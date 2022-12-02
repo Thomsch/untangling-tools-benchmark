@@ -1,2 +1,6 @@
 # Editors
 .idea/
+
+# Project
+out/
+tmp/
