@@ -2,6 +2,8 @@
 
 ################################
 # Runs SmartCommit for one bug
+# Outputs: one line of CSV data in the console
+#
 # WIP: The commands are for reference only for now, the script will not work by itself.
 ################################
 
