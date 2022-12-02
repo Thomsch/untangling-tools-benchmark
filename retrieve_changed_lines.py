@@ -2,6 +2,15 @@ import sys
 import json
 
 # Exports line changed from smartcommit group
+# # #G1.csv
+# class, line
+# class, line
+# class, line
+
+# #G2.csv
+# class, line
+# class, line
+# class, line
 
 def main():
     args = sys.argv[1:]
