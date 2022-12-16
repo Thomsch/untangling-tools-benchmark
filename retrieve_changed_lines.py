@@ -26,7 +26,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: export_group.py <path/to/root/results>")
+        print("usage: file.py <path/to/root/results>")
         exit(1)
     
     result_dir = args[0]
@@ -56,7 +56,6 @@ def main():
 
     # Print CSV for each group
     for group_path in list_json_files(groups_dir):
-        print(group_path)
         with open(group_path, 'r') as group_file:
             data = json.load(group_file)
 
@@ -67,7 +66,7 @@ def main():
                 class_path, start_line, end_line = diff_data[file_id][hunk_id]
 
                 for line in range(start_line, end_line + 1):
-                    print(f"{class_path},{line}")
+                    print(f"{group_path},{class_path},{line}")
 
 if __name__ == "__main__":
     main()
