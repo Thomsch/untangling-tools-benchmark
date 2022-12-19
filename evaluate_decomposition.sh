@@ -12,6 +12,7 @@ work_dir="./tmp"
 revision_id="687b2e62"
 defects4j_framework="/Users/thomas/Workplace/defects4j/framework"
 
+### Get changed lines per group for SmartCommit
 # Checkout bug-fixing commit from developer
 # checkout_bug_fix.sh
 
@@ -21,8 +22,9 @@ defects4j_framework="/Users/thomas/Workplace/defects4j/framework"
 # Get the changed lines in each group automatically decomposed
 # python3 retrieve_changed_lines.py ./out/smartcommit/workdir/687b2e62/generated_groups/
 
+### Get ground truth
 # Get the minimal bug-fixing changes (ground truth)
-# ./minimal_fix.sh
+# ./ground_truth.sh
 
-# Calculates precision and recall for bug-fixing changes and non bug-fixing changes.
+### Calculates precision and recall for bug-fixing changes and non bug-fixing changes.
 # TBD

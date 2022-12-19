@@ -29,7 +29,7 @@ diff-lines() {
                 echo "$path,$line"
             fi
 
-            if [[ ${BASH_REMATCH[2]} != - ]]; then
+            if [[ ${BASH_REMATCH[2]} != - || ${BASH_REMATCH[2]} == + ]]; then
                 ((line++))
             fi
 
@@ -40,8 +40,10 @@ diff-lines() {
 # Ground truth:
 project="Lang"
 vid="1"
-patch="/Users/thomas/Workplace/defects4j/framework/projects/$project/patches/$vid.src.patch"
+patch_src="/Users/thomas/Workplace/defects4j/framework/projects/$project/patches/$vid.src.patch"
+patch_test="/Users/thomas/Workplace/defects4j/framework/projects/$project/patches/$vid.test.patch"
 # Show patch
-# cat $defects4j_framework/projects/$project/patches/$vid.src.patch
-cat  $patch | diff-lines | uniq
+cat  $patch_src | diff-lines | uniq
+cat  $patch_test | diff-lines
+
 # Diff-lines is probably not getting the right line numbers (new rather than old file (vn to vbug)).

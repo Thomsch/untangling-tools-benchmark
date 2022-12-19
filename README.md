@@ -14,3 +14,5 @@ Scripts to run the code changes benchmark.
     2. Run decomposition
 2. Retrieve ground truth (result in `out/evaluation/project/bug_id/truth.csv`)
 3. Retrieve groups changed lines (result in `out/evaluation/project/bug_id/groups.csv`)
+
+A summary of the commands is available in `evaluate_decomposition.sh`
