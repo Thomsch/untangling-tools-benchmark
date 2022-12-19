@@ -24,8 +24,9 @@ def main():
     truth_df = pd.read_csv(truth_file, names=['file', 'line'])
     groups_df = pd.read_csv(groups_file, names=['group', 'file', 'line'])
     
-    groups_df = groups_df[~groups_df['file'].str.endswith(('Test.java'))] # remove test files.
+    # groups_df = groups_df[~groups_df['file'].str.endswith(('Test.java'))] # remove test files.
 
+    # TODO Per group
     print('Bug fixing:')
     print(groups_df.line)
     print(truth_df.line)
@@ -36,6 +37,12 @@ def main():
 
     precision = found.sum() / len(groups_df)
     print(f"Precision {precision}")
+
+    # TODO Non-bug-fixing commits
+    truth_nbf_lines = []
+    nbf_found = groups_df.line.isin(truth_nbf_lines)
+    nbf_recall = nbf_found.sum() / len(truth_nbf_lines)
+    nbf_precision = nbf_found.sum() / len(groups_df)
 
     pred = np.ones(len(groups_df), dtype=bool) # if using sklearn method.
 if __name__ == "__main__":
