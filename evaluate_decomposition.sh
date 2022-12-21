@@ -20,7 +20,7 @@ defects4j_framework="/Users/thomas/Workplace/defects4j/framework"
 # java -jar bin/smartcommitcore-1.0-all.jar -r "workdir" -c "687b2e62" -o "./out/smartcommit/"
 
 # Get the changed lines in each group automatically decomposed
-# python3 retrieve_changed_lines.py ./out/smartcommit/workdir/687b2e62/ out/evaluation/lang/1/groups.csv
+# python3 parse_smartcommit_results.py ./out/smartcommit/workdir/687b2e62/ out/evaluation/lang/1/groups.csv
 
 ### Get ground truth
 # Get the minimal bug-fixing changes (ground truth)
