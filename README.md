@@ -9,10 +9,11 @@ Scripts to run the code changes benchmark.
 - `defects4j` is installed and on the PATH.
 
 ## How to
-1. Decompose changes using SmartCommit (result in `out/smartcommit/project/commit`)
-    1. Checkout repository from Defect4J
-    2. Run decomposition
-2. Retrieve ground truth (result in `out/evaluation/project/bug_id/truth.csv`)
-3. Retrieve groups changed lines (result in `out/evaluation/project/bug_id/groups.csv`)
 
-A summary of the commands is available in `evaluate_decomposition.sh`
+Evaluate decomposition:
+- `./evaluate_decomposition.sh`
+    - Checkout `./checkout_bug_fix.sh`
+    - Decomposition `SmartCommit` + Retrieve changed lines > `out/evaluation/project/vid/groups.csv`
+    - Decomposition `Flexeme`
+    - Ground truth `./ground_truth.sh` > `out/evaluation/project/vid/truth.csv`
+    - Metrics `./compute_metrics.py`
