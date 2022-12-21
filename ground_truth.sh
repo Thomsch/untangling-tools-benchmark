@@ -11,39 +11,13 @@
 # Bar.java  | 232
 #
 
-#https://stackoverflow.com/questions/8259851/using-git-diff-how-can-i-get-added-and-modified-lines-numbers
-diff-lines() {
-    local path=
-    local line=
-    while read; do
-        esc=$'\033'
-        if [[ $REPLY =~ ---\ (a/)?.* ]]; then
-            continue
-        elif [[ $REPLY =~ \+\+\+\ (b/)?([^[:blank:]$esc]+).* ]]; then
-            path=${BASH_REMATCH[2]}
-        elif [[ $REPLY =~ @@\ -[0-9]+(,[0-9]+)?\ \+([0-9]+)(,[0-9]+)?\ @@.* ]]; then
-            line=${BASH_REMATCH[2]}
-        elif [[ $REPLY =~ ^($esc\[[0-9;]*m)*([\ +-]) ]]; then
-            # echo "$line:$REPLY"
-            if [[ ${BASH_REMATCH[2]} == - || ${BASH_REMATCH[2]} == + ]]; then
-                echo "$path,$line"
-            fi
-
-            if [[ ${BASH_REMATCH[2]} != - || ${BASH_REMATCH[2]} == + ]]; then
-                ((line++))
-            fi
-
-        fi
-    done
-}
-
 # Ground truth:
 project="Lang"
 vid="1"
 patch_src="/Users/thomas/Workplace/defects4j/framework/projects/$project/patches/$vid.src.patch"
 patch_test="/Users/thomas/Workplace/defects4j/framework/projects/$project/patches/$vid.test.patch"
-# Show patch
-cat  $patch_src | diff-lines | uniq
-cat  $patch_test | diff-lines
+truth_out="./out/evaluation/$project/$vid/truth.csv"
+repository="./tmp"
 
+./changed_lines.sh "$repository" | python3 ground_truth.py "$truth_out"
 # Diff-lines is probably not getting the right line numbers (new rather than old file (vn to vbug)).
