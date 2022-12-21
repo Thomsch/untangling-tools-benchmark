@@ -9,7 +9,6 @@ from io import StringIO
 import parse_patch
 
 COL_NAMES=['file', 'source', 'target']
-COL_TYPES={'source': 'int', 'target': 'int'}
 
 def from_stdin() -> pd.DataFrame:
     """
