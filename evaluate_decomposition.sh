@@ -27,4 +27,4 @@ defects4j_framework="/Users/thomas/Workplace/defects4j/framework"
 # ./ground_truth.sh
 
 ### Calculates precision and recall for bug-fixing changes and non bug-fixing changes.
-# TBD
+# python3 computer_metrics.py

@@ -21,28 +21,44 @@ def main():
     root = args[0]
     truth_file = path.join(root,'truth.csv')
     groups_file = path.join(root,'groups.csv')
-    truth_df = pd.read_csv(truth_file, names=['file', 'line'])
-    groups_df = pd.read_csv(groups_file, names=['group', 'file', 'line'])
+    truth_df = pd.read_csv(truth_file).convert_dtypes()
+    groups_df = pd.read_csv(groups_file).convert_dtypes()
     
     # groups_df = groups_df[~groups_df['file'].str.endswith(('Test.java'))] # remove test files.
 
     # TODO Per group
     print('Bug fixing:')
-    print(groups_df.line)
-    print(truth_df.line)
-    found = groups_df.line.isin(truth_df.line)
+    # print(groups_df)
+    # print(truth_df)
 
-    recall = found.sum() / len(truth_df)
-    print(f"Recall {recall}")
+    df = pd.merge(truth_df, groups_df, on=['file', 'source', 'target'], how='left')
+    print(df)
 
-    precision = found.sum() / len(groups_df)
-    print(f"Precision {precision}")
+    # Precision for bug-fixing lines
+    # Precision for non bug-fixing lines
 
-    # TODO Non-bug-fixing commits
-    truth_nbf_lines = []
-    nbf_found = groups_df.line.isin(truth_nbf_lines)
-    nbf_recall = nbf_found.sum() / len(truth_nbf_lines)
-    nbf_precision = nbf_found.sum() / len(groups_df)
+    # Group
+    # 5 lines buggy
+    # 40 lines non-buggy 
+
+    # Truth
+    # 20 lines buggy
+    # 10 lines non-buggy
+
+
+    # found = groups_df.line.isin(truth_df.line)
+
+    # recall = found.sum() / len(truth_df)
+    # print(f"Recall {recall}")
+
+    # precision = found.sum() / len(groups_df)
+    # print(f"Precision {precision}")
+
+    # # TODO Non-bug-fixing commits
+    # truth_nbf_lines = []
+    # nbf_found = groups_df.line.isin(truth_nbf_lines)
+    # nbf_recall = nbf_found.sum() / len(truth_nbf_lines)
+    # nbf_precision = nbf_found.sum() / len(groups_df)
 
     pred = np.ones(len(groups_df), dtype=bool) # if using sklearn method.
 if __name__ == "__main__":
