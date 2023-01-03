@@ -84,7 +84,7 @@ def main():
                 import parse_patch
                 patch = PatchSet.from_string(header_str + '\n' + diff_str)
                 for line in parse_patch.to_csv(patch):
-                    result += f'{group_id}, {line}\n'
+                    result += f'{group_id},{line}\n'
 
     # Export results
     df = pd.read_csv(StringIO(result), names=['group', 'file', 'source', 'target'], na_values='None')

@@ -70,8 +70,6 @@ def main():
     vid=1
     out_path = args[0]
 
-
-
     minimal_patch = from_defect4j_patches(defect4j_home, project, vid)
     changes = from_stdin()
 
