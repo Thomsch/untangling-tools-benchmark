@@ -6,10 +6,28 @@
 from os import path
 import sys
 import pandas as pd
-import numpy as np
+from sklearn import metrics
 
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
+def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Merge clusters without any bug fixing changes into one group named 'o'.
+    'o' stands for Other changes.
+    """
+    groups = is_other_change(df)
+    df['adjusted_group'] = df['group'].isin(groups[groups].index)
+
+    df.loc[df['adjusted_group'], 'group'] = 'o'
+
+    return df.drop(['other_change', 'adjusted_group'], axis=1)
+
+def is_other_change(df: pd.DataFrame):
+    """
+    For each group, return whether the group contains only non bug-fixing changes or not.
+    If a group only has bug fixing changes, return True.
+    """
+    df['other_change'] = ~df['fix'] # New column to keep track of non bug-fixing changes.
+    return df.groupby('group')['other_change'].all() # Which groups only have non-bug-fixing changes.
+
 
 def main():
     args = sys.argv[1:]
@@ -26,40 +44,20 @@ def main():
     
     # groups_df = groups_df[~groups_df['file'].str.endswith(('Test.java'))] # remove test files.
 
-    # TODO Per group
-    print('Bug fixing:')
-    # print(groups_df)
-    # print(truth_df)
 
     df = pd.merge(truth_df, groups_df, on=['file', 'source', 'target'], how='left')
     print(df)
+    labels_pred = df['group']
+    labels_true = df['fix']
+    print(metrics.rand_score(labels_true, labels_pred))
+    print(metrics.adjusted_rand_score(labels_true, labels_pred))
 
-    # Precision for bug-fixing lines
-    # Precision for non bug-fixing lines
+    df_adjusted = adjust_groups(df)
+    print(df_adjusted)
 
-    # Group
-    # 5 lines buggy
-    # 40 lines non-buggy 
-
-    # Truth
-    # 20 lines buggy
-    # 10 lines non-buggy
-
-
-    # found = groups_df.line.isin(truth_df.line)
-
-    # recall = found.sum() / len(truth_df)
-    # print(f"Recall {recall}")
-
-    # precision = found.sum() / len(groups_df)
-    # print(f"Precision {precision}")
-
-    # # TODO Non-bug-fixing commits
-    # truth_nbf_lines = []
-    # nbf_found = groups_df.line.isin(truth_nbf_lines)
-    # nbf_recall = nbf_found.sum() / len(truth_nbf_lines)
-    # nbf_precision = nbf_found.sum() / len(groups_df)
-
-    pred = np.ones(len(groups_df), dtype=bool) # if using sklearn method.
+    labels_pred = df_adjusted['group']
+    labels_true = df_adjusted['fix']
+    print(metrics.rand_score(labels_true, labels_pred))
+    print(metrics.adjusted_rand_score(labels_true, labels_pred))
 if __name__ == "__main__":
     main()
