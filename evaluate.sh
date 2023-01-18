@@ -33,7 +33,7 @@ truth_out="./out/evaluation/${project}/${vid}/truth.csv"
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out"
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
     echo -ne 'Calculating ground truth .................................................. OK\r'
 fi
 echo -ne '\n'
@@ -80,6 +80,11 @@ else
     fi
     echo -ne '\n'
 fi
+
+# Compute metrics
+echo -ne '\n'
+evaluation_results="./out/evaluation/${project}/${vid}"
+python3 src/compute_metrics.py "$evaluation_results"
 
 # rm -rf "$workdir" # Deletes temporary directory
 

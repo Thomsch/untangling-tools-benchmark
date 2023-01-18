@@ -1,8 +1,5 @@
-# Takes in the ground truth and the groups
-# Outputs for each group:
-# type, precision, recall,
-# bug-fixing, x, x
-# non bug-fixing, x, x
+# Calculates the Rand Index for the clusters per tool compared to ground truth.
+
 from os import path
 import sys
 import pandas as pd
@@ -38,7 +35,7 @@ def main():
 
     root = args[0]
     truth_file = path.join(root,'truth.csv')
-    groups_file = path.join(root,'groups.csv')
+    groups_file = path.join(root,'smartcommit.csv')
     truth_df = pd.read_csv(truth_file).convert_dtypes()
     groups_df = pd.read_csv(groups_file).convert_dtypes()
     
@@ -46,18 +43,27 @@ def main():
 
 
     df = pd.merge(truth_df, groups_df, on=['file', 'source', 'target'], how='left')
-    print(df)
+    # print(df)
     labels_pred = df['group']
     labels_true = df['fix']
-    print(metrics.rand_score(labels_true, labels_pred))
-    print(metrics.adjusted_rand_score(labels_true, labels_pred))
 
+    ## Regular rand score. Clusters are counted as is.
+    # print(metrics.rand_score(labels_true, labels_pred))
+    # print(metrics.adjusted_rand_score(labels_true, labels_pred))
+
+    ## Adjust cluster to no penalize multiple groups containing exclusively
+    ## non bug fixing changes.
     df_adjusted = adjust_groups(df)
-    print(df_adjusted)
+    # print(df_adjusted)
 
     labels_pred = df_adjusted['group']
     labels_true = df_adjusted['fix']
-    print(metrics.rand_score(labels_true, labels_pred))
-    print(metrics.adjusted_rand_score(labels_true, labels_pred))
+
+    # The adjusted rand index give a score of 0 when the fix is divided in multiple groups, which is unfair.
+    smartcommit_score = metrics.rand_score(labels_true, labels_pred)
+    # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
+    print(f'{root},{smartcommit_score},')
 if __name__ == "__main__":
     main()
+
+# LocalWords: smartcommit dtypes isin sklearn
