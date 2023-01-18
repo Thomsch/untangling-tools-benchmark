@@ -6,7 +6,6 @@ import glob
 from io import StringIO
 from unidiff import PatchSet
 
-import ground_truth
 import pandas as pd
 
 # Retrieves changed lines for SmartCommit results.
@@ -89,6 +88,11 @@ def main():
     # Export results
     df = pd.read_csv(StringIO(result), names=['group', 'file', 'source', 'target'], na_values='None')
     df = df.convert_dtypes() # Forces pandas to use ints in source and target columns.
+
+    if not len(df):
+        print('No results generated. Verify decomposition results and paths.', file=sys.stderr)
+        exit(1)
+
     df.to_csv(output_path, index=False)
 
 

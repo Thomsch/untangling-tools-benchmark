@@ -12,6 +12,7 @@ Scripts to run the code changes benchmark.
 
 ### Environment Variables
 - `DEFECTS4J_HOME`: Location of the defect4j installation.
+- `JAVA_HOME`: Location of the java executable to run SmartCommit.
 
 ## How to
 Evaluate decomposition:
