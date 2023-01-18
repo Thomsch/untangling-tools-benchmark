@@ -20,11 +20,16 @@ defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
 echo "Commit: ${commit}"
 
+# Create directories
+mkdir -p "./out/evaluation/${project}/${vid}"
+
 # Calculates the ground truth
 echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
+
 truth_out="./out/evaluation/${project}/${vid}/truth.csv"
+
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
@@ -64,7 +69,7 @@ if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
     echo -ne 'Parsing SmartCommit results ............................................. SKIP\r'
 else
     echo -ne '\n'
-    python3 parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
+    python3 src/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
     code=$?
 
     if [ $code -eq 0 ] 
@@ -75,7 +80,6 @@ else
     fi
     echo -ne '\n'
 fi
-
 
 # rm -rf "$workdir" # Deletes temporary directory
 

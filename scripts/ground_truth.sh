@@ -17,5 +17,5 @@ vid=$2
 repository=$3
 truth_out=$4
 
-./scripts/changed_lines.sh "$repository" | python3 ground_truth.py "$project" "$vid" "$truth_out"
+./scripts/changed_lines.sh "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
 # Diff-lines is probably not getting the right line numbers (new rather than old file (vn to vbug)).
