@@ -1,5 +1,8 @@
 #!/bin/bash
+# Evaluates a single Defects4j bug.
 
+# Arguments: ./evaluate.sh <project_id> <bug id>
+# e.g., ./evaluate.sh Lang 1
 project=$1
 vid=$2
 export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
@@ -20,36 +23,59 @@ echo "Commit: ${commit}"
 # Calculates the ground truth
 echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
-./scripts/ground_truth.sh "$project" "$vid" "$workdir" ./out/evaluation/"$project"/"$vid"/truth.csv
-echo -ne 'Calculating ground truth .................................................. OK\r'
+
+truth_out="./out/evaluation/${project}/${vid}/truth.csv"
+if [[ -f "$truth_out" ]]; then
+    echo -ne 'Calculating ground truth ................................................ SKIP\r'
+else
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out"
+    echo -ne 'Calculating ground truth .................................................. OK\r'
+fi
 echo -ne '\n'
 
 # Run untangling tools in separate processes.
-echo -ne '\n'
-echo -ne 'Untangling with SmartCommit ...............................................\r'
-echo -ne '\n'
-
-smartcommit_out="./out/decomposition/smartcommit"
-$JAVA_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o $smartcommit_out
 # TODO: Run approaches in parallel. 
 # See https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
+# Each tool's output is redirected in a log file.
 
-echo -ne 'Untangling with SmartCommit ............................................... OK'
+echo -ne '\n'
+echo -ne 'Untangling with SmartCommit ...............................................\r'
+
+smartcommit_untangling_path="./out/decomposition/smartcommit"
+smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
+
+if [[ -d "$smartcommit_untangling_results" ]]; then
+    echo -ne 'Untangling with SmartCommit ............................................. SKIP\r'
+else
+    echo -ne '\n'
+    $JAVA_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o $smartcommit_untangling_path
+    echo -ne 'Untangling with SmartCommit ............................................... OK'
+fi
 echo -ne '\n'
 
 # Collate untangling results
 echo -ne '\n'
-echo -ne 'Parsing SmartCommit results ...............................................\n'
-smartcommit_result_out="./out/evaluation/${project}/${vid}/smartcommit.csv"
-python3 parse_smartcommit_results.py "${smartcommit_out}/${project}_${vid}/${commit}" "$smartcommit_result_out"
-code=$?
+echo -ne 'Parsing SmartCommit results ...............................................\r'
 
-if [ $code -eq 0 ] 
-then 
-    echo -ne 'Parsing SmartCommit results ............................................... OK'
-else 
-    echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+smartcommit_result_out="./out/evaluation/${project}/${vid}/smartcommit.csv"
+if [[ -f "$smartcommit_result_out" ]]; then
+    echo -ne 'Parsing SmartCommit results ............................................. SKIP\r'
+else
+    echo -ne '\n'
+    python3 parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
+    code=$?
+
+    if [ $code -eq 0 ] 
+    then 
+        echo -ne 'Parsing SmartCommit results ............................................... OK'
+    else 
+        echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+    fi
+    echo -ne '\n'
 fi
-echo -ne '\n'
+
 
 # rm -rf "$workdir" # Deletes temporary directory
+
+# TODO: If one step is regenerated, then regenerate all the next steps.
+# TODO: Handle failure for truth step and decomposition step.
