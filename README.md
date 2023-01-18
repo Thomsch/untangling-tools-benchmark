@@ -10,7 +10,7 @@ Scripts to run the code changes benchmark.
 - `java` is installed and on the PATH.
 - `python3` is installed and on the PATH.
 
-## Environment Variables
+### Environment Variables
 - `DEFECTS4J_HOME`: Location of the defect4j installation.
 
 ## How to
