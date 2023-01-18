@@ -46,10 +46,12 @@ smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}
 
 if [[ -d "$smartcommit_untangling_results" ]]; then
     echo -ne 'Untangling with SmartCommit ............................................. SKIP\r'
+    regenerate_results=false
 else
     echo -ne '\n'
     $JAVA_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o $smartcommit_untangling_path
     echo -ne 'Untangling with SmartCommit ............................................... OK'
+    regenerate_results=true
 fi
 echo -ne '\n'
 
@@ -58,7 +60,7 @@ echo -ne '\n'
 echo -ne 'Parsing SmartCommit results ...............................................\r'
 
 smartcommit_result_out="./out/evaluation/${project}/${vid}/smartcommit.csv"
-if [[ -f "$smartcommit_result_out" ]]; then
+if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
     echo -ne 'Parsing SmartCommit results ............................................. SKIP\r'
 else
     echo -ne '\n'
@@ -77,5 +79,4 @@ fi
 
 # rm -rf "$workdir" # Deletes temporary directory
 
-# TODO: If one step is regenerated, then regenerate all the next steps.
 # TODO: Handle failure for truth step and decomposition step.
