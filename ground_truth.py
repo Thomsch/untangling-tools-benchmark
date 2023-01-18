@@ -61,16 +61,20 @@ def main():
 
     args = sys.argv[1:]
 
-    if len(args) != 1:
-        print("usage: file.py <path/to/root/results>")
+    if len(args) != 3:
+        print("usage: file.py <project> <vid> <path/to/root/results>")
         exit(1)
 
-    defect4j_home = "/Users/thomas/Workplace/defects4j"
-    project="Lang"
-    vid=1
-    out_path = args[0]
+    if not os.getenv('DEFECTS4J_HOME'):
+        print('DEFECTS4J_HOME environment variable not set. Exiting.')
+        exit(1)
+        
+    defects4j_home = os.getenv('DEFECTS4J_HOME')
+    project=args[0]
+    vid=args[1]
+    out_path = args[2]
 
-    minimal_patch = from_defect4j_patches(defect4j_home, project, vid)
+    minimal_patch = from_defect4j_patches(defects4j_home, project, vid)
     changes = from_stdin()
 
     # Check which truth are in changes and tag them as True in a new column.
