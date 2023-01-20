@@ -37,6 +37,7 @@ do
 done < $sample_out
 
 cat ${results}/*.csv > $out_file
+find ${results} -name "*.csv" -type f -delete
 
 echo ""
 echo "Decomposition scores aggregated and saved in ${out_file}"
