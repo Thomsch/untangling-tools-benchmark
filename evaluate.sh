@@ -89,7 +89,15 @@ evaluation_results="./out/evaluation/${project}/${vid}"
 
 python3 src/untangling_score.py "$evaluation_results" "${project}" "${vid}" > "${out_path}/${project}_${vid}.csv"
 
+# Compute commit metrics
+echo -ne '\n'
+
+metrics_dir="./out/metrics"
+mkdir -p $metrics_dir
+
+git --git-dir="${workdir}/.git" diff -U0 "$commit"^ "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "${metrics_dir}/${project}_${vid}.csv"
+
 # rm -rf "$workdir" # Deletes temporary directory containing repository
 
 # TODO: Handle failure for truth step and decomposition step.
-# TODO: Measure elapsed time and add to CSV
+# TODO: Measure elapsed time for decomposition and add to CSV

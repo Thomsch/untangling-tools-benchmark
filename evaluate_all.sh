@@ -5,7 +5,7 @@ sample_out="out/commits-sample.csv"
 results="out/results" # Contains the results for each commit.
 out_file="out/decompositions.csv" # Aggregated results.
 
-N=10 # Number of commits to sample
+N=50 # Number of commits to sample
 
 mkdir -p $results
 
@@ -41,3 +41,12 @@ find ${results} -name "*.csv" -type f -delete
 
 echo ""
 echo "Decomposition scores aggregated and saved in ${out_file}"
+
+metrics_dir="out/metrics"
+metrics_results="out/metrics.csv"
+
+cat ${metrics_dir}/*.csv > $metrics_results
+# find ${metrics_dir} -name "*.csv" -type f -delete
+
+echo ""
+echo "Commit metrics aggregated and saved in ${metrics_results}"
