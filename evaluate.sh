@@ -92,3 +92,4 @@ python3 src/compute_metrics.py "$evaluation_results" "${project}" "${vid}" > "${
 # rm -rf "$workdir" # Deletes temporary directory
 
 # TODO: Handle failure for truth step and decomposition step.
+# TODO: Measure elapsed time and add to CSV
