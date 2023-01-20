@@ -14,6 +14,8 @@ Scripts to run the code changes benchmark.
 1. Run `scripts/active_bugs.sh > out/commits.csv`
 2. Run `./evaluate_all.sh`. This script will run on a sample of the commits generated in the previous step.
 
+Or run `make`.
+
 ### Evaluate one bug
 - Run `./evaluate.sh <project_id> <bug_id> <out_dir>`. E.g., `./evaluate.sh Lang 1 out/`.
 

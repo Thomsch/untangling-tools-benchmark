@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := out/decomposition.csv
+
 check-scripts:
     # Fail if any of these files have warnings
 	shellcheck $(wildcard ./*.sh)
