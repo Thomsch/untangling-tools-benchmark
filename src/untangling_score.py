@@ -30,7 +30,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 3:
-        print("usage: compute_metrics.py <evaluation/project/bug_id> <project> <bug_id>")
+        print("usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>")
         exit(1)
 
     root = args[0]
