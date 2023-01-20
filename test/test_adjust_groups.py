@@ -3,8 +3,8 @@ Tests that groups are adjusted properly to avoid penalizing multiple groups with
 """
 
 import pandas as pd
-from compute_metrics import is_other_change
-from compute_metrics import adjust_groups
+from untangling_score import is_other_change
+from untangling_score import adjust_groups
 
 def test_is_other_change():
     df = pd.DataFrame({

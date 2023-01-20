@@ -83,13 +83,13 @@ else
     echo -ne '\n'
 fi
 
-# Compute metrics
+# Compute untangling score
 echo -ne '\n'
 evaluation_results="./out/evaluation/${project}/${vid}"
 
-python3 src/compute_metrics.py "$evaluation_results" "${project}" "${vid}" > "${out_path}/${project}_${vid}.csv"
+python3 src/untangling_score.py "$evaluation_results" "${project}" "${vid}" > "${out_path}/${project}_${vid}.csv"
 
-# rm -rf "$workdir" # Deletes temporary directory
+# rm -rf "$workdir" # Deletes temporary directory containing repository
 
 # TODO: Handle failure for truth step and decomposition step.
 # TODO: Measure elapsed time and add to CSV
