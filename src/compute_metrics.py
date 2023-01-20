@@ -29,11 +29,14 @@ def is_other_change(df: pd.DataFrame):
 def main():
     args = sys.argv[1:]
 
-    if len(args) != 1:
-        print("usage: compute_metrics.py <evaluation/project/bug_id>")
+    if len(args) != 3:
+        print("usage: compute_metrics.py <evaluation/project/bug_id> <project> <bug_id>")
         exit(1)
 
     root = args[0]
+    project = args[1]
+    vid = args[2]
+    
     truth_file = path.join(root,'truth.csv')
     groups_file = path.join(root,'smartcommit.csv')
     truth_df = pd.read_csv(truth_file).convert_dtypes()
@@ -62,7 +65,7 @@ def main():
     # The adjusted rand index give a score of 0 when the fix is divided in multiple groups, which is unfair.
     smartcommit_score = metrics.rand_score(labels_true, labels_pred)
     # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
-    print(f'{root},{smartcommit_score}')
+    print(f'{project},{vid},{smartcommit_score}')
 if __name__ == "__main__":
     main()
 

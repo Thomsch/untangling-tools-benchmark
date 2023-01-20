@@ -87,7 +87,7 @@ fi
 echo -ne '\n'
 evaluation_results="./out/evaluation/${project}/${vid}"
 
-python3 src/compute_metrics.py "$evaluation_results" > "${out_path}/${project}_${vid}.csv"
+python3 src/compute_metrics.py "$evaluation_results" "${project}" "${vid}" > "${out_path}/${project}_${vid}.csv"
 
 # rm -rf "$workdir" # Deletes temporary directory
 
