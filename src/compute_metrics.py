@@ -62,7 +62,7 @@ def main():
     # The adjusted rand index give a score of 0 when the fix is divided in multiple groups, which is unfair.
     smartcommit_score = metrics.rand_score(labels_true, labels_pred)
     # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
-    print(f'{root},{smartcommit_score},')
+    print(f'{root},{smartcommit_score}')
 if __name__ == "__main__":
     main()
 

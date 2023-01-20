@@ -5,6 +5,10 @@ check-scripts:
 out/commits.csv:
 	./scripts/active_bugs.sh > out/commits.csv
 
-all: out/commits.csv
+out/decomposition.csv: out/commits.csv
+	./evaluate_all.sh
 
-.PHONY: all
+clean: 
+	rm -rf ./tmp/
+
+.PHONY: clean

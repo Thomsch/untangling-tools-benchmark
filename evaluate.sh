@@ -5,6 +5,8 @@
 # e.g., ./evaluate.sh Lang 1
 project=$1
 vid=$2
+out_path=$3
+
 export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
 export JAVA_HOME="/Users/thomas/.jenv/versions/11.0/bin/java"
 
@@ -84,7 +86,8 @@ fi
 # Compute metrics
 echo -ne '\n'
 evaluation_results="./out/evaluation/${project}/${vid}"
-python3 src/compute_metrics.py "$evaluation_results"
+
+python3 src/compute_metrics.py "$evaluation_results" > "${out_path}/${project}_${vid}.csv"
 
 # rm -rf "$workdir" # Deletes temporary directory
 
