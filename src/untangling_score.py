@@ -41,9 +41,6 @@ def main():
     groups_file = path.join(root,'smartcommit.csv')
     truth_df = pd.read_csv(truth_file).convert_dtypes()
     groups_df = pd.read_csv(groups_file).convert_dtypes()
-    
-    # groups_df = groups_df[~groups_df['file'].str.endswith(('Test.java'))] # remove test files.
-
 
     df = pd.merge(truth_df, groups_df, on=['file', 'source', 'target'], how='left')
     # print(df)
@@ -62,8 +59,9 @@ def main():
     labels_pred = df_adjusted['group']
     labels_true = df_adjusted['fix']
 
-    # The adjusted rand index give a score of 0 when the fix is divided in multiple groups, which is unfair.
     smartcommit_score = metrics.rand_score(labels_true, labels_pred)
+    # The adjusted rand index (not the same as the adjusted clusters above)
+    # give a score of 0 when the fix is divided in multiple groups, which is unfair.
     # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
     print(f'{project},{vid},{smartcommit_score}')
 if __name__ == "__main__":
