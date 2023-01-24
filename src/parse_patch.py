@@ -1,6 +1,7 @@
 # Retrieves the changed lines for a diff.
 # The diff is passed to the script via stdin.
 import sys
+import os
 
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
@@ -15,11 +16,12 @@ def to_csv(patch: PatchSet):
 
 
 def from_file(filename):
-    patch = PatchSet.from_filename(filename)
-
     result = ''
-    for line in to_csv(patch):
-        result += line + '\n'
+
+    if os.path.exists(filename):
+        patch = PatchSet.from_filename(filename)
+        for line in to_csv(patch):
+            result += line + '\n'
 
     return result
 
