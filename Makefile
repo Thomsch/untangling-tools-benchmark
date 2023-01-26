@@ -7,7 +7,7 @@ check-scripts:
 out/commits.csv:
 	./scripts/active_bugs.sh > out/commits.csv
 
-out/decomposition.csv: out/commits.csv
+out/decomposition.csv:
 	./evaluate_all.sh
 
 clean: 
