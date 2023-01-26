@@ -19,5 +19,5 @@ truth_out=$4
 commit=$5
 
 export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
-./scripts/changed_lines.sh "$repository" "$commit" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
+./scripts/changed_lines.sh "$project" "$vid" "$repository" "$commit" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
 # Diff-lines is probably not getting the right line numbers (new rather than old file (vn to vbug)).

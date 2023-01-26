@@ -1,13 +1,13 @@
 #!/bin/bash
 
-REPO="$1/.git"
-COMMIT="$2"
+project=$1
+vid=$2
 
-if [ ! -d "$REPO" ] 
-then
-    echo "Directory $REPO DOES NOT exists." 
-    exit 1
-fi
+REPO="$3/.git"
+COMMIT="$4"
+
+source ./scripts/diff_util.sh
 
 # Git diff -U0 on top of Vn +  Pipe output to changed_lines.py
-git --git-dir="$REPO" diff -U0 "$COMMIT"^ "$COMMIT" | python3 src/parse_patch.py
+diff "$project" "$vid" "$COMMIT" | python3 src/parse_patch.py
+# git --git-dir="$REPO" diff -U0 "$COMMIT"^ "$COMMIT" | python3 src/parse_patch.py

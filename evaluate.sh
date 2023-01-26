@@ -99,7 +99,8 @@ echo -ne '\n'
 metrics_dir="./out/metrics"
 mkdir -p $metrics_dir
 
-git --git-dir="${workdir}/.git" diff -U0 "$commit"^ "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "${metrics_dir}/${project}_${vid}.csv"
+source ./scripts/diff_util.sh
+diff "$project" "$vid" "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "${metrics_dir}/${project}_${vid}.csv"
 
 # rm -rf "$workdir" # Deletes temporary directory containing repository
 
