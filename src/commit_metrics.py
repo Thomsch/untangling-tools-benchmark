@@ -32,10 +32,11 @@ def main():
             hunk_sizes.append(len(hunk))
             for line in hunk:
                 if line.line_type == LINE_TYPE_CONTEXT:
-                    continue;
+                    continue
                 lines_updated += 1
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
+    
     print(f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}")
 
     
