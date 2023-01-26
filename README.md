@@ -16,6 +16,11 @@ Scripts to run the code changes benchmark.
 
 Or run `make`.
 
+### Aggregating decomposition elapsed time
+All decomposition are timed. The result is stored in each decomposition folder.
+To aggregated all of the results in one file, run `scripts/aggregate_time.sh`. 
+It will create `out/time.csv` containing the runtime of each decomposition.
+
 ### Evaluate one bug
 - Run `./evaluate.sh <project_id> <bug_id> <out_dir>`. E.g., `./evaluate.sh Lang 1 out/`.
 

@@ -56,7 +56,11 @@ if [[ -d "$smartcommit_untangling_results" ]]; then
     regenerate_results=false
 else
     echo -ne '\n'
+    START_DECOMPOSITION=$(date +%s.%N)
     $JAVA_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o $smartcommit_untangling_path
+    END_DECOMPOSITION=$(date +%s.%N)
+    DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
+    echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
     echo -ne 'Untangling with SmartCommit ............................................... OK'
     regenerate_results=true
 fi
