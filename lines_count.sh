@@ -4,7 +4,7 @@
 
 export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
 
-all_commits="out/commits-sample.csv"
+all_commits="out/commits.csv"
 out_file="out/lines.csv"
 
 if ! [[ -f "$all_commits" ]]; then
@@ -13,6 +13,9 @@ if ! [[ -f "$all_commits" ]]; then
 fi
 
 mkdir -p "./tmp" # Create temporary directory
+
+
+echo "project,bug_id,fix_lines,other_lines" > $out_file
 
 while IFS=, read -r project vid
 do
