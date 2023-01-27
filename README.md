@@ -25,6 +25,9 @@ It will create `out/time.csv` containing the runtime of each decomposition.
 ### Evaluate one bug
 - Run `./evaluate.sh <project_id> <bug_id> <out_dir>`. E.g., `./evaluate.sh Lang 1 out/`.
 
+## Adding an untangling tool
+Add a call to your untangling tool executable in `evaluate.sh`. Use the existing tools' code as a template.
+
 ## Limitations
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines containing `Chart` in `out/commits.csv`.
 ## How the benchmark works
