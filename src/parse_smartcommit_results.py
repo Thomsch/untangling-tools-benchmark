@@ -10,17 +10,6 @@ import pandas as pd
 
 # Retrieves changed lines for SmartCommit results.
 
-# Exports line changed from smartcommit group
-# # #G1.csv
-# class, line
-# class, line
-# class, line
-
-# #G2.csv
-# class, line
-# class, line
-# class, line
-
 def list_json_files(dir):
     """
     " Returns the JSON files contained in the specific directory.

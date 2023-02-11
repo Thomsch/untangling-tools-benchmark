@@ -2,8 +2,8 @@
 Scripts to run the code changes benchmark.
 
 ## Requirements
-- `defects4j` is installed and on the PATH.
-- `java` is installed and on the PATH.
+- [Defects4J](https://github.com/rjust/defects4j) is installed and `defects4j` is on the PATH.
+- Java 8 is installed and `java` is on the PATH.
 - `python3` is installed and on the PATH.
 
 ### Environment Variables
@@ -11,9 +11,13 @@ Scripts to run the code changes benchmark.
 - `JAVA_HOME`: Location of the java executable to run SmartCommit.
 
 ## Instructions
-1. Run `scripts/active_bugs.sh > out/commits.csv` (will generate from all project. Project `Chart` is not compatible with SmartCommit because it uses SVN)
-    - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **Limitations** sections.
-2. Run `./evaluate_all.sh`. This script will run on a sample of the commits generated in the previous step.
+1. Clone `https://github.com/Thomsch/Flexeme` locally.
+2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
+3. Run `scripts/active_bugs.sh > out/commits.csv` (will generate from all project. Project `Chart` is not compatible
+   with SmartCommit because it uses SVN)
+    - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
+      Limitations** sections.
+4. Run `./evaluate_all.sh`. This script will run on a sample of the commits generated in the previous step.
 
 Or run `make` (you still need to manually update the intermediary file `out/commit.csv`. See above)
 
