@@ -4,6 +4,8 @@
 # Project
 out/
 tmp/
+.tmp/
+data/corpora_clean
 
 # Python
 __pycache__
