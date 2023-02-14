@@ -8,7 +8,7 @@ Scripts to run the code changes benchmark.
 
 ### Environment Variables
 - `DEFECTS4J_HOME`: Location of the defect4j installation.
-- `JAVA_HOME`: Location of the java executable to run SmartCommit.
+- `JAVA_SMARTCOMMIT`: Location of the java executable to run SmartCommit. Requires Java 11
 
 ## Instructions
 1. Clone `https://github.com/Thomsch/Flexeme` locally.

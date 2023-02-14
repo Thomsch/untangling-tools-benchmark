@@ -6,31 +6,60 @@
 project=$1
 vid=$2
 out_path=$3
+repo_dir=$4
+workdir="${repo_dir}/${project}_${vid}"
 
-export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
-export JAVA_HOME="/Users/thomas/.jenv/versions/11.0/bin/java"
+decomposition_path="${out_path}/decomposition" # Path containing the decomposition results.
+evaluation_path="${out_path}/evaluation/${project}/${vid}" # Path containing the evaluation results. i.e., ground truth, decompositions in CSV format.
+metrics_path="${out_path}/metrics" # Path containing the commit metrics.
 
-echo "Evaluating project $project, bug $vid"
+mkdir -p "${evaluation_path}"
+mkdir -p "${metrics_path}"
 
-workdir=./tmp/"$project"_"$vid"
+# Replace by your settings
+export DEFECTS4J_HOME="$HOME/Workplace/defects4j"
+export JAVA_SMARTCOMMIT="$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java"
 
-mkdir -p "./tmp" # Create temporary directory
+# Check that Java is 1.8 for Defects4j.
+# Defects4J will use whatever is on JAVA_HOME.
+version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+if [[ ! "$version" < "1.9" ]] && [[ "$version" > "1.7" ]]; then
+    echo "Unsupported Java Version: ${version}. Please use Java 8."
+    exit 1
+fi
+
+echo "Evaluating project $project, bug $vid, repository $workdir"
 
 # Checkout defects4j bug
+mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
+# Get commit hash
 commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
-echo "Commit: ${commit}"
 
-# Create directories
-mkdir -p "./out/evaluation/${project}/${vid}"
+# Get source path and class path
+sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
+classpath=$(defects4j export -p cp.compile -w "${workdir}")
 
+#
+# Compute commit metrics
+#
+metrics_out="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
+if [[ -f "$metrics_out" ]]; then
+    echo -ne 'Calculating metrics ..................................................... SKIP\r'
+else
+    source ./scripts/diff_util.sh
+    diff "$project" "$vid" "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
+    echo -ne 'Calculating metrics ...................................................... OK\r'
+fi
+
+#
 # Calculates the ground truth
+#
 echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
-
-truth_out="./out/evaluation/${project}/${vid}/truth.csv"
+truth_out="${evaluation_path}/truth.csv"
 
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
@@ -40,15 +69,19 @@ else
 fi
 echo -ne '\n'
 
-# Run untangling tools in separate processes.
-# TODO: Run approaches in parallel. 
-# See https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
-# Each tool's output is redirected in a log file.
+# 
+# Running each tool on the bug.
+# Tools are run in serial, but could be run in parallel. The results are ouputted to invididual files, enabling parallelisation.
+# 
+# TODO: Run tools in parallel. See https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
+#
 
+#
+# Untangle with SmartCommit
+#
 echo -ne '\n'
 echo -ne 'Untangling with SmartCommit ...............................................\r'
-
-smartcommit_untangling_path="./out/decomposition/smartcommit"
+smartcommit_untangling_path="${out_path}/decomposition/smartcommit"
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
 if [[ -d "$smartcommit_untangling_results" ]]; then
@@ -57,7 +90,7 @@ if [[ -d "$smartcommit_untangling_results" ]]; then
 else
     echo -ne '\n'
     START_DECOMPOSITION=$(date +%s.%N)
-    $JAVA_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o $smartcommit_untangling_path
+    $JAVA_SMARTCOMMIT -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
@@ -70,7 +103,7 @@ echo -ne '\n'
 echo -ne '\n'
 echo -ne 'Parsing SmartCommit results ...............................................\r'
 
-smartcommit_result_out="./out/evaluation/${project}/${vid}/smartcommit.csv"
+smartcommit_result_out="${evaluation_path}/smartcommit.csv"
 if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
     echo -ne 'Parsing SmartCommit results ............................................. SKIP\r'
 else
@@ -87,22 +120,57 @@ else
     echo -ne '\n'
 fi
 
+#
+# Untangle with Flexeme
+#
+echo -ne '\n'
+echo -ne 'Untangling with Flexeme ...............................................\r'
+
+flexeme_untangling_path="${decomposition_path}/flexeme"
+flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
+flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
+
+if [[ -f "$flexeme_untangling_graph" ]]; then
+    echo -ne 'Untangling with Flexeme ................................................. SKIP\r'
+    regenerate_results=false
+else
+    echo -ne '\n'
+    mkdir -p "$flexeme_untangling_results"
+    START_DECOMPOSITION=$(date +%s.%N)
+    ./scripts/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+    END_DECOMPOSITION=$(date +%s.%N)
+    DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
+    echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
+    echo -ne 'Untangling with Flexeme ................................................. OK'
+    regenerate_results=true
+fi
+echo -ne '\n'
+
+# Collate untangling results
+echo -ne 'Parsing Flexeme results ...............................................\r'
+
+flexeme_result_out="${evaluation_path}/flexeme.csv"
+if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
+    echo -ne 'Parsing Flexeme results ................................................. SKIP\r'
+else
+    echo -ne '\n'
+    python3 src/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
+    code=$?
+
+    if [ $code -eq 0 ]
+    then
+        echo -ne 'Parsing Flexeme results ................................................... OK\r'
+    else
+        echo -ne 'Parsing SmartCommit results ................................................. FAIL\r'
+    fi
+    echo -ne '\n'
+fi
+
+#
 # Compute untangling score
-echo -ne '\n'
-evaluation_results="./out/evaluation/${project}/${vid}"
+#
+python3 src/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
 
-python3 src/untangling_score.py "$evaluation_results" "${project}" "${vid}" > "${out_path}/${project}_${vid}.csv"
+# # rm -rf "$workdir" # Deletes temporary directory containing repository
 
-# Compute commit metrics
-echo -ne '\n'
-
-metrics_dir="./out/metrics"
-mkdir -p $metrics_dir
-
-source ./scripts/diff_util.sh
-diff "$project" "$vid" "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "${metrics_dir}/${project}_${vid}.csv"
-
-# rm -rf "$workdir" # Deletes temporary directory containing repository
-
-# TODO: Handle failure for truth step and decomposition step.
-# TODO: Measure elapsed time for decomposition and add to CSV
+# # TODO: Handle failure for truth step and decomposition step.
