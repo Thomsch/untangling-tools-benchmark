@@ -13,13 +13,12 @@ Scripts to run the code changes benchmark.
 ## Instructions
 1. Clone `https://github.com/Thomsch/Flexeme` locally.
 2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
-3. Run `scripts/active_bugs.sh > out/commits.csv` (will generate from all project. Project `Chart` is not compatible
+3. Install local dependencies `pip install -r requirements.txt`.
+4. Run `scripts/active_bugs.sh > out/commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
     - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
       Limitations** sections.
-4. Run `./evaluate_all.sh`. This script will run on a sample of the commits generated in the previous step.
-
-Or run `make` (you still need to manually update the intermediary file `out/commit.csv`. See above)
+5. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.
