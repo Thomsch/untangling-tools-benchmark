@@ -25,6 +25,24 @@ def is_other_change(df: pd.DataFrame):
     df['other_change'] = ~df['fix'] # New column to keep track of non bug-fixing changes.
     return df.groupby('group')['other_change'].all() # Which groups only have non-bug-fixing changes.
 
+def calculate_score_for_tool(truth_df, tool_df):
+    df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left')
+    df['group'] = df['group'].fillna('o') # Fill changed lines that are unclassified as other changes ('o').
+
+    labels_pred = df['group']
+    labels_true = df['fix']
+
+    ## Adjust cluster to not penalize multiple groups containing exclusively
+    ## non bug fixing changes.
+    df_adjusted = adjust_groups(df)
+    labels_pred = df_adjusted['group']
+    labels_true = df_adjusted['fix']
+
+    # The adjusted rand score (not the same as the adjusted clusters above!)
+    # give a score of 0 when the fix is divided in multiple groups, which is unfair.
+    # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
+    return metrics.rand_score(labels_true, labels_pred)
+
 
 def main():
     args = sys.argv[1:]
@@ -38,33 +56,19 @@ def main():
     vid = args[2]
     
     truth_file = path.join(root,'truth.csv')
-    groups_file = path.join(root,'smartcommit.csv')
+    smartcommit_file = path.join(root,'smartcommit.csv')
+    flexeme_file = path.join(root,'flexeme.csv')
+
     truth_df = pd.read_csv(truth_file).convert_dtypes()
-    groups_df = pd.read_csv(groups_file).convert_dtypes()
+    smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
+    flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
+    flexeme_df['group'] = flexeme_df['group'].astype('string')
 
-    df = pd.merge(truth_df, groups_df, on=['file', 'source', 'target'], how='left')
-    # print(df)
-    labels_pred = df['group']
-    labels_true = df['fix']
+    smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
+    flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
 
-    ## Regular rand score. Clusters are counted as is.
-    # print(metrics.rand_score(labels_true, labels_pred))
-    # print(metrics.adjusted_rand_score(labels_true, labels_pred))
-
-    ## Adjust cluster to no penalize multiple groups containing exclusively
-    ## non bug fixing changes.
-    df_adjusted = adjust_groups(df)
-    # print(df_adjusted)
-
-    labels_pred = df_adjusted['group']
-    labels_true = df_adjusted['fix']
-
-    smartcommit_score = metrics.rand_score(labels_true, labels_pred)
-    # The adjusted rand index (not the same as the adjusted clusters above)
-    # give a score of 0 when the fix is divided in multiple groups, which is unfair.
-    # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
-    print(f'{project},{vid},{smartcommit_score}')
+    print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
 if __name__ == "__main__":
     main()
 
-# LocalWords: smartcommit dtypes isin sklearn
+# LocalWords: smartcommit dtypes isin sklearn flexeme astype
