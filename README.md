@@ -14,16 +14,21 @@ Scripts to run the code changes benchmark.
 1. Clone `https://github.com/Thomsch/Flexeme` locally.
 2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
 3. Install local dependencies `pip install -r requirements.txt`.
-4. Run `scripts/active_bugs.sh > out/commits.csv` (will generate from all project. Project `Chart` is not compatible
-   with SmartCommit because it uses SVN)
-    - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
-      Limitations** sections.
-5. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
+4. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.
 To aggregated all of the results in one file, run `scripts/aggregate_time.sh`. 
 It will create `out/time.csv` containing the runtime of each decomposition.
+
+### Untangling multiple bugs
+1. Follow instructions for `evaluate.sh`.
+2. Run `scripts/active_bugs.sh > out/all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+   with SmartCommit because it uses SVN)
+    - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
+      Limitations** sections.
+3. Run `scripts/sample_bugs.sh out/all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs to sample.
+4. Run `./evaluate_all.sh sampled_bugs.csv`.
 
 ## Adding an untangling tool
 Add a call to your untangling tool executable in `evaluate.sh`. Use the existing tools' code as a template.

@@ -1,22 +1,16 @@
 #!/bin/bash
 
-all_commits="out/commits.csv"
-sample_out="out/commits-sample.csv"
-results="out/results" # Contains the results for each commit.
-out_file="out/decompositions.csv" # Aggregated results.
+bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 
-N=50 # Number of commits to sample
+out_dir='out'
+results="${out_dir}/results" # Contains the results for each commit.
+out_file="out/decompositions.csv" # Aggregated results.
 
 mkdir -p $results
 
-if ! [[ -f "$all_commits" ]]; then
-    echo "File ${all_commits} not found. Exiting."
+if ! [[ -f "$bugs_file" ]]; then
+    echo "File ${bugs_file} not found. Exiting."
     exit 1
-fi
-
-if ! [[ -f "$sample_out" ]]; then
-    echo "Generating ${N} commit samples (${sample_out})"
-    shuf -n $N $all_commits > $sample_out
 fi
 
 # TODO: Parallelize
@@ -27,14 +21,14 @@ while IFS=, read -r project vid
 do
     # TODO: Don't regenerate results when they already exist.
     START=$(date +%s.%N)
-    ./evaluate.sh "$project" "$vid" "$results" &> "${results}/${project}_${vid}.log"
+    ./evaluate.sh "$project" "$vid" "$out_dir" "tmp" &> "${results}/${project}_${vid}.log"
     ret_code=$?
     evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
     DIFF=$(echo "$END - $START" | bc)
     printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${DIFF}"
     
-done < $sample_out
+done < "$bugs_file"
 
 cat ${results}/*.csv > $out_file
 find ${results} -name "*.csv" -type f -delete
