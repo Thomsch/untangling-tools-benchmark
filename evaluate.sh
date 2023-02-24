@@ -169,7 +169,7 @@ else
     then
         echo -ne 'Parsing Flexeme results ................................................... OK\r'
     else
-        echo -ne 'Parsing SmartCommit results ................................................. FAIL\r'
+        echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
     fi
     echo -ne '\n'
 fi

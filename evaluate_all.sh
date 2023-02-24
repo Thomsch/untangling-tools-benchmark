@@ -17,6 +17,7 @@ fi
 echo "Logs stored in ${results}/<project>_<bud_id>.log"
 echo ""
 
+error_counter=0
 while IFS=, read -r project vid
 do
     # TODO: Don't regenerate results when they already exist.
@@ -26,9 +27,15 @@ do
     evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
     DIFF=$(echo "$END - $START" | bc)
+    if [ $ret_code -ne 0 ]; then
+        error_counter=$((error_counter+1))
+    fi
     printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${DIFF}"
     
 done < "$bugs_file"
+
+echo ""
+echo "Evaluation finished with ${error_counter} errors out of $(wc -l < $bugs_file) commits."
 
 cat ${results}/*.csv > $out_file
 find ${results} -name "*.csv" -type f -delete
