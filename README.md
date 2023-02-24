@@ -5,25 +5,26 @@ Scripts to run the code changes benchmark.
 - [Defects4J](https://github.com/rjust/defects4j) is installed and `defects4j` is on the PATH.
 - Java 8 is installed and `java` is on the PATH.
 - `python3` is installed and on the PATH.
+- Flexeme is installed and on the PATH.
+  1. Clone `https://github.com/Thomsch/Flexeme` locally.
+  2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
+  3. Install local dependencies `pip install -r requirements.txt`.
 
 ### Environment Variables
 - `DEFECTS4J_HOME`: Location of the defect4j installation.
 - `JAVA_SMARTCOMMIT`: Location of the java executable to run SmartCommit. Requires Java 11
 
 ## Untangling one D4J bug
-1. Clone `https://github.com/Thomsch/Flexeme` locally.
-2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
-3. Install local dependencies `pip install -r requirements.txt`.
-4. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
+Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
 
 ## Running the benchmark
-1. Follow installation instructions in `Untangling one D4J bug` section.
-2. Run `scripts/active_bugs.sh > out/all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+1. Run `scripts/active_bugs.sh > out/all-commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
     - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
       Limitations** sections.
-3. Run `scripts/sample_bugs.sh out/all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs to sample.
-4. Run `./evaluate_all.sh sampled_bugs.csv`.
+2. Run `scripts/sample_bugs.sh out/all-commits.csv <n> > out/sample_<n>.csv` with `<n>` indicating the number of bugs 
+   to sample.
+3. Run `./evaluate_all.sh sampled_bugs.csv`
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.
