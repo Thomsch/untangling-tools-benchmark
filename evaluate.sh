@@ -138,11 +138,19 @@ else
     mkdir -p "$flexeme_untangling_results"
     START_DECOMPOSITION=$(date +%s.%N)
     ./scripts/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+    flexeme_untangling_code=$?
+    if [ $flexeme_untangling_code -eq 0 ]
+    then
+        echo -ne 'Untangling with Flexeme ................................................. OK'
+        regenerate_results=true
+    else
+        echo -ne 'Untangling with Flexeme ................................................. FAIL'
+        regenerate_results=false
+    fi
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
-    echo -ne 'Untangling with Flexeme ................................................. OK'
-    regenerate_results=true
+
 fi
 echo -ne '\n'
 
@@ -150,7 +158,7 @@ echo -ne '\n'
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
+if [ $flexeme_untangling_code -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ; then
     echo -ne 'Parsing Flexeme results ................................................. SKIP\r'
 else
     echo -ne '\n'
@@ -169,6 +177,7 @@ fi
 #
 # Compute untangling score
 #
+echo -ne 'Computing untangling scores ...............................................\r'
 python3 src/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
 
 # # rm -rf "$workdir" # Deletes temporary directory containing repository

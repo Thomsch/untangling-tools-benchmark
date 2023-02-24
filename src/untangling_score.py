@@ -59,15 +59,21 @@ def main():
     smartcommit_file = path.join(root,'smartcommit.csv')
     flexeme_file = path.join(root,'flexeme.csv')
 
-    truth_df = pd.read_csv(truth_file).convert_dtypes()
-    smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
-    flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
-    flexeme_df['group'] = flexeme_df['group'].astype('string')
+    try:
+        truth_df = pd.read_csv(truth_file).convert_dtypes()
+        smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
+        flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
+        flexeme_df['group'] = flexeme_df['group'].astype('string')
 
-    smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
-    flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
+        smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
+        flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
 
-    print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
+        print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
+    except FileNotFoundError as e:
+        print(f'File not found: {e.filename}', file=sys.stderr)
+        exit(1)
+
+
 if __name__ == "__main__":
     main()
 
