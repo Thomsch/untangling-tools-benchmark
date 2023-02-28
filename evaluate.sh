@@ -24,7 +24,7 @@ export FLEXEME_JAVA="$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java"
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
 version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-if [[ ! "$version" < "1.9" ]] && [[ "$version" > "1.7" ]]; then
+if [[ "$version" > "1.9" ]] || [[ "$version" < "1.7" ]]; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
@@ -162,7 +162,8 @@ echo -ne '\n'
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ $flexeme_untangling_code -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ; then
+if [ ${flexeme_untangling_code:-1} -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
+then
     echo -ne 'Parsing Flexeme results ................................................. SKIP\r'
 else
     echo -ne '\n'
