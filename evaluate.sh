@@ -39,7 +39,10 @@ commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail 
 
 # Get source path and class path
 sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
+sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${workdir}")"
+
 classpath=$(defects4j export -p cp.compile -w "${workdir}")
+classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 
 #
 # Compute commit metrics
