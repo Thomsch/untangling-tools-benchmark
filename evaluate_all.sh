@@ -8,14 +8,12 @@ fi
 bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
-results="${out_dir}/results" # Contains the results for each commit.
 out_file="${out_dir}/decompositions.csv" # Aggregated results.
 workdir="${out_dir}/repositories"
 metrics_dir="${out_dir}/metrics"
 evaluation_dir="${out_dir}/evaluation"
 logs_dir="${out_dir}/logs"
 
-mkdir -p "$results"
 mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
