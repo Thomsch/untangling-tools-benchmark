@@ -44,8 +44,8 @@ done < "$bugs_file"
 echo ""
 echo "Evaluation finished with ${error_counter} errors out of $(wc -l < $bugs_file) commits."
 
-cat ${results}/*.csv > $out_file
-find ${results} -name "*.csv" -type f -delete
+cat "${results}"/*.csv > "$out_file"
+#find ${results} -name "*.csv" -type f -delete
 
 echo ""
 echo "Decomposition scores aggregated and saved in ${out_file}"
