@@ -18,11 +18,11 @@ Scripts to run the code changes benchmark.
 Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
 
 ## Running the benchmark
-1. Run `scripts/active_bugs.sh > out/all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+1. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
-    - Remove commits from `Chart` project from `out/commit.csv` because they are incompatible with SmartCommit. See **
+    - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit. See **
       Limitations** sections.
-2. Run `scripts/sample_bugs.sh out/all-commits.csv <n> > out/sample_<n>.csv` with `<n>` indicating the number of bugs 
+2. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs 
    to sample.
 3. Run `./evaluate_all.sh sampled_bugs.csv`
 
