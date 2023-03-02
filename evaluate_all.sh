@@ -49,7 +49,7 @@ done < "$bugs_file"
 echo ""
 echo "Evaluation finished with ${error_counter} errors out of $(wc -l < $bugs_file) commits."
 
-cat "${evaluation_dir}"/*/*/scores.csv > "$out_file"
+cat "${evaluation_dir}"/*/scores.csv > "$out_file"
 #find ${results} -name "*.csv" -type f -delete
 
 echo ""

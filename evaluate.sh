@@ -10,7 +10,8 @@ repo_root=$4 # Path where the repo is checked out
 workdir="${repo_root}/${project}_${vid}"
 
 decomposition_path="${out_path}/decomposition" # Path containing the decomposition results.
-evaluation_path="${out_path}/evaluation/${project}/${vid}" # Path containing the evaluation results. i.e., ground truth, decompositions in CSV format.
+evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
+# truth, decompositions in CSV format.
 metrics_path="${out_path}/metrics" # Path containing the commit metrics.
 
 mkdir -p "${evaluation_path}"
