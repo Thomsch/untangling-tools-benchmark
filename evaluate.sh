@@ -54,8 +54,7 @@ if [[ -f "$metrics_out" ]]; then
     echo -ne 'Calculating metrics ..................................................... SKIP\r'
 else
     source ./scripts/diff_util.sh
-    diff "$project" "$vid" "$commit" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
-    echo -ne 'Calculating metrics ...................................................... OK\r'
+    diff "$project" "$vid" "$commit" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
 fi
 
 #
