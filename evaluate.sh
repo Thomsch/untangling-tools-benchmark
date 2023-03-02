@@ -5,9 +5,9 @@
 # e.g., ./evaluate.sh Lang 1
 project=$1
 vid=$2
-out_path=$3
-repo_dir=$4
-workdir="${repo_dir}/${project}_${vid}"
+out_path=$3 # Path where the results are stored.
+repo_root=$4 # Path where the repo is checked out
+workdir="${repo_root}/${project}_${vid}"
 
 decomposition_path="${out_path}/decomposition" # Path containing the decomposition results.
 evaluation_path="${out_path}/evaluation/${project}/${vid}" # Path containing the evaluation results. i.e., ground truth, decompositions in CSV format.

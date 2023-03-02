@@ -1,12 +1,19 @@
 #!/bin/bash
 
+if [[ $# -ne 2 ]] ; then
+    echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
+    exit 1
+fi
+
 bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
+out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
-out_dir='out'
 results="${out_dir}/results" # Contains the results for each commit.
-out_file="out/decompositions.csv" # Aggregated results.
+out_file="${out_dir}/decompositions.csv" # Aggregated results.
+workdir="${out_dir}/repositories"
 
-mkdir -p $results
+mkdir -p "$results"
+mkdir -p "$workdir"
 
 if ! [[ -f "$bugs_file" ]]; then
     echo "File ${bugs_file} not found. Exiting."
@@ -22,7 +29,7 @@ while IFS=, read -r project vid
 do
     # TODO: Don't regenerate results when they already exist.
     START=$(date +%s.%N)
-    ./evaluate.sh "$project" "$vid" "$out_dir" "tmp" &> "${results}/${project}_${vid}.log"
+    ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${results}/${project}_${vid}.log"
     ret_code=$?
     evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
