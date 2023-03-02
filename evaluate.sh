@@ -55,6 +55,13 @@ if [[ -f "$metrics_out" ]]; then
 else
     source ./scripts/diff_util.sh
     diff "$project" "$vid" "$commit" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
+    code=$?
+    if [ $code -eq 0 ]
+    then
+        echo -ne 'Calculating metrics ..................................................... OK\r'
+    else
+        echo -ne 'Calculating metrics ..................................................... FAIL\r'
+    fi
 fi
 
 #
@@ -69,7 +76,13 @@ if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
     ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
-    echo -ne 'Calculating ground truth .................................................. OK\r'
+    code=$?
+    if [ $code -eq 0 ]
+    then
+        echo -ne 'Calculating ground truth .................................................. OK\r'
+    else
+        echo -ne 'Calculating ground truth .................................................. FAIL\r'
+    fi
 fi
 echo -ne '\n'
 
