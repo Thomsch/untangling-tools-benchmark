@@ -1,10 +1,10 @@
 import logging
 import sys
+from io import StringIO
 
 import networkx as nx
 import pandas as pd
 
-from io import StringIO
 
 # Retrieves changed lines for Flexeme results.
 
@@ -64,6 +64,7 @@ def main():
 
             df = pd.read_csv(StringIO(result), names=['group', 'file', 'source', 'target'], na_values='None')
             df = df.convert_dtypes() # Forces pandas to use ints in source and target columns.
+            df = df.drop_duplicates()
 
             if not len(df):
                 print('No results generated. Verify decomposition results and paths.', file=sys.stderr)
