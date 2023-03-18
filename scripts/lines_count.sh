@@ -29,15 +29,14 @@ do
     commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)  
 
     if [[ -f "$truth_out" ]]; then
-        echo -ne 'Calculating ground truth ................................................ SKIP\r'
+        echo -ne 'Calculating ground truth ................................................ SKIP\r\n'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
         ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
         ret_code=$?
         evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-        echo -ne "Calculating ground truth .................................................. ${evaluation_status}\r"
+        echo -ne "Calculating ground truth .................................................. ${evaluation_status}\r\n"
     fi
-    echo -ne '\n'
 
     # count number of lines and append
     python3 src/count_lines.py "$truth_out" "$project" "$vid" >> $out_file

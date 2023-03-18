@@ -20,8 +20,8 @@ Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the d
 ## Running the benchmark
 1. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
-    - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit. See **
-      Limitations** sections.
+    - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit.
+      See **Limitations** sections.
 2. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs 
    to sample.
 3. Run `./evaluate_all.sh sampled_bugs.csv`

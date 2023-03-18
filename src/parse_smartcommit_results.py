@@ -12,7 +12,7 @@ import pandas as pd
 
 def list_json_files(dir):
     """
-    " Returns the JSON files contained in the specific directory.
+    Returns the JSON files contained in the specific directory.
     """
     return glob.glob(os.path.join(dir, '*.json'))
 
@@ -20,7 +20,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 2:
-        print("usage: this_script.py <path/to/root/results> <path/to/out/file>")
+        print("usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>")
         exit(1)
     
     result_dir = args[0]

@@ -14,12 +14,14 @@ def main():
     project = args[1]
     vid = args[2]
     
+    # "df" stands for "dataframe"
     truth_df = pd.read_csv(truth_file).convert_dtypes()
 
     fix_lines = truth_df['fix'].value_counts().get(True, default=0)
     other_lines = truth_df['fix'].value_counts().get(False, default=0)
 
     print(f'{project},{vid},{fix_lines},{other_lines}')
+
 if __name__ == "__main__":
     main()
 
