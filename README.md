@@ -1,33 +1,46 @@
 # Untangling Tools Benchmark
-Scripts to run the code changes benchmark.
+
+Benchmark for comparing untangling tools on real bug-fixing commits.
 
 ## Requirements
-- [Defects4J](https://github.com/rjust/defects4j) is installed and `defects4j` is on the PATH.
-- Java 8 is installed and `java` is on the PATH.
-- `python3` is installed and on the PATH.
-- Flexeme is installed and on the PATH.
-  1. Clone `https://github.com/Thomsch/Flexeme` locally.
-  2. Install Flexeme from the clone `pip install -e path/to/flexeme/clone`.
-  3. Install local dependencies `pip install -r requirements.txt`.
 
-### Environment Variables
-- `DEFECTS4J_HOME`: Location of the Defects4J installation.
-- `JAVA_SMARTCOMMIT`: Location of the java executable to run SmartCommit. Requires Java 11
+- Python 3.8 is installed and on the PATH.
+- Java 8 is installed and on the PATH.
+- Java 11 is installed, but is not on the PATH.
+
+## Installation
+
+1. Clone this repository locally `git clone https://github.com/Thomsch/untangling-tools-benchmark`.
+2. Go into the repository folder `cd untangling-tools-benchmark`.
+3. Create a virtual environment `python3 -m venv .venv`.
+4. Activate the virtual environment `source .venv/bin/activate`.
+5. Install Flexeme for Java
+    1. Clone the Flexeme repository locally `git clone https://github.com/Thomsch/Flexeme ~/Flexeme`.
+    2. Install Flexeme from the clone `pip install -e ~/Flexeme`.
+6. Install local dependencies `pip install -r requirements.txt`.
+7. Install Defects4J
+   1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
+   2. <Follow D4J instructions: set up Java 8, install dependencies, and run init.sh>.
+   3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.
+8. Copy `.env-template` to `.env` and fill in the environment variables.
+   - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
+   - `JAVA_SMARTCOMMIT`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11.
 
 ## Running the benchmark
-2. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+1. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
     - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit.
       See **Limitations** sections.
-3. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs 
-   to sample.
-4. Copy .env-template to .env and fill in the environment variables.
-5. Run `./evaluate_all.sh sampled_bugs.csv <out_dir>`.
+2. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs to sample.
+3. Run `./evaluate_all.sh sampled_bugs.csv <out_dir>`.
     - This will run the decomposition on all bugs in `sampled_bugs.csv`.
-    - <out_dir> will contain the results of the decomposition.
+    - `<out_dir>` will contain the results of the decomposition.
 
 ## Untangling one D4J bug
-Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
+1. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. 
+   - This will run the decomposition on the specified Defects4J `<bug_id>` in `<project>`. 
+   - `<out_dir>` will contain the results of the decomposition. 
+   - `<repo_dir>` is the directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.
