@@ -2,7 +2,9 @@
 
 # Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
 
-export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
+set -o allexport
+source .env
+set +o allexport
 
 all_commits="out/commits.csv"
 out_file="out/lines.csv"

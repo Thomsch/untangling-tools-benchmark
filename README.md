@@ -14,17 +14,20 @@ Scripts to run the code changes benchmark.
 - `DEFECTS4J_HOME`: Location of the defect4j installation.
 - `JAVA_SMARTCOMMIT`: Location of the java executable to run SmartCommit. Requires Java 11
 
-## Untangling one D4J bug
-Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
-
 ## Running the benchmark
-1. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+2. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
    with SmartCommit because it uses SVN)
     - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit.
       See **Limitations** sections.
-2. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs 
+3. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs 
    to sample.
-3. Run `./evaluate_all.sh sampled_bugs.csv`
+4. Copy .env-template to .env and fill in the environment variables.
+5. Run `./evaluate_all.sh sampled_bugs.csv <out_dir>`.
+    - This will run the decomposition on all bugs in `sampled_bugs.csv`.
+    - <out_dir> will contain the results of the decomposition.
+
+## Untangling one D4J bug
+Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. This will run the decomposition on the specified Defects4J <bug_id> in <project>. <out_dir> will contain the results of the decomposition. <repo_dir> is the directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.

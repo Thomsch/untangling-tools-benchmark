@@ -17,10 +17,9 @@ metrics_path="${out_path}/metrics" # Path containing the commit metrics.
 mkdir -p "${evaluation_path}"
 mkdir -p "${metrics_path}"
 
-# Replace by your settings
-export DEFECTS4J_HOME="$HOME/Workplace/defects4j"
-export JAVA_SMARTCOMMIT="$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java"
-export FLEXEME_JAVA="$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java"
+set -o allexport
+source .env
+set +o allexport
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.

@@ -8,5 +8,4 @@ repository=$3
 truth_out=$4
 commit=$5
 
-export DEFECTS4J_HOME="/Users/thomas/Workplace/defects4j"
 ./scripts/changed_lines.sh "$project" "$vid" "$repository" "$commit" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
