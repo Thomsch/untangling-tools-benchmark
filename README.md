@@ -11,7 +11,7 @@ Scripts to run the code changes benchmark.
   3. Install local dependencies `pip install -r requirements.txt`.
 
 ### Environment Variables
-- `DEFECTS4J_HOME`: Location of the defect4j installation.
+- `DEFECTS4J_HOME`: Location of the Defects4J installation.
 - `JAVA_SMARTCOMMIT`: Location of the java executable to run SmartCommit. Requires Java 11
 
 ## Running the benchmark

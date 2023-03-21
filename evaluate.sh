@@ -31,7 +31,7 @@ fi
 
 echo "Evaluating project $project, bug $vid, repository $workdir"
 
-# Checkout defects4j bug
+# Checkout Defects4J bug
 mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 

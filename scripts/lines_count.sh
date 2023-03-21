@@ -24,7 +24,7 @@ do
     workdir=./tmp/"$project"_"$vid"
     truth_out="./out/evaluation/${project}/${vid}/truth.csv"
   
-    # Checkout defects4j bug
+    # Checkout Defects4J bug
     defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
     # Get fix commit hash

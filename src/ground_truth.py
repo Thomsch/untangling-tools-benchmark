@@ -1,11 +1,12 @@
-# Calculates the ground truth from changed lines and the Defect4J bug-inducing patches.
+# Calculates the ground truth from changed lines and the Defects4J bug-inducing patches.
 # Saves the results in a csv file given in parameter.
-import sys
 import os
-
-import pandas as pd
-import numpy as np
+import sys
 from io import StringIO
+
+import numpy as np
+import pandas as pd
+
 import parse_patch
 
 COL_NAMES=['file', 'source', 'target']

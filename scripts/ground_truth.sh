@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Retrieves the minimal bug-fixing changes for a Defect4J bug.
+# Retrieves the minimal bug-fixing changes for a Defects4J bug.
 #
 project=$1
 vid=$2
