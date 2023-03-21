@@ -22,7 +22,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
    2. <Follow D4J instructions: set up Java 8, install dependencies, and run init.sh>.
    3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.
-8. Copy `.env-template` to `.env` and fill in the environment variables.
+8. Copy `.env-template` to `.env` and fill in the environment variables `cp .env-template .env`.
    - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
    - `JAVA_SMARTCOMMIT`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11.
 
