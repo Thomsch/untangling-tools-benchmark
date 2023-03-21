@@ -24,7 +24,7 @@ if ! [[ -f "$bugs_file" ]]; then
 fi
 
 # TODO: Parallelize
-echo "Logs stored in ${logs_dir}/<project>_<bud_id>.log"
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
 error_counter=0
@@ -36,16 +36,17 @@ do
     ret_code=$?
     evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
-    DIFF=$(echo "$END - $START" | bc)
+    # Must use `bc` because the computation is on floating-point numbers.
+    ELAPSED=$(echo "$END - $START" | bc)
     if [ $ret_code -ne 0 ]; then
         error_counter=$((error_counter+1))
     fi
-    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${DIFF}"
+    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
 
 done < "$bugs_file"
 
 echo ""
-echo "Evaluation finished with ${error_counter} errors out of $(wc -l < $bugs_file) commits."
+echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
 
 cat "${evaluation_dir}"/*/scores.csv > "$out_file"
 #find ${results} -name "*.csv" -type f -delete

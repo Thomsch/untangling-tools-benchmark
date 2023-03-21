@@ -12,7 +12,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 2:
-        print("usage: this_script.py <path/to/root/results> <path/to/out/file>")
+        print("usage: parse_flexeme_results.py <path/to/root/results> <path/to/out/file>")
         exit(1)
     
     result_file = args[0]
@@ -20,15 +20,15 @@ def main():
 
     graph = nx.nx_pydot.read_dot(result_file)
 
+    UPDATE_ADD = 'add'
+    UPDATE_REMOVE = 'remove'
+
     result = ''
     for node, data in graph.nodes(data=True):
         if 'color' in data.keys():
             if not 'label' in data.keys():
                 logging.error(f"Attribute 'label' not found in node {node}")
                 continue
-
-            UPDATE_ADD = 'add'
-            UPDATE_REMOVE = 'remove'
 
             color_attribute = data['color']
             if color_attribute == 'green':
@@ -39,9 +39,8 @@ def main():
                 logging.error(f"Color {color_attribute} not supported in node {node}")
                 continue
 
+            # Get the label for this node. Flexeme prepends "%d:" to the label of the node.
             label_attribute = data['label']
-
-            # Get the label for this node. Flexeme prepend %d: to the label of the node.
             group = label_attribute.split(':')[0].replace('"', '')
 
             # Retrieve line
