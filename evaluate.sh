@@ -1,8 +1,12 @@
 #!/bin/bash
 # Evaluates a single Defects4j bug.
 
-# Arguments: ./evaluate.sh <project_id> <bug id>
-# e.g., ./evaluate.sh Lang 1
+if [[ $# -ne 4 ]] ; then
+    echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
+    echo 'example: evaluate.sh Lang 1 out/ repositories/'
+    exit 1
+fi
+
 project=$1
 vid=$2
 out_path=$3 # Path where the results are stored.
