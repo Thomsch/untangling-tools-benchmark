@@ -200,6 +200,7 @@ fi
 #
 echo -ne 'Computing untangling scores ...............................................\r'
 python3 src/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
+echo -ne 'Computing untangling scores ............................................ OK'
 
 # # rm -rf "$workdir" # Deletes temporary directory containing repository
 
