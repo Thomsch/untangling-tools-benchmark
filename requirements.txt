@@ -3,3 +3,7 @@ numpy
 scikit-learn
 unidiff
 pydot
+
+# Data analysis
+jupyter
+seaborn
