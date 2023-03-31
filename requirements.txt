@@ -8,5 +8,5 @@ networkx~=2.8.8
 # Data analysis
 jupyter
 seaborn
-tisane
+#tisane
 statsmodels
