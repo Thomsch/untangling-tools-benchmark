@@ -1,9 +1,12 @@
-pandas
-numpy
-scikit-learn
-unidiff
+pandas~=1.5.3
+numpy~=1.23.5
+scikit-learn~=1.2.1
+unidiff~=0.7.4
 pydot
+networkx~=2.8.8
 
 # Data analysis
 jupyter
 seaborn
+tisane
+statsmodels
