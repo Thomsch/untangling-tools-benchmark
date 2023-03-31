@@ -5,7 +5,7 @@ library(ggpubr)
 library(lme4)
 library(ggbeeswarm)
 library(effsize)
-
+library(lmerTest)
 #
 # We use R to handle the linear mixed models because Python doesn't support lmms with 2 random effects (cross effects).
 #
