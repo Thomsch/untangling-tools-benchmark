@@ -13,7 +13,7 @@ library(effsize)
 
 library(lmerTest)
 
-fileData <-"./merge-100.csv"
+fileData <-"./merge.csv"
 data <- read.csv(fileData)
 data <- na.omit(data)
 

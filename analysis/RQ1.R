@@ -11,7 +11,7 @@ library(lmerTest)
 #
 
 
-fileData <-"./decompositions-100.csv"
+fileData <-"./decompositions.csv"
 data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme'))
 
 # Convert to long format
