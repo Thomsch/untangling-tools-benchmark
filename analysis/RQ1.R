@@ -21,7 +21,6 @@ ggplot(data_long, aes(x=Treatment, y=Performance)) + geom_beeswarm() + coord_fli
 
 model <- lmer(Performance ~ Treatment + (1|Project) + (1|BugID), data=data_long)
 summary(model)
-# If Estimate for SmartCommit or Flexeme is smaller than 0.05, then there is a significant difference.
 
 # Effect size
 cohen.d(data_long$Performance[data_long$Treatment == "SmartCommit"], data_long$Performance[data_long$Treatment == "Flexeme"])
