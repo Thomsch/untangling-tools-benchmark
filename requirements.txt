@@ -7,6 +7,7 @@ networkx~=2.8.8
 
 # Data analysis
 jupyter
+markupsafe==2.0.1 # otherwise jupyter notebook fails to start
 seaborn
 #tisane
 statsmodels
