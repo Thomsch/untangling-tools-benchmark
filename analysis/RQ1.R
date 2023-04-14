@@ -21,6 +21,10 @@ ggplot(data_long, aes(x=Treatment, y=Performance)) + geom_beeswarm() + coord_fli
 
 model <- lmer(Performance ~ Treatment + (1|Project) + (1|BugID), data=data_long)
 summary(model)
+# The summary can be interpreted as follows:
+# Intercept row shows whether the baseline treatment (whichever is first) is significantly different from 0.
+# The second row, containing the other treatment shows whether the other treatment is significantly different from
+# the intercept.
 
 # Effect size
 cohen.d(data_long$Performance[data_long$Treatment == "SmartCommit"], data_long$Performance[data_long$Treatment == "Flexeme"])
