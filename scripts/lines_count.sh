@@ -6,18 +6,23 @@ set -o allexport
 source .env
 set +o allexport
 
-all_commits="out/commits.csv"
-out_file="out/lines.csv"
+if [[ $# -ne 2 ]] ; then
+    echo 'usage: lines_count.sh <commit_file> <out_file>'
+    echo 'example: lines_count.sh data/d4j-bugs.csv lines.csv'
+    exit 1
+fi
+
+all_commits=$1
+out_file=$2
 
 if ! [[ -f "$all_commits" ]]; then
     echo "File ${all_commits} not found. Exiting."
     exit 1
 fi
 
-mkdir -p "./tmp" # Create temporary directory
+mkdir -p ".tmp" # Create temporary directory
 
-
-echo "project,bug_id,fix_lines,other_lines" > $out_file
+echo "project,bug_id,fix_lines,other_lines" > "$out_file"
 
 while IFS=, read -r project vid
 do
@@ -41,7 +46,5 @@ do
     fi
 
     # count number of lines and append
-    python3 src/count_lines.py "$truth_out" "$project" "$vid" >> $out_file
-    
-    # delete workdir
-done < $all_commits
+    python3 src/count_lines.py "$truth_out" "$project" "$vid" >> "$out_file"
+done < "$all_commits"

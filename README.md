@@ -27,14 +27,16 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    - `JAVA_SMARTCOMMIT`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11.
 
 ## Running the benchmark
-1. Run `scripts/active_bugs.sh > all-commits.csv` (will generate from all project. Project `Chart` is not compatible
+1. Run `scripts/defects4j_bugs.sh > d4j-bugs.csv` (will generate from all project. Project `Chart` is not 
+   compatible
    with SmartCommit because it uses SVN)
-    - Remove commits from `Chart` project from `all-commits.csv` because they are incompatible with SmartCommit.
+    - Remove commits from `Chart` project from `d4j-bugs.csv` because they are incompatible with SmartCommit.
       See **Limitations** sections.
-2. Run `scripts/sample_bugs.sh all-commits.csv <n> > sampled_bugs.csv` with `<n>` indicating the number of bugs to sample.
-3. Run `./evaluate_all.sh sampled_bugs.csv <out_dir>`.
-    - This will run the decomposition on all bugs in `sampled_bugs.csv`.
+2. Run `./evaluate_all.sh d4j-bugs.csv <out_dir>`.
+    - This will run the decomposition on all bugs in `d4j-bugs.csv`.
     - `<out_dir>` will contain the results of the decomposition.
+    - If you want to only run on a few bugs, use `scripts/sample_bugs.sh d4j-bugs.csv <n>`, with `<n>` 
+      indicating the number of bugs to sample.
 
 ## Untangling one D4J bug
 1. Run `./evaluate.sh <project> <bug_id> <out_dir> <repo_dir>`. 
@@ -49,6 +51,9 @@ It will create `out/time.csv` containing the runtime of each decomposition.
 
 ## Adding an untangling tool
 Add a call to your untangling tool executable in `evaluate.sh`. Use the existing tools' code as a template.
+
+## Statistics
+Run `scripts/lines_count.sh` to get the number of changed lines in each D4J bug.
 
 ## Limitations
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines containing `Chart` in `out/commits.csv`.
