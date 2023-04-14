@@ -27,8 +27,8 @@ set +o allexport
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
-version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-if [[ "$version" > "1.9" ]] || [[ "$version" < "1.7" ]]; then
+version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
+if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
@@ -89,10 +89,10 @@ else
 fi
 echo -ne '\n'
 
-# 
+#
 # Running each tool on the bug.
 # Tools are run in serial, but could be run in parallel. The results are ouputted to invididual files, enabling parallelisation.
-# 
+#
 # TODO: Run tools in parallel. See https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
 #
 
@@ -131,10 +131,10 @@ else
     python3 src/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
     code=$?
 
-    if [ $code -eq 0 ] 
-    then 
+    if [ $code -eq 0 ]
+    then
         echo -ne 'Parsing SmartCommit results ............................................... OK'
-    else 
+    else
         echo -ne 'Parsing SmartCommit results ............................................. FAIL'
     fi
     echo -ne '\n'

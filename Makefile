@@ -4,7 +4,7 @@ check: check-scripts check-python
 
 check-scripts:
     # Fail if any of these files have warnings
-	shellcheck $(wildcard ./*.sh scripts/*.sh)
+	shellcheck -x $(wildcard ./*.sh scripts/*.sh)
 
 PYTHON_FILES=$(wildcard src/*.py)
 python-style:
