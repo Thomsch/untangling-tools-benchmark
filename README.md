@@ -24,7 +24,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.
 8. Copy `.env-template` to `.env` and fill in the environment variables `cp .env-template .env`.
    - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
-   - `JAVA_SMARTCOMMIT`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11.
+   - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11.
 
 ## Running the benchmark
 1. Run `scripts/defects4j_bugs.sh > d4j-bugs.csv` (will generate from all project. Project `Chart` is not 

@@ -37,13 +37,14 @@ do
     commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)  
 
     if [[ -f "$truth_out" ]]; then
-        echo -ne 'Calculating ground truth ................................................ SKIP\r\n'
+        echo -ne 'Calculating ground truth ................................................ SKIP\n'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
         ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
         ret_code=$?
+        # Use an if statement to avoid spawning a new subshell.
         evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-        echo -ne "Calculating ground truth .................................................. ${evaluation_status}\r\n"
+        echo -ne "Calculating ground truth .................................................. ${evaluation_status}\n"
     fi
 
     # count number of lines and append

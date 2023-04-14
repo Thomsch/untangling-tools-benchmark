@@ -1,10 +1,17 @@
 #!/bin/bash
-# Evaluates a single Defects4j bug.
+# Run the untangling tools on a single Defects4J bug. Also calculates the bug's metrics and parse the bug's manual
+# untangling into a CSV file.
 
 if [[ $# -ne 4 ]] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
+fi
+
+if [[ -z "${JAVA_11}" ]]; then
+  echo 'JAVA_11 environment variable not set.'
+  echo 'Please set it to the path of a Java 11 JDK.'
+  exit 1
 fi
 
 project=$1
@@ -111,7 +118,7 @@ if [[ -d "$smartcommit_untangling_results" ]]; then
 else
     echo -ne '\n'
     START_DECOMPOSITION=$(date +%s.%N)
-    $JAVA_SMARTCOMMIT -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
+    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
