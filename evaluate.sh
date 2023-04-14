@@ -22,6 +22,7 @@ mkdir -p "${evaluation_path}"
 mkdir -p "${metrics_path}"
 
 set -o allexport
+# shellcheck source=/dev/null
 source .env
 set +o allexport
 

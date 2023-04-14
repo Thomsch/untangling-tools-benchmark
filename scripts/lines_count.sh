@@ -3,6 +3,7 @@
 # Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
 
 set -o allexport
+# shellcheck source=/dev/null
 source .env
 set +o allexport
 
