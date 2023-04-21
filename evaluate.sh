@@ -12,6 +12,11 @@ if [[ $# -ne 4 ]] ; then
     exit 1
 fi
 
+set -o allexport
+# shellcheck source=/dev/null
+source .env
+set +o allexport
+
 if [[ -z "${JAVA_11}" ]]; then
   echo 'JAVA_11 environment variable not set.'
   echo 'Please set it to the path of a Java 11 JDK.'
@@ -31,11 +36,6 @@ metrics_path="${out_path}/metrics" # Path containing the commit metrics.
 
 mkdir -p "${evaluation_path}"
 mkdir -p "${metrics_path}"
-
-set -o allexport
-# shellcheck source=/dev/null
-source .env
-set +o allexport
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
