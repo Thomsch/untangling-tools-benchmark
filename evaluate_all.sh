@@ -1,4 +1,10 @@
 #!/bin/bash
+# Run the untangling tools on a list of Defects4J bugs.
+
+#set -o errexit    # Exit immediately if a command exits with a non-zero status. Disabled because we need to check
+# the return code of ./evaluate.sh.
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
     echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'

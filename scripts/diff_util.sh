@@ -1,7 +1,11 @@
 #!/bin/bash
+# Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
 
-# Generates the unified diff in the same format for Git and Svn repositories
-diff () {
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
+
+d4j_diff () {
     local PROJECT=$1
     local VID=$2
     local REVISION=$3

@@ -1,6 +1,9 @@
 #!/bin/bash
-
 # Sample N bugs from the file containing all bugs.
+
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
     echo 'usage: sample_bugs.sh <commit_file> <sample_size>'

@@ -1,7 +1,9 @@
 #!/bin/bash
-#
 # Retrieves the minimal bug-fixing changes for a Defects4J bug.
-#
+
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 5 ]] ; then
     echo 'usage: ground_truth <D4J Project> <D4J Bug id> <project repository> <out file> <commit id>'

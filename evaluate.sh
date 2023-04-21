@@ -2,6 +2,10 @@
 # Run the untangling tools on a single Defects4J bug. Also calculates the bug's metrics and parse the bug's manual
 # untangling into a CSV file.
 
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
+
 if [[ $# -ne 4 ]] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
@@ -65,7 +69,7 @@ if [[ -f "$metrics_out" ]]; then
     echo -ne 'Calculating metrics ..................................................... SKIP\r'
 else
     source ./scripts/diff_util.sh
-    diff "$project" "$vid" "$commit" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
+    d4j_diff "$project" "$vid" "$commit" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
     code=$?
     if [ $code -eq 0 ]
     then
