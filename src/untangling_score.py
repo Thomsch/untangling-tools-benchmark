@@ -1,9 +1,11 @@
 # Calculates the Rand Index for the clusters per tool compared to ground truth.
 
-from os import path
 import sys
+from os import path
+
 import pandas as pd
 from sklearn import metrics
+
 
 def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -17,23 +19,30 @@ def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
 
     return df.drop(['other_change', 'adjusted_group'], axis=1)
 
+
 def is_other_change(df: pd.DataFrame):
     """
     For each group, return whether the group contains only non bug-fixing changes or not.
     If a group only has bug fixing changes, return True.
     """
-    df['other_change'] = ~df['fix'] # New column to keep track of non bug-fixing changes.
-    return df.groupby('group')['other_change'].all() # Which groups only have non-bug-fixing changes.
+    df['other_change'] = ~df['fix']  # New column to keep track of non bug-fixing changes.
+    return df.groupby('group')['other_change'].all()  # Which groups only have non-bug-fixing changes.
+
 
 def calculate_score_for_tool(truth_df, tool_df):
+    """
+    Calculate the Rand Index between the ground truth and a tool.
+    """
+    if tool_df is None:
+        tool_df = truth_df.copy()
+        tool_df['group'] = 'o'
+        tool_df.drop('fix', axis=1, inplace=True)
+
     df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left')
-    df['group'] = df['group'].fillna('o') # Fill changed lines that are unclassified as other changes ('o').
+    df['group'] = df['group'].fillna('o')  # Fill changed lines that are unclassified as other changes ('o').
 
-    labels_pred = df['group']
-    labels_true = df['fix']
-
-    ## Adjust cluster to not penalize multiple groups containing exclusively
-    ## non bug fixing changes.
+    # Adjust cluster to not penalize multiple groups containing exclusively
+    # non bug fixing changes.
     df_adjusted = adjust_groups(df)
     labels_pred = df_adjusted['group']
     labels_true = df_adjusted['fix']
@@ -54,24 +63,32 @@ def main():
     root = args[0]
     project = args[1]
     vid = args[2]
-    
-    truth_file = path.join(root,'truth.csv')
-    smartcommit_file = path.join(root,'smartcommit.csv')
-    flexeme_file = path.join(root,'flexeme.csv')
+
+    truth_file = path.join(root, 'truth.csv')
+    smartcommit_file = path.join(root, 'smartcommit.csv')
+    flexeme_file = path.join(root, 'flexeme.csv')
 
     try:
         truth_df = pd.read_csv(truth_file).convert_dtypes()
-        smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
-        flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
-        flexeme_df['group'] = flexeme_df['group'].astype('string')
-
-        smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
-        flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
-
-        print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
     except FileNotFoundError as e:
         print(f'File not found: {e.filename}', file=sys.stderr)
         exit(1)
+
+    try:
+        smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
+    except FileNotFoundError:
+        smartcommit_df = None
+
+    try:
+        flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
+        flexeme_df['group'] = flexeme_df['group'].astype('string')
+    except FileNotFoundError:
+        flexeme_df = None
+
+    smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
+    flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
+
+    print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
 
 
 if __name__ == "__main__":
