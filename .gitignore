@@ -11,3 +11,6 @@ data/corpora_clean
 # Python
 __pycache__
 .venv/
+analysis/.RData
+
+analysis/.Rhistory
