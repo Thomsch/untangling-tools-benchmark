@@ -46,20 +46,27 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 
 ### Aggregating decomposition elapsed time
 All decomposition are timed. The result is stored in each decomposition folder.
-To aggregated all of the results in one file, run `scripts/aggregate_time.sh`. 
+To aggregated all the results in one file, run `scripts/aggregate_time.sh`.
 It will create `out/time.csv` containing the runtime of each decomposition.
 
 ## Adding an untangling tool
+
 Add a call to your untangling tool executable in `evaluate.sh`. Use the existing tools' code as a template.
 
 ## Statistics
+
 Run `scripts/lines_count.sh` to get the number of changed lines in each D4J bug.
 
 ## Limitations
-- SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines containing `Chart` in `out/commits.csv`.
 
-## Improvements ideas
-- Use Make to run the build pipeline.
-    - The main benefit is that Make will take care of regenerating the correct files based on what is available / changed.
-      - make: Use filename wildcard for each bug
-      - rake has this options
+- SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines
+  containing `Chart` in `out/commits.csv`.
+
+## Manual analysis
+
+1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
+2. Open the diff for the bug `git diff -U0 <commit>^ <commit>`.
+3. In another tab, open the ground truth `less <out_dir>/evaluation/<project><bug_id>/truth.csv`
+4. In another tab, open the Flexeme decomposition `less <out_dir>/evaluation/<project><bug_id>/flexeme.csv`.
+5. In another tab, open the SmartCommit decomposition `less <out_dir>/evaluation/<project><bug_id>/truth.csv`.
+6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.
