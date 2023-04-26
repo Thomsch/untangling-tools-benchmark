@@ -1,5 +1,5 @@
-install.packages("devtools")
-devtools::install_github("dustinfife/flexplot")
+# install.packages("devtools")
+# devtools::install_github("dustinfife/flexplot")
 
 library(flexplot)
 data(relationship_satisfaction)
