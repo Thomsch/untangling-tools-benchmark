@@ -19,6 +19,6 @@ d4j_diff () {
         svn diff -c "$REVISION" "${REPO_DIR}"  --diff-cmd diff -x "-U 0"
     else
         echo "Error: VCS ${vcs} not supported."
-        exit 1
+        return 1
     fi
 }
