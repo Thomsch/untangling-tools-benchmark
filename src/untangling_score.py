@@ -67,6 +67,7 @@ def main():
     truth_file = path.join(root, 'truth.csv')
     smartcommit_file = path.join(root, 'smartcommit.csv')
     flexeme_file = path.join(root, 'flexeme.csv')
+    file_untangling_file = path.join(root, 'file_untangling.csv')
 
     try:
         truth_df = pd.read_csv(truth_file).convert_dtypes()
@@ -85,10 +86,17 @@ def main():
     except FileNotFoundError:
         flexeme_df = None
 
+    try:
+        file_untangling_df = pd.read_csv(file_untangling_file).convert_dtypes()
+        file_untangling_df['group'] = file_untangling_df['group'].astype('string')
+    except FileNotFoundError:
+        file_untangling_df = None
+
     smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
     flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
+    file_untangling_score = calculate_score_for_tool(truth_df, file_untangling_df)
 
-    print(f'{project},{vid},{smartcommit_score},{flexeme_score}')
+    print(f'{project},{vid},{smartcommit_score},{flexeme_score},{file_untangling_score}')
 
 
 if __name__ == "__main__":

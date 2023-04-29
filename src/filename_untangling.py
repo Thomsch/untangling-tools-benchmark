@@ -36,7 +36,7 @@ def main():
 
                     with open(new_file_path, 'w', newline='') as new_csv_file:
                         csv_writer = csv.writer(new_csv_file)
-                        csv_writer.writerow(['file', 'source', 'target', 'group'])
+                        csv_writer.writerow(['group', 'file', 'source', 'target'])
 
                         for row in csv_reader:
                             file, source, target, _ = row
