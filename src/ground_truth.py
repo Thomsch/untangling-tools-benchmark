@@ -11,11 +11,13 @@ import parse_patch
 
 COL_NAMES=['file', 'source', 'target']
 
+
 def from_stdin() -> pd.DataFrame:
     """
     Parses a diff from stdin into a DataFrame.
     """
     return csv_to_dataframe(StringIO(sys.stdin.read()))
+
 
 def from_file(path) -> pd.DataFrame:
     """
