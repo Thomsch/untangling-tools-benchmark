@@ -43,7 +43,7 @@ def csv_to_dataframe(csv_data: StringIO) -> pd.DataFrame:
     return df
 
 
-def get_d4j_src_path(defects4j_home: str, project: str, vid: int):
+def get_d4j_src_path(defects4j_home, project, vid):
     return os.path.join(defects4j_home, "framework/projects", project, "patches", f"{vid}.src.patch")
 
 
@@ -53,10 +53,12 @@ def get_d4j_test_path(defects4j_home, project, vid):
 
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
-    Converts a PatchSet into a DataFrame.
+    Converts a PatchSet into a DataFrame and filters out non-java files.
     """
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
+        if not file.source_file.lower().endswith(".java") or not file.target_file.lower().endswith(".java"):
+            continue
         for hunk in file:
             for line in hunk:
                 if line.line_type == LINE_TYPE_CONTEXT:
@@ -70,7 +72,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     return df
 
 
-def load_d4j_patch(patch_path: str, original_changes=None) -> PatchSet:
+def load_d4j_patch(patch_path: str, original_changes={}) -> PatchSet:
     patch = PatchSet.from_filename(patch_path)
     for file in patch:
         for hunk in file:
@@ -87,12 +89,11 @@ def load_d4j_patch(patch_path: str, original_changes=None) -> PatchSet:
                     line.source_line_no = line.target_line_no
                     line.target_line_no = line.source_line_no
 
-                if original_changes:
+                if str(line) in original_changes:
                     original_line = original_changes[str(line)]
-                    if original_line is not None:
-                        line.source_line_no = original_line.source_line_no
-                        line.target_line_no = original_line.target_line_no
-                        line.line_type = original_line.line_type
+                    line.source_line_no = original_line.source_line_no
+                    line.target_line_no = original_line.target_line_no
+                    line.line_type = original_line.line_type
     return patch
 
 
@@ -120,7 +121,7 @@ def main():
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
                 if str(line) in changes:
-                    print(f"Duplicate change: {str(line)}", file=sys.stderr)
+                    print(f"Duplicate change in {file.target_file}: {str(line).strip()}", file=sys.stderr)
                     continue
                 changes[str(line)] = line
     changes_df = convert_to_dataframe(changes_diff)
