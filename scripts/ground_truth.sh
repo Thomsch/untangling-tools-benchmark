@@ -1,5 +1,9 @@
 #!/bin/bash
-# Retrieves the minimal bug-fixing changes for a Defects4J bug.
+# Generates the ground truth using the original fix and the minimized version of the D4J bug.
+# - $1: D4J Project name
+# - $2: D4J Bug id
+# - $3: Path to the checked out project repository
+# - $4: The path where to output the results
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -17,4 +21,7 @@ repository=$3
 truth_out=$4
 commit=$5
 
-./scripts/changed_lines.sh "$project" "$vid" "$repository" "$commit" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
+source ./scripts/diff_util.sh
+d4j_diff "$project" "$vid" "$commit" "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
+
+#./scripts/changed_lines.sh "$project" "$vid" "$repository" "$commit" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
