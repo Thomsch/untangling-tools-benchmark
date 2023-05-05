@@ -51,7 +51,7 @@ def get_d4j_test_path(defects4j_home, project, vid):
     return os.path.join(defects4j_home, "framework/projects", project, "patches", f"{vid}.test.patch")
 
 
-def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
+def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out non-java files.
     """
@@ -59,10 +59,24 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     for file in patch:
         if not file.source_file.lower().endswith(".java") or not file.target_file.lower().endswith(".java"):
             continue
+
+        if filter_non_code_changes and (file.source_file.endswith("Test.java") or file.target_file.endswith(
+                "Test.java")):
+            continue
+
         for hunk in file:
             for line in hunk:
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
+
+                # TODO: Lines starting with "*" are not always comments.
+                if filter_non_code_changes and (line.value.strip().startswith("/*") or
+                                                line.value.strip().startswith("*/") or
+                                                line.value.strip().startswith("//") or
+                                                line.value.strip().startswith("*") or
+                                                line.value.strip().startswith("import")):
+                    continue
+
                 entry = pd.DataFrame.from_dict({
                     "file": [file.path],
                     "source": [line.source_line_no],
@@ -100,8 +114,8 @@ def load_d4j_patch(patch_path: str, original_changes={}) -> PatchSet:
 def main():
     args = sys.argv[1:]
 
-    if len(args) != 3:
-        print("usage: file.py <project> <vid> <path/to/root/results>")
+    if len(args) != 4:
+        print("usage: file.py <project> <vid> <path/to/root/results> <exclude tests and non-code changes>")
         exit(1)
 
     if not os.getenv('DEFECTS4J_HOME'):
@@ -112,6 +126,7 @@ def main():
     project = args[0]
     vid = args[1]
     out_path = args[2]
+    exclude_non_code_changes = args[3].lower() == "true"
 
     changes_diff = PatchSet.from_string(sys.stdin.read())
     changes = {}
@@ -124,7 +139,7 @@ def main():
                     print(f"Duplicate change in {file.target_file}: {str(line).strip()}", file=sys.stderr)
                     continue
                 changes[str(line)] = line
-    changes_df = convert_to_dataframe(changes_diff)
+    changes_df = convert_to_dataframe(changes_diff, exclude_non_code_changes)
 
     # Assumption: No duplicate changes in the patch.
     # Assumption: No minimization within a line (i.e., either the line is included or not).
