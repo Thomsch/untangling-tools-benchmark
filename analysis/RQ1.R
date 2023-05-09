@@ -8,29 +8,30 @@ library(effsize)
 library(lmerTest)
 library(flexplot)
 library(ggplot2)
+library(rsq)
 #
 # We use R to handle the linear mixed models because Python doesn't support lmms with 2 random effects (cross effects).
 #
 
 
 fileData <-"./decompositions.csv"
-data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme'))
+data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
+data <- subset(data, select = -c(FileUntangling))
 data$BugID <- as_factor(data$BugID)
 
 # Convert to long format
 data_long = pivot_longer(data, cols = 3:4, names_to = 'Treatment', values_to = 'Performance')
 
-mtcars$am <- as.factor(mtcars$am)
-
-ggplot(data_long, aes(x=Treatment, y=Performance)) + geom_beeswarm() + coord_flip()
-
 model_mixed <- lmer(Performance ~ Treatment + (1|Project) + (1|BugID), data=data_long)
 summary(model_mixed)
 visualize(model_mixed)
+estimates(model_mixed)
+rsq(model_mixed, adj=TRUE)
 model_simple <- lm(Performance ~ Treatment, data=data_long)
 summary(model_simple)
 estimates(model_simple)
 visualize(model_simple)
+rsq(model_simple, adj=TRUE)
 
 model_simple2 <- lm(Performance ~ Treatment + Project, data=data_long)
 summary(model_simple2)
@@ -38,7 +39,8 @@ estimates(model_simple2)
 visualize(model_simple2)
 
 
-a = flexplot(Performance ~ 1, data = data_long) 
+a = flexplot(Performance ~ Treatment, data = data_long) 
+a
 b = flexplot(therapy.type ~ 1, data = data_long) 
 cowplot::plot_grid(a , b)
 
@@ -51,10 +53,10 @@ flexplot(Performance ~ Treatment, data=data_long, jitter = c(0.1,0), spread = "q
 # the intercept.
 
 flexplot(Performance ~ Treatment | Project, data=data_long, jitter = c(0.2,0), spread = "quartile", ghost.line = 'blue') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
-model <- lm(Performance ~ Treatment + Project, data=data_long)
+model <- lm(Performance ~ Treatment, data=data_long)
 summary(model)
 visualize(model, formula = Performance ~ Treatment | Project, plot = 'model', ghost.line = 'blue') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
-visualize(model, formula = Performance ~ Treatment | Project, plot = 'residuals') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
+visualize(model, formula = Performance ~ Treatment, plot = 'residuals') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
 
 # flexplot(Performance ~ BugID | Treatment, data=data_long, jitter = c(0.2,0), spread = "quartile") + theme(axis.text.x = element_blank(), axis.ticks = element_blank())
 
