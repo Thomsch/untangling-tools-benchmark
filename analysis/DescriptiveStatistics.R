@@ -19,6 +19,7 @@ data$BugID <- as_factor(data$BugID)
 #
 groupCount <- data %>% group_by(Project, BugID, Treatment) %>% summarise(GroupCount = n_distinct(Group))
 groupCount
+write.csv(groupCount, file='groupCount.csv', quote=FALSE)
 
 # Summary of group count
 groupCount %>% group_by(Treatment) %>% summarise(Mean=mean(GroupCount), Max=max(GroupCount), Min=min(GroupCount), Median=median(GroupCount), Std=sd(GroupCount))
