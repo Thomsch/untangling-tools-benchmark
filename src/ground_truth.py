@@ -57,7 +57,9 @@ def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False)
     """
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
-        if not file.source_file.lower().endswith(".java") or not file.target_file.lower().endswith(".java"):
+        # Skip non-java files. At least one version must have a java extension.
+        # When a file is deleted or created, the file name is 'dev/null'.
+        if not (file.source_file.lower().endswith(".java") or file.target_file.lower().endswith(".java")):
             continue
 
         if filter_non_code_changes and (file.source_file.endswith("Test.java") or file.target_file.endswith(
