@@ -18,7 +18,7 @@ def main(evaluation_dir):
     - target: the target line number (for insertions)
     - group: the group that the file belongs to
     """
-    result_files = ['flexeme.csv', 'smartcommit.csv', 'file_untangling.csv', 'truth.csv']
+    result_files = ['flexeme.csv', 'smartcommit.csv', 'file_untangling.csv', 'truth_all.csv']
     # Iterate through each subdirectory in the parent directory
     for subdir in os.listdir(evaluation_dir):
         subdir_path = os.path.join(evaluation_dir, subdir)
