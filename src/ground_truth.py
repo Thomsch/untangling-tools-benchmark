@@ -9,6 +9,7 @@ The result is saved as a csv file at the specified path.
 import os
 import sys
 from io import StringIO
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -86,29 +87,32 @@ def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False)
     return df
 
 
-def load_d4j_patch(patch_path: str, original_changes={}) -> PatchSet:
-    patch = PatchSet.from_filename(patch_path)
-    for file in patch:
-        for hunk in file:
-            for line in hunk:
-                if line.line_type == LINE_TYPE_CONTEXT:
-                    continue
+def load_d4j_patch(patch_path: str, original_changes={}) -> PatchSet | list[Any]:
+    try:
+        patch = PatchSet.from_filename(patch_path)
+        for file in patch:
+            for hunk in file:
+                for line in hunk:
+                    if line.line_type == LINE_TYPE_CONTEXT:
+                        continue
 
-                if line.line_type == LINE_TYPE_ADDED:
-                    line.line_type = LINE_TYPE_REMOVED
-                    line.source_line_no = line.target_line_no
-                    line.target_line_no = line.source_line_no
-                elif line.line_type == LINE_TYPE_REMOVED:
-                    line.line_type = LINE_TYPE_ADDED
-                    line.source_line_no = line.target_line_no
-                    line.target_line_no = line.source_line_no
+                    if line.line_type == LINE_TYPE_ADDED:
+                        line.line_type = LINE_TYPE_REMOVED
+                        line.source_line_no = line.target_line_no
+                        line.target_line_no = line.source_line_no
+                    elif line.line_type == LINE_TYPE_REMOVED:
+                        line.line_type = LINE_TYPE_ADDED
+                        line.source_line_no = line.target_line_no
+                        line.target_line_no = line.source_line_no
 
-                if str(line) in original_changes:
-                    original_line = original_changes[str(line)]
-                    line.source_line_no = original_line.source_line_no
-                    line.target_line_no = original_line.target_line_no
-                    line.line_type = original_line.line_type
-    return patch
+                    if str(line) in original_changes:
+                        original_line = original_changes[str(line)]
+                        line.source_line_no = original_line.source_line_no
+                        line.target_line_no = original_line.target_line_no
+                        line.line_type = original_line.line_type
+        return patch
+    except FileNotFoundError:
+        return []
 
 
 def main():
