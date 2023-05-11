@@ -18,7 +18,7 @@ def main(evaluation_dir):
     - target: the target line number (for insertions)
     - group: the group that the file belongs to
     """
-    result_files = ['flexeme.csv', 'smartcommit.csv', 'file_untangling.csv']
+    result_files = ['flexeme.csv', 'smartcommit.csv', 'file_untangling.csv', 'truth.csv']
     # Iterate through each subdirectory in the parent directory
     for subdir in os.listdir(evaluation_dir):
         subdir_path = os.path.join(evaluation_dir, subdir)
@@ -45,6 +45,8 @@ def main(evaluation_dir):
             with open(filepath, "r") as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
+                    if treatment == 'truth':
+                        row['group'] = row['fix']
                     print(f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']}"
                           f",{row['group']}")
 
