@@ -9,7 +9,6 @@ The result is saved as a csv file at the specified path.
 import os
 import sys
 from io import StringIO
-from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -87,7 +86,7 @@ def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False)
     return df
 
 
-def load_d4j_patch(patch_path: str, original_changes={}) -> PatchSet | list[Any]:
+def load_d4j_patch(patch_path: str, original_changes={}):
     try:
         patch = PatchSet.from_filename(patch_path)
         for file in patch:
