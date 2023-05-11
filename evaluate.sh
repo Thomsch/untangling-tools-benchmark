@@ -90,7 +90,7 @@ truth_out="${evaluation_path}/truth.csv"
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit" "False"
     code=$?
     if [ $code -eq 0 ]
     then

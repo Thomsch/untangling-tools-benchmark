@@ -4,6 +4,8 @@
 # - $2: D4J Bug id
 # - $3: Path to the checked out project repository
 # - $4: The path where to output the results
+# - $5: The commit id to use
+# - $6: Whether to exclude non-code changes from the ground truth
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

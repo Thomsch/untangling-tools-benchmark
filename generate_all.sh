@@ -16,10 +16,8 @@ out_dir=$2 # Path to the directory where the results are stored and repositories
 
 mkdir -p "$out_dir"
 
-out_file="${out_dir}/decompositions.csv" # Aggregated results.
 workdir="${out_dir}/repositories"
 metrics_dir="${out_dir}/metrics"
-evaluation_dir="${out_dir}/evaluation"
 logs_dir="${out_dir}/logs"
 
 mkdir -p "$workdir"
@@ -31,16 +29,14 @@ if ! [[ -f "$bugs_file" ]]; then
     exit 1
 fi
 
-# TODO: Parallelize
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
+echo "Logs stored in ${logs_dir}/project_vid_truth.log"
 echo ""
 
 error_counter=0
 while IFS=, read -r project vid
 do
-    # TODO: Don't regenerate results when they already exist.
     START=$(date +%s.%N)
-    ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
+    ./generate_ground_truth.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}_truth.log"
     ret_code=$?
     evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
@@ -54,13 +50,4 @@ do
 done < "$bugs_file"
 
 echo ""
-echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
-
-cat "${evaluation_dir}"/*/scores.csv > "$out_file"
-echo ""
-echo "Decomposition scores aggregated and saved in ${out_file}"
-
-metrics_results="${out_dir}/metrics.csv"
-cat "${metrics_dir}"/*.csv > "$metrics_results"
-echo ""
-echo "Commit metrics aggregated and saved in ${metrics_results}"
+echo "Generation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."

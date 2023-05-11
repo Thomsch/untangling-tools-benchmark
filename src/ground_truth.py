@@ -155,8 +155,8 @@ def main():
     # minimal_patch = from_defect4j_patches(defects4j_home, project, vid)
 
     # # Check which truth are in changes and tag them as True in a new column.
-    ground_truth = pd.merge(changes_df, minimal_patch, on=COL_NAMES, how='left', indicator='fix')
-    ground_truth['fix'] = np.where(ground_truth.fix == 'both', True, False)
+    ground_truth = pd.merge(changes_df, minimal_patch, on=COL_NAMES, how='left', indicator='group')
+    ground_truth['group'] = np.where(ground_truth.group == 'both', 'fix', 'other')
     ground_truth.to_csv(out_path, index=False)
 
 
