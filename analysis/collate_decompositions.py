@@ -45,8 +45,6 @@ def main(evaluation_dir):
             with open(filepath, "r") as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    if treatment == 'truth':
-                        row['group'] = row['fix']
                     print(f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']}"
                           f",{row['group']}")
 
