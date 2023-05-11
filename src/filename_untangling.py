@@ -16,7 +16,7 @@ def main():
     # Iterate through subdirectories and read truth.csv files
     for subdir, dirs, files in os.walk(root_dir):
         for file in files:
-            if file == 'truth.csv':
+            if file == 'truth_all.csv':
                 file_path = os.path.join(subdir, file)
 
                 # Get project name from file path
@@ -32,11 +32,11 @@ def main():
                     paths = {}
                     group_counter = 0
 
-                    new_file_path=os.path.join(subdir, 'file_untangling.csv')
+                    new_file_path = os.path.join(subdir, 'file_untangling.csv')
 
                     with open(new_file_path, 'w', newline='') as new_csv_file:
                         csv_writer = csv.writer(new_csv_file)
-                        csv_writer.writerow(['group', 'file', 'source', 'target'])
+                        csv_writer.writerow(['file', 'source', 'target', 'group'])
 
                         for row in csv_reader:
                             file, source, target, _ = row
