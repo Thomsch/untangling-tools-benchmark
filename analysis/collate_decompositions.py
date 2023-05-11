@@ -45,8 +45,7 @@ def main(evaluation_dir):
             with open(filepath, "r") as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    print(f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']}"
-                          f",{row['group']}")
+                    print(f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']},{row['group']}")
 
 
 if __name__ == '__main__':
