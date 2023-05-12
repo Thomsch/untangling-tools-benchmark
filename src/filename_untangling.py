@@ -4,17 +4,10 @@ import os
 import sys
 
 
-def main():
-    args = sys.argv[1:]
-
-    if len(args) != 1:
-        print("usage: filename_untangling.py <evaluation_root>")
-        exit(1)
-
-    root_dir = args[0]
+def main(evaluation_root):
 
     # Iterate through subdirectories and read truth.csv files
-    for subdir, dirs, files in os.walk(root_dir):
+    for subdir, dirs, files in os.walk(evaluation_root):
         for file in files:
             if file == 'truth_all.csv':
                 file_path = os.path.join(subdir, file)
@@ -49,4 +42,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+
+    if len(args) != 1:
+        print("usage: filename_untangling.py <evaluation_root>")
+        exit(1)
+
+    main(args[0])
