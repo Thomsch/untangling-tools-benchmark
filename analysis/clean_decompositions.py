@@ -24,6 +24,7 @@ def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
     df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left', suffixes=('_truth', '_tool'))
     df.drop(['group_truth'], axis=1, inplace=True)
     df['group_tool'] = df['group_tool'].fillna('o')  # Fill changed lines that are unclassified as other changes ('o').
+    df.rename(columns={'group_tool': 'group'}, inplace=True)
     return df
 
 
