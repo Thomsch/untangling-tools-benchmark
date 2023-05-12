@@ -19,9 +19,6 @@ def main():
             if file == 'truth_all.csv':
                 file_path = os.path.join(subdir, file)
 
-                # Get project name from file path
-                project_name = os.path.basename(os.path.dirname(file_path))
-
                 # Print project name
                 with open(file_path, 'r') as csv_file:
                     csv_reader = csv.reader(csv_file)
