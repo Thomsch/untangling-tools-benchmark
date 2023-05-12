@@ -18,7 +18,7 @@ def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
     """
     if tool_df is None:
         tool_df = truth_df.copy()
-        tool_df['group'] = 0
+        tool_df['group'] = 'o'
         return tool_df
 
     df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left', suffixes=('_truth', '_tool'))
