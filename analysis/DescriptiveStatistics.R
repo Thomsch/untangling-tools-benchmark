@@ -22,7 +22,7 @@ groupCount
 write.csv(groupCount, file='groupCount.csv', quote=FALSE)
 
 # Summary of group count
-groupCount %>% group_by(Treatment) %>% summarise(Mean=mean(GroupCount), Max=max(GroupCount), Min=min(GroupCount), Median=median(GroupCount), Std=sd(GroupCount))
+groupCount %>% group_by(Treatment) %>% summarise(Min=min(GroupCount), Max=max(GroupCount), Median=median(GroupCount), Std=sd(GroupCount))
 
 # Distribution of group count
 plt <- flexplot(GroupCount ~ Treatment, data=groupCount, spread = "quartile")
@@ -35,7 +35,7 @@ plt
 groupSize <- data %>% group_by(Project, BugID, Treatment, Group) %>% summarise(n = n())
 groupSize
 
-groupSize %>% group_by(Treatment) %>% summarise(Mean=mean(n), Max=max(n), Min=min(n), Median=median(n), Std=sd(n))
+groupSize %>% group_by(Treatment) %>% summarise(Min=min(n), Max=max(n), Median=median(n), Std=sd(n))
 
 
 plt <- flexplot(n ~ Treatment, data=groupSize, spread = "quartile")
