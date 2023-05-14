@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-from collections import defaultdict
 
 
 #
@@ -14,11 +13,6 @@ from collections import defaultdict
 #   - smartcommit_exists: true if smartcommit decomposition is present, false otherwise
 #
 def main(path):
-    required_files = ['flexeme.csv', 'smartcommit.csv', 'scores.csv', 'truth.csv', 'file_untangling.csv']
-    missing_files = []
-    projects_missing_files = defaultdict(int)
-    project_counter = 0
-
     print(f"project,bug_id,flexeme_exists,smartcommit_exists")
 
     # Walk through the directory tree starting from 'evaluation'
@@ -45,7 +39,7 @@ if __name__ == '__main__':
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print('usage: list_tool_decomposition.py <path/to/evaluation/folder>')
+        print('usage: decomposition_summary.py <path/to/evaluation/folder>')
         exit(1)
 
     main(os.path.abspath(args[0]))
