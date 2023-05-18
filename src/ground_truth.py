@@ -10,13 +10,12 @@ The tests, comments, and imports are ignored from the original changes.
 
 import os
 import sys
+from collections import defaultdict
 from io import StringIO
 
 import numpy as np
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT, LINE_TYPE_REMOVED, LINE_TYPE_ADDED
-
-import parse_patch
 
 COL_NAMES = ['file', 'source', 'target']
 
@@ -26,14 +25,6 @@ def from_stdin() -> pd.DataFrame:
     Parses a diff from stdin into a DataFrame.
     """
     return csv_to_dataframe(StringIO(sys.stdin.read()))
-
-
-def from_file(path) -> pd.DataFrame:
-    """
-    Parses a diff from a file into a DataFrame.
-    """
-    data = parse_patch.from_file(path)
-    return csv_to_dataframe(StringIO(data))
 
 
 def csv_to_dataframe(csv_data: StringIO) -> pd.DataFrame:
@@ -95,32 +86,69 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     return df
 
 
-def load_d4j_patch(patch_path: str, original_changes={}):
-    try:
-        patch = PatchSet.from_filename(patch_path)
-        for file in patch:
-            for hunk in file:
-                for line in hunk:
-                    if line.line_type == LINE_TYPE_CONTEXT:
+def get_line_map(diff) -> dict:
+    """
+    Returns a map of line numbers for each changed line in the diff.
+    The map is indexed by the line content. The value is a list of tuples (line, source_line_no, target_line_no).
+    """
+    line_map = defaultdict(list)
+
+    for file in diff:
+        for hunk in file:
+            for line in hunk:
+                if line.line_type == LINE_TYPE_CONTEXT: # Ignore context lines.
+                    continue
+                line_map[str(line)].append((line, line.source_line_no, line.target_line_no))
+
+    return line_map
+
+
+def invert_patch(patch):
+    for file in patch:
+        for hunk in file:
+            for line in hunk:
+                if line.line_type == LINE_TYPE_CONTEXT:
+                    continue
+
+                if line.line_type == LINE_TYPE_ADDED:
+                    line.line_type = LINE_TYPE_REMOVED
+                    line.source_line_no = line.target_line_no
+                    line.target_line_no = line.source_line_no
+                elif line.line_type == LINE_TYPE_REMOVED:
+                    line.line_type = LINE_TYPE_ADDED
+                    line.source_line_no = line.target_line_no
+                    line.target_line_no = line.source_line_no
+    return patch
+
+
+def repair_line_numbers(patch_diff, original_diff):
+    """
+    Replaces the line numbers for the changed lines in the patch with the line numbers from the original diff.
+    Returns the updated patch (patch_diff is modified in place).
+    """
+    # Get the reference line number for the content of each changed line.
+    line_map = get_line_map(original_diff)
+
+    # Update the patch with the correct line numbers
+    for file in patch_diff:
+        for hunk in file:
+            for line in hunk:
+                if line.line_type == LINE_TYPE_CONTEXT:
+                    continue
+
+                if str(line) in line_map:
+                    line_records = line_map[str(line)]
+                    if len(line_records) == 0:
+                        print(f"Missing line '{str(line)}' from line map", file=sys.stderr)
                         continue
 
-                    if line.line_type == LINE_TYPE_ADDED:
-                        line.line_type = LINE_TYPE_REMOVED
-                        line.source_line_no = line.target_line_no
-                        line.target_line_no = line.source_line_no
-                    elif line.line_type == LINE_TYPE_REMOVED:
-                        line.line_type = LINE_TYPE_ADDED
-                        line.source_line_no = line.target_line_no
-                        line.target_line_no = line.source_line_no
-
-                    if str(line) in original_changes:
-                        original_line = original_changes[str(line)]
-                        line.source_line_no = original_line.source_line_no
-                        line.target_line_no = original_line.target_line_no
-                        line.line_type = original_line.line_type
-        return patch
-    except FileNotFoundError:
-        return []
+                    original_line = line_records.pop(0)[0]
+                    line.source_line_no = original_line.source_line_no
+                    line.target_line_no = original_line.target_line_no
+                    line.line_type = original_line.line_type
+                else:
+                    print(f"Line not found ({line.source_line_no}, {line.target_line_no}): '{line}'", file=sys.stderr)
+    return patch_diff
 
 
 def main():
@@ -140,22 +168,16 @@ def main():
     out_path = args[2]
 
     changes_diff = PatchSet.from_string(sys.stdin.read())
-    changes = {}
-    for file in changes_diff:
-        for hunk in file:
-            for line in hunk:
-                if line.line_type == LINE_TYPE_CONTEXT:
-                    continue
-                if str(line) in changes:
-                    print(f"Duplicate change in {file.target_file}: {str(line).strip()}", file=sys.stderr)
-                    continue
-                changes[str(line)] = line
     changes_df = convert_to_dataframe(changes_diff)
 
-    # Assumption: No duplicate changes in the patch.
     # Assumption: No minimization within a line (i.e., either the line is included or not).
-    src_patch = load_d4j_patch(get_d4j_src_path(defects4j_home, project, vid), changes)
-    src_patch_df = convert_to_dataframe(src_patch)
+    try:
+        src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
+        src_patch = invert_patch(src_patch)
+        src_patch = repair_line_numbers(src_patch, changes_diff)
+        src_patch_df = convert_to_dataframe(src_patch)
+    except FileNotFoundError:
+        src_patch_df = pd.DataFrame(columns=COL_NAMES)
 
     # Test is not minimized so all the changes are part of the ground truth.
     # test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
