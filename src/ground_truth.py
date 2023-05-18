@@ -4,6 +4,8 @@ This script generates the ground truth using the original changes and the minimi
 
 The tool takes as input the original changes from stdin and the D4J project name, bug id and output path as parameters.
 The result is saved as a csv file at the specified path.
+
+The tests, comments, and imports are ignored from the original changes.
 """
 
 import os
@@ -48,13 +50,18 @@ def get_d4j_src_path(defects4j_home, project, vid):
 
 
 def get_d4j_test_path(defects4j_home, project, vid):
+    """
+    Path to the (non-minimized) test patch file in the D4J project.
+    """
     return os.path.join(defects4j_home, "framework/projects", project, "patches", f"{vid}.test.patch")
 
 
-def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False) -> pd.DataFrame:
+def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
-    Converts a PatchSet into a DataFrame and filters out non-java files.
+    Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-java files.
     """
+    ignore_comments = True
+    ignore_imports = True
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
         # Skip non-java files. At least one version must have a java extension.
@@ -62,8 +69,7 @@ def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False)
         if not (file.source_file.lower().endswith(".java") or file.target_file.lower().endswith(".java")):
             continue
 
-        if filter_non_code_changes and (file.source_file.endswith("Test.java") or file.target_file.endswith(
-                "Test.java")):
+        if file.source_file.endswith("Test.java") or file.target_file.endswith("Test.java"):
             continue
 
         for hunk in file:
@@ -72,11 +78,12 @@ def convert_to_dataframe(patch: PatchSet, filter_non_code_changes: bool = False)
                     continue
 
                 # TODO: Lines starting with "*" are not always comments.
-                if filter_non_code_changes and (line.value.strip().startswith("/*") or
+                if ignore_comments and (line.value.strip().startswith("/*") or
                                                 line.value.strip().startswith("*/") or
                                                 line.value.strip().startswith("//") or
-                                                line.value.strip().startswith("*") or
-                                                line.value.strip().startswith("import")):
+                                                line.value.strip().startswith("*")):
+                    continue
+                if ignore_imports and line.value.strip().startswith("import"):
                     continue
 
                 entry = pd.DataFrame.from_dict({
@@ -119,8 +126,8 @@ def load_d4j_patch(patch_path: str, original_changes={}):
 def main():
     args = sys.argv[1:]
 
-    if len(args) != 4:
-        print("usage: file.py <project> <vid> <path/to/root/results> <exclude tests and non-code changes>")
+    if len(args) != 3:
+        print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
         exit(1)
 
     if not os.getenv('DEFECTS4J_HOME'):
@@ -131,7 +138,6 @@ def main():
     project = args[0]
     vid = args[1]
     out_path = args[2]
-    exclude_non_code_changes = args[3].lower() == "true"
 
     changes_diff = PatchSet.from_string(sys.stdin.read())
     changes = {}
@@ -144,7 +150,7 @@ def main():
                     print(f"Duplicate change in {file.target_file}: {str(line).strip()}", file=sys.stderr)
                     continue
                 changes[str(line)] = line
-    changes_df = convert_to_dataframe(changes_diff, exclude_non_code_changes)
+    changes_df = convert_to_dataframe(changes_diff)
 
     # Assumption: No duplicate changes in the patch.
     # Assumption: No minimization within a line (i.e., either the line is included or not).
@@ -152,12 +158,12 @@ def main():
     src_patch_df = convert_to_dataframe(src_patch)
 
     # Test is not minimized so all the changes are part of the ground truth.
-    test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
-    test_patch_df = convert_to_dataframe(test_patch)
+    # test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
+    # test_patch_df = convert_to_dataframe(test_patch)
 
     # Merge source patch and test patch.
-    minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
-    # minimal_patch = from_defect4j_patches(defects4j_home, project, vid)
+    # minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
+    minimal_patch = src_patch_df
 
     # # Check which truth are in changes and tag them as True in a new column.
     ground_truth = pd.merge(changes_df, minimal_patch, on=COL_NAMES, how='left', indicator='group')
