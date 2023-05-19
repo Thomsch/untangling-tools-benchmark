@@ -77,6 +77,9 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if ignore_imports and line.value.strip().startswith("import"):
                     continue
 
+                if not line.value.strip():
+                    continue
+
                 entry = pd.DataFrame.from_dict({
                     "file": [file.path],
                     "source": [line.source_line_no],
