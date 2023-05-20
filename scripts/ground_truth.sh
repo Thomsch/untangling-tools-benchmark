@@ -20,7 +20,6 @@ vid=$2
 repository=$3
 truth_out=$4
 
-source ./scripts/diff_util.sh
 source ./scripts/d4j_utils.sh
 
 # Parse the returned result into two variables

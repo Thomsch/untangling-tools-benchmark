@@ -1,6 +1,32 @@
 #!/bin/bash
 # Collection of utilities that interface with Defects4J.
 
+# Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
+d4j_diff () {
+    if [[ $# -ne 5 ]] ; then
+      echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Repository>'
+      echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
+      return 1
+    fi
+
+    local PROJECT=$1
+    local VID=$2
+    local REVISION_BUGGY=$3
+    local REVISION_FIXED=$4
+    local REPO_DIR=$5
+
+    vcs=$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')
+
+    if [[ $vcs == "Vcs::Git" ]] ; then
+        git --git-dir="${REPO_DIR}/.git" diff -U0 "$REVISION_BUGGY" "$REVISION_FIXED"
+    elif [[ $vcs == "Vcs::Svn" ]]; then
+        svn diff -c --old"${REVISION_BUGGY}" --new="${REVISION_FIXED}" "${REPO_DIR}"  --diff-cmd diff -x "-U 0"
+    else
+        echo "Error: VCS ${vcs} not supported."
+        return 1
+    fi
+}
+
 # Retrieves the buggy and fixed revision IDs for a given project and bug ID.
 # - $1: D4J Project name
 # - $2: D4J Bug id
@@ -10,7 +36,7 @@ retrieve_revision_ids () {
   if [[ $# -ne 2 ]] ; then
       echo 'usage: retrieve_revision_ids <D4J Project> <D4J Bug id>'
       echo 'example: retrieve_revision_ids Lang 1'
-      exit 1
+      return 1
     fi
 
   local project="$1"

@@ -68,7 +68,6 @@ metrics_out="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
 if [[ -f "$metrics_out" ]]; then
     echo -ne 'Calculating metrics ..................................................... SKIP\r'
 else
-    source ./scripts/diff_util.sh
     source ./scripts/d4j_utils.sh
 
     # Parse the returned result into two variables
