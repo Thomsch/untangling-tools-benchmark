@@ -69,7 +69,13 @@ if [[ -f "$metrics_out" ]]; then
     echo -ne 'Calculating metrics ..................................................... SKIP\r'
 else
     source ./scripts/diff_util.sh
-    d4j_diff "$project" "$vid" "$commit" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
+    source ./scripts/d4j_utils.sh
+
+    # Parse the returned result into two variables
+    result=$(retrieve_revision_ids "$project" "$vid")
+    read -r revision_buggy revision_fixed <<< "$result"
+
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -90,7 +96,7 @@ truth_out="${evaluation_path}/truth.csv"
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out"
     code=$?
     if [ $code -eq 0 ]
     then
