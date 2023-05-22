@@ -57,6 +57,18 @@ Add a call to your untangling tool executable in `evaluate.sh`. Use the existing
 
 Run `scripts/lines_count.sh` to get the number of changed lines in each D4J bug.
 
+## Ground truth
+
+The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
+The ground truth excludes the following changes:
+
+- Non-Java files
+- Test files
+- Comments
+- Import statements
+- Whitespaces (with `git diff -w`)
+- Empty lines (in `ground_truth.py`)
+
 ## Limitations
 
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines

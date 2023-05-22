@@ -77,6 +77,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if ignore_imports and line.value.strip().startswith("import"):
                     continue
 
+                # Ignore whitespace only lines.
                 if not line.value.strip():
                     continue
 

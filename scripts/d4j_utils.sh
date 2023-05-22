@@ -18,9 +18,9 @@ d4j_diff () {
     vcs=$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')
 
     if [[ $vcs == "Vcs::Git" ]] ; then
-        git --git-dir="${REPO_DIR}/.git" diff -U0 "$REVISION_BUGGY" "$REVISION_FIXED"
+        git --git-dir="${REPO_DIR}/.git" diff --ignore-all-space -U0 "$REVISION_BUGGY" "$REVISION_FIXED"
     elif [[ $vcs == "Vcs::Svn" ]]; then
-        svn diff -c --old"${REVISION_BUGGY}" --new="${REVISION_FIXED}" "${REPO_DIR}"  --diff-cmd diff -x "-U 0"
+        svn diff -c --old"${REVISION_BUGGY}" --new="${REVISION_FIXED}" "${REPO_DIR}"  --diff-cmd diff -x -w "-U 0"
     else
         echo "Error: VCS ${vcs} not supported."
         return 1
