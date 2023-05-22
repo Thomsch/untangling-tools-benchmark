@@ -114,14 +114,16 @@ def invert_patch(patch):
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
 
+                if line.line_type == LINE_TYPE_ADDED or line.line_type == LINE_TYPE_REMOVED:
+                    tmp = line.source_line_no
+                    line.source_line_no = line.target_line_no
+                    line.target_line_no = tmp
+
                 if line.line_type == LINE_TYPE_ADDED:
                     line.line_type = LINE_TYPE_REMOVED
-                    line.source_line_no = line.target_line_no
-                    line.target_line_no = line.source_line_no
                 elif line.line_type == LINE_TYPE_REMOVED:
                     line.line_type = LINE_TYPE_ADDED
-                    line.source_line_no = line.target_line_no
-                    line.target_line_no = line.source_line_no
+
     return patch
 
 
