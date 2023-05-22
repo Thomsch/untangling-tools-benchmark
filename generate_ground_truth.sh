@@ -50,9 +50,6 @@ echo "Generating ground truth for $project, bug $vid, repository $workdir"
 mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
-# Get commit hash
-commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
-
 truth_all_out="${evaluation_path}/truth_all.csv"
 truth_code_out="${evaluation_path}/truth_code.csv"
 
