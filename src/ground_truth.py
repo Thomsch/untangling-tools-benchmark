@@ -145,7 +145,9 @@ def repair_line_numbers(patch_diff, original_diff):
                 if str(line) in line_map:
                     line_records = line_map[str(line)]
                     if len(line_records) == 0:
-                        print(f"Missing line '{str(line)}' from line map", file=sys.stderr)
+                        print(f"Minimized line '{line.value.rstrip()}' {line.target_line_no, line.source_line_no} is "
+                              f"not in the original diff. The minimized line may contain partial changes, "
+                              f"new changes, or be incorrectly minimized.", file=sys.stderr)
                         continue
 
                     original_line = line_records.pop(0)[0]
