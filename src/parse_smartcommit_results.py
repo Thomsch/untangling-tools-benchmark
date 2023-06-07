@@ -16,13 +16,14 @@ def list_json_files(dir):
     """
     return glob.glob(os.path.join(dir, '*.json'))
 
+
 def main():
     args = sys.argv[1:]
 
     if len(args) != 2:
         print("usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>")
         exit(1)
-    
+
     result_dir = args[0]
     output_path = args[1]
 
@@ -48,9 +49,8 @@ def main():
                 hunk_id = hunk_data['diffHunkID']
                 startLine = hunk_data['currentHunk']['startLine']
                 endLine = hunk_data['currentHunk']['endLine']
-                
+
                 hunks[hunk_id] = (class_path, startLine, endLine, hunk_data['rawDiffs'])
-                
 
     result = ''
 
@@ -61,7 +61,7 @@ def main():
 
             hunks = data['diffHunkIDs']
             group_id = data['groupID']
-            
+
             for hunk in hunks:
                 file_id, hunk_id = hunk.split(':')
                 class_path, start_line, end_line, rawDiff = diff_data[file_id][hunk_id]
@@ -75,8 +75,8 @@ def main():
                     result += f'{line},{group_id}\n'
 
     # Export results
-    df = pd.read_csv(StringIO(result), names=['group', 'file', 'source', 'target'], na_values='None')
-    df = df.convert_dtypes() # Forces pandas to use ints in source and target columns.
+    df = pd.read_csv(StringIO(result), names=['file', 'source', 'target', 'group'], na_values='None')
+    df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
 
     if not len(df):
         print('No results generated. Verify decomposition results and paths.', file=sys.stderr)
