@@ -69,6 +69,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `out/commits.csv`.
+- If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
 
 ## Ground truth
 

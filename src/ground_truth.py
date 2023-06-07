@@ -178,7 +178,9 @@ def main():
     changes_diff = PatchSet.from_string(sys.stdin.read())
     changes_df = convert_to_dataframe(changes_diff)
 
-    # Assumption: No minimization within a line (i.e., either the line is included or not).
+    # We assume that the minimized d4j patch is a subset of the original diff (changes_diff).
+    # If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't
+    # be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
     try:
         src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
         src_patch = invert_patch(src_patch)
@@ -187,7 +189,7 @@ def main():
     except FileNotFoundError:
         src_patch_df = pd.DataFrame(columns=COL_NAMES)
 
-    # Test is not minimized so all the changes are part of the ground truth.
+    # Test is not minimized, so it's not included in the ground truth.
     # test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
     # test_patch_df = convert_to_dataframe(test_patch)
 
