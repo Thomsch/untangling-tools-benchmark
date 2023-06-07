@@ -114,6 +114,27 @@ echo -ne '\n'
 #
 
 #
+# Untangle with file-based approach
+#
+echo -ne '\n'
+echo -ne 'Untangling with file-based approach ..................................\r'
+
+file_untangling_out="${evaluation_path}/file_untangling.csv"
+
+if [[ -f "$file_untangling_out" ]]; then
+    echo -ne 'Untangling with file-based approach .................................. SKIP\r'
+else
+    python3 src/filename_untangling.py "${truth_out}" "${file_untangling_out}"
+    code=$?
+    if [ $code -eq 0 ]
+    then
+        echo -ne 'Untangling with file-based approach .................................. OK\r'
+    else
+        echo -ne 'Untangling with file-based approach .................................. FAIL\r'
+    fi
+fi
+
+#
 # Untangle with SmartCommit
 #
 echo -ne '\n'
