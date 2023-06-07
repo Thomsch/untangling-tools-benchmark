@@ -61,6 +61,12 @@ Decompositions are timed. The result is stored for each tool and D4J bug (e.g., 
 To aggregated all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
 - `<out-dir>` is the directory where the repositories, decompositions, results, and logs are stored.
 
+## Tests
+- Python tests are located in the `test` folder. To run the tests, run `pytest test`.
+- Run `make check` to run all the checks (tests, linting, etc.) for bash and Python.
+
+Help with adding more automated tests is welcome! :)
+
 ## Adding an untangling tool
 
 Add a call to your untangling tool executable in `evaluate.sh` and update `untangling_score.py`. Use the existing tools' code as a template.
