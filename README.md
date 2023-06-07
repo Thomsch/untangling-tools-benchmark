@@ -33,12 +33,26 @@ Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
-    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end.
-    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark.
-- `<out-dir>` is the directory where the repositories, decompositions, results, and logs will be stored.
+    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end
+    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark
+- `<out-dir>` is the directory where the repositories, decompositions, results, and logs will be stored
 
 For example, use `./evaluate_all.sh data/d4j-5-bugs.csv ~/benchmark` to run the evaluation on 5 bugs from the Defects4J
 project.
+
+The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
+- `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
+- `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
+  - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
+  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line correspond to a changed line and its associated group
+  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line correspond to a changed line and its associated group
+  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line correspond to a changed line and its associated group
+  - `scores.csv`: The rand index score for each tool. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+- `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
+- `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
+- `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug
+- `scores.csv`: Aggregated scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+- `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
 
 #### Generating the bug file
 
