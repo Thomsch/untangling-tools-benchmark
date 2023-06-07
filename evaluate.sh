@@ -117,22 +117,23 @@ echo -ne '\n'
 # Untangle with file-based approach
 #
 echo -ne '\n'
-echo -ne 'Untangling with file-based approach ..................................\r'
+echo -ne 'Untangling with file-based approach .........................................\r'
 
 file_untangling_out="${evaluation_path}/file_untangling.csv"
 
 if [[ -f "$file_untangling_out" ]]; then
-    echo -ne 'Untangling with file-based approach .................................. SKIP\r'
+    echo -ne 'Untangling with file-based approach ..................................... SKIP\r'
 else
     python3 src/filename_untangling.py "${truth_out}" "${file_untangling_out}"
     code=$?
     if [ $code -eq 0 ]
     then
-        echo -ne 'Untangling with file-based approach .................................. OK\r'
+        echo -ne 'Untangling with file-based approach ....................................... OK\r'
     else
-        echo -ne 'Untangling with file-based approach .................................. FAIL\r'
+        echo -ne 'Untangling with file-based approach ..................................... FAIL\r'
     fi
 fi
+echo -ne '\n'
 
 #
 # Untangle with SmartCommit
@@ -155,7 +156,6 @@ else
     echo -ne 'Untangling with SmartCommit ............................................... OK'
     regenerate_results=true
 fi
-echo -ne '\n'
 
 # Collate untangling results
 echo -ne '\n'
@@ -177,6 +177,7 @@ else
     fi
     echo -ne '\n'
 fi
+echo -ne '\n'
 
 #
 # Untangle with Flexeme
@@ -199,7 +200,7 @@ else
     flexeme_untangling_code=$?
     if [ $flexeme_untangling_code -eq 0 ]
     then
-        echo -ne 'Untangling with Flexeme ................................................. OK'
+        echo -ne 'Untangling with Flexeme ................................................... OK'
         regenerate_results=true
     else
         echo -ne 'Untangling with Flexeme ................................................. FAIL'
@@ -232,14 +233,14 @@ else
     fi
     echo -ne '\n'
 fi
+echo -ne '\n'
+
 
 #
 # Compute untangling score
 #
+echo -ne '\n'
 echo -ne 'Computing untangling scores ...............................................\r'
 python3 src/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
-echo -ne 'Computing untangling scores ............................................ OK'
-
-# # rm -rf "$workdir" # Deletes temporary directory containing repository
-
-# # TODO: Handle failure for truth step and decomposition step.
+echo -ne 'Computing untangling scores ............................................... OK'
+echo -ne '\n'
