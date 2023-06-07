@@ -51,9 +51,9 @@ def main():
             file = data['filepath'].replace('"', '') if 'filepath' in data.keys() else data['cluster'].replace('"', '')
             for line in range(span_start, span_end + 1):
                 if update_type == UPDATE_REMOVE:
-                    result += f"{group},{file},{line},\n"
+                    result += f"{file},{line},,{group}\n"
                 elif update_type == UPDATE_ADD:
-                    result += f"{group},{file},,{line}\n"
+                    result += f"{file},,{line},{group}\n"
                 else:
                     logging.error(f"Update {update_type} unsupported")
                     continue
@@ -61,7 +61,7 @@ def main():
             # Merge results per line
             # Might not need to merge results per line since the data is calculated using a left join on the truth.
 
-            df = pd.read_csv(StringIO(result), names=['group', 'file', 'source', 'target'], na_values='None')
+            df = pd.read_csv(StringIO(result), names=['file', 'source', 'target', 'group'], na_values='None')
             df = df.convert_dtypes() # Forces pandas to use ints in source and target columns.
             df = df.drop_duplicates()
 
