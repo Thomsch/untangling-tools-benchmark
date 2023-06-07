@@ -13,9 +13,8 @@ def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
     'o' stands for Other changes.
     """
     groups = is_other_change(df)
-    df['adjusted_group'] = df['group'].isin(groups[groups].index)
-
-    df.loc[df['adjusted_group'], 'group'] = 'o'
+    df['adjusted_group'] = df['group_tool'].isin(groups[groups].index)
+    df.loc[df['adjusted_group'], 'group_tool'] = 'o'
 
     return df.drop(['other_change', 'adjusted_group'], axis=1)
 
@@ -25,8 +24,9 @@ def is_other_change(df: pd.DataFrame):
     For each group, return whether the group contains only non bug-fixing changes or not.
     If a group only has bug fixing changes, return True.
     """
-    df['other_change'] = ~df['fix']  # New column to keep track of non bug-fixing changes.
-    return df.groupby('group')['other_change'].all()  # Which groups only have non-bug-fixing changes.
+    df['group_truth_bool'] = df['group_truth'] == 'fix'  # Convert to boolean.
+    df['other_change'] = ~df['group_truth_bool']  # New column to keep track of non bug-fixing changes.
+    return df.groupby('group_tool')['other_change'].all()  # Which groups only have non-bug-fixing changes.
 
 
 def calculate_score_for_tool(truth_df, tool_df):
@@ -36,16 +36,15 @@ def calculate_score_for_tool(truth_df, tool_df):
     if tool_df is None:
         tool_df = truth_df.copy()
         tool_df['group'] = 'o'
-        tool_df.drop('fix', axis=1, inplace=True)
 
-    df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left')
-    df['group'] = df['group'].fillna('o')  # Fill changed lines that are unclassified as other changes ('o').
+    df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left', suffixes=['_truth', '_tool'])
+    df['group_tool'] = df['group_tool'].fillna('o')  # Fill changed lines that are unclassified as other changes ('o').
 
     # Adjust cluster to not penalize multiple groups containing exclusively
     # non bug fixing changes.
     df_adjusted = adjust_groups(df)
-    labels_pred = df_adjusted['group']
-    labels_true = df_adjusted['fix']
+    labels_pred = df_adjusted['group_tool']
+    labels_true = df_adjusted['group_truth']
 
     # The adjusted rand score (not the same as the adjusted clusters above!)
     # give a score of 0 when the fix is divided in multiple groups, which is unfair.
