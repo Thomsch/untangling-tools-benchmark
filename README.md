@@ -77,6 +77,20 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
   containing `Chart` in `out/commits.csv`.
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
 
+## Structure & repository-specific files
+- `analysis/`: Scripts to analyse the results
+- `bin/`: Contains binaries of untangling tools (when applicable)
+- `data/`: Contains list of Defects4J bugs to run the benchmark on
+- `scripts/`: Utility Bash scripts to run the benchmark
+- `src/`: Utility Python scripts to run the benchmark
+- `test/`: Python tests
+- `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
+- `conftest.py`: Pytest configuration
+- `evaluate.sh`: Script to run the benchmark on one Defects4J bug
+- `evaluate_all.sh`: Script to run the benchmark for a list of Defects4J bugs
+- `generate_all.sh` [WIP]: Script to only generate the ground truth for a list of Defects4J bugs
+- `generate_ground_truth.sh` [WIP]: Script to generate different versions of the ground truth per Defects4J bug
+
 ## Ground truth
 
 The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
