@@ -35,23 +35,30 @@ fi
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
+cust_func(){
+  local project=$1
+  local vid=$2
+
+  START=$(date +%s.%N)
+  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
+  ret_code=$?
+  evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
+  END=$(date +%s.%N)
+  # Must use `bc` because the computation is on floating-point numbers.
+  ELAPSED=$(echo "$END - $START" | bc)
+  if [ $ret_code -ne 0 ]; then
+      error_counter=$((error_counter+1))
+  fi
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
+}
+
 error_counter=0
 while IFS=, read -r project vid
 do
-    # TODO: Don't regenerate results when they already exist.
-    START=$(date +%s.%N)
-    ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
-    ret_code=$?
-    evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-    END=$(date +%s.%N)
-    # Must use `bc` because the computation is on floating-point numbers.
-    ELAPSED=$(echo "$END - $START" | bc)
-    if [ $ret_code -ne 0 ]; then
-        error_counter=$((error_counter+1))
-    fi
-    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
-
+    cust_func "$project" "$vid" &
 done < "$bugs_file"
+
+wait
 
 echo ""
 echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
