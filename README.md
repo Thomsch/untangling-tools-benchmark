@@ -51,7 +51,7 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
 - `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug
-- `scores.csv`: Aggregated scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+- `decompositions.csv`: Aggregated decomposition scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
 
 #### Generating the bug file
