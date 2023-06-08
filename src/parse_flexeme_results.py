@@ -18,7 +18,14 @@ def main():
     result_file = args[0]
     output_path = args[1]
 
-    graph = nx.nx_pydot.read_dot(result_file)
+    try:
+        graph = nx.nx_pydot.read_dot(result_file)
+    except FileNotFoundError:
+        # Flexeme doesn't generate a PDG if it doesn't detect multiple groups.
+        # In this case, we do not create a CSV file. The untangling score will be
+        # calculated as if Flexeme grouped all changes in one group in `untangling_score.py`.
+        print('PDG not found, skipping creation of CSV file', file=sys.stderr)
+        exit(0)
 
     UPDATE_ADD = 'add'
     UPDATE_REMOVE = 'remove'
