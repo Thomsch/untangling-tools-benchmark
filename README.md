@@ -4,7 +4,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 
 ## Requirements
 
-- Python 3.8 is installed and on the PATH.
+- Python 3.8.15 is installed and on the PATH.
 - Java 8 is installed and on the PATH.
 - Java 11 is installed, but is not on the PATH.
 
