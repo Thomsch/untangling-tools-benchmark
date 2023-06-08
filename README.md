@@ -26,6 +26,13 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
 
+## Terminology
+- Program diff: The diff between the buggy and fixed version in the VCS
+- Minimal bug fixing diff: The minmal diff that fixes the bug. It is calculated by inverting the Defects4J minimal bug-inducing patch  
+- Non-bug fixing diff: The diff between buggy and fixed version that is not part of the minimal bug fixing diff
+
+If you encounter a term in the documentation or the source code that is not defined here, please open an issue. Thank you!
+
 ## Usage
 ### Running the benchmark
 
