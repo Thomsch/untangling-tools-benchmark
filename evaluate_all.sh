@@ -35,7 +35,7 @@ fi
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
-cust_func(){
+score_bug(){
   local project=$1
   local vid=$2
 
@@ -55,7 +55,7 @@ cust_func(){
 error_counter=0
 while IFS=, read -r project vid
 do
-    cust_func "$project" "$vid" &
+    score_bug "$project" "$vid" &
 done < "$bugs_file"
 
 wait
