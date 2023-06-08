@@ -17,7 +17,8 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 5. Install Flexeme for Java
    1. Clone the Flexeme repository locally `git clone https://github.com/Thomsch/Flexeme ~/Flexeme`.
    2. Install Graphviz https://graphviz.org/.
-   3. Install Flexeme from the clone `pip install -e ~/Flexeme`.
+   3. Install Flexeme from the clone `pip install -e ~/Flexeme`
+      - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 6. Install local dependencies `pip install -r requirements.txt`.
 7. Install Defects4J
     1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
