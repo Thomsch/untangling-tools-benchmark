@@ -69,6 +69,9 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
   TODO: If this file contains scores, then its name should reflect that, with a name like `aggregated_scores.csv` or the like.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
 
+TODO: The .ipynb files are all for one-off experiments and are not part of any pipeline.  Document this, and maybe move them elsewhere to avoid confusion.
+
+
 #### Generating the bug file
 
 You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating
