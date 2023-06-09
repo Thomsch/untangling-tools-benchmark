@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Counts the number of bug fixing lines and other lines from the ground truth.
 
 import sys

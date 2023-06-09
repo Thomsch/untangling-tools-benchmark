@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Calculates the Rand Index for the clusters per tool compared to ground truth.
 
 import sys

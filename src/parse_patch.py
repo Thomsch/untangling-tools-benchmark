@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Retrieves the changed lines for a diff.
 # The diff is passed to the script via stdin.
 import os
