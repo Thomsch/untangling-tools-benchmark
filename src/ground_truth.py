@@ -49,13 +49,13 @@ def get_d4j_test_path(defects4j_home, project, vid):
 
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
-    Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-java files.
+    Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-Java files.
     """
     ignore_comments = True
     ignore_imports = True
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
-        # Skip non-java files. At least one version must have a java extension.
+        # Skip non-Java files. At least one version must have a .java extension.
         # When a file is deleted or created, the file name is 'dev/null'.
         if not (file.source_file.lower().endswith(".java") or file.target_file.lower().endswith(".java")):
             continue
@@ -167,7 +167,7 @@ def main():
         exit(1)
 
     if not os.getenv('DEFECTS4J_HOME'):
-        print('DEFECTS4J_HOME environment variable not set. Exiting.')
+        print('DEFECTS4J_HOME environment variable is not set. Exiting.')
         exit(1)
     defects4j_home = os.getenv('DEFECTS4J_HOME')
 

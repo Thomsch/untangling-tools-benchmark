@@ -20,8 +20,8 @@ source .env
 set +o allexport
 
 if [[ -z "${JAVA_11}" ]]; then
-  echo 'JAVA_11 environment variable not set.'
-  echo 'Please set it to the path of a Java 11 JDK.'
+  echo 'JAVA_11 environment variable is not set.'
+  echo 'Please set it to the path of a Java 11 javac.'
   exit 1
 fi
 
