@@ -66,6 +66,7 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
 - `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug
 - `decompositions.csv`: Aggregated decomposition scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+  TODO: If this file contains scores, then its name should reflect that, with a name like `aggregated_scores.csv` or the like.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
 
 #### Generating the bug file
@@ -103,14 +104,17 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `out/commits.csv`.
+  TODO: Should the above be `<out-dir>` rather than `out`?  How about using an environment variable for it throughout the documentation?  Then the instructions will be directly cut-and-pasteable, even if users choose to set the environment variable differently.
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
 
-## Structure & repository-specific files
+## Directory structure
+TODO: I find this structure confusing.  There are runnable scripts in 4 different directories.  I suggest grouping similar files together.
+For example, have a `src/` directory that contains all code, and with subdirectories like `python/` (which would itself have subdirectories `main` and `test`) and `scripts` or `bash` which could have subdirectories if you want it to.
 - `analysis/`: Scripts to analyse the results
 - `bin/`: Contains binaries of untangling tools (when applicable)
 - `data/`: Contains list of Defects4J bugs to run the benchmark on
-- `scripts/`: Utility Bash scripts to run the benchmark
-- `src/`: Utility Python scripts to run the benchmark
+- `scripts/`: Bash scripts to run the benchmark
+- `src/`: Python scripts to run the benchmark
 - `test/`: Python tests
 - `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
 - `conftest.py`: Pytest configuration
