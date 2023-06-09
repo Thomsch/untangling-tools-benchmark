@@ -6,6 +6,7 @@ from collections import defaultdict
 
 #
 # This script counts the number of projects with missing results in the benchmark.
+## TODO: What is a "missing result"?
 #
 def main(path):
     required_files = ['flexeme.csv', 'smartcommit.csv', 'scores.csv', 'truth.csv', 'file_untangling.csv']

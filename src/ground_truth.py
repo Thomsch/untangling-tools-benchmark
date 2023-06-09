@@ -179,6 +179,7 @@ def main():
     changes_df = convert_to_dataframe(changes_diff)
 
     # We assume that the minimized d4j patch is a subset of the original diff (changes_diff).
+    ## TODO: What is the definition of "subset"?  (Part of the problem is that I'm not sure what the representation of a diff is.)
     # If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't
     # be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
     try:

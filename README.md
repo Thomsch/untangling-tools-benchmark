@@ -39,6 +39,8 @@ If you encounter a term in the documentation or the source code that is not defi
 ## Usage
 ### Running the benchmark
 
+TODO: The work "benchmark" is misused.  A "benchmark" is a set of inputs.  One cannot "run the benchmark" or "test the benchmark end to end", though one can run some scripts, using the benchmark as inputs.
+
 Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
@@ -54,6 +56,7 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
   - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
+    TODO: What is a "changed line"?  Is it a line from the diff, or from the original program?  Is it a string or a hunk line as provided by the unidiff package?
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line correspond to a changed line and its associated group
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line correspond to a changed line and its associated group
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line correspond to a changed line and its associated group
@@ -118,6 +121,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 ## Ground truth
 
 The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
+## TODO: How, and by whom or what, is it calculated?
 The ground truth excludes the following changes:
 
 - Non-Java files
@@ -128,11 +132,12 @@ The ground truth excludes the following changes:
 - Empty lines (in `ground_truth.py`)
 
 ## Manual analysis
+TODO: What is the purpose of the manual analysis?
 
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
-2. Open the diff for the bug `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
+2. The diff for the bug is `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
-3. In another tab, open the ground truth `less <out_dir>/evaluation/<project><bug_id>/truth.csv`
-4. In another tab, open the Flexeme decomposition `less <out_dir>/evaluation/<project><bug_id>/flexeme.csv`.
-5. In another tab, open the SmartCommit decomposition `less <out_dir>/evaluation/<project><bug_id>/truth.csv`.
+3. The ground truth is `<out_dir>/evaluation/<project><bug_id>/truth.csv`
+4. The Flexeme decomposition is `<out_dir>/evaluation/<project><bug_id>/flexeme.csv`
+5. The SmartCommit decomposition is `<out_dir>/evaluation/<project><bug_id>/truth.csv`
 6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.

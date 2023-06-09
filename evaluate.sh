@@ -1,4 +1,5 @@
 #!/bin/bash
+## TODO: The script name "generate_all" is not descriptive.  The documentation is better -- this runs all untangling tools -- so change the name
 # Run the untangling tools on a single Defects4J bug. Also calculates the bug's metrics and parse the bug's manual
 # untangling into a CSV file.
 
@@ -158,6 +159,7 @@ else
 fi
 
 # Collate untangling results
+## TODO: Why is this section of the script called "collate" but the message says "parsing"?  Which is actually happening?  Also, what is the definition of "collate"?
 echo -ne '\n'
 echo -ne 'Parsing SmartCommit results ...............................................\r'
 

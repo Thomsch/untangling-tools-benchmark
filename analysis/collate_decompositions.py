@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+## TODO: To "collate" is to reorder, but not to do any summarization or computation.  Can you explicitly document if this script does no summarization or computation?
+
 import csv
 import os
 import sys

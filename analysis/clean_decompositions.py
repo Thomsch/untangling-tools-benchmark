@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+## TODO: What is the definition of "clean"?  That is used in the name of this script and throughout the documentation, but it isn't defined, so I don't know what this script does.
 """
 Clean the decomposition results from Flexeme and SmartCommit for all bugs in the given directory.
 Outputs two CSV files for each bug:

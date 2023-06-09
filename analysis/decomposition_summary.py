@@ -5,6 +5,8 @@ import sys
 
 #
 # This script lists missing tool decompositions in the benchmark for each bug.
+## TODO: I think this script lists *all* tool decompositions, not just missing ones.
+## TODO: Define "missing tool decompositions".  Does that mean an untangling tool crashed?
 # Input: the path to the evaluation foot folder.
 # Output: a row for each bug in the benchmark, with the following columns:
 #   - project: the name of the project
