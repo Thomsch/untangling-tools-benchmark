@@ -15,15 +15,12 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 3. Create a virtual environment `python3 -m venv .venv`.
 4. Activate the virtual environment `source .venv/bin/activate`.
 5. Install Flexeme for Java
-   1. Clone the Flexeme repository locally `git clone https://github.com/Thomsch/Flexeme ~/Flexeme`.
+   1. Clone the Flexeme repository locally `git clone https://github.com/Thomsch/Flexeme ../Flexeme`.
    2. Install Graphviz https://graphviz.org/.
-   3. Install Flexeme from the clone `pip install -e ~/Flexeme`
+   3. Install Flexeme from the clone `pip install -e ../Flexeme`
       - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 6. Install local dependencies `pip install -r requirements.txt`.
-7. Install Defects4J
-    1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
-    2. <Follow D4J instructions: set up Java 8, install dependencies, and run init.sh>.
-    3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.
+7. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
 8. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
@@ -43,13 +40,20 @@ Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
-    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end
+    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end.
     - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark
 - `<out-dir>` is the directory where the repositories, decompositions, results, and logs will be stored
 
 For example, use `./evaluate_all.sh data/d4j-5-bugs.csv ~/benchmark` to run the evaluation on 5 bugs from the Defects4J
 project.
 
+## TODO: I find the use of `benchmark` for the output directory nonintuitive.
+## Why not suggest that it be given a name that is more in line with its
+## purpose, which is to hold ouput?  Actually, why is this something that the
+## user is given control over at all?  These instructions could be more
+## opinionated.  Then, the instructions would be simpler, users would have less
+## to remember, and every instance of the version control repository would be
+## more consistent.
 The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
