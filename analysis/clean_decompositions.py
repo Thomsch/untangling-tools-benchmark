@@ -38,7 +38,7 @@ def main(evaluation_root):
     # Iterate through each subdirectory in the parent directory
     for subdir, dirs, files in os.walk(evaluation_root):
         for file in files:
-            if file == 'truth_all.csv':
+            if file == 'truth.csv':
                 truth_file = os.path.join(subdir, file)
 
                 try:
