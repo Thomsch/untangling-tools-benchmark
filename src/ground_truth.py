@@ -57,9 +57,13 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     for file in patch:
         # Skip non-java files. At least one version must have a java extension.
         # When a file is deleted or created, the file name is 'dev/null'.
+        ## TODO: What is the need for "lower()" here?  The subsequent `if` statement does not use it.
+        ## TODO: What is the need for the `or` here?  Shouldn't we expect both, or neither, of the files to be Java files?
         if not (file.source_file.lower().endswith(".java") or file.target_file.lower().endswith(".java")):
             continue
 
+        ## TODO: Same question as above, regarding the `or`.
+        ## TODO: Should this also check a directory name?  Or does it happen to be a fact that in Defects4J, every test in every project has a name ending in "Test.java"?
         if file.source_file.endswith("Test.java") or file.target_file.endswith("Test.java"):
             continue
 

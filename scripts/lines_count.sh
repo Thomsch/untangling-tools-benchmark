@@ -48,6 +48,7 @@ do
         # Use an if statement to avoid spawning a new subshell.
         evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
         echo -ne "Calculating ground truth .................................................. ${evaluation_status}\n"
+        ## TODO: Why does this proceed if there is a failure?  Would it be better to stop, so that the experimenter has to fix it?
     fi
 
     # count number of lines and append
