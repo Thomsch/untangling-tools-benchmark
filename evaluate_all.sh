@@ -14,6 +14,11 @@ fi
 bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
+if ! [[ -f "$bugs_file" ]]; then
+    echo "File ${bugs_file} not found. Exiting."
+    exit 1
+fi
+
 mkdir -p "$out_dir"
 
 out_file="${out_dir}/decompositions.csv" # Aggregated results.
@@ -25,11 +30,6 @@ logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
-
-if ! [[ -f "$bugs_file" ]]; then
-    echo "File ${bugs_file} not found. Exiting."
-    exit 1
-fi
 
 # TODO: Parallelize
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
