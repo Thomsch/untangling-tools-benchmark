@@ -92,8 +92,12 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 def get_line_map(diff) -> dict:
     """
-    Returns a map of line numbers for each changed line in the diff.
-    The map is indexed by the line content. The value is a list of tuples (line, source_line_no, target_line_no).
+    Returns a map from line content to a list of tuples (line, source_line_no, target_line_no).
+    TODO: What is "line content"?  A line of a diff, or of source code?
+    TODO: Does "line" in the tuple mean the line content?  How is it different than the map key?
+    TODO: What is the semantics if the list of tuples?  What does it mean if there is more than one?
+    TODO: What is the type of the input?
+    TODO: What is the point of this routine?
     """
     line_map = defaultdict(list)
 
@@ -107,6 +111,7 @@ def get_line_map(diff) -> dict:
     return line_map
 
 
+## TODO: What is the point of this routine?  Is it needed?
 def invert_patch(patch):
     for file in patch:
         for hunk in file:
