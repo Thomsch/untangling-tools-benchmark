@@ -64,9 +64,9 @@ classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 #
 # Compute commit metrics
 #
-metrics_out="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
-if [[ -f "$metrics_out" ]]; then
-    echo -ne 'Calculating metrics ..................................................... SKIP\r'
+metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
+if [[ -f "$metrics_csv" ]]; then
+    echo -ne 'Calculating metrics ..................................................... CACHED\r'
 else
     source ./scripts/d4j_utils.sh
 
@@ -74,7 +74,7 @@ else
     result=$(retrieve_revision_ids "$project" "$vid")
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_out"
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -90,12 +90,12 @@ fi
 echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
-truth_out="${evaluation_path}/truth.csv"
+truth_csv="${evaluation_path}/truth.csv"
 
-if [[ -f "$truth_out" ]]; then
-    echo -ne 'Calculating ground truth ................................................ SKIP\r'
+if [[ -f "$truth_csv" ]]; then
+    echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out"
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -122,9 +122,9 @@ echo -ne 'Untangling with file-based approach ..................................
 file_untangling_out="${evaluation_path}/file_untangling.csv"
 
 if [[ -f "$file_untangling_out" ]]; then
-    echo -ne 'Untangling with file-based approach ..................................... SKIP\r'
+    echo -ne 'Untangling with file-based approach ..................................... CACHED\r'
 else
-    python3 src/filename_untangling.py "${truth_out}" "${file_untangling_out}"
+    python3 src/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -144,7 +144,7 @@ smartcommit_untangling_path="${out_path}/decomposition/smartcommit"
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
 if [[ -d "$smartcommit_untangling_results" ]]; then
-    echo -ne 'Untangling with SmartCommit ............................................. SKIP\r'
+    echo -ne 'Untangling with SmartCommit ............................................. CACHED\r'
     regenerate_results=false
 else
     echo -ne '\n'
@@ -163,7 +163,7 @@ echo -ne 'Parsing SmartCommit results ..........................................
 
 smartcommit_result_out="${evaluation_path}/smartcommit.csv"
 if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
-    echo -ne 'Parsing SmartCommit results ............................................. SKIP\r'
+    echo -ne 'Parsing SmartCommit results ............................................. CACHED\r'
 else
     echo -ne '\n'
     python3 src/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
@@ -190,7 +190,7 @@ flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
 if [[ -f "$flexeme_untangling_graph" ]]; then
-    echo -ne 'Untangling with Flexeme ................................................. SKIP\r'
+    echo -ne 'Untangling with Flexeme ................................................. CACHED\r'
     regenerate_results=false
 else
     echo -ne '\n'
@@ -219,7 +219,7 @@ echo -ne 'Parsing Flexeme results ..............................................
 flexeme_result_out="${evaluation_path}/flexeme.csv"
 if [ ${flexeme_untangling_code:-1} -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
 then
-    echo -ne 'Parsing Flexeme results ................................................. SKIP\r'
+    echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
     echo -ne '\n'
     python3 src/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"

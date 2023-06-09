@@ -7,19 +7,20 @@ import pandas as pd
 from sklearn import metrics
 
 
+## TODO: "adjust" is a generic, non-descriptive name.  Rename this routine.
 def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge clusters without any bug fixing changes into one group named 'o'.
     'o' stands for Other changes.
     """
-    groups = is_other_change(df)
+    groups = is_only_nonbugfixing_change(df)
     df['adjusted_group'] = df['group_tool'].isin(groups[groups].index)
     df.loc[df['adjusted_group'], 'group_tool'] = 'o'
 
     return df.drop(['other_change', 'adjusted_group'], axis=1)
 
 
-def is_other_change(df: pd.DataFrame):
+def is_only_nonbugfixing_change(df: pd.DataFrame):
     """
     For each group, return whether the group contains only non bug-fixing changes or not.
     If a group only has bug fixing changes, return True.
@@ -43,13 +44,14 @@ def calculate_score_for_tool(truth_df, tool_df):
     # Adjust cluster to not penalize multiple groups containing exclusively
     # non bug fixing changes.
     df_adjusted = adjust_groups(df)
+    ## TODO: What is "pred" a mnemonic for?
     labels_pred = df_adjusted['group_tool']
-    labels_true = df_adjusted['group_truth']
+    labels_truth = df_adjusted['group_truth']
 
     # The adjusted rand score (not the same as the adjusted clusters above!)
     # give a score of 0 when the fix is divided in multiple groups, which is unfair.
-    # smartcommit_score = metrics.adjusted_rand_score(labels_true, labels_pred)
-    return metrics.rand_score(labels_true, labels_pred)
+    # smartcommit_score = metrics.adjusted_rand_score(labels_truth, labels_pred)
+    return metrics.rand_score(labels_truth, labels_pred)
 
 
 def main():

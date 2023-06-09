@@ -195,6 +195,7 @@ def main():
 
     # Merge source patch and test patch.
     # minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
+    ## TODO: Choose a more descriptive name.  Is the the minimal *bug-fixing* patch?
     minimal_patch = src_patch_df
 
     # # Check which truth are in changes and tag them as True in a new column.
