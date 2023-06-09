@@ -4,6 +4,7 @@
 # - $2: D4J Bug id
 # - $3: Path to the checked out project repository
 # - $4: The path where to output the results
+## TOOD: What is the format of the results?
 
 #set -o errexit    # Exit immediately if a command exits with a non-zero status
 #set -o nounset    # Exit if script tries to use an uninitialized variable

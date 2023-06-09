@@ -1,5 +1,6 @@
 #!/bin/bash
 # Run the untangling tools on a list of Defects4J bugs.
+## TODO: What is the output?
 
 #set -o errexit    # Exit immediately if a command exits with a non-zero status. Disabled because we need to check
 # the return code of ./evaluate.sh.

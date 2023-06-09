@@ -1,4 +1,5 @@
 #!/bin/bash
+## TODO: What does this script do?  What are its input and output?
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

@@ -1,3 +1,5 @@
+## TODO: This script is not documented.  What is the input?  What is the output?
+
 import sys
 
 from unidiff import PatchSet

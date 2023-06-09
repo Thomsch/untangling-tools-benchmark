@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+## TODO: This script is not documented.  What is the input?  What is the output?
+
 import csv
 import os
 import sys

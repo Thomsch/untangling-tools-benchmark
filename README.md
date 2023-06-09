@@ -41,10 +41,16 @@ If you encounter a term in the documentation or the source code that is not defi
 
 Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
+TODO: There is heavy use of .csv files.  Each .csv file format should be documented.  I suggest this should be in a README, so that any reference to the file format in documentation (say, elsewhere in a README, or in a script) can be concise.  Using names for file formats would make all of the code easier to understand.
+TODO: Do all the .csv files start with a header line?  I see header lines for many of them, but I'm wondering if there are any exceptions.  That should be documented when the file format is documented.
+
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
-    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end
-    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark
+    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
+    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark.
+      (see **Limitations** section).
+      It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
+    - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
 - `<out-dir>` is the directory where the repositories, decompositions, results, and logs will be stored
 
 For example, use `./evaluate_all.sh data/d4j-5-bugs.csv ~/benchmark` to run the evaluation on 5 bugs from the Defects4J
@@ -52,8 +58,11 @@ project.
 
 The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
+- `<out-dir>/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
+  To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
-  - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
+  - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change.
+    TODO: This also needs to indicate, for each changed line, whether it is a non-bug-fixing change.  Both of those conditions could be true for a given line.
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line correspond to a changed line and its associated group
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line correspond to a changed line and its associated group
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line correspond to a changed line and its associated group
@@ -61,17 +70,12 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
 - `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug
+  TODO: What are the metrics?
 - `decompositions.csv`: Aggregated decomposition scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+  TODO: Is there just one row?
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
 
 #### Generating the bug file
-
-You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating
-the number of bugs to include.
-
-`data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are compatible with the benchmark (see **Limitations** sections).
-It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
-To generate `data/d4j-bugs-all.csv`, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can run the following command: `./evaluate.sh <project> <bug-id> <out-dir> <repo-dir>`.
@@ -80,10 +84,6 @@ If you only want to evaluate the decomposition of one Defects4J bug, you can run
 - `<repo-dir>` directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
-Decompositions are timed. The result is stored for each tool and D4J bug (e.g., `benchmark/decomposition/flexeme/Csv_8/time.csv`).
-
-To aggregated all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
-- `<out-dir>` is the directory where the repositories, decompositions, results, and logs are stored.
 
 ## Tests
 - Python tests are located in the `test` folder. To run the tests, run `pytest test`.
@@ -99,7 +99,9 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 - SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `out/commits.csv`.
+  TODO: This is the first mention of this file.  Does that step need to be done every time that output is regenerated?  What is the relationship to `data/d4j-compatible-bugs.csv`?
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
+  TODO: Is every occurrence of such a line a mistake in Defects4J?
 
 ## Structure & repository-specific files
 - `analysis/`: Scripts to analyse the results

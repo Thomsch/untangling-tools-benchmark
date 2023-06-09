@@ -1,5 +1,7 @@
 # Counts the number of bug fixing lines and other lines from the ground truth.
 
+## TODO: What is the format of the input?  What is the output?
+
 import sys
 import pandas as pd
 

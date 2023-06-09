@@ -4,6 +4,7 @@ This script generates the ground truth using the original changes and the minimi
 
 The tool takes as input the original changes from stdin and the D4J project name, bug id and output path as parameters.
 The result is saved as a csv file at the specified path.
+TODO: What is the format of the csv file?
 
 The tests, comments, and imports are ignored from the original changes.
 """
@@ -50,6 +51,7 @@ def get_d4j_test_path(defects4j_home, project, vid):
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-java files.
+    TODO: What is the format of the DataFrame?  Why do you use a dataframe at all?  Would it be possible to use the PatchSet instead?
     """
     ignore_comments = True
     ignore_imports = True

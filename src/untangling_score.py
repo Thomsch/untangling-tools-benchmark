@@ -43,6 +43,7 @@ def calculate_score_for_tool(truth_df, tool_df):
     # Adjust cluster to not penalize multiple groups containing exclusively
     # non bug fixing changes.
     df_adjusted = adjust_groups(df)
+    ## TODO: What is the type of labels_pred and labels_true?
     labels_pred = df_adjusted['group_tool']
     labels_true = df_adjusted['group_truth']
 
@@ -67,6 +68,8 @@ def main():
     smartcommit_file = path.join(root, 'smartcommit.csv')
     flexeme_file = path.join(root, 'flexeme.csv')
     file_untangling_file = path.join(root, 'file_untangling.csv')
+
+    ## TODO: What is the type of truth_df and all the other dataframes?
 
     try:
         truth_df = pd.read_csv(truth_file).convert_dtypes()

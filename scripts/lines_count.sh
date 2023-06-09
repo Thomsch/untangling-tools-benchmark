@@ -1,5 +1,6 @@
 #!/bin/bash
 # Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
+## TODO: "those that are not in the bug fix": I think this is the number of lines that are in the programmer diff but not in the bug fix.  (It isn't all lines that are not in the bug fix.)  Shouldn't a tangled line appear in both of these, so that it isn't "lines that are not in the bug fix" but "lines that are in the non-bug-fix changes"?
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

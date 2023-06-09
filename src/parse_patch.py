@@ -1,5 +1,8 @@
 # Retrieves the changed lines for a diff.
 # The diff is passed to the script via stdin.
+
+## TODO: What is the struture/type of the output?
+
 import os
 import sys
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Generate the ground truth for a Defects4J bug.
+## TODO: In what file format?
 # Two ground truths are generated:
 # 1. Include all the original changes in the bug fix.
 # 2. Include only the source codes changes that are not comments, import, or test changes.
