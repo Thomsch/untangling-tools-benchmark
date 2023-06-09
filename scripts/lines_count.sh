@@ -45,7 +45,7 @@ do
         mkdir -p "./out/evaluation/${project}/${vid}"
         ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "$commit"
         ret_code=$?
-        # Use an if statement to avoid spawning a new subshell.
+        # TODO: Use an if statement to avoid spawning a new subshell.
         evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
         echo -ne "Calculating ground truth .................................................. ${evaluation_status}\n"
     fi

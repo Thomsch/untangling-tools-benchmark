@@ -54,9 +54,9 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
   - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
-  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line correspond to a changed line and its associated group
-  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line correspond to a changed line and its associated group
-  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line correspond to a changed line and its associated group
+  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group
+  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group
+  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group
   - `scores.csv`: The rand index score for each tool. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
 - `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
@@ -124,7 +124,7 @@ The ground truth excludes the following changes:
 - Test files
 - Comments
 - Import statements
-- Whitespaces (with `git diff -w`)
+- Whitespace (with `git diff -w`)
 - Empty lines (in `ground_truth.py`)
 
 ## Manual analysis
