@@ -92,8 +92,14 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 def get_line_map(diff) -> dict:
     """
-    Returns a map of line numbers for each changed line in the diff.
-    The map is indexed by the line content. The value is a list of tuples (line, source_line_no, target_line_no).
+    Generates a map of line numbers for each changed line in the diff.
+    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times in the original diff.
+
+    Args:
+        diff: a PatchSet object (i.e. list of PatchFiles)
+    Returns:
+        line_map: a dictionary {key = line content, a String representation of line_type and line_value,
+                                value = a list of tuples (line, source_line_no, target_line_no)}
     """
     line_map = defaultdict(list)
 
@@ -108,6 +114,15 @@ def get_line_map(diff) -> dict:
 
 
 def invert_patch(patch):
+    """
+    Handles the invertedness of D4J bug fix dataset, in which the Line Type Indicator is flipped and Line Number is switched.
+    This function reintroduces the bug fix in the correct way.
+
+    Args:
+        patch: a PatchSet object (i.e. list of PatchFiles)
+    Returns:
+        The same patch with diff Line objects inverted, modified in-place.
+    """
     for file in patch:
         for hunk in file:
             for line in hunk:
@@ -129,8 +144,13 @@ def invert_patch(patch):
 
 def repair_line_numbers(patch_diff, original_diff):
     """
-    Replaces the line numbers for the changed lines in the patch with the line numbers from the original diff.
-    Returns the updated patch (patch_diff is modified in place).
+    Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
+    If the same bug-fix (i.e. Line Object-wise) occurs at muliple locations, we will select its first occurrence in original diff as the original line.
+    
+    Args:
+        patch_diff: the minimized D4J bug-fixing diff lines 
+    Returns:
+        The updated patch (in which each bug-fixing Line Object is modified in place).
     """
     # Get the reference line number for the content of each changed line.
     line_map = get_line_map(original_diff)
@@ -150,7 +170,7 @@ def repair_line_numbers(patch_diff, original_diff):
                               f"new changes, or be incorrectly minimized.", file=sys.stderr)
                         continue
 
-                    original_line = line_records.pop(0)[0]
+                    original_line = line_records.pop(0)[0]     
                     line.source_line_no = original_line.source_line_no
                     line.target_line_no = original_line.target_line_no
                     line.line_type = original_line.line_type
@@ -160,6 +180,18 @@ def repair_line_numbers(patch_diff, original_diff):
 
 
 def main():
+    '''
+    Generates the linewise ground truth, in which each diff line is classified into either a non-bug-fixing or bug-fixing change.
+    The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups)
+    Command Line Args:
+        project: D4J Project name
+        vid: D4J Bug id
+        path/to/root/results: Specified path to store CSV file returned
+
+    Returns:
+        The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+        headerline: {file, source, target, group='fix' or 'other'}
+    '''
     args = sys.argv[1:]
 
     if len(args) != 3:
@@ -175,7 +207,7 @@ def main():
     vid = args[1]
     out_path = args[2]
 
-    changes_diff = PatchSet.from_string(sys.stdin.read())
+    changes_diff = PatchSet.from_string(sys.stdin.read())   # original_programmer_diff
     changes_df = convert_to_dataframe(changes_diff)
 
     # We assume that the minimized d4j patch is a subset of the original diff (changes_diff).
