@@ -10,7 +10,6 @@ This script calculates the following 5 commit metrics for a provided D4J bug:
     3. Number of hunks
     4. Average hunk size
     5. Number of lines updated.
-The results are stored as a .csv file (with 1 row) in <out_dir>/metrics folder. 
 
 Command Line Args:
     project: D4J Project name

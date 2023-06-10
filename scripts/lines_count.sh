@@ -1,5 +1,10 @@
 #!/bin/bash
 # Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
+# The script calls ground_truth.sh to generate a truth.csv file, then call count_lines.py to count 'fix' versus 'other' commits.
+# - $1: Path where the D4J bug file is stored.
+# - $2: Path where the line counting result is checked out
+# Returns a lines.csv file (with 1 row) to the specified path.
+# - headerline: project,bug_id,fix_lines=number of bug-fixing lines,nonfix_line=number of non bug-fixing lines
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

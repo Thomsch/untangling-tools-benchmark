@@ -1,5 +1,3 @@
-# Calculates the Rand Index for the clusters per tool compared to ground truth.
-
 import sys
 from os import path
 
@@ -11,6 +9,7 @@ def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge clusters without any bug fixing changes into one group named 'o'.
     'o' stands for Other changes.
+
     """
     groups = is_other_change(df)
     df['adjusted_group'] = df['group_tool'].isin(groups[groups].index)
@@ -53,6 +52,17 @@ def calculate_score_for_tool(truth_df, tool_df):
 
 
 def main():
+    '''
+    Calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
+
+    Command Line Args:
+        - evaluation/project/bug_id: Path to the evaluation subfolder of the D4J bug containing CSV files for: ground truth, 3 untangling results
+        - project: D4J project name
+        - bug_id: D4J bug id
+    Returns:
+        A scores.csv file in the /evaluation/<D4J bug id> subfolder.
+        headerline: {project,vid,smartcommit_score,flexeme_score,file_untangling_score}
+    '''
     args = sys.argv[1:]
 
     if len(args) != 3:

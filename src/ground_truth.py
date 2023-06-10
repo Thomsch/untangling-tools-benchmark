@@ -19,7 +19,6 @@ from unidiff import PatchSet, LINE_TYPE_CONTEXT, LINE_TYPE_REMOVED, LINE_TYPE_AD
 
 COL_NAMES = ['file', 'source', 'target']
 
-
 def from_stdin() -> pd.DataFrame:
     """
     Parses a diff from stdin into a DataFrame.
@@ -145,11 +144,11 @@ def invert_patch(patch):
 def repair_line_numbers(patch_diff, original_diff):
     """
     Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
-    If the same bug-fix (i.e. Line Object-wise) occurs at muliple locations, we will select its first occurrence in original diff as the original line.
+    If the same bug-fix (i.e. Line Object-wise) re duplicated, we will select its first occurrence in original diff as the original line.
     We ignore Line Objects that are not whole (i.e. DNE in original_diff)
     
     Args:
-        patch_diff: the minimized D4J bug-fixing diff lines 
+        patch_diff: the minimized D4J bug-fixing diff  
     Returns:
         The updated patch (in which each bug-fixing Line Object is modified in place).
     """
@@ -194,6 +193,10 @@ def main():
     Returns:
         The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
         headerline: {file, source, target, group='fix','other',or 'both}
+            - file = each Diff Line Object from the original dif generated
+            - source = the line removed (-) from buggy version
+            - target = the line added (+) to fixed version
+
     '''
     args = sys.argv[1:]
 
@@ -215,7 +218,7 @@ def main():
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
     # A purely bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to the one in original_diff PatchSet
-    # A tangled line containing a bug fix will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
+    # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
     # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
     try:
         src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
@@ -233,7 +236,7 @@ def main():
     # minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
     minimal_patch = src_patch_df
 
-    # # Check which truth are in changes and tag them as True in a new column.
+    # Check which truth are in changes and tag them as True in a new column.
     ground_truth = pd.merge(changes_df, minimal_patch, on=COL_NAMES, how='left', indicator='group')
     ground_truth['group'] = np.where(ground_truth.group == 'both', 'fix', 'other')
     ground_truth.to_csv(out_path, index=False)

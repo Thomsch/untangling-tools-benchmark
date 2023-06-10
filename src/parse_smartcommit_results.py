@@ -6,9 +6,7 @@ from io import StringIO
 
 import pandas as pd
 from unidiff import PatchSet
-
-
-# Retrieves changed lines for SmartCommit results.
+import parse_patch
 
 def list_json_files(dir):
     """
@@ -16,8 +14,18 @@ def list_json_files(dir):
     """
     return glob.glob(os.path.join(dir, '*.json'))
 
-
 def main():
+    '''
+    Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug file
+    to the line level. Each line is labelled with the group it belongs to and this is reported in a readable CSV file.
+
+    Command Line Args:
+        - result_dir: Path to JSON results in decomposition/smartcommit
+        - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
+    Returns:
+        A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.
+        headerline: {file, source, target, group='group0','group1',etc.}
+    '''
     args = sys.argv[1:]
 
     if len(args) != 2:
@@ -69,7 +77,6 @@ def main():
                 header_str = '\n'.join(diff_data[file_id]['rawHeaders'])
                 diff_str = '\n'.join(rawDiff)
 
-                import parse_patch
                 patch = PatchSet.from_string(header_str + '\n' + diff_str)
                 for line in parse_patch.to_csv(patch):
                     result += f'{line},{group_id}\n'
