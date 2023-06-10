@@ -146,6 +146,7 @@ def repair_line_numbers(patch_diff, original_diff):
     """
     Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
     If the same bug-fix (i.e. Line Object-wise) occurs at muliple locations, we will select its first occurrence in original diff as the original line.
+    We ignore Line Objects that are not whole (i.e. DNE in original_diff)
     
     Args:
         patch_diff: the minimized D4J bug-fixing diff lines 
@@ -174,7 +175,8 @@ def repair_line_numbers(patch_diff, original_diff):
                     line.source_line_no = original_line.source_line_no
                     line.target_line_no = original_line.target_line_no
                     line.line_type = original_line.line_type
-                else:
+                else:   # Bug-fixing portion of a tangled line.
+                        # TODO: This should be classified as tangled rather than non-bug-fixing ("both", not "other")
                     print(f"Line not found ({line.source_line_no}, {line.target_line_no}): '{line}'", file=sys.stderr)
     return patch_diff
 
@@ -182,7 +184,8 @@ def repair_line_numbers(patch_diff, original_diff):
 def main():
     '''
     Generates the linewise ground truth, in which each diff line is classified into either a non-bug-fixing or bug-fixing change.
-    The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups)
+    The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
+
     Command Line Args:
         project: D4J Project name
         vid: D4J Bug id
@@ -190,7 +193,7 @@ def main():
 
     Returns:
         The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-        headerline: {file, source, target, group='fix' or 'other'}
+        headerline: {file, source, target, group='fix','other',or 'both}
     '''
     args = sys.argv[1:]
 
@@ -210,9 +213,10 @@ def main():
     changes_diff = PatchSet.from_string(sys.stdin.read())   # original_programmer_diff
     changes_df = convert_to_dataframe(changes_diff)
 
-    # We assume that the minimized d4j patch is a subset of the original diff (changes_diff).
-    # If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't
-    # be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
+    # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
+    # A purely bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to the one in original_diff PatchSet
+    # A tangled line containing a bug fix will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
+    # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
     try:
         src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
         src_patch = invert_patch(src_patch)
