@@ -1,3 +1,24 @@
+#!/usr/bin/env python3
+
+"""
+Translates Flexeme grouping results ((dot files) in decomposition/flexeme for each D4J bug file
+to the line level.
+
+Each line is labelled by collecting all of its nodes' groups (it is possible for one line to have multiple groups).
+# TODO: Explain how we come down to only 1 group.
+
+Command Line Args:
+    - result_dir: Path to flexeme.dot results in decomposition/flexeme
+    - output_path: Path to store returned CSV file in evaluation/flexeme.csv
+Returns:
+    A flexeme.csv file in the respective /evaluation/<D4J bug> subfolder.
+    CSV header: {file, source, target, group=0,1,2,etc.}
+        - file: The relative file path from the project root for a change
+        - source: The line number of the change if the change is a deletion
+        - target: The line number of the change if the change is an addition
+        - group: The group number of the change determined by Flexeme.
+"""
+
 import logging
 import sys
 from io import StringIO
@@ -5,8 +26,6 @@ from io import StringIO
 import networkx as nx
 import pandas as pd
 
-
-# Retrieves changed lines for Flexeme results.
 
 def main():
     args = sys.argv[1:]
