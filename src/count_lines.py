@@ -41,6 +41,7 @@ def main():
 
     print(f'{project},{vid},{fix_lines},{other_lines}')
 
+
 if __name__ == "__main__":
     main()
 

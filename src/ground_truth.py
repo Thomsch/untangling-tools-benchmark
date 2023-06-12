@@ -182,7 +182,7 @@ def repair_line_numbers(patch_diff, original_diff):
                               f"new changes, or be incorrectly minimized.", file=sys.stderr)
                         continue
 
-                    original_line = line_records.pop(0)[0]     
+                    original_line = line_records.pop(0)[0]
                     line.source_line_no = original_line.source_line_no
                     line.target_line_no = original_line.target_line_no
                     line.line_type = original_line.line_type
@@ -208,7 +208,7 @@ def main():
     vid = args[1]
     out_path = args[2]
 
-    changes_diff = PatchSet.from_string(sys.stdin.read())   # original_programmer_diff
+    changes_diff = PatchSet.from_string(sys.stdin.read())   # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
