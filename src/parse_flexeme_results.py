@@ -6,6 +6,7 @@ to the line level.
 
 Each line is labelled by collecting all of its nodes' groups (it is possible for one line to have multiple groups).
 # TODO: Explain how we come down to only 1 group.
+## TODO: Should that be "2 groups"?
 
 Command Line Args:
     - result_dir: Path to flexeme.dot results in decomposition/flexeme

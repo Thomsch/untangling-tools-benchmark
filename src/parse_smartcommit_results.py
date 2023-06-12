@@ -6,6 +6,7 @@ to the line level. Each line is labelled with the group it belongs to and this i
 
 Command Line Args:
     - result_dir: Path to JSON results in decomposition/smartcommit
+## TODO: It would be good to give the format or schema of the JSON file.  A URL to a description of it is adequate.
     - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
 Returns:
     A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.

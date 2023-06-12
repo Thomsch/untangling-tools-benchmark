@@ -54,6 +54,7 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
   - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
+    ## TODO: what is the definition of "changed" above?
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group

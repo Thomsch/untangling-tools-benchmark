@@ -104,6 +104,8 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 def get_line_map(diff) -> dict:
     """
     Generates a map of line numbers for each changed line in the diff.
+## TODO: What is the definition of "changed"?  Does it exclude added or removed lines?
+## TODO: If this is by line content, is it the line before the fix or the line after the fix?
     The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times in the original diff.
 
     Args:
@@ -212,8 +214,10 @@ def main():
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
+    ## TODO: are source_line_no and target_line_no ever `None`?
     # A purely bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to the one in original_diff PatchSet
     # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
+    ## TODO: What is "DNE"?
     # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
     try:
         src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))

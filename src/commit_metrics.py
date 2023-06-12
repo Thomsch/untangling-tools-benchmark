@@ -2,10 +2,12 @@
 
 """
 This script calculates the following 5 commit metrics for a provided D4J bug:
+## TODO: I don't understand what "non-exclusive" means in the following line.
     1. Total number of files updated (non-exclusive)
     2. Number of test files updated
     3. Number of hunks
     4. Average hunk size
+## TODO: Is it the number of lines in the pre-fix version of the software or the number of lines in the post-fix software?
     5. Number of lines updated.
 
 Command Line Args:
