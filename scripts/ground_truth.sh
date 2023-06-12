@@ -4,8 +4,13 @@
 # - $2: D4J Bug id
 # - $3: Path to the checked out project repository
 # - $4: The path where to output the results
+#
 # Returns the ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
 # - CSV headerline: {file, source, target, group}
+#     - file: The relative file path from the project root for a change
+#     - source: The line number of the change if the change is a deletion
+#     - target: The line number of the change if the change is an addition
+#     - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
 #set -o errexit    # Exit immediately if a command exits with a non-zero status
 #set -o nounset    # Exit if script tries to use an uninitialized variable
