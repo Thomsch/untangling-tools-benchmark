@@ -1,11 +1,23 @@
-""" Ground Truth Script.
+#!/usr/bin/env python3
 
-This script generates the ground truth using the original changes and the minimized version of the D4J bug.
-
-The tool takes as input the original changes from stdin and the D4J project name, bug id and output path as parameters.
-The result is saved as a csv file at the specified path.
+"""
+Generates the line-wise ground truth using the original changes and the minimized version of the D4J bug.
+Each diff line is classified into either a non-bug-fixing or bug-fixing change.
 
 The tests, comments, and imports are ignored from the original changes.
+The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
+
+Command Line Args:
+    project: D4J Project name
+    vid: D4J Bug id
+    path/to/root/results: Specified path to store CSV file returned
+
+Returns:
+    The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+    CSV header: {file, source, target, group='fix','other',or 'both}
+        - file = each Diff Line Object from the original dif generated
+        - source = the line removed (-) from buggy version
+        - target = the line added (+) to fixed version
 """
 
 import os
@@ -181,23 +193,6 @@ def repair_line_numbers(patch_diff, original_diff):
 
 
 def main():
-    '''
-    Generates the linewise ground truth, in which each diff line is classified into either a non-bug-fixing or bug-fixing change.
-    The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
-
-    Command Line Args:
-        project: D4J Project name
-        vid: D4J Bug id
-        path/to/root/results: Specified path to store CSV file returned
-
-    Returns:
-        The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-        headerline: {file, source, target, group='fix','other',or 'both}
-            - file = each Diff Line Object from the original dif generated
-            - source = the line removed (-) from buggy version
-            - target = the line added (+) to fixed version
-
-    '''
     args = sys.argv[1:]
 
     if len(args) != 3:

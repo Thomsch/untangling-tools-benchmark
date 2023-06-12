@@ -6,7 +6,7 @@
 # - $4: The path where to output the results
 #
 # Returns the ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-# - CSV headerline: {file, source, target, group}
+# - CSV CSV header: {file, source, target, group}
 #     - file: The relative file path from the project root for a change
 #     - source: The line number of the change if the change is a deletion
 #     - target: The line number of the change if the change is an addition

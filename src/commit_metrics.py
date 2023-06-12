@@ -1,10 +1,7 @@
-import sys
+#!/usr/bin/env python3
 
-from unidiff import PatchSet
-from unidiff.constants import LINE_TYPE_CONTEXT
-
-'''
-This script calculates the following 5 commit metrics for a provided D4J bug: 
+"""
+This script calculates the following 5 commit metrics for a provided D4J bug:
     1. Total number of files updated (non-exclusive)
     2. Number of test files updated
     3. Number of hunks
@@ -17,9 +14,16 @@ Command Line Args:
     out_dir: Path where results are stored
     repo_root: Path where the repo is checked out
 Returns:
-    The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder. 
-    <project> <id>.csv headerline: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
-'''
+    The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
+    CSV header: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
+"""
+
+import sys
+
+from unidiff import PatchSet
+from unidiff.constants import LINE_TYPE_CONTEXT
+
+
 def main():
     args = sys.argv[1:]
 
