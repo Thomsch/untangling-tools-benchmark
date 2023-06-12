@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the untangling tools on a list of Defects4J bugs by calling ./evaluate.sh.
+# Run the untangling tools on a list of Defects4J (D4J) bugs by calling ./evaluate.sh.
 # - $1: Path to the file containing the bugs to untangle and evaluate.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 # The output of evaluate.sh for each bug file is reported individually in 5 folders: /decompositions, /evaluation, /logs, /metrics, /repositories.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the untangling tools on a single D4J bug. Also calculates the bug's metrics and parse the bug's manual
+# Run the untangling tools on a single Defects4J (D4J) bug. Also calculates the bug's metrics and parse the bug's manual
 # untangling into a CSV file.
 # - $1: D4J Project name
 # - $2: D4J Bug Id
