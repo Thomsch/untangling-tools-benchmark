@@ -126,8 +126,8 @@ def get_line_map(diff) -> dict:
 
 def invert_patch(patch):
     """
-    Handles the invertedness of D4J bug fix dataset, in which the Line Type Indicator is flipped and Line Number is switched.
-    This function reintroduces the bug fix in the correct way.
+    Inverts the minimized bug-inducing patch of D4J bug fix dataset to a minimal bug-fix patch that can be applied to
+    the buggy program by flipping the line type of change (addition/deletion) and updating the line numbers.
 
     Args:
         patch: a PatchSet object (i.e. list of PatchFiles)
