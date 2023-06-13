@@ -2,13 +2,11 @@
 
 """
 This script calculates the following 5 commit metrics for a provided D4J bug:
-## TODO: I don't understand what "non-exclusive" means in the following line.
-    1. Total number of files updated (non-exclusive)
+    1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
     3. Number of hunks
     4. Average hunk size
-## TODO: Is it the number of lines in the pre-fix version of the software or the number of lines in the post-fix software?
-    5. Number of lines updated.
+    5. Number of lines changed (i.e. all lines with +/- indicators in the original diff generated from pre-fix and post-fix versions).
 
 Command Line Args:
     project: D4J Project name
@@ -42,7 +40,7 @@ def main():
     test_files_updated = 0  # Number of test files updated
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
-    lines_updated = 0  # The number of lines updated in the commit
+    lines_updated = 0  # The number of lines changed in the commit
     contains_refactoring = False
     different_changes_same_line = None
 
