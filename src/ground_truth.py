@@ -2,7 +2,7 @@
 
 """
 Generates the line-wise ground truth using the original changes and the minimized version of the D4J bug.
-Each diff line is classified into either a non-bug-fixing or bug-fixing change.
+Each diff line is classified into a non-bug-fixing, bug-fixing change, or both.
 
 The tests, comments, and imports are ignored from the original changes.
 The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
@@ -103,10 +103,9 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 def get_line_map(diff) -> dict:
     """
-    Generates a map of line numbers for each changed line in the diff.
-## TODO: What is the definition of "changed"?  Does it exclude added or removed lines?
-## TODO: If this is by line content, is it the line before the fix or the line after the fix?
-    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times in the original diff.
+    In a diff, we define a changed line as either a line removed from the original (pre-fix) file, indicated with (-), or a line added to the modified (post-fix) file, indicated with (+). An unchanged line is a context line, indicated with (' ').
+    The function generates a map from line contents (i.e. either added/removed contents) to their line numbers in the diff provided.
+    The mapping is one-to-many as identical lines of bug-fixing code can occur multiple times in the original diff.
 
     Args:
         diff: a PatchSet object (i.e. list of PatchFiles)
