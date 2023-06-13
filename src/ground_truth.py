@@ -212,11 +212,10 @@ def main():
     changes_diff = PatchSet.from_string(sys.stdin.read())   # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
 
-    # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
-    ## TODO: are source_line_no and target_line_no ever `None`?
+    # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no=line number in original file,self.target_line_no=line number in modified file), and (3) Line Content (self.value)
+    # A line removed from original (pre-fix) file will have self.source_line_no=None. A line added to modified (post-fix) file will have self.target_line_no=None. A tangled line will have both fileds initialized to the same integer.
     # A purely bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to the one in original_diff PatchSet
-    # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
-    ## TODO: What is "DNE"?
+    # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus does not exist in original_diff
     # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
     try:
         src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
