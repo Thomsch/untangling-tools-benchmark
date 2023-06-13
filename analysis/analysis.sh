@@ -27,3 +27,6 @@ python analysis/count_missing_results.py "${BENCHMARK_DIR}" > "${ANALYSIS_DIR}/m
 python analysis/clean_decompositions.py ~/benchmark-test/evaluation
 python analysis/collate_decompositions.py ~/benchmark-test/evaluation > collated_decompositions.csv
 R CMD BATCH analysis/DescriptiveStatistics.R
+
+# Generates the performance statistics
+analysis/median_performance.py "${BENCHMARK_DIR}/decompositions.csv" > "${ANALYSIS_DIR}/performance.txt"
