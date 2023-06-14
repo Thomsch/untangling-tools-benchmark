@@ -16,7 +16,7 @@ The procedure to create ground truth is illustrated below. The diagram is create
 
 Diagram legend:
 - Orange and Yellow rectangular boxes: Different source code versions in the Version Control history. V<sub>n-1</sub> and V<sub>n</sub> represent the source code version of the pre-commit and post-commit revisions (i.e. including all commits actually made), while  V<sub>bug</sub> and V<sub>fix</sub> differ only by isolated bug fixes.
-- Blue rectangles: UNIX Diff file formats that are converted into PatchSet Objects. In the program, we utilize OOP provided by the `unidiff.PatchSet` module by treating Diffs as PatchFiles - i.e. containing PatchSet, diff Line, etc. Objects. 
+- Blue rectangles: UNIX Diff file formats that are converted into PatchSet Objects. In the program, we utilize OOP provided by the `unidiff` package by treating Diffs as PatchFiles - i.e. containing PatchSet, diff Line, etc. Objects. 
 - Tables: DataFrames. To manipulate the diff PatchSets more easily, we finally convert the filtered PatchSets to DataFrame formats/CSV exports for empirical analysis in the succeeding steps of the evaluation framework.
 - White rounded boxes: the hashtagged (#) labels are actual names of code files/function calls/ Bash scripts, .etc that are invoked to produce the output indicated by the arrow. If the draw.io VSCode extension is installed with Code Links enabled, double-clicking on the hashtag allows for a workspace search for a symbol matching the rest of the label.
 
