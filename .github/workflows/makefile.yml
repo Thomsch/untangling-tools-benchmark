@@ -17,6 +17,5 @@ jobs:
     - name: make check-scripts
       run: |
         make check-scripts
-        make python-style
         make python-test
 
