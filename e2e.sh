@@ -31,7 +31,7 @@ decomposition_results="${out_dir}/decompositions.csv"
 
 # Diff the aggregated metrics file with the goal file
 if [ -f "$metric_goal_out" ]; then
-    diff_metrics=$(diff -u $metric_goal_out $metrics_results)
+    diff_metrics=$(diff -u "$metric_goal_out" "$metrics_results")
     # Check if the diff output is empty
     if [ -n "$diff_metrics" ]; then
         echo "Warning: The metrics computed are different."
@@ -43,7 +43,7 @@ fi
 
 # Diff the aggregated Rand Index scores file with the goal file
 if [ -f "$decomposition_goal_out" ]; then
-    diff_scores=$(diff -u $decomposition_goal_out $decomposition_results)
+    diff_scores=$(diff -u "$decomposition_goal_out" "$decomposition_results")
     # Check if the diff output is empty
     if [ -n "$diff_scores" ]; then
         echo "Warning: The Rand Index scores computed are different."
