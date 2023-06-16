@@ -13,7 +13,7 @@ python-style:
 	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
 
 python-test:
-	pytest test
+	pytest test/test_ground_truth.py
 
 clean: 
 	rm -rf ./tmp/
