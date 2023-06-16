@@ -14,7 +14,7 @@ Command Line Args:
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-    CSV header: {file, source, target, group='fix','other',or 'both}
+    CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
