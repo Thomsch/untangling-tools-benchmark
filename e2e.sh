@@ -20,35 +20,38 @@ bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
 metric_goal_out="${out_dir}/metrics_goal.csv"
-decomposition_goal_out="${out_dir}/decompositions_goal.csv"
+decompositions_goal_out="${out_dir}/decompositions_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
 ./evaluate_all.sh "$bugs_file" "$out_dir"
 
 metrics_results="${out_dir}/metrics.csv"
-decomposition_results="${out_dir}/decompositions.csv"
+decompositions_results="${out_dir}/decompositions.csv"
 
 # Diff the aggregated metrics file with the goal file
-if [ -f "$metric_goal_out" ]; then
+if [[ -f "$metric_goal_out" ]]; then
     diff_metrics=$(diff -u "$metric_goal_out" "$metrics_results")
     # Check if the diff output is empty
     if [ -n "$diff_metrics" ]; then
         echo "Warning: The metrics computed are different."
         echo -e "$diff_metrics"
     fi
-
     echo "The results are identical."
+else 
+    echo "Cannot find goal file."
 fi
 
 # Diff the aggregated Rand Index scores file with the goal file
-if [ -f "$decomposition_goal_out" ]; then
-    diff_scores=$(diff -u "$decomposition_goal_out" "$decomposition_results")
+if [[ -f "$decompositions_goal_out" ]]; then
+    diff_scores=$(diff -u "$decompositions_goal_out" "$decompositions_results")
     # Check if the diff output is empty
     if [ -n "$diff_scores" ]; then
-        echo "Warning: The Rand Index scores computed are different."
+        echo "Warning: The Rand Index computed are different."
         echo -e "$diff_scores"
     fi
-
+    
     echo "The scores are identical."
+else 
+    echo "Cannot find goal file."
 fi
