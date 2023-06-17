@@ -19,7 +19,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    2. Install Graphviz https://graphviz.org/.
    3. Install Flexeme from the clone `pip install -e ../Flexeme`
       - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
-6. Install local dependencies `pip install -r requirements.txt`.
+6. Install local dependencies `pip install -U -r requirements.txt`.
 7. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
 8. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)

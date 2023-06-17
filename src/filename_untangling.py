@@ -8,7 +8,8 @@ Command Line Args:
     file_path: Path to ground truth file
     output_file: Path to output file
 Returns:
-    A <project-id>/file_untangling.csv file containing the file-based classification group in each D4J bug file subfolder.
+    A <project-id>/file_untangling.csv file containing the file-based classification group
+    in each D4J bug file subfolder.
     header line: {file, source, target, group}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion
