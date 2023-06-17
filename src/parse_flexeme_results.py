@@ -80,7 +80,7 @@ def main():
             file = (
                 data["filepath"].replace('"', "")
                 if "filepath" in data.keys()
-                    # do nothing
+                # then do nothing
                 else data["cluster"].replace('"', "")
             )
             for line in range(span_start, span_end + 1):
