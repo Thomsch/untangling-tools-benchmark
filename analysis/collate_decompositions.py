@@ -35,7 +35,8 @@ def main(evaluation_dir):
 
         if len(split) != 2:
             print(
-                f"Invalid subdirectory name: {subdir}. Expected to be of the form <project>_<bug_id>",
+                f"Invalid subdirectory name: {subdir}."
+                f" Expected to be of the form <project>_<bug_id>",
                 file=sys.stderr,
             )
             continue
@@ -54,7 +55,8 @@ def main(evaluation_dir):
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     print(
-                        f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']},{row['group']}"
+                        f"{project},{bug_id},{treatment},"
+                        f"{row['file']},{row['source']},{row['target']},{row['group']}"
                     )
 
 
