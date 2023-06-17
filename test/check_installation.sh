@@ -24,7 +24,7 @@ fi
 # Check Java is 1.8 for Defects4j. 
 java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
 if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
-    echo "Unsupported Java Version: ${version}. Please use Java 8."
+    echo "Unsupported Java Version: ${java_version}. Please use Java 8."
     exit 1
 fi
 
