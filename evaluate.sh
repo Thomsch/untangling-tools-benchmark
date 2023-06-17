@@ -233,7 +233,7 @@ echo -ne '\n'
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ ${flexeme_untangling_code:-1} -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
+if [ "${flexeme_untangling_code:-1}" -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
 then
     echo -ne 'Parsing Flexeme results ................................................. SKIP\r'
 else
