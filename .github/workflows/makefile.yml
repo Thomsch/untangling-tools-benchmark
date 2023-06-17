@@ -9,9 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: psf/black@stable
+      - name: install Python modules
+        run: pip install -U -r requirements.txt
 
       - name: make check
-        run: |
-          make check
-
+        run: make check

@@ -13,7 +13,7 @@ import sys
 #   - smartcommit_exists: true if smartcommit decomposition is present, false otherwise
 #
 def main(path):
-    print(f"project,bug_id,flexeme_exists,smartcommit_exists")
+    print("project,bug_id,flexeme_exists,smartcommit_exists")
 
     # Walk through the directory tree starting from 'evaluation'
     for root, dirs, files in os.walk(path):
