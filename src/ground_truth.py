@@ -197,11 +197,11 @@ def main():
 
     if len(args) != 3:
         print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
-        exit(1)
+        sys.exit(1)
 
     if not os.getenv('DEFECTS4J_HOME'):
         print('DEFECTS4J_HOME environment variable is not set. Exiting.')
-        exit(1)
+        sys.exit(1)
     defects4j_home = os.getenv('DEFECTS4J_HOME')
 
     project = args[0]
