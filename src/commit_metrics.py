@@ -15,7 +15,8 @@ Command Line Args:
     repo_root: Path where the repo is checked out
 Returns:
     The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
-    CSV header: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
+    CSV header:
+    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
 """
 
 import sys
@@ -59,7 +60,8 @@ def main():
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
     print(
-        f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}"
+        f"{project},{vid},{files_updated},{test_files_updated},"
+        f"{hunks},{average_hunk_size},{lines_updated}"
     )
 
 

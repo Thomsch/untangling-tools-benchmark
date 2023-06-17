@@ -39,7 +39,8 @@ def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
 
 def main(evaluation_root):
     """
-    Clean the results of the decompositions to avoid unclassified line changes with respect to the ground truth.
+    Clean the results of the decompositions to avoid unclassified line changes with respect to the
+    ground truth.
     """
     # File untangling is not included since it's made from the ground truth already.
     result_files = ["flexeme.csv", "smartcommit.csv"]
