@@ -20,7 +20,12 @@ def main(evaluation_dir):
     - target: the target line number (for insertions)
     - group: the group that the file belongs to
     """
-    result_files = ['flexeme_clean.csv', 'smartcommit_clean.csv', 'file_untangling.csv', 'truth_all.csv']
+    result_files = [
+        "flexeme_clean.csv",
+        "smartcommit_clean.csv",
+        "file_untangling.csv",
+        "truth_all.csv",
+    ]
     # Iterate through each subdirectory in the parent directory
     for subdir in os.listdir(evaluation_dir):
         subdir_path = os.path.join(evaluation_dir, subdir)
@@ -31,7 +36,10 @@ def main(evaluation_dir):
         split = subdir.split("_")
 
         if len(split) != 2:
-            print(f"Invalid subdirectory name: {subdir}. Expected to be of the form <project>_<bug_id>", file=sys.stderr)
+            print(
+                f"Invalid subdirectory name: {subdir}. Expected to be of the form <project>_<bug_id>",
+                file=sys.stderr,
+            )
             continue
 
         project, bug_id = split
@@ -47,14 +55,16 @@ def main(evaluation_dir):
             with open(filepath, "r") as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    print(f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']},{row['group']}")
+                    print(
+                        f"{project},{bug_id},{treatment},{row['file']},{row['source']},{row['target']},{row['group']}"
+                    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print('usage: collate_decompositions.py <path/to/benchmark/evaluation/folder>')
-        exit(1)
+        print("usage: collate_decompositions.py <path/to/benchmark/evaluation/folder>")
+        sys.exit(1)
 
     main(os.path.abspath(args[0]))

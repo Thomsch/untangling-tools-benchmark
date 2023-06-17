@@ -25,23 +25,27 @@ def main(path):
         split = root.split("_")
 
         if len(split) != 2:
-            print(f"Invalid subdirectory name: {root}. Expected to be of the form <project>_<bug_id>",
-                  file=sys.stderr)
+            print(
+                f"Invalid subdirectory name: {root}. Expected to be of the form <project>_<bug_id>",
+                file=sys.stderr,
+            )
             continue
 
         project, bug_id = split
 
-        flexeme_exists = os.path.exists(os.path.join(root, 'flexeme.csv'))
-        smartcommit_exists = os.path.exists(os.path.join(root, 'smartcommit.csv'))
+        flexeme_exists = os.path.exists(os.path.join(root, "flexeme.csv"))
+        smartcommit_exists = os.path.exists(os.path.join(root, "smartcommit.csv"))
 
-        print(f"{os.path.basename(project)},{bug_id},{flexeme_exists},{smartcommit_exists}")
+        print(
+            f"{os.path.basename(project)},{bug_id},{flexeme_exists},{smartcommit_exists}"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print('usage: decomposition_summary.py <path/to/evaluation/folder>')
-        exit(1)
+        print("usage: decomposition_summary.py <path/to/evaluation/folder>")
+        sys.exit(1)
 
     main(os.path.abspath(args[0]))

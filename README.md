@@ -20,7 +20,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    3. Install Flexeme from the clone `pip install -e ~/Flexeme`
       - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 6. Install local dependencies `pip install -r requirements.txt`.
-7. Install Defects4J
+7. Install Defects4J (D4J)
     1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
     2. <Follow D4J instructions: set up Java 8, install dependencies, and run init.sh>.
     3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.
@@ -57,9 +57,9 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
   - `truth.csv`: The ground truth of the bug-fixing commit. For each changed line whether it's a bug-fixing change or not.
     TODO: What is a "changed line"?  Is it a line from the diff, or from the original program?  Is it a string or a hunk line as provided by the unidiff package?
-  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line correspond to a changed line and its associated group
-  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line correspond to a changed line and its associated group
-  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line correspond to a changed line and its associated group
+  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group
+  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group
+  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group
   - `scores.csv`: The rand index score for each tool. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
 - `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
@@ -128,7 +128,7 @@ The ground truth excludes the following changes:
 - Test files
 - Comments
 - Import statements
-- Whitespaces (with `git diff -w`)
+- Whitespace (with `git diff -w`)
 - Empty lines (in `ground_truth.py`)
 
 ## Manual analysis
