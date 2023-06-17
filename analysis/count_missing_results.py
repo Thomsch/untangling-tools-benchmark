@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     if len(args) != 1:
         print("usage: count_missing_results.py <path/to/benchmark/root>")
-        exit(1)
+        sys.exit(1)
 
     benchmark_root = os.path.abspath(args[0])
     path = os.path.join(benchmark_root, "evaluation")

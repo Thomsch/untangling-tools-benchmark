@@ -44,6 +44,6 @@ if __name__ == "__main__":
 
     if len(args) != 1:
         print("usage: decomposition_summary.py <path/to/evaluation/folder>")
-        exit(1)
+        sys.exit(1)
 
     main(os.path.abspath(args[0]))
