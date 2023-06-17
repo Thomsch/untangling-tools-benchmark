@@ -18,13 +18,10 @@ Returns:
 """
 
 import csv
-import os
 import sys
 
 
 def main(file_path, output_file):
-    # GET directory path of file_path
-    path = os.path.dirname(file_path)
     # Print project name
     with open(file_path, "r") as csv_file:
         csv_reader = csv.reader(csv_file)
