@@ -4,7 +4,8 @@
 Translates Flexeme grouping results ((dot files) in decomposition/flexeme for each D4J bug file
 to the line level.
 
-Each line is labelled by collecting all of its nodes' groups (it is possible for one line to have multiple groups).
+Each line is labelled by collecting all of its nodes' groups (it is possible for one line
+to have multiple groups).
 # TODO: Explain how we come down to only 1 group.
 
 Command Line Args:
@@ -90,8 +91,9 @@ def main():
                     logging.error(f"Update {update_type} unsupported")
                     continue
 
-            # Merge results per line
-            # Might not need to merge results per line since the data is calculated using a left join on the truth.
+            # Merge results per line.
+            # Might not need to merge results per line since the data is calculated using a left
+            # join on the truth.
 
             df = pd.read_csv(
                 StringIO(result),
@@ -103,7 +105,7 @@ def main():
             )  # Forces pandas to use ints in source and target columns.
             df = df.drop_duplicates()
 
-            if not len(df):
+            if len(df) == 0:
                 print(
                     "No results generated. Verify decomposition results and paths.",
                     file=sys.stderr,
