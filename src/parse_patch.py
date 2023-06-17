@@ -15,16 +15,16 @@ def to_csv(patch: PatchSet):
             for line in hunk:
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
-                yield f'{file.path},{line.source_line_no},{line.target_line_no}' #,\"{line.value.strip()}\"'
+                yield f"{file.path},{line.source_line_no},{line.target_line_no}"  # ,\"{line.value.strip()}\"'
 
 
 def from_file(filename):
-    result = ''
+    result = ""
 
     if os.path.exists(filename):
         patch = PatchSet.from_filename(filename)
         for line in to_csv(patch):
-            result += line + '\n'
+            result += line + "\n"
 
     return result
 
