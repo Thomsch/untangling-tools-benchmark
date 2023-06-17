@@ -38,14 +38,14 @@ def main(evaluation_root):
     # Iterate through each subdirectory in the parent directory
     for subdir, dirs, files in os.walk(evaluation_root):
         for file in files:
-            if file == 'truth_all.csv':
+            if file == 'truth.csv':
                 truth_file = os.path.join(subdir, file)
 
                 try:
                     truth_df = pd.read_csv(truth_file).convert_dtypes()
                 except FileNotFoundError as e:
                     print(f'File not found: {e.filename}', file=sys.stderr)
-                    exit(1)
+                    sys.exit(1)
 
                 smartcommit_file = path.join(subdir, 'smartcommit.csv')
                 smartcommit_clean_file = path.join(subdir, 'smartcommit_clean.csv')
@@ -75,6 +75,6 @@ if __name__ == '__main__':
 
     if len(args) != 1:
         print('usage: clean_decompositions.py <path/to/benchmark/evaluation/folder>')
-        exit(1)
+        sys.exit(1)
 
     main(os.path.abspath(args[0]))
