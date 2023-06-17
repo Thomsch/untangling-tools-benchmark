@@ -53,6 +53,6 @@ if __name__ == '__main__':
 
     if len(args) != 1:
         print('usage: collate_decompositions.py <path/to/benchmark/evaluation/folder>')
-        exit(1)
+        sys.exit(1)
 
     main(os.path.abspath(args[0]))
