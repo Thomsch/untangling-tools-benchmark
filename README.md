@@ -20,7 +20,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
    3. Install Flexeme from the clone `pip install -e ~/Flexeme`
       - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 6. Install local dependencies `pip install -r requirements.txt`.
-7. Install Defects4J
+7. Install Defects4J (D4J)
     1. Clone the Defects4J locally `git clone https://github.com/rjust/defects4j ~/defects4j`.
     2. <Follow D4J instructions: set up Java 8, install dependencies, and run init.sh>.
     3. Export the `defects4j` command on your path `export PATH=$D4J_HOME/framework/bin:$PATH`.

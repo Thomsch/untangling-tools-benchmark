@@ -1,6 +1,20 @@
 #!/bin/bash
-# Run the untangling tools on a single Defects4J bug. Also calculates the bug's metrics and parse the bug's manual
+# Run the untangling tools on a single Defects4J (D4J) bug. Also calculates the bug's metrics and parse the bug's manual
 # untangling into a CSV file.
+# - $1: D4J Project name
+# - $2: D4J Bug Id
+# - $3: Path where the results are stored.
+# - $4: Path where the repo is checked out
+
+# Output: evaluate.sh calls the following scripts in order on each bug file, please refer to the particular script for detailed documentation of input & output:
+# - src/commit_metrics.py returns commit metrics in /metrics
+# - scripts/ground_truth.sh returns ground truth in /evaluation/truth.csv
+# - src/filename_untangling.py returns file-based untangling results in evaluation/file_untangling.csv
+# - bin/smartcommitcore-1.0-all.jar returns SmartCommit untangling results in decomposition/smartcommit
+# - src/parse_smartcommit_results.py returns collated SmartCommit results in evaluation/smartcommit.csv
+# - scripts/untangle_flexeme.sh returns Flexeme untangling results in /decomposition/flexeme
+# - src/parse_flexeme_results.py returns collated Flexeme untangling results in evaluation/flexeme.csv
+# - src/untangling_score.py returns untangling scores in evaluation/scores.csv
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

@@ -1,4 +1,21 @@
-# Calculates the Rand Index for the clusters per tool compared to ground truth.
+#!/usr/bin/env python3
+
+"""
+Calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
+
+Command Line Args:
+    - evaluation/project/bug_id: Path to the evaluation subfolder of the D4J bug containing CSV files for: ground truth, 3 untangling results
+    - project: D4J project name
+    - bug_id: D4J bug id
+Returns:
+    A scores.csv file in the /evaluation/<D4J bug id> subfolder.
+    CSV header: {project,vid,smartcommit_score,flexeme_score,file_untangling_score}
+        - project: D4J project name
+        - vid: D4J bug id
+        - smartcommit_score: The Rand Index score for SmartCommit untangling results
+        - flexeme_score: The Rand Index score for Flexeme untangling results
+        - file_untangling_score: The Rand Index score for File-based untangling results
+"""
 
 import sys
 from os import path
@@ -11,6 +28,7 @@ def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge clusters without any bug fixing changes into one group named 'o'.
     'o' stands for Other changes.
+
     """
     groups = is_other_change(df)
     df['adjusted_group'] = df['group_tool'].isin(groups[groups].index)
@@ -57,7 +75,7 @@ def main():
 
     if len(args) != 3:
         print("usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     root = args[0]
     project = args[1]
@@ -74,7 +92,7 @@ def main():
         truth_df = pd.read_csv(truth_file).convert_dtypes()
     except FileNotFoundError as e:
         print(f'File not found: {e.filename}', file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     try:
         smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
