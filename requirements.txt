@@ -11,3 +11,8 @@ markupsafe==2.0.1 # otherwise jupyter notebook fails to start
 seaborn
 #tisane
 statsmodels
+
+# Python style
+black
+flake8
+pylint

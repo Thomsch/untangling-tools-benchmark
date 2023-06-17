@@ -55,7 +55,7 @@ def main():
     result = ""
     for node, data in graph.nodes(data=True):
         if "color" in data.keys():
-            if not "label" in data.keys():
+            if "label" not in data.keys():
                 logging.error(f"Attribute 'label' not found in node {node}")
                 continue
 

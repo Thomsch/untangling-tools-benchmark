@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install Python modules
-        run: python3 -m pip install --upgrade black pylint
+        run: python3 -m pip install --upgrade black flake8 pylint
 
       - name: make check
         run: |
