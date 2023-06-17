@@ -233,7 +233,7 @@ def main():
         print("DEFECTS4J_HOME environment variable not set. Exiting.")
         sys.exit(1)
 
-    changes_diff = PatchSet.from_string(sys.stdin.read())
+    changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
