@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug file
-to the line level. Each line is labelled with the group it belongs to and this is reported in a readable CSV file.
+Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug
+file to the line level. Each line is labelled with the group it belongs to and this is reported in
+a readable CSV file.
 
 Command Line Args:
     - result_dir: Path to JSON results in decomposition/smartcommit
@@ -99,7 +100,7 @@ def main():
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
 
-    if not len(df):
+    if len(df) == 0:
         print(
             "No results generated. Verify decomposition results and paths.",
             file=sys.stderr,

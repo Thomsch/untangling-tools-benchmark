@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Generates the line-wise ground truth using the original changes and the minimized version of the D4J bug.
+Generates the line-wise ground truth using the original changes and the minimized version
+of the D4J bug.
 Each diff line is classified into either a non-bug-fixing or bug-fixing change.
 
 The tests, comments, and imports are ignored from the original changes.
@@ -122,13 +123,15 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 def get_line_map(diff) -> dict:
     """
     Generates a map of line numbers for each changed line in the diff.
-    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times in the original diff.
+    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times
+    in the original diff.
 
     Args:
         diff: a PatchSet object (i.e. list of PatchFiles)
     Returns:
-        line_map: a dictionary {key = line content, a String representation of line_type and line_value,
-                                value = a list of tuples (line, source_line_no, target_line_no)}
+        line_map: a dictionary
+            {key = line content, a String representation of line_type and line_value,
+             value = a list of tuples (line, source_line_no, target_line_no)}
     """
     line_map = defaultdict(list)
 
@@ -146,8 +149,9 @@ def get_line_map(diff) -> dict:
 
 def invert_patch(patch):
     """
-    Inverts the minimized bug-inducing patch of D4J bug fix dataset to a minimal bug-fix patch that can be applied to
-    the buggy program by flipping the line type of change (addition/deletion) and updating the line numbers.
+    Inverts the minimized bug-inducing patch of D4J bug fix dataset to a minimal bug-fix patch that
+    can be applied to the buggy program by flipping the line type of change (addition/deletion) and
+    updating the line numbers.
 
     Args:
         patch: a PatchSet object (i.e. list of PatchFiles)
@@ -160,10 +164,7 @@ def invert_patch(patch):
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
 
-                if (
-                    line.line_type == LINE_TYPE_ADDED
-                    or line.line_type == LINE_TYPE_REMOVED
-                ):
+                if line.line_type in (LINE_TYPE_ADDED, LINE_TYPE_REMOVED):
                     tmp = line.source_line_no
                     line.source_line_no = line.target_line_no
                     line.target_line_no = tmp
@@ -179,7 +180,8 @@ def invert_patch(patch):
 def repair_line_numbers(patch_diff, original_diff):
     """
     Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
-    If the same bug-fix (i.e. Line Object-wise) re duplicated, we will select its first occurrence in original diff as the original line.
+    If the same bug-fix (i.e. Line Object-wise) re duplicated, we will select its first occurrence
+    in original diff as the original line.
     We ignore Line Objects that are not whole (i.e. DNE in original_diff)
 
     Args:
@@ -201,9 +203,11 @@ def repair_line_numbers(patch_diff, original_diff):
                     line_records = line_map[str(line)]
                     if len(line_records) == 0:
                         print(
-                            f"Minimized line '{line.value.rstrip()}' {line.target_line_no, line.source_line_no} is "
-                            f"not in the original diff. The minimized line may contain partial changes, "
-                            f"new changes, or be incorrectly minimized.",
+                            f"Minimized line"
+                            f" '{line.value.rstrip()}' {line.target_line_no, line.source_line_no}"
+                            f" is not in the original diff."
+                            f" The minimized line may contain partial changes,"
+                            f" new changes, or be incorrectly minimized.",
                             file=sys.stderr,
                         )
                         continue
@@ -213,7 +217,8 @@ def repair_line_numbers(patch_diff, original_diff):
                     line.target_line_no = original_line.target_line_no
                     line.line_type = original_line.line_type
                 else:  # Bug-fixing portion of a tangled line.
-                    # TODO: This should be classified as tangled rather than non-bug-fixing ("both", not "other")
+                    # TODO: This should be classified as tangled rather than
+                    # non-bug-fixing ("both", not "other")
                     print(
                         f"Line not found ({line.source_line_no}, {line.target_line_no}): '{line}'",
                         file=sys.stderr,
@@ -240,10 +245,13 @@ def main():
     changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
 
-    # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
-    # A purely bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to the one in original_diff PatchSet
-    # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
-    # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
+    # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number
+    # (self.source_line_no,self.target_line_no), and (3) Line Content (self.value).  A purely
+    # bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to
+    # the one in original_diff PatchSet.  A tangled line will only have a bug-fix portion (i.e. a
+    # Line Object with different instance variables) in the minimized patch, thus DNE in
+    # original_diff.  These tangled lines will not be counted as part of the minimal_bug_fixing
+    # Patch.
     try:
         src_patch = PatchSet.from_filename(
             get_d4j_src_path(defects4j_home, project, vid)

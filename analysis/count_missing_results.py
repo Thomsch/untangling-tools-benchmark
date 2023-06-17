@@ -36,7 +36,7 @@ def main(path):
     print("Number of times each file is missing:")
     for file in required_files:
         count = sum(
-            [1 for project_missing in missing_files if file in project_missing[1]]
+            1 for project_missing in missing_files if file in project_missing[1]
         )
         print(f"{file}: {count}")
     print("The following projects are missing the following files:")
