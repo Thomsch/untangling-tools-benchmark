@@ -29,7 +29,7 @@ def main():
 
     if len(args) != 2:
         print("usage: patch | python3 commit_metrics.py <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     project = args[0]
     vid = args[1]
@@ -58,7 +58,9 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
-    print(f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}")
+    print(
+        f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}"
+    )
 
 
 if __name__ == "__main__":
