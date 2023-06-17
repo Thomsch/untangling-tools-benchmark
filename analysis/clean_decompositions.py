@@ -42,7 +42,6 @@ def main(evaluation_root):
     ground truth.
     """
     # File untangling is not included since it's made from the ground truth already.
-    result_files = ["flexeme.csv", "smartcommit.csv"]
 
     # Iterate through each subdirectory in the parent directory
     for subdir, dirs, files in os.walk(evaluation_root):
