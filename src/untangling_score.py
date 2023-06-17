@@ -75,7 +75,7 @@ def main():
 
     if len(args) != 3:
         print("usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     root = args[0]
     project = args[1]
@@ -90,7 +90,7 @@ def main():
         truth_df = pd.read_csv(truth_file).convert_dtypes()
     except FileNotFoundError as e:
         print(f'File not found: {e.filename}', file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     try:
         smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()

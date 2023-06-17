@@ -29,7 +29,7 @@ def main():
 
     if len(args) != 2:
         print("usage: patch | python3 commit_metrics.py <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     project = args[0]
     vid = args[1]

@@ -27,7 +27,7 @@ def main():
 
     if len(args) != 3:
         print("usage: count_lines.py <path/to/truth/file> <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     truth_file = args[0]  # Path to the generated ground truth: <project-id>/truth.csv file
     project = args[1]  # D4J project name

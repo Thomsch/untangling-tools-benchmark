@@ -32,7 +32,7 @@ def main():
 
     if len(args) != 2:
         print("usage: parse_flexeme_results.py <path/to/root/results> <path/to/out/file>")
-        exit(1)
+        sys.exit(1)
     
     result_file = args[0]
     output_path = args[1]
@@ -93,7 +93,7 @@ def main():
 
             if not len(df):
                 print('No results generated. Verify decomposition results and paths.', file=sys.stderr)
-                exit(1)
+                sys.exit(1)
 
             df.to_csv(output_path, index=False)
 

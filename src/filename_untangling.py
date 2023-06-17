@@ -56,5 +56,5 @@ if __name__ == "__main__":
 
     if len(args) != 2:
         print("usage: filename_untangling.py <path/to/ground-truth/file> <path/to/output/file>")
-        exit(1)
+        sys.exit(1)
     main(args[0], args[1])
