@@ -13,6 +13,7 @@ check-python-style:
 	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
 
 check-some-python-style:
+	flake8 --color never --ignore E501,W503 ${PYTHON_FILES}
 	pylint -f parseable --disable=W,invalid-name conftest.py src/__init__.py
 
 check-python-format:

@@ -12,7 +12,8 @@ seaborn
 #tisane
 statsmodels
 
-# Python style
+# Python style and testing
 black
 flake8
 pylint
+pytest
