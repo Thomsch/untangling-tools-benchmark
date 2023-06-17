@@ -29,17 +29,19 @@ def main():
         print("usage: count_lines.py <path/to/truth/file> <project> <bug_id>")
         sys.exit(1)
 
-    truth_file = args[0]  # Path to the generated ground truth: <project-id>/truth.csv file
+    truth_file = args[
+        0
+    ]  # Path to the generated ground truth: <project-id>/truth.csv file
     project = args[1]  # D4J project name
     vid = args[2]  # D4J bug id
 
     # "df" stands for "dataframe"
     truth_df = pd.read_csv(truth_file).convert_dtypes()
 
-    fix_lines = truth_df['fix'].value_counts().get(True, default=0)
-    nonfix_lines = truth_df['fix'].value_counts().get(False, default=0)
+    fix_lines = truth_df["fix"].value_counts().get(True, default=0)
+    nonfix_lines = truth_df["fix"].value_counts().get(False, default=0)
 
-    print(f'{project},{vid},{fix_lines},{nonfix_lines}')
+    print(f"{project},{vid},{fix_lines},{nonfix_lines}")
 
 
 if __name__ == "__main__":
