@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 
+"""
+Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug file
+to the line level. Each line is labelled with the group it belongs to and this is reported in a readable CSV file.
+
+Command Line Args:
+    - result_dir: Path to JSON results in decomposition/smartcommit
+    - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
+Returns:
+    A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.
+    CSV header: {file, source, target, group}
+        - file: The relative file path from the project root for a change
+        - source: The line number of the change if the change is a deletion
+        - target: The line number of the change if the change is an addition
+        - group: The group number of the change determined by SmartCommit (e.g, 'group0','group1')
+"""
+
 import glob
 import json
 import os
@@ -9,8 +25,8 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
+import parse_patch
 
-# Retrieves changed lines for SmartCommit results.
 
 def list_json_files(dir):
     """
@@ -18,13 +34,12 @@ def list_json_files(dir):
     """
     return glob.glob(os.path.join(dir, '*.json'))
 
-
 def main():
     args = sys.argv[1:]
 
     if len(args) != 2:
         print("usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>")
-        exit(1)
+        sys.exit(1)
 
     result_dir = args[0]
     output_path = args[1]
@@ -71,7 +86,6 @@ def main():
                 header_str = '\n'.join(diff_data[file_id]['rawHeaders'])
                 diff_str = '\n'.join(rawDiff)
 
-                import parse_patch
                 patch = PatchSet.from_string(header_str + '\n' + diff_str)
                 for line in parse_patch.to_csv(patch):
                     result += f'{line},{group_id}\n'
@@ -82,7 +96,7 @@ def main():
 
     if not len(df):
         print('No results generated. Verify decomposition results and paths.', file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     df.to_csv(output_path, index=False)
 
