@@ -7,7 +7,7 @@ check-scripts:
 	shellcheck $(wildcard ./*.sh scripts/*.sh test/*.sh)
 
 # black's formatting is akward for some lines, I'm removing it from `check` until I can tweak the config.
-PYTHON_FILES=$(wildcard ./*.py src/*.py analysis/*.py test/*.py)
+PYTHON_FILES=$(wildcard *.py analysis/*.py src/*.py test/*.py)
 python-style:
 	black ${PYTHON_FILES}
 	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
