@@ -58,7 +58,9 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
-    print(f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}")
+    print(
+        f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}"
+    )
 
 
 if __name__ == "__main__":
