@@ -42,8 +42,6 @@ def main():
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
     lines_updated = 0  # The number of lines updated in the commit
-    contains_refactoring = False
-    different_changes_same_line = None
 
     for file in patch:
         if file.path.endswith("Test.java"):
