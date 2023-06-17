@@ -9,7 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: psf/black@stable
+      - name: install black
+        run: python3 -m pip install --upgrade black
 
       - name: make check
         run: |
