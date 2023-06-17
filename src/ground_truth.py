@@ -29,7 +29,8 @@ import numpy as np
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT, LINE_TYPE_REMOVED, LINE_TYPE_ADDED
 
-COL_NAMES = ['file', 'source', 'target']
+COL_NAMES = ["file", "source", "target"]
+
 
 def from_stdin() -> pd.DataFrame:
     """
@@ -42,20 +43,24 @@ def csv_to_dataframe(csv_data: StringIO) -> pd.DataFrame:
     """
     Convert a CSV string stream into a DataFrame.
     """
-    df = pd.read_csv(csv_data, names=COL_NAMES, na_values='None')
+    df = pd.read_csv(csv_data, names=COL_NAMES, na_values="None")
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
     return df
 
 
 def get_d4j_src_path(defects4j_home, project, vid):
-    return os.path.join(defects4j_home, "framework/projects", project, "patches", f"{vid}.src.patch")
+    return os.path.join(
+        defects4j_home, "framework/projects", project, "patches", f"{vid}.src.patch"
+    )
 
 
 def get_d4j_test_path(defects4j_home, project, vid):
     """
     Path to the (non-minimized) test patch file in the D4J project.
     """
-    return os.path.join(defects4j_home, "framework/projects", project, "patches", f"{vid}.test.patch")
+    return os.path.join(
+        defects4j_home, "framework/projects", project, "patches", f"{vid}.test.patch"
+    )
 
 
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
@@ -68,10 +73,15 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     for file in patch:
         # Skip non-Java files. At least one version must have a .java extension.
         # When a file is deleted or created, the file name is 'dev/null'.
-        if not (file.source_file.lower().endswith(".java") or file.target_file.lower().endswith(".java")):
+        if not (
+            file.source_file.lower().endswith(".java")
+            or file.target_file.lower().endswith(".java")
+        ):
             continue
 
-        if file.source_file.endswith("Test.java") or file.target_file.endswith("Test.java"):
+        if file.source_file.endswith("Test.java") or file.target_file.endswith(
+            "Test.java"
+        ):
             continue
 
         for hunk in file:
@@ -80,10 +90,12 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                     continue
 
                 # TODO: Lines starting with "*" are not always comments.
-                if ignore_comments and (line.value.strip().startswith("/*") or
-                                                line.value.strip().startswith("*/") or
-                                                line.value.strip().startswith("//") or
-                                                line.value.strip().startswith("*")):
+                if ignore_comments and (
+                    line.value.strip().startswith("/*")
+                    or line.value.strip().startswith("*/")
+                    or line.value.strip().startswith("//")
+                    or line.value.strip().startswith("*")
+                ):
                     continue
                 if ignore_imports and line.value.strip().startswith("import"):
                     continue
@@ -92,11 +104,13 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if not line.value.strip():
                     continue
 
-                entry = pd.DataFrame.from_dict({
-                    "file": [file.path],
-                    "source": [line.source_line_no],
-                    "target": [line.target_line_no],
-                })
+                entry = pd.DataFrame.from_dict(
+                    {
+                        "file": [file.path],
+                        "source": [line.source_line_no],
+                        "target": [line.target_line_no],
+                    }
+                )
                 df = pd.concat([df, entry], ignore_index=True)
     return df
 
@@ -117,9 +131,11 @@ def get_line_map(diff) -> dict:
     for file in diff:
         for hunk in file:
             for line in hunk:
-                if line.line_type == LINE_TYPE_CONTEXT: # Ignore context lines.
+                if line.line_type == LINE_TYPE_CONTEXT:  # Ignore context lines.
                     continue
-                line_map[str(line)].append((line, line.source_line_no, line.target_line_no))
+                line_map[str(line)].append(
+                    (line, line.source_line_no, line.target_line_no)
+                )
 
     return line_map
 
@@ -140,7 +156,10 @@ def invert_patch(patch):
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
 
-                if line.line_type == LINE_TYPE_ADDED or line.line_type == LINE_TYPE_REMOVED:
+                if (
+                    line.line_type == LINE_TYPE_ADDED
+                    or line.line_type == LINE_TYPE_REMOVED
+                ):
                     tmp = line.source_line_no
                     line.source_line_no = line.target_line_no
                     line.target_line_no = tmp
@@ -158,9 +177,9 @@ def repair_line_numbers(patch_diff, original_diff):
     Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
     If the same bug-fix (i.e. Line Object-wise) re duplicated, we will select its first occurrence in original diff as the original line.
     We ignore Line Objects that are not whole (i.e. DNE in original_diff)
-    
+
     Args:
-        patch_diff: the minimized D4J bug-fixing diff  
+        patch_diff: the minimized D4J bug-fixing diff
     Returns:
         The updated patch (in which each bug-fixing Line Object is modified in place).
     """
@@ -177,18 +196,24 @@ def repair_line_numbers(patch_diff, original_diff):
                 if str(line) in line_map:
                     line_records = line_map[str(line)]
                     if len(line_records) == 0:
-                        print(f"Minimized line '{line.value.rstrip()}' {line.target_line_no, line.source_line_no} is "
-                              f"not in the original diff. The minimized line may contain partial changes, "
-                              f"new changes, or be incorrectly minimized.", file=sys.stderr)
+                        print(
+                            f"Minimized line '{line.value.rstrip()}' {line.target_line_no, line.source_line_no} is "
+                            f"not in the original diff. The minimized line may contain partial changes, "
+                            f"new changes, or be incorrectly minimized.",
+                            file=sys.stderr,
+                        )
                         continue
 
                     original_line = line_records.pop(0)[0]
                     line.source_line_no = original_line.source_line_no
                     line.target_line_no = original_line.target_line_no
                     line.line_type = original_line.line_type
-                else:   # Bug-fixing portion of a tangled line.
-                        # TODO: This should be classified as tangled rather than non-bug-fixing ("both", not "other")
-                    print(f"Line not found ({line.source_line_no}, {line.target_line_no}): '{line}'", file=sys.stderr)
+                else:  # Bug-fixing portion of a tangled line.
+                    # TODO: This should be classified as tangled rather than non-bug-fixing ("both", not "other")
+                    print(
+                        f"Line not found ({line.source_line_no}, {line.target_line_no}): '{line}'",
+                        file=sys.stderr,
+                    )
     return patch_diff
 
 
@@ -199,16 +224,16 @@ def main():
         print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
         sys.exit(1)
 
-    if not os.getenv('DEFECTS4J_HOME'):
-        print('DEFECTS4J_HOME environment variable is not set. Exiting.')
+    if not os.getenv("DEFECTS4J_HOME"):
+        print("DEFECTS4J_HOME environment variable is not set. Exiting.")
         sys.exit(1)
-    defects4j_home = os.getenv('DEFECTS4J_HOME')
+    defects4j_home = os.getenv("DEFECTS4J_HOME")
 
     project = args[0]
     vid = args[1]
     out_path = args[2]
 
-    changes_diff = PatchSet.from_string(sys.stdin.read())   # original programmer diff
+    changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number (self.source_line_no,self.target_line_no), and (3) Line Content (self.value)
@@ -216,7 +241,9 @@ def main():
     # A tangled line will only have a bug-fix portion (i.e. a Line Object with different instance variables) in the minimized patch, thus DNE in original_diff
     # These tangled lines will not be counted as part of the minimal_bug_fixing Patch
     try:
-        src_patch = PatchSet.from_filename(get_d4j_src_path(defects4j_home, project, vid))
+        src_patch = PatchSet.from_filename(
+            get_d4j_src_path(defects4j_home, project, vid)
+        )
         src_patch = invert_patch(src_patch)
         src_patch = repair_line_numbers(src_patch, changes_diff)
         src_patch_df = convert_to_dataframe(src_patch)
@@ -232,8 +259,10 @@ def main():
     minimal_patch = src_patch_df
 
     # Check which truth are in changes and tag them as True in a new column.
-    ground_truth = pd.merge(changes_df, minimal_patch, on=COL_NAMES, how='left', indicator='group')
-    ground_truth['group'] = np.where(ground_truth.group == 'both', 'fix', 'other')
+    ground_truth = pd.merge(
+        changes_df, minimal_patch, on=COL_NAMES, how="left", indicator="group"
+    )
+    ground_truth["group"] = np.where(ground_truth.group == "both", "fix", "other")
     ground_truth.to_csv(out_path, index=False)
 
 
