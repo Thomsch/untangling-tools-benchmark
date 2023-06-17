@@ -9,8 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: install black
-        run: python3 -m pip install --upgrade black
+      - name: install Python modules
+        run: python3 -m pip install --upgrade black pylint
 
       - name: make check
         run: |
