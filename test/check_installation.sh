@@ -6,7 +6,6 @@
 # - JAVA 11 is installed, but not on the PATH
 # Check for PyGraphviz and GNU coreutiles
 
-
 set -o errexit
 set -o nounset
 set -o allexport
@@ -35,27 +34,11 @@ if [[ -z "${JAVA_11}" ]]; then
   exit 1
 fi
 
-# Check for each package in both the system's PATH and the additional directories.
-required_packages=("defects4j" "flexeme" "graphviz" "coreutils")
-additional_directories=("/opt/homebrew/opt")  # Add additional directories here
+# Check for each program in the system's PATH 
+required_packages=("defects4j" "flexeme" "date" "cpanm")
 
 for package in "${required_packages[@]}"; do
-    found=false
-
-    # Check in system's PATH
-    if command -v "$package" >/dev/null 2>&1; then
-        found=true
-    fi
-
-    # Check in additional directories
-    for dir in "${additional_directories[@]}"; do
-        if [ -x "$dir/$package" ]; then
-            found=true
-            break
-        fi
-    done
-
-    if ! $found; then
+    if ! command -v "$package" >/dev/null 2>&1; then
         echo "Error: Required package '$package' is not installed."
         exit 1
     fi
