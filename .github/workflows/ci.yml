@@ -44,7 +44,7 @@ jobs:
           brew install graphviz
           pip install pygraphviz
           pip install -e ${GITHUB_WORKSPACE}/Flexeme
-      - run: cd ${HOME}/untangling-tools-benchmark
+      - run: cd ${GITHUB_WORKSPACE}/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
           pip install -U -r requirements.txt
