@@ -30,9 +30,10 @@ jobs:
           path: Flexeme
       - name: set
         run: set | sort
-      - name: ls GITHUB_WORKSPACE
+      - name: list directory paths
         run: |
-          echo GITHUB_WORKSPACE=${GITHUB_WORKSPACE}
+          benchmark="${GITHUB_WORKSPACE}/untangling-tools-benchmark"
+          echo $benchmark
           ls -al ${GITHUB_WORKSPACE}
       - name: ls ${HOME}
         run: |
@@ -48,7 +49,7 @@ jobs:
       - name: install Python modules and MacOS dependencies
         run: |
           echo $(pwd)
-          pip install -U -r ${GITHUB_WORKSPACE}/untangling-tools-benchmark/requirements.txt
+          pip install -U -r $benchmark/requirements.txt
           brew install cpanminus
           brew install wget
           brew install coreutils
@@ -58,20 +59,23 @@ jobs:
           path: defects4j
       - name: install Defects4J
         run: |
-          cd ${GITHUB_WORKSPACE}/defects4j
+          d4j="${GITHUB_WORKSPACE}/defects4j"
+          echo $d4j
+          cd $d4j
           cpanm --installdeps .
           ./init.sh
       - name: set up environment variables
         run: |
-          cd ${GITHUB_WORKSPACE}/untangling-tools-benchmark
-          current_path=$(pwd)
-          D4J_EXEC="$current_path/framework/bin"
+          cd $benchmark
+          D4J_EXEC="$d4j/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
           [ -f .env-template ] || (pwd && ls -al && false)
           echo "DEFECTS4J_HOME=$current_path" > .env
           echo "JAVA_11=$JAVA11_HOME/bin/java" >> .env
       - name: check installations and dependencies
-        run: ./test/check_installation.sh
+        run: |
+          cd $benchmark/test
+          ./test/check_installation.sh
       - name: run end-to-end tests
         run: |
           export PYTHONHASHSEED=0
