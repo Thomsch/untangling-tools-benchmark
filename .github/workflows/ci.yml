@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
         with: 
           repository: Thomsch/Flexeme
-          path: ${HOME}/Flexeme
+          path: Flexeme
       - name: set
         run: set | sort
       - name: ls GITHUB_WORKSPACE
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v3
         with: 
           repository: rjust/defects4j
-          path: ${HOME}/defects4j
+          path: defects4j
       - name: install Defects4J
         run: |
           cd ${GITHUB_WORKSPACE}/defects4j
