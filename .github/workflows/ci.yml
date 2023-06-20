@@ -32,6 +32,8 @@ jobs:
         run: |
           echo GITHUB_WORKSPACE=${GITHUB_WORKSPACE}
           ls -al ${GITHUB_WORKSPACE}
+          echo "parent of GITHUB_WORKSPACE"
+          ls -al ${GITHUB_WORKSPACE}/..
       - name: ls ${HOME}
         run: |
           echo HOME=${HOME}
@@ -42,7 +44,10 @@ jobs:
           brew install graphviz
           pip install pygraphviz
           pip install -e ${HOME}/Flexeme
-      - run: cd ${HOME}/untangling-tools-benchmark
+      - run: |
+          echo "HOME=${HOME}"
+          ls -al ${HOME}
+          cd ${HOME}/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
           pip install -U -r requirements.txt
