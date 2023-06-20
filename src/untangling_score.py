@@ -96,6 +96,8 @@ def main():
     project = args[1]
     vid = args[2]
 
+    # TODO: Rather than duplicating code, use a for loop.
+
     truth_file = path.join(root, "truth.csv")
     smartcommit_file = path.join(root, "smartcommit.csv")
     flexeme_file = path.join(root, "flexeme.csv")
