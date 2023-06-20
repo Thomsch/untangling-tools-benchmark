@@ -49,7 +49,7 @@ jobs:
       - name: install Python modules and MacOS dependencies
         run: |
           echo $(pwd)
-          pip install -U -r "$benchmark/requirements.txt"
+          pip install -U -r ${GITHUB_WORKSPACE}/untangling-tools-benchmark/requirements.txt
           brew install cpanminus
           brew install wget
           brew install coreutils
@@ -74,9 +74,8 @@ jobs:
           echo "JAVA_11=$JAVA11_HOME/bin/java" >> .env
       - name: check installations and dependencies
         run: |
-          cd $benchmark/test
-          ./test/check_installation.sh
+          ${GITHUB_WORKSPACE}/untangling-tools-benchmark/test/check_installation.sh
       - name: run end-to-end tests
         run: |
           export PYTHONHASHSEED=0
-          ./test/e2e.sh
+          ${GITHUB_WORKSPACE}/untangling-tools-benchmark/test/e2e.sh
