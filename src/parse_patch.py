@@ -1,6 +1,12 @@
-# Retrieves the changed lines for a diff.
-# Args: The diff is passed to the script via stdin.
-# Output: Writes out only added (+) or removed(-) Diff lines in the format: "file, source, target"
+#!/usr/bin/env python3
+
+"""
+Retrieves the changed lines for a diff. Args: The diff is passed to the script via stdin.
+Output: Writes out added (+) or removed(-) diff lines in the CSV format:
+  - file (string)
+  - source (int)
+  - target (int)
+"""
 import os
 import sys
 
