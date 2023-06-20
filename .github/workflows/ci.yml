@@ -33,7 +33,7 @@ jobs:
         run: |
           brew install graphviz
           pip install pygraphviz
-          pip install -e $(GITHUB_WORKSPACE)/Flexeme
+          pip install -e ${GITHUB_WORKSPACE}/Flexeme
       - run: cd ~/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
@@ -47,7 +47,7 @@ jobs:
           path: ~/defects4j  
       - name: install defects4j
         run: |
-          cd $(GITHUB_WORKSPACE)/defects4j
+          cd ${GITHUB_WORKSPACE}/defects4j
           cpanm --installdeps .
           ./init.sh
       - name: set up environment variables
