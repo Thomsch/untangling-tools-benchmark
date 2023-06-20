@@ -20,15 +20,17 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 8
-      - uses: actions/checkout@v3
-        with: 
-          repository: Thomsch/untangling-tools-benchmark
-          ref: ci
-          path: main
-      - uses: actions/checkout@v3
-        with: 
-          repository: Thomsch/Flexeme
-          path: ~/Flexeme
+      - run: |
+          git config --global user.name "Virtual Machine"
+          git config --global user.email "vm@gmail.com
+      - name: install untangling-benchmark-tools
+        run: |
+          git clone https://github.com/Thomsch/untangling-tools-benchmark
+          cd untangling-tools-benchmark
+          current_path=$(pwd)
+      - name: install Flexeme
+        run: |
+          git clone https://github.com/Thomsch/Flexeme ~/Flexeme
       - name: set
         run: set | sort
       - name: ls GITHUB_WORKSPACE
@@ -40,7 +42,7 @@ jobs:
         run: |
           brew install graphviz
           pip install pygraphviz
-          pip install -e ${GITHUB_WORKSPACE}/Flexeme
+          pip install -e ~/Flexeme
       - run: cd ~/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
@@ -48,18 +50,14 @@ jobs:
           brew install cpanminus
           brew install wget
           brew install coreutils
-      - uses: actions/checkout@v3
-        with: 
-          repository: rjust/defects4j
-          path: ~/defects4j  
       - name: install defects4j
         run: |
-          cd ${GITHUB_WORKSPACE}/defects4j
+          git clone https://github.com/rjust/defects4j ~/defects4j
+          cd ~/defects4j
           cpanm --installdeps .
           ./init.sh
       - name: set up environment variables
         run: |
-          current_path=$(pwd)
           D4J_EXEC="$current_path/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
           echo "DEFECTS4J_HOME=$current_path" > .env
