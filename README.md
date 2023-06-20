@@ -115,6 +115,9 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - `generate_all.sh` [WIP]: Script to only generate the ground truth for a list of Defects4J bugs
 - `generate_ground_truth.sh` [WIP]: Script to generate different versions of the ground truth per Defects4J bug
 
+## Diagrams
+Diagrams of the ground truth construction and evaluation pipeline are listed in [diagrams](diagrams/README.md).
+
 ## Ground truth
 
 The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
