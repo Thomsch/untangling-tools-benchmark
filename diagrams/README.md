@@ -1,15 +1,3 @@
-## Ground truth
-
-The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
-
-The ground truth excludes the following changes (when these changes are eliminated, we call the file "filtered"):
-
-- Non-Java files
-- Test files
-- Comments
-- Import statements
-- Whitespace (with `git diff -w`)
-- Empty lines (in `ground_truth.py`)
 
 ### Ground truth Diagram
 The procedure to create ground truth is illustrated below. The diagram is created with [draw.io](https://app.diagrams.net/). The draw.io extensions in VSCode allows for more functionality when streamlined with Git.
