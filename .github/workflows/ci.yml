@@ -23,9 +23,11 @@ jobs:
       - run: |
           git config --global user.name "VirtualMachine"
           git config --global user.email "vm@nowhere.nowhere"
-      - name: install untangling-benchmark-tools
+      - name: clone untangling-benchmark-tools
         run: |
           pwd
+          git config --global user.name "VirtualMachine"
+          git config --global user.email "vm@nowhere.nowhere"
           git clone https://github.com/Thomsch/untangling-tools-benchmark
           cd untangling-tools-benchmark
           current_path=$(pwd)
