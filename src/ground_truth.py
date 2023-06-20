@@ -229,14 +229,14 @@ def main():
         print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
         sys.exit(1)
 
-    if not os.getenv("DEFECTS4J_HOME"):
-        print("DEFECTS4J_HOME environment variable is not set. Exiting.")
-        sys.exit(1)
-    defects4j_home = os.getenv("DEFECTS4J_HOME")
-
     project = args[0]
     vid = args[1]
     out_path = args[2]
+
+    defects4j_home = os.getenv("DEFECTS4J_HOME")
+    if not defects4j_home:
+        print("DEFECTS4J_HOME environment variable not set. Exiting.")
+        sys.exit(1)
 
     changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
