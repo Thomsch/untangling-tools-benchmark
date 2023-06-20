@@ -25,7 +25,6 @@ jobs:
           repository: Thomsch/untangling-tools-benchmark
           ref: ci
           path: main
-      - run: cd untangling-tools-benchmark
       - uses: actions/checkout@v3
         with: 
           repository: Thomsch/Flexeme
@@ -35,6 +34,7 @@ jobs:
           brew install graphviz
           pip install pygraphviz
           pip install -e ~/Flexeme
+      - run: cd ~/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
           pip install -U -r requirements.txt
