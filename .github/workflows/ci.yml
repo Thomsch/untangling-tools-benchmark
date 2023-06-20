@@ -20,13 +20,18 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: install untangling-benchmark-tools
+      - uses: actions/checkout@v3
+        with: 
+          repository: Thomsch/untangling-tools-benchmark
+          ref: ci
+          path: main
+      - run: cd untangling-tools-benchmark
+      - uses: actions/checkout@v3
+        with: 
+          repository: Thomsch/Flexeme
+          path: ~/Flexeme
+      - name: install Flexeme dependencies
         run: |
-          git clone https://github.com/Thomsch/untangling-tools-benchmark
-          cd untangling-tools-benchmark
-      - name: install Flexeme
-        run: |
-          git clone https://github.com/Thomsch/Flexeme ~/Flexeme
           brew install graphviz
           pip install pygraphviz
           pip install -e ~/Flexeme
@@ -36,10 +41,13 @@ jobs:
           brew install cpanminus
           brew install wget
           brew install coreutils
+      - uses: actions/checkout@v3
+        with: 
+          repository: rjust/defects4j
+          path: ~/defects4j  
       - name: install defects4j
         run: |
-          git clone https://github.com/rjust/defects4j ~/defects4j
-          cd defects4j
+          cd ~/defects4j
           cpanm --installdeps .
           ./init.sh
       - name: set up environment variables
