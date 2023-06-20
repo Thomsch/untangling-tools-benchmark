@@ -33,7 +33,7 @@ jobs:
         run: |
           brew install graphviz
           pip install pygraphviz
-          pip install -e ~/Flexeme
+          pip install -e $(GITHUB_WORKSPACE)
       - run: cd ~/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
