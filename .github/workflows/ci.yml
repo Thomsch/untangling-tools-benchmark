@@ -62,8 +62,8 @@ jobs:
           current_path=$(pwd)
           D4J_EXEC="$current_path/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
-          echo "DEFECTS4J_HOME=$current_path" >> $GITHUB_ENV
-          echo "JAVA_11=$JAVA11_HOME/bin/java" >> $GITHUB_ENV
+          echo "DEFECTS4J_HOME=$current_path" > .env
+          echo "JAVA_11=$JAVA11_HOME/bin/java" >> .env
       - name: check installations and dependencies
         run: ./test/check_installation.sh
       - name: run end-to-end tests
