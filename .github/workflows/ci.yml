@@ -29,16 +29,20 @@ jobs:
           git clone https://github.com/Thomsch/untangling-tools-benchmark
           cd untangling-tools-benchmark
           current_path=$(pwd)
-      - name: install Flexeme
+      - name: clone Flexeme
         run: |
           git clone https://github.com/Thomsch/Flexeme ${HOME}/Flexeme
       - name: set
         run: set | sort
       - name: ls GITHUB_WORKSPACE
-        run: ls -al ${GITHUB_WORKSPACE}
+        run: |
+          echo GITHUB_WORKSPACE=${GITHUB_WORKSPACE}
+          ls -al ${GITHUB_WORKSPACE}
       - name: ls ${HOME}
-        run: ls -al ${HOME}
-      - run: find ${HOME}
+        run: |
+          echo HOME=${HOME}
+          ls -al ${HOME}
+          find ${HOME}
       - name: install Flexeme dependencies
         run: |
           brew install graphviz
@@ -51,9 +55,11 @@ jobs:
           brew install cpanminus
           brew install wget
           brew install coreutils
-      - name: install defects4j
+      - name: clone Defects4J
         run: |
           git clone https://github.com/rjust/defects4j ${HOME}/defects4j
+      - name: install Defects4J
+        run: |
           cd ${HOME}/defects4j
           cpanm --installdeps .
           ./init.sh
