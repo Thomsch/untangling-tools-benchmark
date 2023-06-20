@@ -29,6 +29,13 @@ jobs:
         with: 
           repository: Thomsch/Flexeme
           path: ~/Flexeme
+      - name: set
+        run: set | sort
+      - name: ls GITHUB_WORKSPACE
+        run: ls -al ${GITHUB_WORKSPACE}
+      - name: ls ~
+        run: ls -al ~
+      - run: find ~
       - name: install Flexeme dependencies
         run: |
           brew install graphviz
@@ -57,10 +64,6 @@ jobs:
           export PATH="$D4J_EXEC:$PATH"
           echo "DEFECTS4J_HOME=$current_path" >> $GITHUB_ENV
           echo "JAVA_11=$JAVA11_HOME/bin/java" >> $GITHUB_ENV
-      - name: ls GITHUB_WORKSPACE
-        run: ls -al ${GITHUB_WORKSPACE}
-      - name: ls ~
-        run: ls -al ~
       - name: check installations and dependencies
         run: ./test/check_installation.sh
       - name: run end-to-end tests
