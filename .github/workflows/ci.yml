@@ -49,7 +49,7 @@ jobs:
       - name: install Python modules and MacOS dependencies
         run: |
           echo $(pwd)
-          pip install -U -r $benchmark/requirements.txt
+          pip install -U -r "$benchmark/requirements.txt"
           brew install cpanminus
           brew install wget
           brew install coreutils
