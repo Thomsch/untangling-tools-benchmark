@@ -30,20 +30,20 @@ jobs:
           current_path=$(pwd)
       - name: install Flexeme
         run: |
-          git clone https://github.com/Thomsch/Flexeme ~/Flexeme
+          git clone https://github.com/Thomsch/Flexeme ${HOME}/Flexeme
       - name: set
         run: set | sort
       - name: ls GITHUB_WORKSPACE
         run: ls -al ${GITHUB_WORKSPACE}
-      - name: ls ~
-        run: ls -al ~
-      - run: find ~
+      - name: ls ${HOME}
+        run: ls -al ${HOME}
+      - run: find ${HOME}
       - name: install Flexeme dependencies
         run: |
           brew install graphviz
           pip install pygraphviz
-          pip install -e ~/Flexeme
-      - run: cd ~/untangling-tools-benchmark
+          pip install -e ${HOME}/Flexeme
+      - run: cd ${HOME}/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
           pip install -U -r requirements.txt
@@ -52,8 +52,8 @@ jobs:
           brew install coreutils
       - name: install defects4j
         run: |
-          git clone https://github.com/rjust/defects4j ~/defects4j
-          cd ~/defects4j
+          git clone https://github.com/rjust/defects4j ${HOME}/defects4j
+          cd ${HOME}/defects4j
           cpanm --installdeps .
           ./init.sh
       - name: set up environment variables
