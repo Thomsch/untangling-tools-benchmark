@@ -21,8 +21,8 @@ jobs:
         with:
           java-version: 8
       - run: |
-          git config --global user.name "Virtual Machine"
-          git config --global user.email "vm@gmail.com
+          git config --global user.name "VirtualMachine"
+          git config --global user.email "vm@gmail.com"
       - name: install untangling-benchmark-tools
         run: |
           git clone https://github.com/Thomsch/untangling-tools-benchmark
