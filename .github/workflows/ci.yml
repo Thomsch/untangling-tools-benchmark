@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - run: echo "JAVA11_HOME=$JAVA_HOME" >> $GITHUB_ENV
+      # - run: echo "JAVA11_HOME=$JAVA_HOME" >> $GITHUB_ENV
       - name: Install Java 8 as default
         uses: actions/setup-java@v1
         with:
@@ -33,11 +33,6 @@ jobs:
         with: 
           repository: Thomsch/Flexeme
           path: Flexeme
-      # - name: list directory paths
-      #   run: |
-      #     benchmark="${GITHUB_WORKSPACE}/untangling-tools-benchmark"
-      #     echo $benchmark
-      #     ls -al ${GITHUB_WORKSPACE}
       # - name: ls ${HOME}
       #   run: |
       #     echo HOME=${HOME}
@@ -66,12 +61,16 @@ jobs:
           cd $d4j
           cpanm --installdeps .
           ./init.sh
+      - name: List working directory paths
+        run: |
+          benchmark="${GITHUB_WORKSPACE}/untangling-tools-benchmark"
+          echo $benchmark
+          ls -al ${GITHUB_WORKSPACE}
       - name: Add Defects4J's executable to PATH
         run: |
-          cd $benchmark
           D4J_EXEC="$d4j/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
-          [ -f .env-template ] || (pwd && ls -al && false)
+          cp .env-template .env
           echo "DEFECTS4J_HOME=$d4j" > .env
           echo "JAVA_11=$JAVA11_HOME/bin/java" >> .env
       - name: check installations and dependencies
