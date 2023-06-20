@@ -1,6 +1,6 @@
 #!/bin/bash
 # Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
-# The script calls ground_truth.sh to generate a truth.csv file, then call count_lines.py to count 'fix' versus 'other' commits.
+# The script calls ground_truth.sh to generate a truth.csv file, then calls count_lines.py to count 'fix' versus 'other' commits.
 # - $1: Path where the D4J bug file is stored.
 # - $2: Path where the line counting result is checked out
 # Returns a lines.csv file (with 1 row) to the specified path.
