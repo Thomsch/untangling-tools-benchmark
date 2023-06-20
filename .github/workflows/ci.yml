@@ -47,7 +47,8 @@ jobs:
       - run: cd ${GITHUB_WORKSPACE}/untangling-tools-benchmark
       - name: install Python modules and MacOS dependencies
         run: |
-          pip install -U -r requirements.txt
+          echo $(pwd)
+          pip install -U -r ${GITHUB_WORKSPACE}/untangling-tools-benchmark/requirements.txt
           brew install cpanminus
           brew install wget
           brew install coreutils
@@ -62,6 +63,7 @@ jobs:
           ./init.sh
       - name: set up environment variables
         run: |
+          cd ${GITHUB_WORKSPACE}/untangling-tools-benchmark
           current_path=$(pwd)
           D4J_EXEC="$current_path/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
