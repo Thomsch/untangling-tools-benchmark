@@ -28,12 +28,13 @@ jobs:
           pwd
           git config --global user.name "VirtualMachine"
           git config --global user.email "vm@nowhere.nowhere"
-          git clone https://github.com/Thomsch/untangling-tools-benchmark
+          git clone https://github.com/Thomsch/untangling-tools-benchmark.git
           cd untangling-tools-benchmark
           current_path=$(pwd)
+          echo "current_path=${current_path}"
       - name: clone Flexeme
         run: |
-          git clone https://github.com/Thomsch/Flexeme ${HOME}/Flexeme
+          git clone https://github.com/Thomsch/Flexeme.git ${HOME}/Flexeme
       - name: set
         run: set | sort
       - name: ls GITHUB_WORKSPACE
