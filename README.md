@@ -34,10 +34,13 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 - Minimal bug fixing diff: The minmal diff that fixes the bug. It is calculated by inverting the Defects4J minimal bug-inducing patch  
 - Non-bug fixing diff: The diff between buggy and fixed version that is not part of the minimal bug fixing diff
 
+The detailed description of these artifacts are listed in [diagrams/README.md](diagrams/README.md).
+
 If you encounter a term in the documentation or the source code that is not defined here, please open an issue. Thank you!
 
 ## Usage
 ### Running the benchmark
+For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) for evaluation framework in /evaluate.sh.
 
 Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
@@ -115,9 +118,6 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - `generate_all.sh` [WIP]: Script to only generate the ground truth for a list of Defects4J bugs
 - `generate_ground_truth.sh` [WIP]: Script to generate different versions of the ground truth per Defects4J bug
 
-## Diagrams
-Diagrams of the ground truth construction and evaluation pipeline are listed in [diagrams](diagrams/README.md).
-
 ## Ground truth
 
 The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
@@ -129,6 +129,8 @@ The ground truth excludes the following changes:
 - Import statements
 - Whitespace (with `git diff -w`)
 - Empty lines (in `ground_truth.py`)
+
+For visualization purpose, here is the [diagram](diagrams/diffs.drawio.svg) for ground truth construction.
 
 ## Manual analysis
 
