@@ -70,13 +70,15 @@ jobs:
         run: |
           D4J_EXEC="$d4j/framework/bin"
           export PATH="$D4J_EXEC:$PATH"
-          cp .env-template .env
-          echo "DEFECTS4J_HOME=$d4j" > .env
-          echo "JAVA_11=$JAVA11_HOME/bin/java" >> .env
+          ENV_TEMPLATE = "$benchmark/.env-template"
+          ENV = "$benchmark/.env"
+          cp $ENV_TEMPLATE $ENV
+          echo "DEFECTS4J_HOME=$d4j" > $ENV
+          echo "JAVA_11=$JAVA11_HOME/bin/java" >> $ENV
       - name: check installations and dependencies
         run: |
-          ${GITHUB_WORKSPACE}/untangling-tools-benchmark/test/check_installation.sh
+          $benchmark/test/check_installation.sh
       - name: run end-to-end tests
         run: |
           export PYTHONHASHSEED=0
-          ${GITHUB_WORKSPACE}/untangling-tools-benchmark/test/e2e.sh
+          $benchmark/test/e2e.sh
