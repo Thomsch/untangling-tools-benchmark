@@ -15,7 +15,8 @@ Command Line Args:
     repo_root: Path where the repo is checked out
 Returns:
     The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
-    CSV header: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
+    CSV header:
+    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
 """
 
 import sys
@@ -29,7 +30,7 @@ def main():
 
     if len(args) != 2:
         print("usage: patch | python3 commit_metrics.py <project> <bug_id>")
-        exit(1)
+        sys.exit(1)
 
     project = args[0]
     vid = args[1]
@@ -40,9 +41,7 @@ def main():
     test_files_updated = 0  # Number of test files updated
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
-    lines_updated = 0  # The number of lines changed in the commit
-    contains_refactoring = False
-    different_changes_same_line = None
+    lines_updated = 0  # The number of lines updated in the commit
 
     for file in patch:
         if file.path.endswith("Test.java"):
@@ -58,7 +57,10 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
-    print(f"{project},{vid},{files_updated},{test_files_updated},{hunks},{average_hunk_size},{lines_updated}")
+    print(
+        f"{project},{vid},{files_updated},{test_files_updated},"
+        f"{hunks},{average_hunk_size},{lines_updated}"
+    )
 
 
 if __name__ == "__main__":
