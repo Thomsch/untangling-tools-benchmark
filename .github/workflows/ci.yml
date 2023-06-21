@@ -68,14 +68,16 @@ jobs:
           ls -al ${GITHUB_WORKSPACE}
       - name: Add Defects4J's executable to PATH
         run: |
-          D4J_EXEC="$d4j/framework/bin"
-          export PATH="$D4J_EXEC:$PATH"
-          ENV_TEMPLATE = "$benchmark/.env-template"
-          ENV = "$benchmark/.env"
+          D4J_EXEC="${d4j}/framework/bin"
+          export PATH="${D4J_EXEC}:$PATH"
+      - name: Fill in environment variables
+        run: |
+          ENV_TEMPLATE = "${benchmark}/.env-template"
+          ENV = "${benchmark}/.env"
           cp $ENV_TEMPLATE $ENV
           echo "DEFECTS4J_HOME=$d4j" > $ENV
           echo "JAVA_11=$JAVA11_HOME/bin/java" >> $ENV
-      - name: check installations and dependencies
+      - name: Check installations and dependencies
         run: |
           $benchmark/test/check_installation.sh
       - name: run end-to-end tests
