@@ -72,8 +72,12 @@ jobs:
           export PATH="${D4J_EXEC}:$PATH"
       - name: Fill in environment variables
         run: |
-          echo "DEFECTS4J_HOME=${d4j}" > "${benchmark}/.env"
-          echo "JAVA_11=${JAVA11_HOME}/bin/java" >> "${benchmark}/.env"
+          ls -al ${benchmark}
+          # [ -f "${benchmark}/.env-template" ] || (pwd && ls -al && false)
+          # echo "DEFECTS4J_HOME=${d4j}" > "${benchmark}/.env"
+          # echo "JAVA_11=${JAVA11_HOME}/bin/java" >> "${benchmark}/.env"
+          echo "DEFECTS4J_HOME=${d4j}" >> $GITHUB_ENV
+          echo "JAVA_11=${JAVA11_HOME}/bin/java" >> $GITHUB_ENV
       - name: Check installations and dependencies
         run: |
           $benchmark/test/check_installation.sh
