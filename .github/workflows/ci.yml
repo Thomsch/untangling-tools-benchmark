@@ -28,6 +28,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
+      - name: Enable write permission
+        run: |
+          csrutil disable
+          reboot
+          sudo mount -uw /
       - name: Install Flexeme
         uses: actions/checkout@v3
         with: 
