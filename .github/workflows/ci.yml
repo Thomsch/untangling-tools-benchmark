@@ -1,6 +1,6 @@
 name: Continuous Integration
 
-on: [push, pull_request, fork]
+on: [push]
 
 jobs:
 
@@ -12,8 +12,8 @@ jobs:
       - name: Checkout untangling-tools-benchmark
         uses: actions/checkout@v3
         with: 
-          repository: Thomsch/untangling-tools-benchmark
-          ref: ci                              # ci branch has end to end tests; not yet merged to main
+          repository: thanhdang2712/untangling-tools-benchmark
+          ref: my_ci                              # ci branch has end to end tests; not yet merged to main
           path: untangling-tools-benchmark     # Relative path under $GITHUB_WORKSPACE to place the repository
       - name: Install Python 3.8.15
         uses: actions/setup-python@v4
@@ -28,21 +28,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Enable write permission
-        run: |
-          csrutil disable
-          reboot
-          sudo mount -uw /
       - name: Install Flexeme
         uses: actions/checkout@v3
         with: 
           repository: Thomsch/Flexeme
           path: Flexeme
-      # - name: ls ${HOME}
-      #   run: |
-      #     echo HOME=${HOME}
-      #     ls -al ${HOME}
-      #     find ${HOME}
       - name: Install Flexeme dependencies
         run: |
           brew install graphviz
@@ -62,19 +52,19 @@ jobs:
           path: defects4j
       - name: Initialize Defects4J
         run: |
-          d4j="${GITHUB_WORKSPACE}/defects4j"
+          export d4j="${GITHUB_WORKSPACE}/defects4j"
           cd $d4j
           cpanm --installdeps .
           ./init.sh
-      - name: List working directory paths
-        run: |
-          benchmark="${GITHUB_WORKSPACE}/untangling-tools-benchmark"
-          echo $benchmark
-          ls -al ${benchmark}
       - name: Add Defects4J's executable to PATH
         run: |
           D4J_EXEC="${d4j}/framework/bin"
           export PATH="${D4J_EXEC}:$PATH"
+      - name: List working directory paths
+        run: |
+          export benchmark="${GITHUB_WORKSPACE}/untangling-tools-benchmark"
+          echo benchmark="${benchmark}"
+          ls -al ${benchmark}
       - name: Fill in environment variables
         run: |
           cd $benchmark
