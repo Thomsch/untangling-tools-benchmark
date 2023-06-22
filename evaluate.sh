@@ -66,7 +66,7 @@ mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
 # Get commit hash
-commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
+commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)    # Commit hash is the revision_fixed_ID
 
 # Get source path and class path
 sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
@@ -109,7 +109,7 @@ truth_out="${evaluation_path}/truth.csv"
 if [[ -f "$truth_out" ]]; then
     echo -ne 'Calculating ground truth ................................................ SKIP\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out"
+    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "diff"
     code=$?
     if [ $code -eq 0 ]
     then

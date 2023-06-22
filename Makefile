@@ -24,7 +24,6 @@ format-python:
 
 python-test:
 	pytest test
-
 clean: 
 	rm -rf ./tmp/
 
