@@ -13,8 +13,8 @@ if [[ $# -ne 0 ]] ; then
     exit 1
 fi
 
+export PYTHONHASHSEED=0         # Make test deterministic
 
-# Don't hard code file names
 bugs_file="data/d4j-5-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
 out_dir="test/e2e" # Path to the directory where the results are stored and repositories checked out.
 
