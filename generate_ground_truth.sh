@@ -14,21 +14,22 @@ if [[ $# -ne 4 ]] ; then
     exit 1
 fi
 
+project=$1
+vid=$2
+out_path=$3 # Path where the results are stored.
+repo_root=$4 # Path where the repo is checked out
+
 set -o allexport
 # shellcheck source=/dev/null
 source .env
 set +o allexport
 
 if [[ -z "${JAVA_11}" ]]; then
-  echo 'JAVA_11 environment variable not set.'
-  echo 'Please set it to the path of a Java 11 JDK.'
+  echo 'JAVA_11 environment variable is not set.'
+  echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
 
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
 workdir="${repo_root}/${project}_${vid}"
 
 evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
