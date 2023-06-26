@@ -130,13 +130,13 @@ def main(args):
         sys.exit(1)
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
-    tool_scores = [0] * len(tool_csv)
+    tool_scores = [0.] * len(tool_csv)             # Generate array of RandIndex scores (type='float') for each tool, initialized to 0.0
 
     # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index
     for i in range(len(tool_csv)):
-        tool_file = path.join(root, tool_csv[i])
+        tool_decomposition_file = path.join(root, tool_csv[i])
         try:
-            tool_df = pd.read_csv(tool_file).convert_dtypes()
+            tool_df = pd.read_csv(tool_decomposition_file).convert_dtypes()
             tool_df["group"] = tool_df["group"].astype("string")
         except FileNotFoundError:
             tool_df = None
