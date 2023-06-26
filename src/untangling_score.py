@@ -111,7 +111,6 @@ def calculate_score_for_tool(truth_df, tool_df):
 
 
 def main(args):
-
     if len(args) != 3:
         print(
             "usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>"
@@ -131,22 +130,21 @@ def main(args):
         sys.exit(1)
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
-    tool_scores = [0]*len(tool_csv) 
-    
-    # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index 
+    tool_scores = [0] * len(tool_csv)
+
+    # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index
     for i in range(len(tool_csv)):
         tool_file = path.join(root, tool_csv[i])
         try:
             tool_df = pd.read_csv(tool_file).convert_dtypes()
             tool_df["group"] = tool_df["group"].astype("string")
         except FileNotFoundError:
-            tool_df = None 
-        tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)  # Add Rand Index in respective tool order
+            tool_df = None
+        tool_scores[i] = calculate_score_for_tool(
+            truth_df, tool_df
+        )  # Add Rand Index in respective tool order
 
-
-    print(
-        f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}"
-    )
+    print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
 
 
 if __name__ == "__main__":
