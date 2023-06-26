@@ -10,6 +10,6 @@ flexplot(satisfaction~communication + separated | gender + interests, data=relat
 flexplot(gender~1, data=relationship_satisfaction)
 
 fileData <-"./lines.csv"
-data <- read.csv(fileData, header = FALSE, col.names = c('project','bug_id','fix_lines','nonfix_lines'))
+data <- read.csv(fileData, header = FALSE, col.names = c('project','bug_id','fix_lines','other_lines'))
 
 flexplot(project~1, data=data)
