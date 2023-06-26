@@ -49,6 +49,7 @@ inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.s
 target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
 source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file name
 
+# Obtain 3 Java files and clean before generating diff
 cd $repository
 mkdir "${diff}"
 git diff --ignore-all-space -U0 "$revision_buggy"  "$source_file" >> "${diff}/non_bug_fix.diff"       # Retrieve non bug fixing diff
