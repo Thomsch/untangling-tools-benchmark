@@ -27,8 +27,8 @@ d4j_diff () {
     fi
 }
 
-# Retrieves the buggy and fixed revision IDs for a given project and bug ID.
-## TODO: What is a "revision ID"?  Is it in Defects4J, or in the underlying version control system, or something else?
+# Retrieves the buggy and fixed revision IDs in the underlying version control
+# system for a given Defects4J project and bug ID.
 # - $1: D4J Project name
 # - $2: D4J Bug id
 # Returns the buggy and fixed revision IDs in the format:

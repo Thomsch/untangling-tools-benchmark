@@ -143,7 +143,6 @@ def get_line_map(diff) -> dict:
     return line_map
 
 
-## TODO: What is the point of this routine?  Is it needed?
 def invert_patch(patch):
     """
     Inverts the minimized bug-inducing patch of D4J bug fix dataset to a minimal bug-fix patch that
