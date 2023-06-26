@@ -1,9 +1,9 @@
 #!/bin/bash
-# Run the untangling tools on a list of Defects4J (D4J) bugs by calling ./evaluate.sh.
+# Run the untangling tools on a list of Defects4J (D4J) bugs.  The implementation calls ./evaluate.sh.
 # - $1: Path to the file containing the bugs to untangle and evaluate.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 # The output of evaluate.sh for each bug file is reported individually in 5 folders: /decompositions, /evaluation, /logs, /metrics, /repositories.
-# Returns aggregated scores across all D4J bugs in 2 .csv files, where each row represents one bug in provided list of D4J bugs:
+# Writes aggregated scores across all D4J bugs in 2 .csv files, where each row represents one bug in provided list of D4J bugs:
 # - decomposition.csv: Decomposition scores, header line: {d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score}
 # - metrics.csv: Commit metrics scores, CSV header: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
 
@@ -20,6 +20,11 @@ fi
 bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
+if ! [[ -f "$bugs_file" ]]; then
+    echo "File ${bugs_file} not found. Exiting."
+    exit 1
+fi
+
 mkdir -p "$out_dir"
 
 out_file="${out_dir}/decompositions.csv" # Aggregated results.
@@ -31,11 +36,6 @@ logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
-
-if ! [[ -f "$bugs_file" ]]; then
-    echo "File ${bugs_file} not found. Exiting."
-    exit 1
-fi
 
 # TODO: Parallelize
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"

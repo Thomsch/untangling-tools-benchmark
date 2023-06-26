@@ -26,6 +26,12 @@ if [[ $# -ne 4 ]] ; then
     exit 1
 fi
 
+project=$1
+vid=$2
+out_path=$3 # Path where the results are stored.
+repo_root=$4 # Path where the repo is checked out
+workdir="${repo_root}/${project}_${vid}"
+
 set -o allexport
 # shellcheck source=/dev/null
 source .env
@@ -36,12 +42,6 @@ if [[ -z "${JAVA_11}" ]]; then
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
-
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
-workdir="${repo_root}/${project}_${vid}"
 
 decomposition_path="${out_path}/decomposition" # Path containing the decomposition results.
 evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
@@ -126,6 +126,8 @@ echo -ne '\n'
 #
 # TODO: Run tools in parallel. See https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
 #
+
+## TODO: Rather than duplicating code, which is error-prone, use a for loop to run all of the tools.
 
 #
 # Untangle with file-based approach

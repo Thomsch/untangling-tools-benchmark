@@ -15,7 +15,7 @@ Command Line Args:
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-    CSV header: {file, source, target, group='fix','other',or 'both}
+    CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
@@ -118,9 +118,9 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 def get_line_map(diff) -> dict:
     """
-    Generates a map of line numbers for each changed line in the diff.
-    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times
-    in the original diff.
+    In a diff, we define a changed line as either a line removed from the original (pre-fix) file, indicated with (-), or a line added to the modified (post-fix) file, indicated with (+). An unchanged line is a context line, indicated with (' ').
+    The function generates a map from line contents (i.e. either added/removed contents) to their line numbers in the diff provided.
+    The mapping is one-to-many as identical lines of bug-fixing code can occur multiple times in the original diff.
 
     Args:
         diff: a PatchSet object (i.e. list of PatchFiles)
@@ -229,14 +229,14 @@ def main():
         print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
         sys.exit(1)
 
-    if not os.getenv("DEFECTS4J_HOME"):
-        print("DEFECTS4J_HOME environment variable is not set. Exiting.")
-        sys.exit(1)
-    defects4j_home = os.getenv("DEFECTS4J_HOME")
-
     project = args[0]
     vid = args[1]
     out_path = args[2]
+
+    defects4j_home = os.getenv("DEFECTS4J_HOME")
+    if not defects4j_home:
+        print("DEFECTS4J_HOME environment variable not set. Exiting.")
+        sys.exit(1)
 
     changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
     changes_df = convert_to_dataframe(changes_diff)
