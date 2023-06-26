@@ -52,7 +52,7 @@ source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/
 cd $repository
 mkdir "${diff}"
 git diff --ignore-all-space -U0 "$revision_buggy"  "$source_file" >> "${diff}/non_bug_fix.diff"       # Retrieve non bug fixing diff
-patch --input=$inverted_patch -p1 -R < $inverted_patch                                                # Apply Reverse patch to buggy source file to obtain fixed code
+patch --input="$inverted_patch" -p1 -R < "$inverted_patch"                                               # Apply Reverse patch to buggy source file to obtain fixed code
 git diff --ignore-all-space -U0 >> "${diff}/bug_fix.diff"
 git diff --ignore-all-space -U0 "$revision_buggy"  "$source_file" >> "${diff}/VC.diff"
 
