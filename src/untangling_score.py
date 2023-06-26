@@ -25,8 +25,7 @@ import pandas as pd
 from sklearn import metrics
 
 
-## TODO: "adjust" is a generic, non-descriptive name.  Rename this routine.
-def adjust_groups(df: pd.DataFrame) -> pd.DataFrame:
+def merge_nonbugfixing_changes(df: pd.DataFrame) -> pd.DataFrame:
     """
     Merge clusters of purely non-bug-fixing changes into one group named 'o'.
     Args:
@@ -99,13 +98,13 @@ def calculate_score_for_tool(truth_df, tool_df):
 
     # Adjust cluster to not penalize multiple groups containing exclusively
     # non bug fixing changes.
-    df_adjusted = adjust_groups(df)
+    df_adjusted = merge_nonbugfixing_changes(df)
     
-    ## TODO: What is "pred" a mnemonic for?
+    # Group labels predicted by the tool.
     labels_pred = df_adjusted["group_tool"]  # Series [Name: group_tool, dtype: string]
-    labels_true = df_adjusted[
-        "group_truth"
-    ]  # Series [Name: group_truth, dtype: string]
+
+    # Group labels from the ground truth.
+    labels_true = df_adjusted["group_truth"]  # Series [Name: group_truth, dtype: string]
     
 
     # The adjusted rand score (not the same as the adjusted clusters above!)
@@ -169,4 +168,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# LocalWords: smartcommit dtypes isin sklearn flexeme astype
+# LocalWords: smartcommit dtypes isin sklearn flexeme astype nonbugfixing
