@@ -1,5 +1,12 @@
-# Retrieves the changed lines for a diff.
-# The diff is passed to the script via stdin.
+#!/usr/bin/env python3
+
+"""
+Retrieves the changed lines for a diff. Args: The diff is passed to the script via stdin.
+Output: Writes out added (+) or removed(-) diff lines in the CSV format:
+  - file (string)
+  - source (int)
+  - target (int)
+"""
 import os
 import sys
 
@@ -8,6 +15,9 @@ from unidiff.constants import LINE_TYPE_CONTEXT
 
 
 def to_csv(patch: PatchSet):
+    """
+    Takes in a PatchSet and prints out only added/removed lines (i.e. ignores all context lines).
+    """
     for file in patch:
         for hunk in file:
             for line in hunk:
