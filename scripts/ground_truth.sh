@@ -56,7 +56,7 @@ patch --input=$inverted_patch -p1 -R < $inverted_patch                          
 git diff --ignore-all-space -U0 >> "${diff}/bug_fix.diff"
 git diff --ignore-all-space -U0 "$revision_buggy"  "$source_file" >> "${diff}/VC.diff"
 
-patch --input=$inverted_patch -p1 < $inverted_patch                                         # Reverse the patch to ensure the D4J repo stays intact
+patch --input="$inverted_patch" -p1 < "$inverted_patch"                                         # Reverse the patch to ensure the D4J repo stays intact
 
 cd -
 # Generate ground truth
