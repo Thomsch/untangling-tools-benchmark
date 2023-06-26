@@ -99,13 +99,14 @@ def calculate_score_for_tool(truth_df, tool_df):
     # Adjust cluster to not penalize multiple groups containing exclusively
     # non bug fixing changes.
     df_adjusted = merge_nonbugfixing_changes(df)
-    
+
     # Group labels predicted by the tool.
-    labels_pred = df_adjusted["group_tool"]  # Series [Name: group_tool, dtype: string]
+    # Series [Name: group_tool, dtype: string]
+    labels_pred = df_adjusted["group_tool"]
 
     # Group labels from the ground truth.
-    labels_true = df_adjusted["group_truth"]  # Series [Name: group_truth, dtype: string]
-    
+    # Series [Name: group_truth, dtype: string]
+    labels_true = df_adjusted["group_truth"]
 
     # The adjusted rand score (not the same as the adjusted clusters above!)
     # give a score of 0 when the fix is divided in multiple groups, which is unfair.
