@@ -263,12 +263,12 @@ def main():
     # test_patch_df = convert_to_dataframe(test_patch)
 
     # Merge source patch and test patch.
-    # minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
-    minimal_patch = src_patch_df
+    # minimal_bugfix_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
+    minimal_bugfix_patch = src_patch_df
 
     # Check which truth are in changes and tag them as True in a new column.
     ground_truth = pd.merge(
-        changes_df, minimal_patch, on=COL_NAMES, how="left", indicator="group"
+        changes_df, minimal_bugfix_patch, on=COL_NAMES, how="left", indicator="group"
     )
     ground_truth["group"] = np.where(ground_truth.group == "both", "fix", "other")
     ground_truth.to_csv(out_path, index=False)
@@ -277,4 +277,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# LocalWords: dtypes, dataframe
+# LocalWords: dtypes, dataframe, bugfix
