@@ -111,7 +111,7 @@ def calculate_score_for_tool(truth_df, tool_df):
     # The adjusted rand score (not the same as the adjusted clusters above!)
     # give a score of 0 when the fix is divided in multiple groups, which is unfair.
     # smartcommit_score = metrics.adjusted_rand_score(labels_truth, labels_pred)
-    return metrics.rand_score(labels_truth, labels_pred)
+    return metrics.rand_score(labels_true, labels_pred)
 
 
 def main():
