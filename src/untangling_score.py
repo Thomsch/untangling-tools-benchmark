@@ -110,8 +110,7 @@ def calculate_score_for_tool(truth_df, tool_df):
     return metrics.rand_score(labels_true, labels_pred)
 
 
-def main():
-    args = sys.argv[1:]
+def main(args):
 
     if len(args) != 3:
         print(
@@ -151,6 +150,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+    main(args)
 
 # LocalWords: smartcommit dtypes isin sklearn flexeme astype
