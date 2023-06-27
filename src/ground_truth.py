@@ -92,7 +92,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
         # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
         # and modification cases.
-        if is_test_file(file.source_file)  or is_test_file(file.target_file):
+        if is_test_file(file.source_file) or is_test_file(file.target_file):
             continue
 
         for hunk in file:
@@ -128,11 +128,13 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 def is_test_file(filename):
     "Returns True if the filename is a filename for tests."
-    return ("/test/" in filename or
-        "/tests/" in filename or
-        filename.startswith("test/" or
-        filename.startswith("tests/" or
-        filename.endswith("Test.java")
+    return (
+        "/test/" in filename
+        or "/tests/" in filename
+        or filename.startswith("test/")
+        or filename.startswith("tests/")
+        or filename.endswith("Test.java")
+    )
 
 
 def get_line_map(diff) -> dict:
