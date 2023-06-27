@@ -266,12 +266,8 @@ def main():
     except FileNotFoundError:
         src_patch_df = pd.DataFrame(columns=COL_NAMES)
 
-    # Test is not minimized, so it's not included in the ground truth.
-    # test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
-    # test_patch_df = convert_to_dataframe(test_patch)
-
-    # Merge source patch and test patch.
-    # minimal_bugfix_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
+    # The minimal bug-fixing patch contains only the bug-fixing lines on the source code. The changed lines in the
+    # test files are excluded.
     minimal_bugfix_patch = src_patch_df
 
     # Check which truth are in changes and tag them as True in a new column.
