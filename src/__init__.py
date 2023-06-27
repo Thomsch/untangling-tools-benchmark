@@ -1,1 +1,4 @@
-## TODO: What is the point of this empty file?
+"""
+Module file for the src directory.
+Allows for relative imports for test and analysis files.
+"""
