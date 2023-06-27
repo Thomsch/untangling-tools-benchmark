@@ -130,7 +130,9 @@ def main(args):
         sys.exit(1)
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
-    tool_scores = [0.] * len(tool_csv)             # Generate array of RandIndex scores (type='float') for each tool, initialized to 0.0
+
+    # Generate array of RandIndex scores (type='float') for each tool, initialized to 0.0
+    tool_scores = [0.0] * len(tool_csv)
 
     # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index
     for i in range(len(tool_csv)):
@@ -140,9 +142,9 @@ def main(args):
             tool_df["group"] = tool_df["group"].astype("string")
         except FileNotFoundError:
             tool_df = None
-        tool_scores[i] = calculate_score_for_tool(
-            truth_df, tool_df
-        )  # Add Rand Index in respective tool order
+
+        # Add Rand Index in respective tool order
+        tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)
 
     print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
 
