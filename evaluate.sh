@@ -174,8 +174,9 @@ else
     regenerate_results=true
 fi
 
-# Collate untangling results
-## TODO: Why is this section of the script called "collate" but the message says "parsing"?  Which is actually happening?  Also, what is the definition of "collate"?
+#
+# Retrieve untangling results from SmartCommit and parse them into a CSV file.
+#
 echo -ne '\n'
 echo -ne 'Parsing SmartCommit results ...............................................\r'
 
@@ -231,7 +232,9 @@ else
 fi
 echo -ne '\n'
 
-# Collate untangling results
+#
+# Retrieve untangling results from Flexeme and parse them into a CSV file.
+#
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
@@ -252,7 +255,6 @@ else
     echo -ne '\n'
 fi
 echo -ne '\n'
-
 
 #
 # Compute untangling score
