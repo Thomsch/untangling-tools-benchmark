@@ -109,11 +109,7 @@ truth_csv="${evaluation_path}/truth.csv"
 if [[ -f "$truth_csv" ]]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-<<<<<<< HEAD
     ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_out" "diff"
-=======
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
->>>>>>> 0084dfd31de208f89b7fb48dd109726ae4ee616f
     code=$?
     if [ $code -eq 0 ]
     then

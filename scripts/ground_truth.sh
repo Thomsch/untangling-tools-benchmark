@@ -35,12 +35,8 @@ fi
 project=$1
 vid=$2
 repository=$3
-<<<<<<< HEAD
 truth_out=$4
 diff=$5
-=======
-truth_csv=$4
->>>>>>> 0084dfd31de208f89b7fb48dd109726ae4ee616f
 
 source ./scripts/d4j_utils.sh
 
@@ -48,7 +44,6 @@ source ./scripts/d4j_utils.sh
 result=$(retrieve_revision_ids "$project" "$vid")
 read -r revision_buggy revision_fixed <<< "$result"
 
-<<<<<<< HEAD
 # Generate the three unified diff file
 inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
 target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
@@ -67,6 +62,3 @@ patch --input="$inverted_patch" -p1 < "$inverted_patch"                         
 cd -
 # Generate ground truth
 d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_out"
-=======
-d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_csv"
->>>>>>> 0084dfd31de208f89b7fb48dd109726ae4ee616f
