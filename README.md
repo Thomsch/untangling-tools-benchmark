@@ -36,7 +36,7 @@ If you encounter a term in the documentation or the source code that is not defi
 ## Usage
 ### Running the benchmark
 
-Run `./evaluate_all.sh <bug-file> <out-dir>`.
+Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
 
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
@@ -45,31 +45,24 @@ Run `./evaluate_all.sh <bug-file> <out-dir>`.
       (see **Limitations** section).
       It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
     - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
-- `<out-dir>` is the directory where the repositories, decompositions, results, and logs will be stored
+- `$UTB_OUTPUT` is a placeholder variable to represent the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/benchmark`). 
 
-For example, use `./evaluate_all.sh data/d4j-5-bugs.csv ~/benchmark` to run the evaluation on 5 bugs from the Defects4J
+For example, use `./evaluate_all.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run the evaluation on 5 bugs from the Defects4J
 project.
 
-## TODO: I find the use of `benchmark` for the output directory nonintuitive.
-## Why not suggest that it be given a name that is more in line with its
-## purpose, which is to hold ouput?  Actually, why is this something that the
-## user is given control over at all?  These instructions could be more
-## opinionated.  Then, the instructions would be simpler, users would have less
-## to remember, and every instance of the version control repository would be
-## more consistent.
-The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
-- `<out-dir>/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
-- `<out-dir>/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
+The results will be stored in `$UTB_OUTPUT`:
+- `$UTB_OUTPUT/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
+- `$UTB_OUTPUT/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
   To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
-- `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
+- `$UTB_OUTPUT/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
   - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as either a line removed from the original (buggy) file (-) or a line added to the modified (fixed) file (+). Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `scores.csv`: The rand index score for each tool. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
-- `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
-- `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
-- `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug. See section [Metrics](#metrics) for more details.
+- `$UTB_OUTPUT/logs/`: Folder containing the logs of the `evalute.sh` script
+- `$UTB_OUTPUT/repositories/`: Folder containing the checked out Defect4J bug repositories
+- `$UTB_OUTPUT/metrics/`: Folder containing metrics for each Defects4J bug. See section [Metrics](#metrics) for more details.
 - `decompositions.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
   TODO: If this file contains scores, then its name should reflect that, with a name like `aggregated_scores.csv` or the like.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated.
@@ -80,9 +73,9 @@ TODO: The .ipynb files are all for one-off experiments and are not part of any p
 #### Generating the bug file
 
 ### Untangling one Defects4J bug
-If you only want to evaluate the decomposition of one Defects4J bug, you can run the following command: `./evaluate.sh <project> <bug-id> <out-dir> <repo-dir>`.
+If you only want to evaluate the decomposition of one Defects4J bug, you can run the following command: `./evaluate.sh <project> <bug-id> $UTB_OUTPUT <repo-dir>`.
 - This will run the decomposition evaluation on the specified Defects4J `<bug-id>` in `<project>`.
-- `<out-dir>` will contain the results of the decomposition.
+- `$UTB_OUTPUT` will contain the results of the decomposition.
 - `<repo-dir>` directory used by Defects4J to checkout the specified project.
 
 ### Aggregating decomposition elapsed time
@@ -100,7 +93,6 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 - SmartCommit doesn't support SVN projects. All commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `data/d4j-bugs-all`.
-  TODO: Should the above be `<out-dir>` rather than `out`?  How about using an environment variable for it throughout the documentation?  Then the instructions will be directly cut-and-pasteable, even if users choose to set the environment variable differently.
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labelling mistake in Defects4J, an issue is opened in the Defects4J repository.
 
 ## Directory structure
@@ -146,7 +138,7 @@ The supported metrics are:
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
 2. Open the diff for the bug `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
-3. In another tab, open the ground truth `less <out_dir>/evaluation/<project><bug_id>/truth.csv`
-4. In another tab, open the Flexeme decomposition `less <out_dir>/evaluation/<project><bug_id>/flexeme.csv`.
-5. In another tab, open the SmartCommit decomposition `less <out_dir>/evaluation/<project><bug_id>/truth.csv`.
+3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`
+4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/flexeme.csv`.
+5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`.
 6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.
