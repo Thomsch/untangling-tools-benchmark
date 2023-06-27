@@ -59,7 +59,7 @@ do
         echo -ne 'Calculating ground truth ................................................ CACHED\n'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
-        ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
+        ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
         ret_code=$?
         # TODO: Use an if statement to avoid spawning a new subshell.
         evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
@@ -67,5 +67,5 @@ do
     fi
 
     # count number of lines and append
-    python3 src/count_lines.py "$truth_csv" "$project" "$vid" >> "$out_file"
+    python3 src/python/main/count_lines.py "$truth_csv" "$project" "$vid" >> "$out_file"
 done < "$all_commits_file"

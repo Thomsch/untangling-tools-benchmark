@@ -93,14 +93,15 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labelling mistake in Defects4J, an issue is opened in the Defects4J repository.
 
 ## Directory structure
-TODO: I find this structure confusing.  There are runnable scripts in 4 different directories.  I suggest grouping similar files together.
-For example, have a `src/` directory that contains all code, and with subdirectories like `python/` (which would itself have subdirectories `main` and `test`) and `scripts` or `bash` which could have subdirectories if you want it to.
 - `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.
 - `bin/`: Contains binaries of untangling tools (when applicable)
 - `data/`: Contains list of Defects4J bugs to run the benchmark on
-- `scripts/`: Bash scripts to run the benchmark
 - `src/`: Python scripts to run the benchmark
-- `test/`: Python tests
+  - `python/`: Python files
+    - `main/`: Python source code for the benchmark
+    - `test/`: Python tests
+  - `bash/`: Bash files
+    - `main/`: Bash source code for the benchmark
 - `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
 - `conftest.py`: Pytest configuration
 - `evaluate.sh`: Script to run the benchmark on one Defects4J bug
