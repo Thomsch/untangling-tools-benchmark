@@ -1,9 +1,15 @@
 #!/bin/bash
+
 # Generate the ground truth for a Defects4J bug.
-## TODO: In what file format?
 # Two ground truths are generated:
 # 1. Include all the original changes in the bug fix.
 # 2. Include only the source codes changes that are not comments, import, or test changes.
+#
+# The ground truth is outputed to stdout in a CSV format with the following columns:
+#   - file path (string): the path of the file where the change occurred.
+#   - source: the line number of the line that was deleted or changed in the buggy version.
+#   - target: the line number of the line that was added or changed in the fixed version.
+#   - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
