@@ -17,8 +17,6 @@ Returns:
         - nonfix_lines: Number of non bug-fixing lines
 """
 
-## TODO: What is the format of the input?  What is the output?
-
 import sys
 
 import pandas as pd
