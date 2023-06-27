@@ -72,18 +72,22 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     ignore_imports = True
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
-        # Skip non-Java files. At least one version must have a .java extension.
-        # When a file is deleted or created, the file name is 'dev/null'.
-        ## TODO: What is the need for "lower()" here?  The subsequent `if` statement does not use it.
-        ## TODO: What is the need for the `or` here?  Shouldn't we expect both, or neither, of the files to be Java files?
+        # Skip non-Java files.
+        # lower() is used to catch cases where the extension is in upper case.
+        # We need at least one file with the Java extension because a diff can have the following cases:
+        # 1. source_file is 'dev/null' and the target_file is 'foo.java' (i.e. 'foo.java' was added)
+        # 2. source_file is 'foo.java' and the target_file is 'dev/null' (i.e. 'foo.java' was deleted)
+        # 3. source_file is 'foo.java' and the target_file is 'foo.java' (i.e. 'foo.java' was modified)
         if not (
             file.source_file.lower().endswith(".java")
             or file.target_file.lower().endswith(".java")
         ):
             continue
 
-        ## TODO: Same question as above, regarding the `or`.
-        ## TODO: Should this also check a directory name?  Or does it happen to be a fact that in Defects4J, every test in every project has a name ending in "Test.java"?
+        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
+        # and modification cases.
+        # We assume test files are named as <class_name>Test.java because it is a convention in Java development and
+        # from our observation in the projects in Defects4J.
         if file.source_file.endswith("Test.java") or file.target_file.endswith(
             "Test.java"
         ):
