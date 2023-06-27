@@ -1,6 +1,7 @@
 #!/bin/bash
-# Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
-## TODO: "those that are not in the bug fix": I think this is the number of lines that are in the programmer diff but not in the bug fix.  (It isn't all lines that are not in the bug fix.)  Shouldn't a tangled line appear in both of these, so that it isn't "lines that are not in the bug fix" but "lines that are in the non-bug-fix changes"?
+#
+# Counts the number of bug-fixing lines and non-bug-fixing lines from the ground truth.
+# This implementation does not account for tangled lines. A tangled line is counted as a non-bug-fixing line.
 # The script calls ground_truth.sh to generate a truth.csv file, then calls count_lines.py to count 'fix' versus 'other' commits.
 # - $1: Path where the D4J bug file is stored.
 # - $2: Path where the line counting result is checked out
