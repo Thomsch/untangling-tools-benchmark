@@ -92,11 +92,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
         # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
         # and modification cases.
-        # We assume test files are named as <class_name>Test.java because it is a convention in Java development and
-        # from our observation in the projects in Defects4J.
-        if file.source_file.endswith("Test.java") or file.target_file.endswith(
-            "Test.java"
-        ):
+        if is_test_file(file.source_file)  or is_test_file(file.target_file):
             continue
 
         for hunk in file:
@@ -128,6 +124,11 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 )
                 df = pd.concat([df, entry], ignore_index=True)
     return df
+
+
+def is_test_file(filename):
+    "Returns true if the filename is a filename for tests."
+    return "/test/" in filename or filename.endswith("Test.java")
 
 
 def get_line_map(diff) -> dict:
