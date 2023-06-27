@@ -270,11 +270,6 @@ def main():
     # it uses nested iterable objects.
     changes_df = convert_to_dataframe(changes_diff)
 
-    # We assume that the minimized d4j patch is a subset of the original diff (changes_diff).
-    ## TODO: What is the definition of "subset"?  (Part of the problem is that I'm not sure what the representation of a diff is.)
-    # If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't
-    # be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
-
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number
     # (self.source_line_no,self.target_line_no), and (3) Line Content (self.value).  A purely
     # bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to
