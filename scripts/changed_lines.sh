@@ -1,5 +1,13 @@
 #!/bin/bash
-## TODO: What does this script do?  What are its input and output?
+
+# This script takes a Defects4J project id, a bug id, and a project repository
+# as input and outputs all the changed lines for the D4J bug. The changed lines
+# are not filtered unlike in ground_truth.sh.
+#
+# The result is outputed to stdout in a CSV format with the following columns:
+#   - file path (string): the path of the file where the change occurred.
+#   - source: the line number of the line that was deleted or changed in the buggy version.
+#   - target: the line number of the line that was added or changed in the fixed version.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
