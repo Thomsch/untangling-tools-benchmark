@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import unidiff
 
 from src import ground_truth
