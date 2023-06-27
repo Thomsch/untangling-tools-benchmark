@@ -111,17 +111,15 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - `generate_ground_truth.sh` [WIP]: Script to generate different versions of the ground truth per Defects4J bug
 
 ## Ground truth
-
-The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
-## TODO: How, and by whom or what, is it calculated?
-The ground truth excludes the following changes:
-
+The script `ground_truth.sh` calculates the ground truth from the original bug-fixing commit diff and the minimal bug inducing patch. The ground truth excludes the following changes:
 - Non-Java files
 - Test files
 - Comments
 - Import statements
 - Whitespace (with `git diff -w`)
 - Empty lines (in `ground_truth.py`)
+
+See `ground_truth.py` for how the ground truth is calculated.
 
 ## Metrics
 
