@@ -66,8 +66,6 @@ The results will be stored in `$UTB_OUTPUT`:
 - `decomposition_scores.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated.
 
-TODO: The .ipynb files are all for one-off experiments and are not part of any pipeline.  Document this, and maybe move them elsewhere to avoid confusion.
-
 
 #### Generating the bug file
 
@@ -97,7 +95,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 ## Directory structure
 TODO: I find this structure confusing.  There are runnable scripts in 4 different directories.  I suggest grouping similar files together.
 For example, have a `src/` directory that contains all code, and with subdirectories like `python/` (which would itself have subdirectories `main` and `test`) and `scripts` or `bash` which could have subdirectories if you want it to.
-- `analysis/`: Scripts to analyse the results
+- `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.
 - `bin/`: Contains binaries of untangling tools (when applicable)
 - `data/`: Contains list of Defects4J bugs to run the benchmark on
 - `scripts/`: Bash scripts to run the benchmark
