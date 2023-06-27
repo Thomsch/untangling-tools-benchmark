@@ -3,7 +3,7 @@
 check: check-scripts check-python-format check-python-style python-test
 
 check-scripts:
-    # Fail if any of these files have warnings
+# Fail if any of these files have warnings
 	shellcheck $(wildcard ./*.sh scripts/*.sh test/*.sh)
 
 PYTHON_FILES=$(wildcard *.py analysis/*.py src/*.py test/*.py)
