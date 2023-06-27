@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 
-## TODO: To "collate" is to reorder, but not to do any summarization or computation.  Can you explicitly document if this script does no summarization or computation?
+"""
+Combines the results of the benchmark evaluation from flexeme.csv,
+smartcommit.csv, and file_untangling.csv into a single CSV file containing
+the following columns:
+- project: the name of the project
+- bug_id: the ID of the Defects4J bug
+- treatment: the treatment that classified this line change into <group>
+- file: the path to the file
+- source: the source line number (for deletions)
+- target: the target line number (for insertions)
+- group: the group that the file belongs to
+"""
 
 import csv
 import os
@@ -8,18 +19,6 @@ import sys
 
 
 def main(evaluation_dir):
-    """
-    Collates the results of the benchmark evaluation from flexeme.csv,
-    smartcommit.csv, and file_untangling.csv into a single CSV file containing
-    the following columns:
-    - project: the name of the project
-    - bug_id: the ID of the Defects4J bug
-    - treatment: the treatment that classified this line change into <group>
-    - file: the path to the file
-    - source: the source line number (for deletions)
-    - target: the target line number (for insertions)
-    - group: the group that the file belongs to
-    """
     result_files = [
         "flexeme_clean.csv",
         "smartcommit_clean.csv",
@@ -66,7 +65,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: collate_decompositions.py <path/to/benchmark/evaluation/folder>")
+        print("usage: combine_decompositions.py <path/to/benchmark/evaluation/folder>")
         sys.exit(1)
 
     main(os.path.abspath(args[0]))
