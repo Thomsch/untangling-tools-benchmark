@@ -1,5 +1,7 @@
 #!/bin/bash
-# Count, for each commit, the number of lines in the bug fix and those that are not in the bug fix.
+#
+# Counts the number of bug-fixing lines and non-bug-fixing lines from the ground truth.
+# This implementation does not account for tangled lines. A tangled line is counted as a non-bug-fixing line.
 # The script calls ground_truth.sh to generate a truth.csv file, then calls count_lines.py to count 'fix' versus 'other' commits.
 # - $1: Path where the D4J bug file is stored.
 # - $2: Path where the line counting result is checked out

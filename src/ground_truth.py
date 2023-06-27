@@ -67,6 +67,12 @@ def get_d4j_test_path(defects4j_home, project, vid):
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-Java files.
+    The filtering is done during the conversion to avoid iterating over the patch twice.
+
+    The dataframe has the following columns:
+        - file (str): Path of the file
+        - source (int): Line number when the line is removed or changed
+        - target (int): Line number when the line is added or changed
     """
     ignore_comments = True
     ignore_imports = True
@@ -247,6 +253,10 @@ def main():
         sys.exit(1)
 
     changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
+
+    # Convert the diff to a dataframe for easier manipulation.
+    # The PatchSet is not easy or efficient to work with because
+    # it uses nested iterable objects.
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number
