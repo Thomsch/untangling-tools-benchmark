@@ -86,7 +86,6 @@ To aggregated all the results in one file, run `scripts/aggregate_time.sh <out-d
 - `<out-dir>` is the directory where the repositories, decompositions, results, and logs are stored.
 
 ## Tests
-- Python tests are located in the `test` folder. To run the tests, run `pytest test`.
 - Run `make check` to run all the checks (tests, linting, etc.) for bash and Python.
 
 Help with adding more automated tests is welcome! :)
@@ -105,8 +104,8 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - `analysis/`: Scripts to analyse the results
 - `bin/`: Contains binaries of untangling tools (when applicable)
 - `data/`: Contains list of Defects4J bugs to run the benchmark on
-- `scripts/`: Utility Bash scripts to run the benchmark
-- `src/`: Utility Python scripts to run the benchmark
+- `scripts/`: Bash scripts to run the benchmark
+- `src/`: Python scripts to run the benchmark
 - `test/`: Python tests
 - `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
 - `conftest.py`: Pytest configuration
