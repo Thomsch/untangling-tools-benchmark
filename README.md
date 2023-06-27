@@ -132,7 +132,7 @@ The supported metrics are:
   - Number of lines changed (i.e. all lines with +/- indicators in the original diff generated from pre-fix and post-fix versions).
 
 ## Manual analysis
-TODO: What is the purpose of the manual analysis?
+This section explains how to manually analyse the decomposition results to qualitative assess the untangling tools compared to the ground truth.
 
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
 2. The diff for the bug is `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
