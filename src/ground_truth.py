@@ -127,7 +127,11 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
 
 
 def is_test_file(filename):
-    "Returns True if the filename is a filename for tests."
+    """
+    Returns True if the filename is a filename for tests.
+
+    This implementation currently works for all Defects4J 2.0.0 projects.
+    """
     return (
         "/test/" in filename
         or "/tests/" in filename
