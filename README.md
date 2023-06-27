@@ -41,9 +41,6 @@ If you encounter a term in the documentation or the source code that is not defi
 
 Run `./evaluate_all.sh <bug-file> <out-dir>`.
 
-TODO: There is heavy use of .csv files.  Each .csv file format should be documented.  I suggest this should be in a README, so that any reference to the file format in documentation (say, elsewhere in a README, or in a script) can be concise.  Using names for file formats would make all of the code easier to understand.
-TODO: Do all the .csv files start with a header line?  I see header lines for many of them, but I'm wondering if there are any exceptions.  That should be documented when the file format is documented.
-
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
     - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
@@ -61,18 +58,16 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
   To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
-  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as either a line removed from the original (buggy) file (-) or a line added to the modified (fixed) file (+). Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line).
-    TODO: This also needs to indicate, for each changed line, whether it is a non-bug-fixing change.  Both of those conditions could be true for a given line.
-  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group
-  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group
-  - `scores.csv`: The rand index score for each tool. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
+  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as either a line removed from the original (buggy) file (-) or a line added to the modified (fixed) file (+). Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
+  - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
+  - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
+  - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
+  - `scores.csv`: The rand index score for each tool. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
 - `<out-dir>/logs/`: Folder containing the logs of the `evalute.sh` script
 - `<out-dir>/repositories/`: Folder containing the checked out Defect4J bug repositories
-- `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug
-  TODO: What are the metrics?
-- `decompositions.csv`: Aggregated decomposition scores across all the D4J bugs evaluated. CSV columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score
-  TODO: Is there just one row?
-- `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated
+- `<out-dir>/metrics/`: Folder containing metrics for each Defects4J bug. See section [Metrics](#metrics) for more details.
+- `decompositions.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
+- `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated.
 
 #### Generating the bug file
 
@@ -95,11 +90,9 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 ## Limitations
 
-- SmartCommit doesn't support SVN projects. For now, all commits in a SVN project are ignored by manually removing lines
-  containing `Chart` in `out/commits.csv`.
-  TODO: This is the first mention of this file.  Does that step need to be done every time that output is regenerated?  What is the relationship to `data/d4j-compatible-bugs.csv`?
-- If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file.
-  TODO: Is every occurrence of such a line a mistake in Defects4J?
+- SmartCommit doesn't support SVN projects. All commits in a SVN project are ignored by manually removing lines
+  containing `Chart` in `data/d4j-bugs-all`.
+- If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labelling mistake in Defects4J, an issue is opened in the Defects4J repository.
 
 ## Structure & repository-specific files
 - `analysis/`: Scripts to analyse the results
@@ -126,6 +119,16 @@ The ground truth excludes the following changes:
 - Import statements
 - Whitespace (with `git diff -w`)
 - Empty lines (in `ground_truth.py`)
+
+## Metrics
+
+Commit metrics are calculated by `src/commit_metrics.py` and stored in `<out_dir>/metrics/`.
+The supported metrics are:
+  - Total number of files updated (i.e. both code and test files)
+  - Number of test files updated 
+  - Number of hunks 
+  - Average hunk size 
+  - Number of lines changed (i.e. all lines with +/- indicators in the original diff generated from pre-fix and post-fix versions).
 
 ## Manual analysis
 
