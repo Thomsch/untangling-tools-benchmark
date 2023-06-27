@@ -1,4 +1,4 @@
-project,bug_id,fix_lines,other_lines
+project,bug_id,fix_lines,nonfix_lines
 Cli,1,98,63
 Cli,2,54,2
 Cli,3,16,23

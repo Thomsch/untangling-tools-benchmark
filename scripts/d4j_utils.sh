@@ -27,7 +27,8 @@ d4j_diff () {
     fi
 }
 
-# Retrieves the buggy and fixed revision IDs for a given project and bug ID.
+# Retrieves the buggy and fixed revision IDs in the underlying version control
+# system for a given Defects4J project and bug ID.
 # - $1: D4J Project name
 # - $2: D4J Bug id
 # Returns the buggy and fixed revision IDs in the format:
@@ -44,7 +45,7 @@ retrieve_revision_ids () {
 
   # Check if the DEFECTS4J_HOME environment variable is set
   if [[ -z "${DEFECTS4J_HOME}" ]]; then
-    echo 'DEFECTS4J_HOME environment variable not set.' 1>&2
+    echo 'DEFECTS4J_HOME environment variable is not set.' 1>&2
     echo 'Please set it to the path of your Defects4J installation.' 1>&2
     return 1
   fi
