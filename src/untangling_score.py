@@ -114,9 +114,7 @@ def calculate_score_for_tool(truth_df, tool_df):
     return metrics.rand_score(labels_true, labels_pred)
 
 
-def main():
-    args = sys.argv[1:]
-
+def main(args):
     if len(args) != 3:
         print(
             "usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>"
@@ -127,46 +125,36 @@ def main():
     project = args[1]
     vid = args[2]
 
-    # TODO: Rather than duplicating code, use a for loop.
-
-    truth_file = path.join(root, "truth.csv")
-    smartcommit_file = path.join(root, "smartcommit.csv")
-    flexeme_file = path.join(root, "flexeme.csv")
-    file_untangling_file = path.join(root, "file_untangling.csv")
-
+    # Convert ground truth into a DataFrame
     try:
+        truth_file = path.join(root, "truth.csv")
         truth_df = pd.read_csv(truth_file).convert_dtypes()
     except FileNotFoundError as e:
         print(f"File not found: {e.filename}", file=sys.stderr)
         sys.exit(1)
 
-    try:
-        smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
-    except FileNotFoundError:
-        smartcommit_df = None
+    tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
 
-    try:
-        flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
-        flexeme_df["group"] = flexeme_df["group"].astype("string")
-    except FileNotFoundError:
-        flexeme_df = None
+    # Generate array of RandIndex scores (type='float') for each tool, initialized to 0.0
+    tool_scores = [0.0] * len(tool_csv)
 
-    try:
-        file_untangling_df = pd.read_csv(file_untangling_file).convert_dtypes()
-        file_untangling_df["group"] = file_untangling_df["group"].astype("string")
-    except FileNotFoundError:
-        file_untangling_df = None
+    # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index
+    for i in range(len(tool_csv)):
+        tool_decomposition_file = path.join(root, tool_csv[i])
+        try:
+            tool_df = pd.read_csv(tool_decomposition_file).convert_dtypes()
+            tool_df["group"] = tool_df["group"].astype("string")
+        except FileNotFoundError:
+            tool_df = None
 
-    smartcommit_score = calculate_score_for_tool(truth_df, smartcommit_df)
-    flexeme_score = calculate_score_for_tool(truth_df, flexeme_df)
-    file_untangling_score = calculate_score_for_tool(truth_df, file_untangling_df)
+        # Add Rand Index in respective tool order
+        tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)
 
-    print(
-        f"{project},{vid},{smartcommit_score},{flexeme_score},{file_untangling_score}"
-    )
+    print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+    main(args)
 
 # LocalWords: smartcommit dtypes isin sklearn flexeme astype nonbugfixing
