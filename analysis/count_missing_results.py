@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+
+"""
+This script counts the number of projects with missing results in the benchmark.
+A missing result happens when a decomposition tool fails to produce a decomposition for a D4J bug.
+"""
+
 import os
 import sys
 from collections import defaultdict
 
 
-#
-# This script counts the number of projects with missing results in the benchmark.
-## TODO: What is a "missing result"?
-#
 def main(path):
     required_files = [
         "flexeme.csv",
