@@ -60,8 +60,7 @@ The results will be stored in `<out-dir>` (e.g., `~/benchmark`):
 - `<out-dir>/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
   To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
 - `<out-dir>/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
-  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as either a line removed from the original (buggy) file (-) or a line added to the modified (fixed) file (+). Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
-    TODO: What is a "changed line"?  Is it a line from the diff, or from the original program?  Is it a string or a hunk line as provided by the unidiff package?
+  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as a line from the diff from the buggy to the fixed version in CSV. The changed line can be a deletion or addition. Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
