@@ -17,6 +17,7 @@ check-some-python-style:
 	pylint -f parseable --disable=W,invalid-name conftest.py src/__init__.py
 
 check-python-format:
+	black --version
 	black --check ${PYTHON_FILES}
 
 format-python:
