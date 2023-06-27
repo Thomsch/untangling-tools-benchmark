@@ -63,8 +63,7 @@ The results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/logs/`: Folder containing the logs of the `evalute.sh` script
 - `$UTB_OUTPUT/repositories/`: Folder containing the checked out Defect4J bug repositories
 - `$UTB_OUTPUT/metrics/`: Folder containing metrics for each Defects4J bug. See section [Metrics](#metrics) for more details.
-- `decompositions.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
-  TODO: If this file contains scores, then its name should reflect that, with a name like `aggregated_scores.csv` or the like.
+- `decomposition_scores.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated.
 
 TODO: The .ipynb files are all for one-off experiments and are not part of any pipeline.  Document this, and maybe move them elsewhere to avoid confusion.
