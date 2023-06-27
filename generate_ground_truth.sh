@@ -1,8 +1,15 @@
 #!/bin/bash
+
 # Generate the ground truth for a Defects4J bug.
 # Two ground truths are generated:
 # 1. Include all the original changes in the bug fix.
 # 2. Include only the source codes changes that are not comments, import, or test changes.
+#
+# The ground truth is outputed to stdout in a CSV format with the following columns:
+#   - file path (string): the path of the file where the change occurred.
+#   - source: the line number of the line that was deleted or changed in the buggy version.
+#   - target: the line number of the line that was added or changed in the fixed version.
+#   - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -13,6 +20,11 @@ if [[ $# -ne 4 ]] ; then
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
 fi
+
+project=$1
+vid=$2
+out_path=$3 # Path where the results are stored.
+repo_root=$4 # Path where the repo is checked out
 
 set -o allexport
 # shellcheck source=/dev/null
@@ -25,10 +37,6 @@ if [[ -z "${JAVA_11}" ]]; then
   exit 1
 fi
 
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
 workdir="${repo_root}/${project}_${vid}"
 
 evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
