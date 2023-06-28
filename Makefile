@@ -5,16 +5,16 @@ check: check-scripts check-python-format check-some-python-style python-test
 
 check-scripts:
 # Fail if any of these files have warnings
-	shellcheck $(wildcard ./*.sh scripts/*.sh test/*.sh)
+	shellcheck $(wildcard ./*.sh src/bash/main/*.sh)
 
-PYTHON_FILES=$(wildcard *.py analysis/*.py src/*.py test/*.py)
+PYTHON_FILES=$(wildcard *.py analysis/*.py src/python/main/*.py src/python/test/*.py)
 check-python-style:
 	flake8 --color never --ignore E501,W503 ${PYTHON_FILES}
 	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
 
 check-some-python-style:
 	flake8 --color never --ignore E501,W503 ${PYTHON_FILES}
-	pylint -f parseable --disable=W,invalid-name conftest.py src/__init__.py
+	pylint -f parseable --disable=W,invalid-name conftest.py src/__init__.py src/python/__init__.py src/python/main/__init__.py
 
 check-python-format:
 	black --check ${PYTHON_FILES}
@@ -23,7 +23,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	pytest test
+	pytest src/python/test
 
 clean: 
 	rm -rf ./tmp/

@@ -4,7 +4,7 @@ import tempfile
 
 import pandas as pd
 
-from src.untangling_score import main
+from src.python.main.untangling_score import main
 
 
 def test_main():
