@@ -27,6 +27,7 @@ import pandas as pd
 from unidiff import PatchSet
 
 import parse_patch
+from src.python.main.parse_utils import export_tool_decomposition_as_csv
 
 
 def list_json_files(dir):
@@ -163,13 +164,7 @@ def export_csv(output_path, result):
         StringIO(result), names=["file", "source", "target", "group"], na_values="None"
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
-    if len(df) == 0:
-        print(
-            "No results generated. Verify decomposition results and paths.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    df.to_csv(output_path, index=False)
+    export_tool_decomposition_as_csv(df, output_path)
 
 
 if __name__ == "__main__":

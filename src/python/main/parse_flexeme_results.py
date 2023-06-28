@@ -27,6 +27,8 @@ from io import StringIO
 import networkx as nx
 import pandas as pd
 
+from src.python.main.parse_utils import export_tool_decomposition_as_csv
+
 UPDATE_ADD = "add"
 UPDATE_REMOVE = "remove"
 
@@ -110,13 +112,7 @@ def export_csv(output_path, result):
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
     df = df.drop_duplicates()
-    if len(df) == 0:
-        print(
-            "No results generated. Verify decomposition results and paths.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    df.to_csv(output_path, index=False)
+    export_tool_decomposition_as_csv(df, output_path)
 
 
 def get_update_type(data):
