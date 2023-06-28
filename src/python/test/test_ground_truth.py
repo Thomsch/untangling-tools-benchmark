@@ -3,7 +3,7 @@ Tests for the ground_truth module.
 """
 import unidiff
 
-from src import ground_truth
+from src.python.main import ground_truth
 
 
 def test_patch_line_is_updated():

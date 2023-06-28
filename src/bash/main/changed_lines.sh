@@ -23,10 +23,10 @@ PROJECT=$1
 VID=$2
 REPO="$3"
 
-source ./scripts/d4j_utils.sh
+source ./src/bash/main/d4j_utils.sh
 
 # Parse the returned result into two variables
 result=$(retrieve_revision_ids "$PROJECT" "$VID")
 read -r revision_buggy revision_fixed <<< "$result"
 
-d4j_diff "$PROJECT" "$VID" "$revision_buggy" "$revision_fixed" "$REPO" | python3 src/parse_patch.py
+d4j_diff "$PROJECT" "$VID" "$revision_buggy" "$revision_fixed" "$REPO" | python3 src/python/main/parse_patch.py
