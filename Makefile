@@ -12,7 +12,7 @@ check-python-style:
 	pylint -f parseable --disable=W,invalid-name,line-too-long ${PYTHON_FILES} --init-hook="import sys; sys.path.append('.venv/lib/python3.8/site-packages')"
 
 check-python-format:
-	black ${PYTHON_FILES}
+	black --check ${PYTHON_FILES}
 
 format-python:
 	black ${PYTHON_FILES}
