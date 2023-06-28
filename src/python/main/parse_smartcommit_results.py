@@ -26,7 +26,7 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
-import parse_patch
+from src.python.main import parse_patch
 from src.python.main.parse_utils import export_tool_decomposition_as_csv
 
 
