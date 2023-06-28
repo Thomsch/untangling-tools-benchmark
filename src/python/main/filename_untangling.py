@@ -22,6 +22,11 @@ import sys
 
 
 def main(file_path, output_file):
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
+
     # Print project name
     with open(file_path, "r") as csv_file:
         csv_reader = csv.reader(csv_file)

@@ -27,8 +27,18 @@ from io import StringIO
 import networkx as nx
 import pandas as pd
 
+from parse_utils import export_tool_decomposition_as_csv
+
+UPDATE_ADD = "add"
+UPDATE_REMOVE = "remove"
+
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
+
     args = sys.argv[1:]
 
     if len(args) != 2:
@@ -49,71 +59,111 @@ def main():
         print("PDG not found, skipping creation of CSV file", file=sys.stderr)
         sys.exit(0)
 
-    UPDATE_ADD = "add"
-    UPDATE_REMOVE = "remove"
-
     result = ""
     for node, data in graph.nodes(data=True):
-        if "color" in data.keys():
-            if "label" not in data.keys():
-                logging.error(f"Attribute 'label' not found in node {node}")
-                continue
+        # Changed nodes are the only nodes with a color attribute.
+        if "color" not in data.keys():
+            continue
 
-            color_attribute = data["color"]
-            if color_attribute == "green":
-                update_type = UPDATE_ADD
-            elif color_attribute == "red":
-                update_type = UPDATE_REMOVE
+        if data["color"] not in ["green", "red"]:
+            logging.error(f"Color {data['color']} not supported")
+            continue
+
+        if "label" not in data.keys():
+            logging.error(f"Attribute 'label' not found in node {node}")
+            continue
+
+        group = get_node_label(data)
+        span_start, span_end = get_span(data)
+        update_type = get_update_type(data)
+
+        file = (
+            data["filepath"].replace('"', "")
+            if "filepath" in data.keys()
+            # then do nothing
+            else data["cluster"].replace('"', "")
+        )
+        for line in range(span_start, span_end + 1):
+            if update_type == UPDATE_REMOVE:
+                result += f"{file},{line},,{group}\n"
+            elif update_type == UPDATE_ADD:
+                result += f"{file},,{line},{group}\n"
             else:
-                logging.error(f"Color {color_attribute} not supported in node {node}")
+                logging.error(f"Update {update_type} unsupported")
                 continue
 
-            # Get the label for this node. Flexeme prepends "%d:" to the label of the node.
-            label_attribute = data["label"]
-            group = label_attribute.split(":")[0].replace('"', "")
+        # Merge results per line. Might not need to merge results per line
+        #  since the data is calculated using a left join on the truth.
+        export_csv(output_path, result)
 
-            # Retrieve line
-            span_attribute = data["span"].replace('"', "").split("-")
-            span_start = int(span_attribute[0])
-            span_end = int(span_attribute[1])
 
-            file = (
-                data["filepath"].replace('"', "")
-                if "filepath" in data.keys()
-                # then do nothing
-                else data["cluster"].replace('"', "")
-            )
-            for line in range(span_start, span_end + 1):
-                if update_type == UPDATE_REMOVE:
-                    result += f"{file},{line},,{group}\n"
-                elif update_type == UPDATE_ADD:
-                    result += f"{file},,{line},{group}\n"
-                else:
-                    logging.error(f"Update {update_type} unsupported")
-                    continue
+def export_csv(output_path, result):
+    """
+    Export the results to a CSV file.
 
-            # Merge results per line.
-            # Might not need to merge results per line since the data is calculated using a left
-            # join on the truth.
+    Args:
+        output_path: The path to the CSV file to be created.
+        result: The string containing the results to be written to the CSV file.
+    """
+    df = pd.read_csv(
+        StringIO(result),
+        names=["file", "source", "target", "group"],
+        na_values="None",
+    )
+    df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
+    df = df.drop_duplicates()
+    export_tool_decomposition_as_csv(df, output_path)
 
-            df = pd.read_csv(
-                StringIO(result),
-                names=["file", "source", "target", "group"],
-                na_values="None",
-            )
-            df = (
-                df.convert_dtypes()
-            )  # Forces pandas to use ints in source and target columns.
-            df = df.drop_duplicates()
 
-            if len(df) == 0:
-                print(
-                    "No results generated. Verify decomposition results and paths.",
-                    file=sys.stderr,
-                )
-                sys.exit(1)
+def get_update_type(data):
+    """
+    Get the update type for this node.
 
-            df.to_csv(output_path, index=False)
+    Args:
+        data: The data attribute of the node.
+
+    Returns:
+        The update type of the node as a string. Can be either UPDATE_ADD or UPDATE_REMOVE.
+    """
+    color_attribute = data["color"]
+    if color_attribute == "green":
+        update = UPDATE_ADD
+    elif color_attribute == "red":
+        update = UPDATE_REMOVE
+    else:
+        raise ValueError(f"Color {color_attribute} not supported")
+    return update
+
+
+def get_span(data):
+    """
+    Get the line span for this node.
+
+    Args:
+        data: The data attribute of the node.
+
+    Returns:
+        The line span of the node as a tuple (span_end, span_start).
+    """
+    span_attribute = data["span"].replace('"', "").split("-")
+    span_start = int(span_attribute[0])
+    span_end = int(span_attribute[1])
+    return span_start, span_end
+
+
+def get_node_label(data):
+    """
+    Get the label for this node. Flexeme prepends "%d:" to the label of the node.
+
+    Args:
+        data: The data attribute of the node.
+
+    Returns:
+        The group label of the node.
+    """
+    label_attribute = data["label"]
+    group = label_attribute.split(":")[0].replace('"', "")
+    return group
 
 
 if __name__ == "__main__":
