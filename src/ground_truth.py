@@ -15,7 +15,7 @@ Command Line Args:
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-    CSV header: {file, source, target, group='fix','other',or 'both}
+    CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
@@ -67,22 +67,32 @@ def get_d4j_test_path(defects4j_home, project, vid):
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-Java files.
+    The filtering is done during the conversion to avoid iterating over the patch twice.
+
+    The dataframe has the following columns:
+        - file (str): Path of the file
+        - source (int): Line number when the line is removed or changed
+        - target (int): Line number when the line is added or changed
     """
     ignore_comments = True
     ignore_imports = True
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
-        # Skip non-Java files. At least one version must have a .java extension.
-        # When a file is deleted or created, the file name is 'dev/null'.
+        # Skip non-Java files.
+        # lower() is used to catch cases where the extension is in upper case.
+        # We need at least one file with the Java extension because a diff can have the following cases:
+        # 1. source_file is 'dev/null' and the target_file is 'foo.java' (i.e. 'foo.java' was added)
+        # 2. source_file is 'foo.java' and the target_file is 'dev/null' (i.e. 'foo.java' was deleted)
+        # 3. source_file is 'foo.java' and the target_file is 'foo.java' (i.e. 'foo.java' was modified)
         if not (
             file.source_file.lower().endswith(".java")
             or file.target_file.lower().endswith(".java")
         ):
             continue
 
-        if file.source_file.endswith("Test.java") or file.target_file.endswith(
-            "Test.java"
-        ):
+        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
+        # and modification cases.
+        if is_test_file(file.source_file) or is_test_file(file.target_file):
             continue
 
         for hunk in file:
@@ -116,11 +126,26 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     return df
 
 
+def is_test_file(filename):
+    """
+    Returns True if the filename is a filename for tests.
+
+    This implementation currently works for all Defects4J 2.0.0 projects.
+    """
+    return (
+        "/test/" in filename
+        or "/tests/" in filename
+        or filename.startswith("test/")
+        or filename.startswith("tests/")
+        or filename.endswith("Test.java")
+    )
+
+
 def get_line_map(diff) -> dict:
     """
-    Generates a map of line numbers for each changed line in the diff.
-    The mapping is one-to-many as bug-fixes for the exact same problem can occurr multiple times
-    in the original diff.
+    In a diff, we define a changed line as either a line removed from the original (pre-fix) file, indicated with (-), or a line added to the modified (post-fix) file, indicated with (+). An unchanged line is a context line, indicated with (' ').
+    The function generates a map from line contents (i.e. either added/removed contents) to their line numbers in the diff provided.
+    The mapping is one-to-many as identical lines of bug-fixing code can occur multiple times in the original diff.
 
     Args:
         diff: a PatchSet object (i.e. list of PatchFiles)
@@ -229,16 +254,20 @@ def main():
         print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
         sys.exit(1)
 
-    if not os.getenv("DEFECTS4J_HOME"):
-        print("DEFECTS4J_HOME environment variable is not set. Exiting.")
-        sys.exit(1)
-    defects4j_home = os.getenv("DEFECTS4J_HOME")
-
     project = args[0]
     vid = args[1]
     out_path = args[2]
 
+    defects4j_home = os.getenv("DEFECTS4J_HOME")
+    if not defects4j_home:
+        print("DEFECTS4J_HOME environment variable not set. Exiting.")
+        sys.exit(1)
+
     changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
+
+    # Convert the diff to a dataframe for easier manipulation.
+    # The PatchSet is not easy or efficient to work with because
+    # it uses nested iterable objects.
     changes_df = convert_to_dataframe(changes_diff)
 
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number
@@ -258,17 +287,13 @@ def main():
     except FileNotFoundError:
         src_patch_df = pd.DataFrame(columns=COL_NAMES)
 
-    # Test is not minimized, so it's not included in the ground truth.
-    # test_patch = load_d4j_patch(get_d4j_test_path(defects4j_home, project, vid))
-    # test_patch_df = convert_to_dataframe(test_patch)
-
-    # Merge source patch and test patch.
-    # minimal_patch = pd.concat([src_patch_df, test_patch_df], axis=0, ignore_index=True)
-    minimal_patch = src_patch_df
+    # The minimal bug-fixing patch contains only the bug-fixing lines on the source code. The changed lines in the
+    # test files are excluded.
+    minimal_bugfix_patch = src_patch_df
 
     # Check which truth are in changes and tag them as True in a new column.
     ground_truth = pd.merge(
-        changes_df, minimal_patch, on=COL_NAMES, how="left", indicator="group"
+        changes_df, minimal_bugfix_patch, on=COL_NAMES, how="left", indicator="group"
     )
     ground_truth["group"] = np.where(ground_truth.group == "both", "fix", "other")
     ground_truth.to_csv(out_path, index=False)
@@ -277,4 +302,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# LocalWords: dtypes, dataframe
+# LocalWords: dtypes, dataframe, bugfix
