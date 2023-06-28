@@ -61,8 +61,7 @@ git checkout "$revision_buggy"
 cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "buggy.java"                                          # V_buggy
 git checkout "$revision_fixed"
 cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "fixed.java"                                          # V_fixed
-git checkout "$revision_buggy"                       
-                                                                # Return to project repository
+git checkout "$revision_buggy"                                                                                       # Return to project repository
 # Generate the three unified diff file, then clean the diff
 cd -
 diff -w -u "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/clean_artifacts.py "${repository}/${diff}/BF.diff"
