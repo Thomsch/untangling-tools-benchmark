@@ -37,6 +37,10 @@ def list_json_files(dir):
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     args = sys.argv[1:]
 
     if len(args) != 2:
@@ -51,8 +55,26 @@ def main():
     diff_dir = os.path.join(result_dir, "diffs")
     groups_dir = os.path.join(result_dir, "generated_groups")
 
-    diff_data = {}
+    diff_data = read_results(diff_dir)
+    result = generate_csv(diff_data, groups_dir)
 
+    export_csv(output_path, result)
+
+
+def read_results(diff_dir):
+    """
+    Read the decomposition results from disk. Each JSON file in the diff directory contains the
+    diff data for a single file. We retrieve the hunk id, hunk header, raw diff, start line, and
+    end line for each hunk in the file. The file is indexed by its file id defined in the JSON.
+
+    Args:
+        diff_dir: The path to the directory containing the JSON files with the diffs.
+
+    Returns:
+        A dictionary mapping file ids to dictionaries mapping hunk ids to tuples containing the
+        hunk header, start line, end line, and raw diff.
+    """
+    diff_data = {}
     # Load diffs
     for diff_path in list_json_files(diff_dir):
         with open(diff_path, "r") as diff_file:
@@ -68,11 +90,29 @@ def main():
             # Save data for each hunk
             for hunk_data in data["diffHunksMap"].values():
                 hunk_id = hunk_data["diffHunkID"]
-                startLine = hunk_data["currentHunk"]["startLine"]
-                endLine = hunk_data["currentHunk"]["endLine"]
+                start_line = hunk_data["currentHunk"]["startLine"]
+                end_line = hunk_data["currentHunk"]["endLine"]
 
-                hunks[hunk_id] = (class_path, startLine, endLine, hunk_data["rawDiffs"])
+                hunks[hunk_id] = (
+                    class_path,
+                    start_line,
+                    end_line,
+                    hunk_data["rawDiffs"],
+                )
+    return diff_data
 
+
+def generate_csv(diff_data, groups_dir):
+    """
+    Generate the CSV file from the diff data and the groups.
+
+    Args:
+        diff_data: The diff data loaded from the JSON files.
+        groups_dir: The path to the directory containing the JSON files with the groups.
+
+    Returns:
+        A string containing the group data in CSV format.
+    """
     result = ""
 
     # Print CSV for each group
@@ -84,29 +124,51 @@ def main():
             group_id = data["groupID"]
 
             for hunk in hunks:
-                file_id, hunk_id = hunk.split(":")
-                class_path, start_line, end_line, rawDiff = diff_data[file_id][hunk_id]
+                patch = make_patch(diff_data, hunk)
 
-                header_str = "\n".join(diff_data[file_id]["rawHeaders"])
-                diff_str = "\n".join(rawDiff)
-
-                patch = PatchSet.from_string(header_str + "\n" + diff_str)
+                # Break down the group for a hunk into its individual lines.
                 for line in parse_patch.to_csv(patch):
                     result += f"{line},{group_id}\n"
+    return result
 
-    # Export results
+
+def make_patch(diff_data, hunk) -> PatchSet:
+    """
+    Make a patch from the diff data and the hunk id.
+
+    Args:
+        diff_data: The diff data loaded from the JSON files.
+        hunk: The hunk id of the hunk to make a patch from.
+
+    Returns:
+        A PatchSet object containing the patch for the hunk.
+    """
+    file_id, hunk_id = hunk.split(":")
+    class_path, start_line, end_line, raw_diff = diff_data[file_id][hunk_id]
+    header_str = "\n".join(diff_data[file_id]["rawHeaders"])
+    diff_str = "\n".join(raw_diff)
+
+    return PatchSet.from_string(header_str + "\n" + diff_str)
+
+
+def export_csv(output_path, result):
+    """
+    Export the results to a CSV file.
+
+    Args:
+        output_path: The path to the CSV file to be created.
+        result: The string containing the results to be written to the CSV file.
+    """
     df = pd.read_csv(
         StringIO(result), names=["file", "source", "target", "group"], na_values="None"
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
-
     if len(df) == 0:
         print(
             "No results generated. Verify decomposition results and paths.",
             file=sys.stderr,
         )
         sys.exit(1)
-
     df.to_csv(output_path, index=False)
 
 

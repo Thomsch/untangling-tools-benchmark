@@ -115,6 +115,13 @@ def calculate_score_for_tool(truth_df, tool_df):
 
 
 def main(args):
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+
+    Args:
+        args: command line arguments
+    """
     if len(args) != 3:
         print(
             "usage: untangling_score.py <evaluation/project/bug_id> <project> <bug_id>"
@@ -139,8 +146,8 @@ def main(args):
     tool_scores = [0.0] * len(tool_csv)
 
     # Cast each tool's group labels into String format and pair with ground truth to calculate Rand Index
-    for i in range(len(tool_csv)):
-        tool_decomposition_file = path.join(root, tool_csv[i])
+    for i, value in enumerate(tool_csv):
+        tool_decomposition_file = path.join(root, value)
         try:
             tool_df = pd.read_csv(tool_decomposition_file).convert_dtypes()
             tool_df["group"] = tool_df["group"].astype("string")

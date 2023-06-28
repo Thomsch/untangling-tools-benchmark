@@ -1,9 +1,15 @@
+"""
+Tests for the ground_truth module.
+"""
 import unidiff
 
 from src import ground_truth
 
 
 def test_patch_line_is_updated():
+    """
+    Test that the line numbers are updated correctly when the patch is inversed.
+    """
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -36,6 +42,9 @@ index 8422d40..682191b 100644
 
 
 def test_duplicate_lines_are_updated():
+    """
+    Test that duplcated lines are stored correctly in the line map.
+    """
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -89,6 +98,9 @@ index 8422d40..3e8a10f 100644
 
 
 def test_get_line_map():
+    """
+    Tests that the line map is correct for a diff containing duplicate lines
+    """
     diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt

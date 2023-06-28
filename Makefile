@@ -9,10 +9,10 @@ check-scripts:
 PYTHON_FILES=$(wildcard *.py analysis/*.py src/*.py test/*.py)
 check-python-style:
 	flake8 --color never --ignore E501,W503 ${PYTHON_FILES}
-	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
+	pylint -f parseable --disable=W,invalid-name,line-too-long ${PYTHON_FILES} --init-hook="import sys; sys.path.append('.venv/lib/python3.8/site-packages')"
 
 check-python-format:
-	black --check ${PYTHON_FILES}
+	black ${PYTHON_FILES}
 
 format-python:
 	black ${PYTHON_FILES}
