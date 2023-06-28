@@ -18,7 +18,7 @@ export PYTHONHASHSEED=0         # Make test deterministic
 bugs_file="data/d4j-5-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
 out_dir="test/e2e" # Path to the directory where the results are stored and repositories checked out.
 
-metric_goal="${out_dir}/metrics_goal.csv"
+metrics_goal="${out_dir}/metrics_goal.csv"
 decompositions_goal="${out_dir}/decompositions_goal.csv"
 
 
@@ -29,17 +29,13 @@ metrics_results="${out_dir}/metrics.csv"
 decompositions_results="${out_dir}/decompositions.csv"
 
 # Diff the aggregated metrics file with the goal file
-if ! diff -u "$metric_goal" "$metrics_results"; then
-    echo "Warning: The metrics computed are different."
+if ! diff -u "$metrics_goal" "$metrics_results"; then
+    echo "Error: The metrics computed are different."
     exit 1
-else 
-    echo "The metrics are identical."
 fi
 
 # Diff the aggregated Rand Index scores file with the goal file
 if ! diff -u "$decompositions_goal" "$decompositions_results"; then
-    echo "Warning: The Rand Index scores computed are different."
+    echo "Error: The Rand Index scores computed are different."
     exit 1
-else 
-    echo "The Rand Index scores are identical."
 fi
