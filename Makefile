@@ -9,7 +9,7 @@ check-scripts:
 PYTHON_FILES=$(wildcard *.py analysis/*.py src/python/main/*.py src/python/test/*.py)
 check-python-style:
 	flake8 --color never --ignore E501,W503 ${PYTHON_FILES}
-	pylint -f parseable ${PYTHON_FILES} --init-hook="import sys; sys.path.append('.venv/lib/python3.8/site-packages')"
+	pylint -f parseable ${PYTHON_FILES}
 
 check-python-format:
 	black --check ${PYTHON_FILES}

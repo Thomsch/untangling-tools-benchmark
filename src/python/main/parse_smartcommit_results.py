@@ -26,8 +26,8 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
-from src.python.main import parse_patch
-from src.python.main.parse_utils import export_tool_decomposition_as_csv
+from parse_patch import to_csv
+from parse_utils import export_tool_decomposition_as_csv
 
 
 def list_json_files(dir):
@@ -128,7 +128,7 @@ def generate_csv(diff_data, groups_dir):
                 patch = make_patch(diff_data, hunk)
 
                 # Break down the group for a hunk into its individual lines.
-                for line in parse_patch.to_csv(patch):
+                for line in to_csv(patch):
                     result += f"{line},{group_id}\n"
     return result
 

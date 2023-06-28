@@ -27,7 +27,7 @@ from io import StringIO
 import networkx as nx
 import pandas as pd
 
-from src.python.main.parse_utils import export_tool_decomposition_as_csv
+from parse_utils import export_tool_decomposition_as_csv
 
 UPDATE_ADD = "add"
 UPDATE_REMOVE = "remove"
