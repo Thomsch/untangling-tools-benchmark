@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Check if the local machine satisfy requirements:
-# - Python 3.8.15 is the version used and on the PATh.
+# Check for requirements:
+# - Python 3.8.15 is the version used and on the PATH.
 # - JAVA 8 is the default version on the PATH, but not used.
 # - JAVA 11 is installed, but not on the PATH
 # Check for PyGraphviz and GNU coreutiles
