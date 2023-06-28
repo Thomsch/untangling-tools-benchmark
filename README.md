@@ -45,7 +45,7 @@ Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
       (see **Limitations** section).
       It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
     - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
-- `$UTB_OUTPUT` is a placeholder variable to represent the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/benchmark`). 
+- `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/benchmark`). 
 
 For example, use `./evaluate_all.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run the evaluation on 5 bugs from the Defects4J
 project.
