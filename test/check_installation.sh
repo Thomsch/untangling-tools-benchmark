@@ -43,5 +43,5 @@ for package in "${required_packages[@]}"; do
         exit 1
     fi
 done
-echo 'All required packages, installations and dependencies are satisfied. The tool is ready.'
+echo 'The tool dependencies are satisfied.'
 
