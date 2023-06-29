@@ -37,8 +37,8 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
-  echo 'JAVA_11 environment variable is not set.'
+if [[ -z "${JAVA11_HOME}" ]]; then
+  echo 'JAVA11_HOME environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
@@ -165,7 +165,7 @@ if [[ -d "$smartcommit_untangling_results" ]]; then
 else
     echo -ne '\n'
     START_DECOMPOSITION=$(date +%s.%N)
-    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
+    $JAVA11_HOME -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
