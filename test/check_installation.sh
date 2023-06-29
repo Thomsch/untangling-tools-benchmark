@@ -28,8 +28,8 @@ if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
 fi
 
 # Check JAVA 11 is installed and on PATH. Defects4J will use whatever is on JAVA_HOME.
-if [[ -z "${JAVA_11}" ]]; then
-  echo 'JAVA_11 environment variable is not set.'
+if [[ -z "${JAVA11_HOME}" ]]; then
+  echo 'JAVA11_HOME environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
