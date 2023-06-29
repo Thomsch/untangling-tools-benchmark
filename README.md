@@ -135,7 +135,7 @@ The supported metrics are:
 This section explains how to manually analyse the decomposition results to qualitative assess the untangling tools compared to the ground truth.
 
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
-2. The diff for the bug is `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
+2. The diff for the bug is `git diff -U0 <buggy-commit> <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
 3. The ground truth is `<out_dir>/evaluation/<project><bug_id>/truth.csv`
 4. The Flexeme decomposition is `<out_dir>/evaluation/<project><bug_id>/flexeme.csv`
