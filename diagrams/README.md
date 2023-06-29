@@ -1,6 +1,13 @@
-
-
 ### Ground truth Diagram
+The ground truth excludes the following changes:
+- Non-Java files
+- Test files
+- Comments
+- Import statements
+- Whitespace (with `git diff -w`)
+- Empty lines (in `ground_truth.py`)
+When all these changes are excluded, we say that a file is "filtered".
+
 The procedure to create ground truth is illustrated below. The diagram is created with [draw.io](https://app.diagrams.net/). The draw.io extensions in VSCode allows for more functionality when streamlined with Git.
 
 ### Terminology
@@ -12,10 +19,10 @@ The code artifacts are (they are orange and yellow rectangular boxes on the left
 * V_fixed = V_n, the fixed code from the version control repository
 
 The diff artifacts are:
-1. Version Control Diff (or original diff or programmer diff): The diff between V_{n-1} and V_n. This diff file is not filtered. 
-2. Bug-Fix Diff (or minimal diff): The diff between V_bug and V_fixed.  This contains all bug-fixing lines and is the inverse of the Defects4J bug-inducing patch (which is the diff between V_fixed and V_bug). The line numbers of Bug-Fix Diff are repaired to match exactly with the Original Diff. This diff file is not filtered.
+* Version Control Diff (or original diff or programmer diff): The diff between V_{n-1} and V_n. This diff file is not filtered. 
+* Bug-Fix Diff (or minimal diff): The diff between V_bug and V_fixed. This contains all bug-fixing lines and is the inverse of the Defects4J bug-inducing patch (which is the diff between V_fixed and V_bug). The line numbers of Bug-Fix Diff are repaired to match exactly with the Original Diff. This diff file is not filtered.
     - Note: the Bug-Fix Diff might not be a subset of Original Diff, as it may contain bug-fix portion of a tangled line (e.g. (4 + F)) - these are dropped when creating the ground truth. 
-3. Non-Bug-Fix Diff: The diff between V_{n-1} and V_bug.
+* Non-Bug-Fix Diff: The diff between V_{n-1} and V_bug.
     - Current implementation: The set difference {Orginal Diff \ Bug-Fix Diff} - which contains all the lines that are non-bug-fixing and tangled (as we drop bug-fix portions in ground truth). This diff file is not filtered.
     - Desired implementation: The UNIX diff of {buggy version, fixed version}, in which the fixed code is bug-fix-diff applied on original-diff (Original_diff(buggy) + Bug-fix_diff). We expect that this file contains only the non-bug-fixing portion of a tangled line and is filtered.
 
