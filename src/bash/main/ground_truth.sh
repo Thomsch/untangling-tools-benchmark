@@ -39,7 +39,7 @@ truth_csv=$4
 diff="diff"
 workdir=$(pwd)
 
-source ./scripts/d4j_utils.sh
+source ./src/bash/main/d4j_utils.sh
 
 # Parse the returned result into two variables
 result=$(retrieve_revision_ids "$project" "$vid")
@@ -64,10 +64,11 @@ cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "fixed.java"     
 git checkout "$revision_buggy"                                                                                       # Return to project repository
 # Generate the three unified diff file, then clean the diff
 cd -
-diff -w -u "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/clean_artifacts.py "${repository}/${diff}/BF.diff"
-diff -w -u "${repository}/original.java"  "${repository}/fixed.java" | python3 src/clean_artifacts.py "${repository}/${diff}/VC.diff"
+diff -w -u "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/BF.diff"
+diff -w -u "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
 patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/BF.diff"
 diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
 
-# Generate ground truth
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_csv"
+d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
+
+d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
