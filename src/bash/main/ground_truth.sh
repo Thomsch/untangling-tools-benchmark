@@ -56,19 +56,18 @@ cd $repository
 mkdir "${diff}"
 revision_buggy=$(git rev-parse HEAD)
 git checkout "$revision_original"
-cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "original.java"                                       # V_{n-1}
+cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "original.java"                                       # V_{n-1}
 git checkout "$revision_buggy"
-cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "buggy.java"                                          # V_buggy
+cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "buggy.java"                                          # V_buggy
 git checkout "$revision_fixed"
-cpp $source_file | python3 "${workdir}/src/clean_artifacts.py" "fixed.java"                                          # V_fixed
+cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "fixed.java"                                          # V_fixed
 git checkout "$revision_buggy"                                                                                       # Return to project repository
 # Generate the three unified diff file, then clean the diff
-cd -
+cd - || exit 1
 diff -w -u "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/BF.diff"
 diff -w -u "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
+diff -w -u "${repository}/original.java"  "${repository}/buggy.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/old_NBF.diff"
 patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/BF.diff"
-diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
-
-d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
+diff -w -u "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
 
 d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
