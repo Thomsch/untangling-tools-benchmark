@@ -11,11 +11,6 @@
 #     - source: The line number of the change if the change is a deletion
 #     - target: The line number of the change if the change is an addition
 #     - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs
-# - vc.diff: Version Control diff
-# - bug_fix.diff: bug-fixing diff
-# - non_bug_fix.diff: Non bug-fixing diff
-# Obtains 3 versions of the source code from Defects4J VCS History:
 
 #set -o errexit    # Exit immediately if a command exits with a non-zero status
 #set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -36,8 +31,6 @@ project=$1
 vid=$2
 repository=$3
 truth_csv=$4
-diff="diff"
-workdir=$(pwd)
 
 source ./src/bash/main/d4j_utils.sh
 
@@ -45,29 +38,4 @@ source ./src/bash/main/d4j_utils.sh
 result=$(retrieve_revision_ids "$project" "$vid")
 read -r revision_original revision_fixed <<< "$result"
 
-# Obtain 3 Java files and clean before generating diff
-inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
-target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
-source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file name, V_buggy
-
-# Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
-#       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
-cd $repository
-mkdir "${diff}"
-revision_buggy=$(git rev-parse HEAD)
-git checkout "$revision_original"
-cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "original.java"                                       # V_{n-1}
-git checkout "$revision_buggy"
-cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "buggy.java"                                          # V_buggy
-git checkout "$revision_fixed"
-cpp $source_file | python3 "${workdir}/src/python/main/clean_artifacts.py" "fixed.java"                                          # V_fixed
-git checkout "$revision_buggy"                                                                                       # Return to project repository
-# Generate the three unified diff file, then clean the diff
-cd - || exit 1
-diff -w -u "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/BF.diff"
-diff -w -u "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
-diff -w -u "${repository}/original.java"  "${repository}/buggy.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/old_NBF.diff"
-patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/BF.diff"
-diff -w -u "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
-
-d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$repository" "$truth_csv"

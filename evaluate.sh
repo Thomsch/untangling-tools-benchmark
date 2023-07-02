@@ -76,6 +76,25 @@ classpath=$(defects4j export -p cp.compile -w "${workdir}")
 classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 
 #
+# Generate six artifacts (three unified diffs, three source code files)
+# 
+bug_fix_diff_out="${workdir}/diff/bug_fix.diff"
+
+if [[ -f "$bug_fix_diff_out" ]]; then
+    echo -ne 'Generating diff and code artifacts ................................................ CACHED\r'
+else
+    ./src/bash/main/generate_artifacts.sh "$project" "$vid" "$workdir"
+    code=$?
+    if [ $code -eq 0 ]
+    then
+        echo -ne 'Generating diff and code artifacts .................................................. OK\r'
+    else
+        echo -ne 'Generating diff and code artifacts .................................................. FAIL\r'
+    fi
+fi
+echo -ne '\n'
+
+#
 # Compute commit metrics
 #
 metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
