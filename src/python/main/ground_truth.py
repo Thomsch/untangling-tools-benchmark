@@ -224,9 +224,9 @@ def invert_patch(patch):
 def repair_line_numbers(patch_diff, original_diff):
     """
     Replaces the line numbers for bug-fixing lines with the line numbers from the original diff.
-    If the same bug-fix (i.e. Line Object-wise) re duplicated, we will select its first occurrence
+    If the same bug-fix (i.e. Line Object-wise) í duplicated, we will select its first occurrence
     in original diff as the original line.
-    We ignore Line Objects that are not whole (i.e. DNE in original_diff)
+    We ignore Line Objects that does not exist in original_diff)
 
     Args:
         patch_diff: the minimized D4J bug-fixing diff
@@ -269,6 +269,46 @@ def repair_line_numbers(patch_diff, original_diff):
                     )
     return patch_diff
 
+def get_diff_lines(patch):
+    ''''
+    Get a list of all the diff Line Objects (with all instance variables initialized), preserving the original
+    order in the respective patch.
+    '''
+    lines = []
+    for file in patch:
+        for hunk in file:
+            for line in hunk:
+                lines.append(line)
+    return lines
+
+def tag_truth_label(original_diff, bug_fix_diff, nonfix_diff):
+    original_lines = get_diff_lines(original_diff)
+    fix_lines = get_diff_lines(bug_fix_diff)
+    nonfix_lines = get_diff_lines(nonfix_diff)
+    labels = ['o' for i in range(len(original_lines))]
+    for i in range(len(original_lines)):
+        line = original_lines[i]
+        if len(fix_lines) == 0 and len(nonfix_lines) == 0:
+            print("This is a bug")
+            return labels
+        fix = fix_lines[0] if fix_lines else None
+        nonfix = nonfix_lines[0] if nonfix_lines else None
+        if not nonfix or str(line) == str(fix) and str(line) != str(nonfix):
+            labels[i] = 'fix'
+            fix_lines.pop(0)
+        elif not fix or str(line) == str(nonfix) and str(line) != str(fix):
+            labels[i] = 'other'
+            nonfix_lines.pop(0)
+        elif str(line) != str(nonfix) and str(line) != str(fix):
+            print("This is potentially a tangled line")
+            fix_lines.pop(0)
+            nonfix_lines.pop(0)
+            continue
+        else:
+            labels[i] = 'both'
+            fix_lines.pop(0)
+            nonfix_lines.pop(0)
+    return labels
 
 def main():
     """
@@ -278,53 +318,61 @@ def main():
 
     args = sys.argv[1:]
 
-    if len(args) != 3:
-        print("usage: ground_truth.py <project> <vid> <path/to/root/results>")
+    if len(args) != 4:
+        print("usage: ground_truth.py <project> <vid> <path/to/project/repo> <path/to/root/results>")
         sys.exit(1)
 
     project = args[0]
     vid = args[1]
-    out_path = args[2]
+    repository = args[2]
+    out_path = args[3]
 
     defects4j_home = os.getenv("DEFECTS4J_HOME")
     if not defects4j_home:
         print("DEFECTS4J_HOME environment variable not set. Exiting.")
         sys.exit(1)
-
-    changes_diff = PatchSet.from_string(sys.stdin.read())  # original programmer diff
+    # all_changes_diff = PatchSet.from_string(sys.stdin.read())
+    original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC.diff"))
+    bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "bug_fix.diff"))
+    nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "non_bug_fix.diff"))
 
     # Convert the diff to a dataframe for easier manipulation.
     # The PatchSet is not easy or efficient to work with because
     # it uses nested iterable objects.
-    changes_df = convert_to_dataframe(changes_diff)
+    original_diff_df = convert_to_dataframe(original_diff)
+    truth_labels = tag_truth_label(original_diff, bug_fix_diff, nonfix_diff)
+    original_diff_df['group'] = truth_labels
+    ground_truth_df = original_diff_df
 
+    ground_truth_df.to_csv(out_path, index=False)
     # A diff Line object has (1) a Line Type Indicator (+/-/' ') (self.line_type), (2) Line Number
     # (self.source_line_no,self.target_line_no), and (3) Line Content (self.value).  A purely
     # bug-fix Line Object will be in the minimized bug-fix patch, this Line Object is identical to
     # the one in original_diff PatchSet.  A tangled line will only have a bug-fix portion (i.e. a
-    # Line Object with different instance variables) in the minimized patch, thus DNE in
+    # Line Object with different instance variables) in the minimized patch, thus does not exist in
     # original_diff.  These tangled lines will not be counted as part of the minimal_bug_fixing
     # Patch.
-    try:
-        src_patch = PatchSet.from_filename(
-            get_d4j_src_path(defects4j_home, project, vid)
-        )
-        src_patch = invert_patch(src_patch)
-        src_patch = repair_line_numbers(src_patch, changes_diff)
-        src_patch_df = convert_to_dataframe(src_patch)
-    except FileNotFoundError:
-        src_patch_df = pd.DataFrame(columns=COL_NAMES)
+    
+    # try:
+    #     src_patch = PatchSet.from_filename(
+    #         get_d4j_src_path(defects4j_home, project, vid)
+    #     )
+    #     src_patch = invert_patch(src_patch)
+    #     src_patch = repair_line_numbers(src_patch, changes_diff)
+    #     src_patch_df = convert_to_dataframe(src_patch)
+    # except FileNotFoundError:
+    #     src_patch_df = pd.DataFrame(columns=COL_NAMES)
 
     # The minimal bug-fixing patch contains only the bug-fixing lines on the source code. The changed lines in the
     # test files are excluded.
-    minimal_bugfix_patch = src_patch_df
+    # minimal_bugfix_patch = src_patch_df
 
     # Check which truth are in changes and tag them as True in a new column.
-    ground_truth = pd.merge(
-        changes_df, minimal_bugfix_patch, on=COL_NAMES, how="left", indicator="group"
-    )
-    ground_truth["group"] = np.where(ground_truth.group == "both", "fix", "other")
-    ground_truth.to_csv(out_path, index=False)
+    # ground_truth = pd.merge(
+    #     changes_df, minimal_bugfix_patch, on=COL_NAMES, how="left", indicator="group"
+    # )
+    # ground_truth["group"] = np.where(ground_truth.group == "both", "fix", "other")
+    # ground_truth.to_csv(out_path, index=False)
 
 
 if __name__ == "__main__":

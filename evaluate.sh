@@ -107,7 +107,7 @@ else
     result=$(retrieve_revision_ids "$project" "$vid")
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" "${workdir}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
     then
