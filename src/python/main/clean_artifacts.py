@@ -19,30 +19,67 @@ def remove_noncode_lines(patch):
     
     for file in patch:
         # Skip non-Java files.
+        # lower() is used to catch cases where the extension is in upper case.
+        # We need at least one file with the Java extension because a diff can have
+        # the following cases:
+        #   1. source_file is 'dev/null' and the target_file is
+        #      'foo.java' (i.e. 'foo.java' was added)
+        # 2. source_file is 'foo.java' and the target_file is
+        #      'dev/null' (i.e. 'foo.java' was deleted)
+        # 3. source_file is 'foo.java' and the target_file is
+        #      'foo.java' (i.e. 'foo.java' was modified)
         if not (
             file.source_file.lower().endswith(".java")
             or file.target_file.lower().endswith(".java")
         ):
-            continue
-        
+            file.patch_info = None
+            file.source_file = ''
+            file.source_timestamp = None
+            file.target_file = ''
+            file.target_timestamp = None
+            file.is_binary_file = False
+        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
+        # and modification cases.
+        if is_test_file(file.source_file) or is_test_file(file.target_file):
+            file.patch_info = None
+            file.source_file = ''
+            file.source_timestamp = None
+            file.target_file = ''
+            file.target_timestamp = None
+            file.is_binary_file = False
         # Remove lines from Hunk if they are invalid
         for hunk in file:
             for line in hunk:
-                if line.line_type == LINE_TYPE_CONTEXT:
-                    continue
-                elif ignore_comments and (
+                if ignore_comments and (
                     line.value.strip().startswith("/*")
                     or line.value.strip().startswith("*/")
                     or line.value.strip().startswith("//")
                     or line.value.strip().startswith("*")
                 ):  
                     line.line_type = LINE_TYPE_CONTEXT
-                elif ignore_imports and line.value.strip().startswith("import"):
+                    line.value = "\n"
+                if ignore_imports and line.value.strip().startswith("import"):
                     line.line_type = LINE_TYPE_CONTEXT
+                    line.value = "\n"
                 # Ignore whitespace only lines.
-                elif not line.value.strip():
+                if not line.value.strip():
                     line.line_type = LINE_TYPE_CONTEXT
+                    line.value = "\n"
     return patch
+
+def is_test_file(filename):
+    """
+    Returns True if the filename is a filename for tests.
+
+    This implementation currently works for all Defects4J 2.0.0 projects.
+    """
+    return (
+        "/test/" in filename
+        or "/tests/" in filename
+        or filename.startswith("test/")
+        or filename.startswith("tests/")
+        or filename.endswith("Test.java")
+    )
 
 def cancel_out_diff(patch):
     '''
@@ -106,16 +143,14 @@ def clean_diff(diff_file):
     '''
     patch = PatchSet.from_filename(diff_file)
 
-    non_redundant_patch = cancel_out_diff(patch)
+    uncommented_patch = remove_noncode_lines(patch)
+    non_redundant_patch = cancel_out_diff(uncommented_patch)
     fixed_info_patch = fix_hunk_info(non_redundant_patch)
     
     cleaned_patch = []
     for file in fixed_info_patch:
-        # Skip non-Java files.
-        if not (
-            file.source_file.lower().endswith(".java")
-            or file.target_file.lower().endswith(".java")
-        ):
+        # Skip null Files
+        if not file.patch_info:   
             continue
         else:
             cleaned_patch.append('' if file.patch_info is None else str(file.patch_info))
@@ -178,7 +213,7 @@ def main():
     if filename.endswith(".diff"):
         with open(filename, 'w') as file:
             file.write(sys.stdin.read())
-        clean_diff(filename)
+    clean_diff(filename)
         
 if __name__ == "__main__":
     main()

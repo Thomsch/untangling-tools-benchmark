@@ -42,7 +42,7 @@ revision_buggy=$(git rev-parse HEAD)
 # Obtain 3 Java files and clean before generating diff
 inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
 # target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
-source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file name, V_buggy
+source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
 
 # Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
 #       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
@@ -63,6 +63,11 @@ diff -w -U0 "${repository}/original.java"  "${repository}/buggy.java" | python3 
 patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/bug_fix.diff"
 diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
 
+git diff --ignore-all-space -U0 "$revision_original"  "$revision_buggy" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/NBF.diff"
+patch --input="$inverted_patch" -p1 -R < "$inverted_patch"
+git diff --ignore-all-space -U0 | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/BF.diff" 
+patch --input="$inverted_patch" -p1 < "$inverted_patch"
+git diff --ignore-all-space -U0 "$revision_original"  "$revision_fixed" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"   
 # For debugging 
 # code=$?
 # echo "exit code=${code}"
