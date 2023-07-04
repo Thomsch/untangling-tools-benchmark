@@ -278,7 +278,8 @@ def get_diff_lines(patch):
     for file in patch:
         for hunk in file:
             for line in hunk:
-                lines.append(line)
+                if line.line_type != LINE_TYPE_CONTEXT and not line.value.strip():
+                    lines.append(line)
     return lines
 
 def tag_truth_label(original_diff, bug_fix_diff, nonfix_diff):

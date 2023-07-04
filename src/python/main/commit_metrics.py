@@ -21,11 +21,12 @@ Returns:
     CSV header:
     {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
 """
-
 import sys
 from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
+import clean_artifacts
+import ground_truth
 
 def count_hunks(patch):
     '''
@@ -44,7 +45,7 @@ def count_hunks(patch):
 
 def count_changed_lines(patch):
     '''
-    Return the numbe of changed lines (+)/(-) in the diff file.
+    Return the numbe of nonempty changed lines (+)/(-) in the diff file.
     A line is called "changed" if it is either removed from the source file or added to the target file
     Args:
         patch <PatchSet Object>: filtered, contain no context lines, comments, or import statements. 
@@ -55,7 +56,9 @@ def count_changed_lines(patch):
     if len(patch) > 0:              # Non-empty patch
         for file in patch:
             for hunk in file:
-                count += len(hunk)
+                for line in hunk:
+                    if line.line_type != LINE_TYPE_CONTEXT and not line.value.strip():
+                        count += 1
     return count
 
 def tangled_hunks(original_diff, bug_fix_diff, nonfix_diff):
@@ -64,21 +67,20 @@ def tangled_hunks(original_diff, bug_fix_diff, nonfix_diff):
     nonfix_hunks_count = count_hunks(nonfix_diff)
     
     tangled_hunks_count = (fix_hunks_count + nonfix_hunks_count) - all_hunks_count
-    
-    if tangled_hunks_count > 0:
-        return True
-    elif tangled_hunks_count == 0:
+    print("Number of tangled hunks: ", tangled_hunks_count)
+    if tangled_hunks_count == 0:
         return False
+    elif tangled_hunks_count > 0:
+        return True
     else:
         return "There is a bug."
-    
 def tangled_lines(original_diff, bug_fix_diff, nonfix_diff):                # TODO: Can further reduce duplicated code for is_tangled lines and hunks into one
     all_lines_count = count_changed_lines(original_diff)
     fix_lines_count = count_changed_lines(bug_fix_diff)
     nonfix_lines_count = count_changed_lines(nonfix_diff)
     
     tangled_lines_count = (fix_lines_count + nonfix_lines_count) - all_lines_count
-    
+    print("Number of tangled lines: ", tangled_lines_count)
     if tangled_lines_count > 0:
         return True
     elif tangled_lines_count == 0:
@@ -101,7 +103,7 @@ def main():
     vid = args[1]
     repository = args[2]
 
-    patch = PatchSet.from_string(sys.stdin.read())
+    patch = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
 
     files_updated = len(patch)  # The number of files updated
     test_files_updated = 0  # Number of test files updated
@@ -123,16 +125,24 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
+    clean_artifacts.clean_diff(path.join(repository, "diff", "VC.diff"))
     original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
-    bug_fix_diff = PatchSet.from_filename(path.join(repository, "diff", "bug_fix.diff"))
-    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "non_bug_fix.diff"))
+    bug_fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
+    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
+
+    # Convert to dictionary representation
 
     # TODO: With this implementation, we can return the number of tangled hunks and tangled lines.
     # The question is, is this way of detecting tangled hunks and lines naive, as it gives too much trust to Defects4J file? Defects4J can be buggy.
     # However, testing on sample reliable bug files show that this is for now correct.
     # Do we want the number of tangled hunks and lines instead?
-    has_tangled_hunks = tangled_hunks(original_diff, bug_fix_diff, nonfix_diff)
     has_tangled_lines = tangled_lines(original_diff, bug_fix_diff, nonfix_diff)
+
+    if (has_tangled_lines):
+        has_tangled_hunks = True
+    else:
+        has_tangled_hunks = tangled_hunks(original_diff, bug_fix_diff, nonfix_diff)
+    
 
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
@@ -142,3 +152,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#_lines(VC) = #_lines(BF) + #_lines(BF) 

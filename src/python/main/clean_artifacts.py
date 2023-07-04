@@ -28,19 +28,12 @@ def remove_noncode_lines(patch):
         #      'dev/null' (i.e. 'foo.java' was deleted)
         # 3. source_file is 'foo.java' and the target_file is
         #      'foo.java' (i.e. 'foo.java' was modified)
+        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
+        # and modification cases.
         if not (
             file.source_file.lower().endswith(".java")
             or file.target_file.lower().endswith(".java")
-        ):
-            file.patch_info = None
-            file.source_file = ''
-            file.source_timestamp = None
-            file.target_file = ''
-            file.target_timestamp = None
-            file.is_binary_file = False
-        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
-        # and modification cases.
-        if is_test_file(file.source_file) or is_test_file(file.target_file):
+        ) or is_test_file(file.source_file) or is_test_file(file.target_file):
             file.patch_info = None
             file.source_file = ''
             file.source_timestamp = None
@@ -50,20 +43,18 @@ def remove_noncode_lines(patch):
         # Remove lines from Hunk if they are invalid
         for hunk in file:
             for line in hunk:
+                if line.line_type == LINE_TYPE_CONTEXT:
+                    continue
                 if ignore_comments and (
                     line.value.strip().startswith("/*")
                     or line.value.strip().startswith("*/")
                     or line.value.strip().startswith("//")
                     or line.value.strip().startswith("*")
                 ):  
-                    line.line_type = LINE_TYPE_CONTEXT
                     line.value = "\n"
                 if ignore_imports and line.value.strip().startswith("import"):
-                    line.line_type = LINE_TYPE_CONTEXT
                     line.value = "\n"
-                # Ignore whitespace only lines.
                 if not line.value.strip():
-                    line.line_type = LINE_TYPE_CONTEXT
                     line.value = "\n"
     return patch
 
@@ -101,9 +92,7 @@ def cancel_out_diff(patch):
                 if line.line_type != LINE_TYPE_CONTEXT and next_line.line_type != LINE_TYPE_CONTEXT:  # Ignore context lines.
                     if line.value.strip() == next_line.value.strip():
                         if line.line_type != next_line.line_type:
-                            line.line_type = LINE_TYPE_CONTEXT
                             line.value = '\n'
-                            next_line.line_type = LINE_TYPE_CONTEXT
                             next_line.value = '\n'
                             i += 2     # Skip both lines
                             continue
@@ -115,7 +104,6 @@ def fix_hunk_info(patch):
     Repair the hunk metadata on cleaned diff file. The line metadata might be incorrect due to changed lines converted to context lines.
     The hunk metadata is a header for each hunk, containing the info in order: source_start, source_length,
                     target_start, target_length, and section_header
-
     Args: 
         patch: a PatchSet object with possible erroneous hunk info.
     Returns:
@@ -126,8 +114,6 @@ def fix_hunk_info(patch):
             additions = 0
             deletions = 0
             for line in hunk:
-                if not line.value.strip():
-                    continue                        # Skip blank lines
                 if line.line_type == LINE_TYPE_ADDED or line.line_type == LINE_TYPE_CONTEXT:
                     additions += 1
                 if line.line_type == LINE_TYPE_REMOVED or line.line_type == LINE_TYPE_CONTEXT:
@@ -136,21 +122,26 @@ def fix_hunk_info(patch):
             hunk.target_length = additions
     return patch
 
-def clean_diff(diff_file):
+def filter(patch):
     '''
     Filter out comments, import statements, and empty lines from a diff.
     Completely clean the diff files to adhere to the criteria listed in ground truth construction in README.
     '''
-    patch = PatchSet.from_filename(diff_file)
-
     uncommented_patch = remove_noncode_lines(patch)
     non_redundant_patch = cancel_out_diff(uncommented_patch)
     fixed_info_patch = fix_hunk_info(non_redundant_patch)
-    
+    return fixed_info_patch
+
+def clean_diff(diff_file):
+    '''
+    Remove blank lines and split the hunk accordingly.
+    '''
+    patch = PatchSet.from_filename(diff_file)
+    patch = filter(patch)
     cleaned_patch = []
-    for file in fixed_info_patch:
+    for file in patch:
         # Skip null Files
-        if not file.patch_info:   
+        if not file.patch_info and file.source_file == '' and file.target_file == '':   
             continue
         else:
             cleaned_patch.append('' if file.patch_info is None else str(file.patch_info))
@@ -166,16 +157,44 @@ def clean_diff(diff_file):
         for hunk in file:
             if hunk.source_length == 0 and hunk.target_length == 0:
                 continue
-            else:
-                hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
-                    hunk.source_start, hunk.source_length,
-                    hunk.target_start, hunk.target_length,
-                    ' ' + hunk.section_header if hunk.section_header else '')
-                cleaned_patch.append(hunk_info)
-            for line in hunk:
-                # if not line.line_type == LINE_TYPE_CONTEXT:
-                if line.value.strip():      # Append non empty lines
-                    cleaned_patch.append(str(line))
+            hunk_features = [hunk.source_start, hunk.source_length,
+                hunk.target_start, hunk.target_length, hunk.section_header]
+            
+            ptr = 0
+            while ptr < len(hunk):
+                consecutive_lines = []                                                    # List of non-empty, consecutive lines
+                if not hunk[ptr].value.strip():                                           # Both are blank lines
+                    ptr += 1
+                    continue
+                else:                                                                     # Construct new hunk
+                    while ptr < len(hunk) and hunk[ptr].value.strip():
+                        consecutive_lines.append(hunk[ptr])
+                        ptr += 1
+                    new_hunk_features = hunk_features.copy()
+                    new_source_start, new_target_start = None, None
+                    additions, deletions = 0, 0
+                    if len(consecutive_lines) == 0:
+                        continue
+                    for line in consecutive_lines:
+                        if not new_source_start and line.line_type == LINE_TYPE_REMOVED:
+                            new_source_start = line.source_line_no
+                        if not new_target_start and line.line_type == LINE_TYPE_ADDED:
+                            new_target_start = line.target_line_no
+                        if line.line_type in [LINE_TYPE_ADDED, LINE_TYPE_CONTEXT]:
+                            additions += 1
+                        if line.line_type in [LINE_TYPE_REMOVED, LINE_TYPE_CONTEXT]:
+                            deletions += 1
+                    new_hunk_features[0] = new_source_start if new_source_start else new_hunk_features[0]
+                    new_hunk_features[1] = deletions
+                    new_hunk_features[2] = new_target_start if new_target_start else new_hunk_features[2]
+                    new_hunk_features[3] = additions
+                    new_hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
+                        new_hunk_features[0], new_hunk_features[1],
+                        new_hunk_features[2], new_hunk_features[3],
+                        ' ' + new_hunk_features[4] if new_hunk_features[4] else '')
+                    cleaned_patch.append(new_hunk_info)
+                    for line in consecutive_lines:
+                        cleaned_patch.append(str(line))
     with open(diff_file, 'w') as file:
         file.writelines(cleaned_patch)
 
