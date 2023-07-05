@@ -55,19 +55,19 @@ git checkout "$revision_fixed"
 cpp "$source_file" | python3 "${workdir}/src/python/main/clean_artifacts.py" "fixed.java"                                          # V_fixed
 git checkout "$revision_buggy"                                                                                       # Return to project repository
 
+git diff --ignore-all-space -U0 "$revision_original"  "$revision_buggy" | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff}/NBF.diff"
+patch --input="$inverted_patch" -p1 -R < "$inverted_patch"
+git diff --ignore-all-space -U0 | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff}/BF.diff" 
+patch --input="$inverted_patch" -p1 < "$inverted_patch"
+git diff --ignore-all-space -U0 "$revision_original"  "$revision_fixed" | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff}/VC.diff" 
+
 # Generate the three unified diff file with no context lines, then clean the diff
 cd - || exit 1
-diff -w -U0 "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/bug_fix.diff"
-diff -w -U0 "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
-diff -w -U0 "${repository}/original.java"  "${repository}/buggy.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/non_bug_fix.diff"
-patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/bug_fix.diff"
-diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"
-
-git diff --ignore-all-space -U0 "$revision_original"  "$revision_buggy" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/NBF.diff"
-patch --input="$inverted_patch" -p1 -R < "$inverted_patch"
-git diff --ignore-all-space -U0 | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/BF.diff" 
-patch --input="$inverted_patch" -p1 < "$inverted_patch"
-git diff --ignore-all-space -U0 "$revision_original"  "$revision_fixed" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"   
-# For debugging 
+# diff -w -U0 "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/bug_fix.diff"
+# diff -w -U0 "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
+# diff -w -U0 "${repository}/original.java"  "${repository}/buggy.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/non_bug_fix.diff"
+# patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/bug_fix.diff"
+# diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"  
+# # For debugging 
 # code=$?
 # echo "exit code=${code}"
