@@ -38,6 +38,12 @@ cd "$repository" || exit 1
 mkdir "${diff}"
 revision_buggy=$(git rev-parse HEAD)
 
+if [[ -z "${DEFECTS4J_HOME}" ]]; then
+  echo 'DEFECTS4J_HOME environment variable is not set.'
+  echo 'Please set it to the path of the Defects4J repository.'
+  exit 1
+fi
+
 inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
 # target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" \
 #   | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
