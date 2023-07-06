@@ -6,7 +6,7 @@
 
 # Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the project repository
 # - VC.diff: Version Control diff
-# - BF.diff: bug-fixing diff
+# - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff
 # - original.java: The buggy source code in version control
 # - buggy.java: The buggy source code after all non-bug fixes are applied
