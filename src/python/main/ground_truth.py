@@ -31,6 +31,11 @@ from collections import deque
 COL_NAMES = ["file", "source", "target"]
 
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
+    '''
+    Convert the nested PatchSet object to a Dataframe to:
+    - Filter out comments, blank lines, and import statements
+    - Easier manipulate data as PatchSet is a nested iterable Object.
+    '''
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
         for hunk in file:
@@ -47,10 +52,20 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     return df
 
 def tag_truth_label(original_diff, fix_diff, nonfix_diff):
-    original_lines = deque(commit_metrics.flatten_patch_object(original_diff))
+    '''
+    Tag the correct truth label to each line in original diff by aligining the fix lines and nonfix lines as Queues.
+    Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
+    Returns a List of labels for each line:
+    - 'fix': A bug-fixing line
+    - 'other': A non bug-fixing line
+    - 'both': A tangled line.
+    Note: The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
+    # TODO: We can use == for object equality, but only for bug fix lines
+    '''
+    original_lines = deque(commit_metrics.flatten_patch_object(original_diff))  # Generated 3 Queue objects
     fix_lines = deque(commit_metrics.flatten_patch_object(fix_diff))
     nonfix_lines = deque(commit_metrics.flatten_patch_object(nonfix_diff))
-    labels = ['o' for i in range(len(original_lines))]
+    labels = ['o' for i in range(len(original_lines))]                          # Place holder for the truth label
 
     i = 0
     while i < len(original_lines):
@@ -60,20 +75,20 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
             return labels
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
-        if not nonfix or str(line) == str(fix) and str(line) != str(nonfix):   # TODO: We can use == for object equality, but only for bug fix lines
+        if not nonfix or str(line) == str(fix) and str(line) != str(nonfix):    # If line is identical to head of fix_lines, it is bug-fixing
             labels[i] = 'fix'
             fix_lines.popleft()
-        elif not fix or str(line) == str(nonfix) and str(line) != str(fix):
+        elif not fix or str(line) == str(nonfix) and str(line) != str(fix):     # If line is identical to head of nonfix_lines, it is non bug-fixing
             labels[i] = 'other'
             nonfix_lines.popleft()
-        elif str(line) != str(nonfix) and str(line) != str(fix):
+        elif str(line) != str(nonfix) and str(line) != str(fix):                # If line is different from both: the 2 heads of fix and nonfix are tangled changes
             print("These are tangled lines: ")
             print(str(nonfix))
             print(str(fix))
             fix_lines.popleft()
             nonfix_lines.popleft()
             continue
-        else:   # TODO: Does this really happen though?
+        else:                                                                   # TODO: Does this really happen though?
             labels[i] = 'both'
             fix_lines.popleft()
             nonfix_lines.popleft()
@@ -85,7 +100,6 @@ def main():
     Implement the logic of the script. See the module docstring for more
     information.
     """
-
     args = sys.argv[1:]
 
     if len(args) != 4:
@@ -101,9 +115,6 @@ def main():
     bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"))
 
-    # Convert the diff to a dataframe for easier manipulation.
-    # The PatchSet is not easy or efficient to work with because
-    # it uses nested iterable objects.
     original_diff_df = convert_to_dataframe(original_diff)
     truth_labels = tag_truth_label(original_diff, bug_fix_diff, nonfix_diff)
     original_diff_df['group'] = truth_labels
