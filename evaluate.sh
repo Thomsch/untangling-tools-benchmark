@@ -101,12 +101,7 @@ metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
 if [[ -f "$metrics_csv" ]]; then
     echo -ne 'Calculating metrics ..................................................... CACHED\r'
 else
-    source ./src/bash/main/d4j_utils.sh
-
     # Parse the returned result into two variables
-    result=$(retrieve_revision_ids "$project" "$vid")
-    read -r revision_buggy revision_fixed <<< "$result"
-
     python3 src/python/main/commit_metrics.py "${project}" "${vid}" "${workdir}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
