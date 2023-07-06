@@ -13,6 +13,7 @@
 # - fixed.java: The fixed source code after all minimal bug fixes are applied
 
 set -o allexport
+# shellcheck source=/dev/null
 source .env
 set +o allexport
 
@@ -60,6 +61,7 @@ d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" \
 
 # Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
 #       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
+# TODO: This doesn't handle when source file contain multiple filenames
 cd "$repository" || exit 1
 git checkout "$revision_original"
 cpp "$source_file" | python3 "${workdir}/src/python/main/clean_artifacts.py" "original.java"                                       # V_{n-1}
