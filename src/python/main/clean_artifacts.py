@@ -154,47 +154,60 @@ def clean_diff(diff_file):
                     '\t' + file.target_timestamp if file.target_timestamp else '')
             cleaned_patch.append(source)
             cleaned_patch.append(target)
-        for hunk in file:
-            if hunk.source_length == 0 and hunk.target_length == 0:
-                continue
-            hunk_features = [hunk.source_start, hunk.source_length,
-                hunk.target_start, hunk.target_length, hunk.section_header]
-            
-            ptr = 0
-            while ptr < len(hunk):
-                consecutive_lines = []                                                    # List of non-empty, consecutive lines
-                if not hunk[ptr].value.strip():                                           # Both are blank lines
-                    ptr += 1
+            for hunk in file:
+                if hunk.source_length == 0 and hunk.target_length == 0:
                     continue
-                else:                                                                     # Construct new hunk
-                    while ptr < len(hunk) and hunk[ptr].value.strip():
-                        consecutive_lines.append(hunk[ptr])
-                        ptr += 1
-                    new_hunk_features = hunk_features.copy()
-                    new_source_start, new_target_start = None, None
-                    additions, deletions = 0, 0
-                    if len(consecutive_lines) == 0:
-                        continue
-                    for line in consecutive_lines:
-                        if not new_source_start and line.line_type == LINE_TYPE_REMOVED:
-                            new_source_start = line.source_line_no
-                        if not new_target_start and line.line_type == LINE_TYPE_ADDED:
-                            new_target_start = line.target_line_no
-                        if line.line_type in [LINE_TYPE_ADDED, LINE_TYPE_CONTEXT]:
-                            additions += 1
-                        if line.line_type in [LINE_TYPE_REMOVED, LINE_TYPE_CONTEXT]:
-                            deletions += 1
-                    new_hunk_features[0] = new_source_start if new_source_start else new_hunk_features[0]
-                    new_hunk_features[1] = deletions
-                    new_hunk_features[2] = new_target_start if new_target_start else new_hunk_features[2]
-                    new_hunk_features[3] = additions
-                    new_hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
-                        new_hunk_features[0], new_hunk_features[1],
-                        new_hunk_features[2], new_hunk_features[3],
-                        ' ' + new_hunk_features[4] if new_hunk_features[4] else '')
-                    cleaned_patch.append(new_hunk_info)
-                    for line in consecutive_lines:
-                        cleaned_patch.append(str(line))
+                else:
+                    hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
+                        hunk.source_start, hunk.source_length,
+                        hunk.target_start, hunk.target_length,
+                        ' ' + hunk.section_header if hunk.section_header else '')
+                    cleaned_patch.append(hunk_info)
+                for line in hunk:
+                    # if not line.line_type == LINE_TYPE_CONTEXT:
+                    # if line.value.strip():      # Append non empty lines
+                    cleaned_patch.append(str(line))
+        # for hunk in file:
+        #     if hunk.source_length == 0 and hunk.target_length == 0:
+        #         continue
+        #     hunk_features = [hunk.source_start, hunk.source_length,
+        #         hunk.target_start, hunk.target_length, hunk.section_header]
+            
+        #     ptr = 0
+        #     while ptr < len(hunk):
+        #         consecutive_lines = []                                                    # List of non-empty, consecutive lines
+        #         if not hunk[ptr].value.strip():                                           # Both are blank lines
+        #             ptr += 1
+        #             continue
+        #         else:                                                                     # Construct new hunk
+        #             while ptr < len(hunk) and hunk[ptr].value.strip():
+        #                 consecutive_lines.append(hunk[ptr])
+        #                 ptr += 1
+        #             new_hunk_features = hunk_features.copy()
+        #             new_source_start, new_target_start = None, None
+        #             additions, deletions = 0, 0
+        #             if len(consecutive_lines) == 0:
+        #                 continue
+        #             for line in consecutive_lines:
+        #                 if not new_source_start and line.line_type == LINE_TYPE_REMOVED:
+        #                     new_source_start = line.source_line_no
+        #                 if not new_target_start and line.line_type == LINE_TYPE_ADDED:
+        #                     new_target_start = line.target_line_no
+        #                 if line.line_type in [LINE_TYPE_ADDED, LINE_TYPE_CONTEXT]:
+        #                     additions += 1
+        #                 if line.line_type in [LINE_TYPE_REMOVED, LINE_TYPE_CONTEXT]:
+        #                     deletions += 1
+        #             new_hunk_features[0] = new_source_start if new_source_start else new_hunk_features[0]
+        #             new_hunk_features[1] = deletions
+        #             new_hunk_features[2] = new_target_start if new_target_start else new_hunk_features[2]
+        #             new_hunk_features[3] = additions
+        #             new_hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
+        #                 new_hunk_features[0], new_hunk_features[1],
+        #                 new_hunk_features[2], new_hunk_features[3],
+        #                 ' ' + new_hunk_features[4] if new_hunk_features[4] else '')
+        #             cleaned_patch.append(new_hunk_info)
+        #             for line in consecutive_lines:
+        #                 cleaned_patch.append(str(line))
     with open(diff_file, 'w') as file:
         file.writelines(cleaned_patch)
 
