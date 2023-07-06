@@ -1,9 +1,17 @@
 """
 Tests for the clean_artifacts module.
 """
-from unidiff import PatchedFile, Hunk, PatchSet, LINE_TYPE_CONTEXT, LINE_TYPE_REMOVED, LINE_TYPE_ADDED
+from unidiff import (
+    PatchedFile,
+    Hunk,
+    PatchSet,
+    LINE_TYPE_CONTEXT,
+    LINE_TYPE_REMOVED,
+    LINE_TYPE_ADDED,
+)
 import sys
 from src.python.main import clean_artifacts
+
 
 def test_cancelled_out_lines_are_removed():
     """
@@ -26,10 +34,11 @@ index 8422d40..e2c9801 100644
     assert len(clean_patch[0]) == 1
     assert len(clean_patch[0][0]) == 4
     assert clean_patch[0][0][1].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][1].value.strip() == ''
+    assert clean_patch[0][0][1].value.strip() == ""
     assert clean_patch[0][0][2].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][2].value.strip() == ''
+    assert clean_patch[0][0][2].value.strip() == ""
     return clean_patch
+
 
 def test_identical_line_contents():
     """
@@ -65,14 +74,15 @@ index 8422d40..fb47f45 100644
     assert clean_patch[0][0][-1].line_type == LINE_TYPE_ADDED
     assert clean_patch[0][0][-2].line_type == LINE_TYPE_CONTEXT
     assert clean_patch[0][0][2].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][2].value.strip() == ''
+    assert clean_patch[0][0][2].value.strip() == ""
     assert clean_patch[0][0][3].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][3].value.strip() == ''
+    assert clean_patch[0][0][3].value.strip() == ""
     assert clean_patch[0][0][5].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][5].value.strip() == ''
+    assert clean_patch[0][0][5].value.strip() == ""
     assert clean_patch[0][0][6].line_type == LINE_TYPE_CONTEXT
-    assert clean_patch[0][0][6].value.strip() == ''
+    assert clean_patch[0][0][6].value.strip() == ""
     return clean_patch
+
 
 def test_fix_short_hunk_info():
     clean_patch = test_cancelled_out_lines_are_removed()
@@ -80,10 +90,9 @@ def test_fix_short_hunk_info():
     assert fixed_patch[0][0].source_length == 2
     assert fixed_patch[0][0].target_length == 2
 
+
 def test_fix_long_hunk_info():
     clean_patch = test_identical_line_contents()
     fixed_patch = clean_artifacts.fix_hunk_info(clean_patch)
     assert fixed_patch[0][0].source_length == 5
     assert fixed_patch[0][0].target_length == 10
-
-
