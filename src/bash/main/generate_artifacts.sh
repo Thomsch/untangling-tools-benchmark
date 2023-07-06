@@ -39,20 +39,23 @@ cd "$repository" || exit 1
 mkdir "${diff}"
 revision_buggy=$(git rev-parse HEAD)
 
-# Obtain 3 Java files and clean before generating diff
 inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
-# target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
-source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch" | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
+# target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" \
+#   | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
+source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
+  | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
 
 cd - || exit 1
 # Generate the three unified diff file with no context lines, then clean the diff
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${repository}/${diff}/VC.diff" 
-d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/NBF.diff"
-d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/BF.diff"
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" 
+    >> "${repository}/${diff}/VC.diff" 
+d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" 
+    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/NBF.diff"
+d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" 
+    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/BF.diff"
 
 # Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
 #       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
-
 cd "$repository" || exit 1
 git checkout "$revision_original"
 cpp "$source_file" | python3 "${workdir}/src/python/main/clean_artifacts.py" "original.java"                                       # V_{n-1}
@@ -63,11 +66,3 @@ cpp "$source_file" | python3 "${workdir}/src/python/main/clean_artifacts.py" "fi
 git checkout "$revision_buggy"                                                                                       # Return to project repository
 
 cd - || exit 1
-# diff -w -U0 "${repository}/buggy.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/bug_fix.diff"
-# diff -w -U0 "${repository}/original.java"  "${repository}/fixed.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/VC.diff"
-# diff -w -U0 "${repository}/original.java"  "${repository}/buggy.java" | python3 src/python/main/clean_artifacts.py "${repository}/${diff}/non_bug_fix.diff"
-# patch --verbose -p1 --ignore-whitespace --output="${repository}/original_nobug_no_context.java" --fuzz 3 "${repository}/original.java" "${repository}/${diff}/bug_fix.diff"
-# diff -w -U0 "${repository}/original_nobug_no_context.java"  "${repository}/fixed.java" >> "${repository}/${diff}/NBF.diff"  
-# # For debugging 
-# code=$?
-# echo "exit code=${code}"
