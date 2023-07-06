@@ -78,7 +78,7 @@ classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 #
 # Generate six artifacts (three unified diffs, three source code files)
 # 
-bug_fix_diff_out="${workdir}/diff/bug_fix.diff"
+bug_fix_diff_out="${workdir}/diff/BF.diff"
 
 if [[ -f "$bug_fix_diff_out" ]]; then
     echo -ne 'Generating diff and code artifacts ................................................ CACHED\r'
@@ -107,7 +107,7 @@ else
     result=$(retrieve_revision_ids "$project" "$vid")
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" "${workdir}" > "$metrics_csv"
+    python3 src/python/main/commit_metrics.py "${project}" "${vid}" "${workdir}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
     then

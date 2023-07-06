@@ -5,9 +5,9 @@
 # - $3: Path to the checked out project repository
 
 # Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the project repository
-# - vc.diff: Version Control diff
-# - bug_fix.diff: bug-fixing diff
-# - non_bug_fix.diff: Non bug-fixing diff
+# - VC.diff: Version Control diff
+# - BF.diff: bug-fixing diff
+# - NBF.diff: Non bug-fixing diff
 # - original.java: The buggy source code in version control
 # - buggy.java: The buggy source code after all non-bug fixes are applied
 # - fixed.java: The fixed source code after all minimal bug fixes are applied
@@ -34,7 +34,6 @@ source ./src/bash/main/d4j_utils.sh
 result=$(retrieve_revision_ids "$project" "$vid")
 read -r revision_original revision_fixed <<< "$result"
 
-# Obtain the 3 source code files (V_{n-1}), (V_buggy), (V_fixed)
 cd "$repository" || exit 1
 mkdir "${diff}"
 revision_buggy=$(git rev-parse HEAD)
@@ -47,11 +46,10 @@ source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
 
 cd - || exit 1
 # Generate the three unified diff file with no context lines, then clean the diff
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" 
-    >> "${repository}/${diff}/VC.diff" 
-d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" 
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${repository}/${diff}/VC.diff" 
+d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" \
     | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/NBF.diff"
-d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" 
+d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" \
     | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/BF.diff"
 
 # Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
@@ -65,4 +63,4 @@ git checkout "$revision_fixed"
 cpp "$source_file" | python3 "${workdir}/src/python/main/clean_artifacts.py" "fixed.java"                                          # V_fixed
 git checkout "$revision_buggy"                                                                                       # Return to project repository
 
-cd - || exit 1
+cd - || exit 1                                                                                    # Return to project repository
