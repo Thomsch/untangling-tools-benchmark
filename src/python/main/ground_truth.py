@@ -20,13 +20,13 @@ Returns:
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
 """
-from src.python.main import clean_artifacts
-from src.python.main import commit_metrics
 from collections import deque
 import os
-import pandas as pd
 import sys
+import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
+from src.python.main import clean_artifacts
+from src.python.main import commit_metrics
 
 COL_NAMES = ["file", "source", "target"]
 
