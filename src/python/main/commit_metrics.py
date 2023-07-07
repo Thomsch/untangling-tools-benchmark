@@ -80,7 +80,7 @@ def tangled_hunks(original_diff, fix_diff):
         original_diff <PatchSet Object>: the Version Control diff.
         fix_diff <PatchSet Object>: the bug-fixing diff.
     Returns:
-        Boolean: True if there is at least 1 tangled hunk. 
+        Boolean: True if there is at least 1 tangled hunk.
     """
     tangled_hunks_count = 0
     hunks_VC = get_hunks_in_patch(original_diff)
@@ -102,7 +102,7 @@ def count_changed_lines(patch):
     A line is called "changed" if it is either removed from the source file or added to the target file
 
     Args:
-        patch <PatchSet Object>: filtered, contain no context lines, comments, or import statements. 
+        patch <PatchSet Object>: filtered, contain no context lines, comments, or import statements.
     Return:
         count <Integer>: The number of hunks reported in the diff
     """
@@ -113,7 +113,7 @@ def count_changed_lines(patch):
 def tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
     Return the number of tangled lines found in original VC diff.
-    For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF) 
+    For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
     As tangled lines are duplicated, we return the count divided by 2. # TODO: Is this correct?
     """
     all_lines_count = count_changed_lines(original_diff)
