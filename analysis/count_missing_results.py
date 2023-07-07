@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+This script counts the number of projects with missing results in the benchmark and
+the number of times each tool didn't produce a result is missing.
+"""
 import os
 import sys
 from collections import defaultdict
 
 
-#
-# This script counts the number of projects with missing results in the benchmark.
-#
 def main(path):
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     required_files = [
         "flexeme.csv",
         "smartcommit.csv",

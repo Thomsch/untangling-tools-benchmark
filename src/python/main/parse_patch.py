@@ -28,6 +28,9 @@ def to_csv(patch: PatchSet):
 
 
 def from_file(filename):
+    """
+    Takes in a filename and returns a CSV string of added/removed lines.
+    """
     result = ""
 
     if os.path.exists(filename):
@@ -39,6 +42,11 @@ def from_file(filename):
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
+
     patch = PatchSet.from_string(sys.stdin.read())
 
     for line in to_csv(patch):

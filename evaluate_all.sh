@@ -27,7 +27,7 @@ fi
 
 mkdir -p "$out_dir"
 
-out_file="${out_dir}/decompositions.csv" # Aggregated results.
+out_file="${out_dir}/decomposition_scores.csv" # Aggregated results.
 workdir="${out_dir}/repositories"
 metrics_dir="${out_dir}/metrics"
 evaluation_dir="${out_dir}/evaluation"

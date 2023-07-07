@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+"""
+Collates the results of the benchmark evaluation from flexeme.csv,
+smartcommit.csv, and file_untangling.csv into a single CSV file containing
+the following columns:
+- project: the name of the project
+- bug_id: the ID of the Defects4J bug
+- treatment: the treatment that classified this line change into <group>
+- file: the path to the file
+- source: the source line number (for deletions)
+- target: the target line number (for insertions)
+- group: the group that the file belongs to
+"""
+
 import csv
 import os
 import sys
@@ -7,16 +20,8 @@ import sys
 
 def main(evaluation_dir):
     """
-    Collates the results of the benchmark evaluation from flexeme.csv,
-    smartcommit.csv, and file_untangling.csv into a single CSV file containing
-    the following columns:
-    - project: the name of the project
-    - bug_id: the ID of the Defects4J bug
-    - treatment: the treatment that classified this line change into <group>
-    - file: the path to the file
-    - source: the source line number (for deletions)
-    - target: the target line number (for insertions)
-    - group: the group that the file belongs to
+    Implement the logic of the script. See the module docstring for more
+    information.
     """
     result_files = [
         "flexeme_clean.csv",

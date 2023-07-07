@@ -23,6 +23,10 @@ import pandas as pd
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     args = sys.argv[1:]
 
     if len(args) != 3:

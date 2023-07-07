@@ -50,6 +50,14 @@ def csv_to_dataframe(csv_data: StringIO) -> pd.DataFrame:
 
 
 def get_d4j_src_path(defects4j_home, project, vid):
+    """
+    Returns the path to the minimal bug-inducing source patch for a D4J bug.
+
+    Args:
+        defects4j_home: Path to the local Defects4J installation
+        project: D4J project name
+        vid: D4J bug id
+    """
     return os.path.join(
         defects4j_home, "framework/projects", project, "patches", f"{vid}.src.patch"
     )
@@ -57,7 +65,12 @@ def get_d4j_src_path(defects4j_home, project, vid):
 
 def get_d4j_test_path(defects4j_home, project, vid):
     """
-    Path to the (non-minimized) test patch file in the D4J project.
+    Returns the path to the minimal bug-inducing test patch for a D4J bug.
+
+    Args:
+        defects4j_home: Path to the local Defects4J installation
+        project: D4J project name
+        vid: D4J bug id
     """
     return os.path.join(
         defects4j_home, "framework/projects", project, "patches", f"{vid}.test.patch"
@@ -80,10 +93,14 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     for file in patch:
         # Skip non-Java files.
         # lower() is used to catch cases where the extension is in upper case.
-        # We need at least one file with the Java extension because a diff can have the following cases:
-        # 1. source_file is 'dev/null' and the target_file is 'foo.java' (i.e. 'foo.java' was added)
-        # 2. source_file is 'foo.java' and the target_file is 'dev/null' (i.e. 'foo.java' was deleted)
-        # 3. source_file is 'foo.java' and the target_file is 'foo.java' (i.e. 'foo.java' was modified)
+        # We need at least one file with the Java extension because a diff can have
+        # the following cases:
+        #   1. source_file is 'dev/null' and the target_file is
+        #      'foo.java' (i.e. 'foo.java' was added)
+        # 2. source_file is 'foo.java' and the target_file is
+        #      'dev/null' (i.e. 'foo.java' was deleted)
+        # 3. source_file is 'foo.java' and the target_file is
+        #      'foo.java' (i.e. 'foo.java' was modified)
         if not (
             file.source_file.lower().endswith(".java")
             or file.target_file.lower().endswith(".java")
@@ -143,9 +160,15 @@ def is_test_file(filename):
 
 def get_line_map(diff) -> dict:
     """
-    In a diff, we define a changed line as either a line removed from the original (pre-fix) file, indicated with (-), or a line added to the modified (post-fix) file, indicated with (+). An unchanged line is a context line, indicated with (' ').
-    The function generates a map from line contents (i.e. either added/removed contents) to their line numbers in the diff provided.
-    The mapping is one-to-many as identical lines of bug-fixing code can occur multiple times in the original diff.
+    In a diff, we define a changed line as either a line removed from the original (pre-fix) file,
+    indicated with (-), or a line added to the modified (post-fix) file, indicated with (+).
+    An unchanged line is a context line, indicated with (' ').
+
+    The function generates a map from line contents (i.e. either added/removed contents) to
+    their line numbers in the diff provided.
+
+    The mapping is one-to-many as identical lines of bug-fixing code can occur multiple times in
+    the original diff.
 
     Args:
         diff: a PatchSet object (i.e. list of PatchFiles)
@@ -248,6 +271,11 @@ def repair_line_numbers(patch_diff, original_diff):
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
+
     args = sys.argv[1:]
 
     if len(args) != 3:
