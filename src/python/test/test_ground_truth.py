@@ -4,10 +4,11 @@ Tests for the clean_artifacts module.
 import unidiff
 from src.python.main import ground_truth
 
+
 def test_non_overlap_lines_correctly_labelled():
-    '''
+    """
     Test that the truth group of each line in VC diff is correctly labelled.
-    '''
+    """
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -43,13 +44,14 @@ index 8422d40..682191b 100644
 """
     )
     labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == 'other'
-    assert labels[1] == 'fix'
+    assert labels[0] == "other"
+    assert labels[1] == "fix"
+
 
 def test_overlap_lines_correctly_labelled():
-    '''
+    """
     Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
-    '''
+    """
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -109,13 +111,13 @@ index 8422d40..682191b 100644
     )
 
     labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == 'fix'
-    assert labels[1] == 'fix'
-    assert labels[2] == 'fix'
-    assert labels[3] == 'other'
-    assert labels[4] == 'other'
-    assert labels[5] == 'other'
-    assert labels[6] == 'fix'
-    assert labels[7] == 'other'
-    assert labels[8] == 'other'
-    assert labels[9] == 'other'
+    assert labels[0] == "fix"
+    assert labels[1] == "fix"
+    assert labels[2] == "fix"
+    assert labels[3] == "other"
+    assert labels[4] == "other"
+    assert labels[5] == "other"
+    assert labels[6] == "fix"
+    assert labels[7] == "other"
+    assert labels[8] == "other"
+    assert labels[9] == "other"
