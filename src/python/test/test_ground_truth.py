@@ -1,7 +1,13 @@
+"""
+Tests for the clean_artifacts module.
+"""
 import unidiff
 from src.python.main import ground_truth
 
 def test_non_overlap_lines_correctly_labelled():
+    '''
+    Test that the truth group of each line in VC diff is correctly labelled.
+    '''
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -41,6 +47,9 @@ index 8422d40..682191b 100644
     assert labels[1] == 'fix'
 
 def test_overlap_lines_correctly_labelled():
+    '''
+    Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
+    '''
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
