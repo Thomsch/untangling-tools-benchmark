@@ -9,13 +9,13 @@ Returns:
     Creates and writes to the desired file the cleaned input.
 """
 import fileinput
+import sys
 from unidiff import (
     PatchSet,
     LINE_TYPE_CONTEXT,
     LINE_TYPE_REMOVED,
     LINE_TYPE_ADDED,
 )
-import sys
 
 
 def remove_noncode_lines(patch):

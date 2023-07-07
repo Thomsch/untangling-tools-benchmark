@@ -86,7 +86,7 @@ def tangled_hunks(original_diff, fix_diff):
     hunks_VC = get_hunks_in_patch(original_diff)
     fix_lines = [str(line) for line in flatten_patch_object(fix_diff)]
     if len(fix_lines) > 0 or len(fix_lines) != sum(
-        [len(hunk) for hunk in hunks_VC]
+        len(hunk) for hunk in hunks_VC
     ):  # TODO: Ideal to use object identity here, but now opt for identity by string representation instead; possible for this to be error prone
         for hunk in hunks_VC:
             fix_lines_VC = [line for line in hunk if str(line) in fix_lines]
