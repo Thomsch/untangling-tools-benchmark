@@ -1,15 +1,7 @@
-"""
-Tests for the ground_truth module.
-"""
 import unidiff
-
 from src.python.main import ground_truth
 
-
-def test_patch_line_is_updated():
-    """
-    Test that the line numbers are updated correctly when the patch is inversed.
-    """
+def test_non_overlap_lines_correctly_labelled():
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -22,7 +14,7 @@ index 8422d40..e2c9801 100644
 +E
  B"""
     )
-    patch_diff = unidiff.PatchSet.from_string(
+    fix_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/patch.txt
 index 8422d40..682191b 100644
@@ -30,21 +22,25 @@ index 8422d40..682191b 100644
 +++ b/test/patch.txt
 @@ -1,2 +1,3 @@
  A
+
 +E
  B"""
     )
-    ground_truth.repair_line_numbers(patch_diff, original_diff)
-    assert patch_diff[0][0][0].target_line_no == 1  # First line (A) is unchanged
-    assert (
-        patch_diff[0][0][1].target_line_no == 3
-    )  # E is inserted after A on line 3 in the original patch
-    assert patch_diff[0][0][2].target_line_no == 3  # Third line (B) is unchanged
+    nonfix_diff = unidiff.PatchSet.from_string(
+        """
+diff --git a/test/before.txt b/test/patch.txt
+index 8422d40..682191b 100644
+--- a/test/before.txt
++++ b/test/patch.txt
+@@ -2,0 +2,1 @@
++~
+"""
+    )
+    labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
+    assert labels[0] == 'other'
+    assert labels[1] == 'fix'
 
-
-def test_duplicate_lines_are_updated():
-    """
-    Test that duplcated lines are stored correctly in the line map.
-    """
+def test_overlap_lines_correctly_labelled():
     original_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/after.txt
@@ -53,11 +49,11 @@ index 8422d40..fb47f45 100644
 +++ b/test/after.txt
 @@ -1,4 +1,14 @@
  A
-+~
-+~
-+~
++~~
 +~
 +E
++//
++~~
 +F
  B
  C
@@ -68,60 +64,49 @@ index 8422d40..fb47f45 100644
 +H
 """
     )
-    patch_diff = unidiff.PatchSet.from_string(
+    fix_diff = unidiff.PatchSet.from_string(
         """
 diff --git a/test/before.txt b/test/patch.txt
 index 8422d40..3e8a10f 100644
 --- a/test/before.txt
 +++ b/test/patch.txt
-@@ -1,4 +1,6 @@
+@@ -1,1 +1,4 @@
  A
++~~
++~
 +E
- B
- C
+@@ -10,0 +10,1 @@
 +E
- D"""
+"""
     )
-
-    ground_truth.repair_line_numbers(patch_diff, original_diff)
-    assert len(patch_diff[0][0]) == 6  # Patch doesn't change in size
-    assert patch_diff[0][0][0].target_line_no == 1  # First line (A) is unchanged
-    assert (
-        patch_diff[0][0][1].target_line_no == 6
-    )  # E is inserted after A on line 6 in the original patch
-    assert patch_diff[0][0][2].target_line_no == 3  # Third line (B) is unchanged
-    assert patch_diff[0][0][3].target_line_no == 4  # Fourth line (C) is unchanged
-    assert (
-        patch_diff[0][0][4].target_line_no == 10
-    )  # E is inserted after C on line 10 in the original patch
-    assert patch_diff[0][0][5].target_line_no == 6  # Sixth line (D) is unchanged
-
-
-def test_get_line_map():
-    """
-    Tests that the line map is correct for a diff containing duplicate lines
-    """
-    diff = unidiff.PatchSet.from_string(
+    nonfix_diff = unidiff.PatchSet.from_string(
         """
-diff --git a/test/before.txt b/test/after.txt
-index 8422d40..71040ea 100644
+diff --git a/test/before.txt b/test/patch.txt
+index 8422d40..682191b 100644
 --- a/test/before.txt
-+++ b/test/after.txt
-@@ -1,4 +1,10 @@
- A
-+E
++++ b/test/patch.txt
+@@ -1,2 +1,5 @@
++//
++~~
 +F
  B
  C
-+E
+@@ -1,1 +7,4 @@
 +F
 +G
  D
 +H
 """
     )
-    line_map = ground_truth.get_line_map(diff)
-    e_changes = line_map["+E\n"]
-    assert len(e_changes) == 2
-    assert e_changes[0][2] == 2
-    assert e_changes[1][2] == 6
+
+    labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
+    assert labels[0] == 'fix'
+    assert labels[1] == 'fix'
+    assert labels[2] == 'fix'
+    assert labels[3] == 'other'
+    assert labels[4] == 'other'
+    assert labels[5] == 'other'
+    assert labels[6] == 'fix'
+    assert labels[7] == 'other'
+    assert labels[8] == 'other'
+    assert labels[9] == 'other'
