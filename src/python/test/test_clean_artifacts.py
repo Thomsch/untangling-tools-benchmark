@@ -2,16 +2,11 @@
 Tests for the clean_artifacts module.
 """
 from unidiff import (
-    PatchedFile,
-    Hunk,
     PatchSet,
     LINE_TYPE_CONTEXT,
-    LINE_TYPE_REMOVED,
     LINE_TYPE_ADDED,
 )
-import sys
 from src.python.main import clean_artifacts
-
 
 def test_cancelled_out_lines_are_removed():
     """
@@ -63,7 +58,7 @@ index 8422d40..fb47f45 100644
 +E
 +F
 +G
- D 
+ D
 +D
 """
     )
