@@ -8,6 +8,7 @@ from unidiff import (
 )
 from src.python.main import clean_artifacts
 
+
 def test_cancelled_out_lines_are_removed():
     """
     Test that consecutive lines that cancel each other out are removed in patch.
