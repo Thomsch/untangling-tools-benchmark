@@ -14,7 +14,7 @@ library(rsq)
 #
 
 
-fileData <-"./decomposition_scores.csv"
+fileData <-"./decompositions.csv"
 data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
 data <- subset(data, select = -c(FileUntangling))
 data$BugID <- as_factor(data$BugID)

@@ -38,14 +38,14 @@ do
     START=$(date +%s.%N)
     ./generate_ground_truth.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}_truth.log"
     ret_code=$?
-    evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
+    evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
     END=$(date +%s.%N)
     # Must use `bc` because the computation is on floating-point numbers.
     ELAPSED=$(echo "$END - $START" | bc)
     if [ $ret_code -ne 0 ]; then
         error_counter=$((error_counter+1))
     fi
-    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status_string}" "${ELAPSED}"
+    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
 
 done < "$bugs_file"
 

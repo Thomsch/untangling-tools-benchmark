@@ -1,6 +1,10 @@
 name: Makefile CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -8,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: install Python modules
-        run: pip install -U -r requirements.txt
+    - uses: actions/checkout@v3
 
-      - name: make check
-        run: make check
+    - name: make check-scripts
+      run: make check-scripts

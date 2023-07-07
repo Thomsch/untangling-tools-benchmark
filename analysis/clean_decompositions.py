@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 Clean the decomposition results from Flexeme and SmartCommit for all bugs in the given directory.
 Outputs two CSV files for each bug:
@@ -8,6 +7,7 @@ Outputs two CSV files for each bug:
 """
 import os
 import sys
+from os import path
 
 import pandas as pd
 
@@ -18,73 +18,63 @@ def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
     """
     if tool_df is None:
         tool_df = truth_df.copy()
-        tool_df["group"] = "o"
+        tool_df['group'] = 'o'
         return tool_df
 
-    df = pd.merge(
-        truth_df,
-        tool_df,
-        on=["file", "source", "target"],
-        how="left",
-        suffixes=("_truth", "_tool"),
-    )
-    df.drop(["group_truth"], axis=1, inplace=True)
-    df["group_tool"] = df["group_tool"].fillna(
-        "o"
-    )  # Fill changed lines that are unclassified as other changes ('o').
-    df.rename(columns={"group_tool": "group"}, inplace=True)
+    df = pd.merge(truth_df, tool_df, on=['file', 'source', 'target'], how='left', suffixes=('_truth', '_tool'))
+    df.drop(['group_truth'], axis=1, inplace=True)
+    df['group_tool'] = df['group_tool'].fillna('o')  # Fill changed lines that are unclassified as other changes ('o').
+    df.rename(columns={'group_tool': 'group'}, inplace=True)
     return df
 
 
 def main(evaluation_root):
     """
-    Clean the results of the decompositions to avoid unclassified line changes with respect to the
-    ground truth.
+    Clean the results of the decompositions to avoid unclassified line changes with respect to the ground truth.
     """
     # File untangling is not included since it's made from the ground truth already.
+    result_files = ['flexeme.csv', 'smartcommit.csv']
 
     # Iterate through each subdirectory in the parent directory
-    for subdir, _, _ in os.walk(evaluation_root):
-        if subdir == evaluation_root:
-            continue
+    for subdir, dirs, files in os.walk(evaluation_root):
+        for file in files:
+            if file == 'truth_all.csv':
+                truth_file = os.path.join(subdir, file)
 
-        print(f"Cleaning decompositions in {subdir}")
+                try:
+                    truth_df = pd.read_csv(truth_file).convert_dtypes()
+                except FileNotFoundError as e:
+                    print(f'File not found: {e.filename}', file=sys.stderr)
+                    exit(1)
 
-        try:
-            truth_file = os.path.join(subdir, "truth.csv")
-            truth_df = pd.read_csv(truth_file).convert_dtypes()
-        except FileNotFoundError as e:
-            print(f"File not found: {e.filename}", file=sys.stderr)
-            sys.exit(1)
+                smartcommit_file = path.join(subdir, 'smartcommit.csv')
+                smartcommit_clean_file = path.join(subdir, 'smartcommit_clean.csv')
+                flexeme_file = path.join(subdir, 'flexeme.csv')
+                flexeme_clean_file = path.join(subdir, 'flexeme_clean.csv')
 
-        decomposition_files = ["smartcommit.csv", "flexeme.csv"]
+                try:
+                    smartcommit_df = pd.read_csv(smartcommit_file).convert_dtypes()
+                except FileNotFoundError:
+                    smartcommit_df = None
 
-        for decomposition_file in decomposition_files:
-            decomposition_file_clean = decomposition_file.replace(".csv", "_clean.csv")
+                try:
+                    flexeme_df = pd.read_csv(flexeme_file).convert_dtypes()
+                    flexeme_df['group'] = flexeme_df['group'].astype('string')
+                except FileNotFoundError:
+                    flexeme_df = None
 
-            try:
-                decomposition_df = pd.read_csv(
-                    os.path.join(subdir, decomposition_file)
-                ).convert_dtypes()
+                smartcommit_cleaned = clean_decomposition(truth_df, smartcommit_df)
+                flexeme_cleaned = clean_decomposition(truth_df, flexeme_df)
 
-                if decomposition_file == "flexeme.csv":
-                    decomposition_df["group"] = decomposition_df["group"].astype(
-                        "string"
-                    )
-            except FileNotFoundError:
-                decomposition_df = None
-
-            decomposition_cleaned = clean_decomposition(truth_df, decomposition_df)
-            decomposition_cleaned.to_csv(
-                os.path.join(subdir, decomposition_file_clean), index=False
-            )
+                smartcommit_cleaned.to_csv(smartcommit_clean_file, index=False)
+                flexeme_cleaned.to_csv(flexeme_clean_file, index=False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: clean_decompositions.py <path/to/benchmark/evaluation/folder>")
-        sys.exit(1)
+        print('usage: clean_decompositions.py <path/to/benchmark/evaluation/folder>')
+        exit(1)
 
     main(os.path.abspath(args[0]))
