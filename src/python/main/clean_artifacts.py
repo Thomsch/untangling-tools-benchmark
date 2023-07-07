@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+"""
+The script reads input from stdin and filter out comments, import statements, and empty lines from the unified diff file or Java source code.
+A file is considered "clean" if it satisfies the criteria listed in ground truth construction in README.
+
+Command Line Args:
+    filename: the dsired filename for the unidifed diff (.diff) or Java source code (.java) input
+Returns:
+    Creates and writes to the desired file the cleaned input.
+"""
 import fileinput
 from unidiff import (
     PatchSet,
@@ -102,15 +112,14 @@ def cancel_out_diff(patch):
                 line = hunk[i]
                 next_line = hunk[i + 1]
                 if (
-                    line.line_type != LINE_TYPE_CONTEXT
-                    and next_line.line_type != LINE_TYPE_CONTEXT
-                ):  # Ignore context lines.
-                    if line.value.strip() == next_line.value.strip():
-                        if line.line_type != next_line.line_type:
-                            line.value = "\n"
-                            next_line.value = "\n"
-                            i += 2  # Skip both lines
-                            continue
+                    (LINE_TYPE_CONTEXT not in [line.line_type, next_line.line_type])
+                    and line.value.strip() == next_line.value.strip()
+                    and line.line_type != next_line.line_type
+                ):
+                    line.value = "\n"
+                    next_line.value = "\n"
+                    i += 2  # Skip both lines
+                    continue
                 i += 1
     return patch
 
@@ -130,15 +139,9 @@ def fix_hunk_info(patch):
             additions = 0
             deletions = 0
             for line in hunk:
-                if (
-                    line.line_type == LINE_TYPE_ADDED
-                    or line.line_type == LINE_TYPE_CONTEXT
-                ):
+                if line.line_type in (LINE_TYPE_ADDED, LINE_TYPE_CONTEXT):
                     additions += 1
-                if (
-                    line.line_type == LINE_TYPE_REMOVED
-                    or line.line_type == LINE_TYPE_CONTEXT
-                ):
+                if line.line_type in (LINE_TYPE_REMOVED, LINE_TYPE_CONTEXT):
                     deletions += 1
             hunk.source_length = deletions
             hunk.target_length = additions
@@ -167,37 +170,33 @@ def clean_diff(diff_file):
         # Skip null Files
         if not file.patch_info and file.source_file == "" and file.target_file == "":
             continue
-        else:
-            cleaned_patch.append(
-                "" if file.patch_info is None else str(file.patch_info)
+        cleaned_patch.append("" if file.patch_info is None else str(file.patch_info))
+        if not file.is_binary_file and file:
+            source = "--- %s%s\n" % (
+                file.source_file,
+                "\t" + file.source_timestamp if file.source_timestamp else "",
             )
-            if not file.is_binary_file and file:
-                source = "--- %s%s\n" % (
-                    file.source_file,
-                    "\t" + file.source_timestamp if file.source_timestamp else "",
-                )
-                target = "+++ %s%s\n" % (
-                    file.target_file,
-                    "\t" + file.target_timestamp if file.target_timestamp else "",
-                )
-            cleaned_patch.append(source)
-            cleaned_patch.append(target)
-            for hunk in file:
-                if hunk.source_length == 0 and hunk.target_length == 0:
-                    continue
-                else:
-                    hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
-                        hunk.source_start,
-                        hunk.source_length,
-                        hunk.target_start,
-                        hunk.target_length,
-                        " " + hunk.section_header if hunk.section_header else "",
-                    )
-                    cleaned_patch.append(hunk_info)
-                for line in hunk:
-                    # if not line.line_type == LINE_TYPE_CONTEXT:
-                    # if line.value.strip():      # Append non empty lines
-                    cleaned_patch.append(str(line))
+            target = "+++ %s%s\n" % (
+                file.target_file,
+                "\t" + file.target_timestamp if file.target_timestamp else "",
+            )
+        cleaned_patch.append(source)
+        cleaned_patch.append(target)
+        for hunk in file:
+            if hunk.source_length == 0 and hunk.target_length == 0:
+                continue
+            hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
+                hunk.source_start,
+                hunk.source_length,
+                hunk.target_start,
+                hunk.target_length,
+                " " + hunk.section_header if hunk.section_header else "",
+            )
+            cleaned_patch.append(hunk_info)
+            for line in hunk:
+                # if not line.line_type == LINE_TYPE_CONTEXT:
+                # if line.value.strip():      # Append non empty lines
+                cleaned_patch.append(str(line))
         # for hunk in file:
         #     if hunk.source_length == 0 and hunk.target_length == 0:
         #         continue
@@ -252,17 +251,20 @@ def clean_source_code(java_file):
         for line in file:
             if line.strip().startswith("import"):
                 continue
-            elif line.strip().startswith("#"):
+            if line.strip().startswith("#"):
                 continue
-            elif line.strip().startswith("//"):
+            if line.strip().startswith("//"):
                 continue
-            elif not line.strip():
+            if not line.strip():
                 continue
-            else:
-                print(line, end="")
+            print(line, end="")
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     args = sys.argv[1:]
 
     if len(args) != 1:

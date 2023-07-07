@@ -25,7 +25,7 @@ import sys
 from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
-import clean_artifacts
+from src.python.main import clean_artifacts
 
 
 def get_lines_in_hunk(hunk):
