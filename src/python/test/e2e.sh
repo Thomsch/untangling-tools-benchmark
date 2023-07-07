@@ -21,7 +21,6 @@ out_dir="src/python/test/e2e" # Path to the directory where the results are stor
 metrics_goal="${out_dir}/metrics_goal.csv"
 decompositions_goal="${out_dir}/decompositions_goal.csv"
 
-
 # Run the 5_bug example and write output files to /e2e
 ./evaluate_all.sh "$bugs_file" "$out_dir"
 

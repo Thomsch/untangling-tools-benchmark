@@ -24,8 +24,8 @@ Returns:
 import os
 import sys
 import pandas as pd
-from unidiff import PatchSet, LINE_TYPE_CONTEXT, LINE_TYPE_REMOVED, LINE_TYPE_ADDED
-import commit_metrics
+from unidiff import PatchSet, LINE_TYPE_CONTEXT
+import commit_metrics, clean_artifacts
 from collections import deque
 
 COL_NAMES = ["file", "source", "target"]
@@ -115,17 +115,15 @@ def main():
     """
     args = sys.argv[1:]
 
-    if len(args) != 4:
-        print(
-            "usage: ground_truth.py <project> <vid> <path/to/project/repo> <path/to/root/results>"
-        )
+    if len(args) != 2:
+        print("usage: ground_truth.py <path/to/project/repo> <path/to/root/results>")
         sys.exit(1)
 
-    project = args[0]
-    vid = args[1]
-    repository = args[2]
-    out_path = args[3]
-
+    repository = args[0]
+    out_path = args[1]
+    clean_artifacts.clean_diff(
+        os.path.join(repository, "diff", "VC.diff")
+    )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
     original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC.diff"))
     bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"))

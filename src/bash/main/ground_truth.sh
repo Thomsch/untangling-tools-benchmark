@@ -21,15 +21,13 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ $# -ne 4 ]] ; then
-    echo 'usage: ./ground_truth.sh <D4J Project> <D4J Bug id> <project repository> <truth file>'
-    echo 'example: ./ground_truth.sh Lang 1 path/to/Lang_1/ evaluation_path/truth.csv'
+if [[ $# -ne 2 ]] ; then
+    echo 'usage: ./ground_truth.sh <project repository> <truth file>'
+    echo 'example: ./ground_truth.sh path/to/Lang_1/ evaluation_path/truth.csv'
     exit 1
 fi
 
-project=$1
-vid=$2
-repository=$3
-truth_csv=$4
+repository=$1
+truth_csv=$2
 
-python3 src/python/main/ground_truth.py "$project" "$vid" "$repository" "$truth_csv"
+python3 src/python/main/ground_truth.py "$repository" "$truth_csv"

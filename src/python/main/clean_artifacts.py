@@ -1,7 +1,5 @@
 import fileinput
 from unidiff import (
-    PatchedFile,
-    Hunk,
     PatchSet,
     LINE_TYPE_CONTEXT,
     LINE_TYPE_REMOVED,
