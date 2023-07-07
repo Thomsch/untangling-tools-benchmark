@@ -11,16 +11,16 @@ if [[ $# -ne 2 ]] ; then
     exit 1
 fi
 
-bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
+export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
 mkdir -p "$out_dir"
 
-out_file="${out_dir}/decompositions.csv" # Aggregated results.
-workdir="${out_dir}/repositories"
-metrics_dir="${out_dir}/metrics"
-evaluation_dir="${out_dir}/evaluation"
-logs_dir="${out_dir}/logs"
+export out_file="${out_dir}/decompositions.csv" # Aggregated results.
+export workdir="${out_dir}/repositories"
+export metrics_dir="${out_dir}/metrics"
+export evaluation_dir="${out_dir}/evaluation"
+export logs_dir="${out_dir}/logs"
 
 mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
@@ -35,7 +35,7 @@ fi
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
-score_bug(){
+cust_func(){
   local project=$1
   local vid=$2
 
@@ -52,13 +52,9 @@ score_bug(){
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
 }
 
-error_counter=0
-while IFS=, read -r project vid
-do
-    score_bug "$project" "$vid" &
-done < "$bugs_file"
-
-wait
+export error_counter=0
+export -f cust_func
+cat "$bugs_file" | parallel --colsep "," cust_func {1} {2}
 
 echo ""
 echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
