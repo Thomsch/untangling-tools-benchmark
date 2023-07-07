@@ -25,6 +25,8 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
 8. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
+9. Install GNU coreutils if you are on MacOS or Windows.
+10. Install GNU parallel.
 
 ## Usage
 ### Running the benchmark
