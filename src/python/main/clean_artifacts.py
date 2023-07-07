@@ -12,12 +12,12 @@ import sys
 
 def remove_noncode_lines(patch):
     """
-    This implementation is not optimal, as the unidiff Python package does not have built-in remove method to manupulate the list-like Objects using list comprehensions. etc. The best solution is to use del to completely remove the object from memory space. 
+    This implementation is not optimal, as the unidiff Python package does not have built-in remove method to manupulate the list-like Objects using list comprehensions. etc. The best solution is to use del to completely remove the object from memory space.
     Yet, I have not found a way to do it using indexing or object references.
 
     Filter out comments, import statements, and empty lines from a diff by marking them as context lines.
 
-    Args: 
+    Args:
         patch: a PatchSet object to be remove the Java comments, import statements, and whitespaces from.
     Returns:
         The PatchSet Object modified in-place.
@@ -92,7 +92,7 @@ def cancel_out_diff(patch):
     by creating 1-to-1 mapping of redundant changes (i.e. pair of lines that cancel each other out).
     These lines are both marked as context lines.
 
-    Args: 
+    Args:
         patch: a PatchSet object to be remove redundant changed lines from.
     Returns:
         The PatchSet Object modified in-place.
@@ -122,7 +122,7 @@ def fix_hunk_info(patch):
     Repair the hunk metadata on cleaned diff file. The line metadata might be incorrect due to changed lines converted to context lines.
     The hunk metadata is a header for each hunk, containing the info in order: source_start, source_length,
                     target_start, target_length, and section_header
-    Args: 
+    Args:
         patch: a PatchSet object with possible erroneous hunk info.
     Returns:
         The PatchSet Object modified in-place.
