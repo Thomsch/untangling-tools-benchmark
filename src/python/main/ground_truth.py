@@ -25,8 +25,8 @@ import os
 import sys
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
-from src.python.main import clean_artifacts
-from src.python.main import commit_metrics
+import clean_artifacts
+import commit_metrics
 
 COL_NAMES = ["file", "source", "target"]
 
