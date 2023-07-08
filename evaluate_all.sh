@@ -52,12 +52,11 @@ score_bug(){
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
 }
 
-export error_counter=0
 export -f score_bug
 cat "$bugs_file" | parallel --colsep "," score_bug {1} {2}
 
 echo ""
-echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
+echo "Evaluation finished with for $(wc -l < "$bugs_file") commits."
 
 cat "${evaluation_dir}"/*/scores.csv > "$out_file"
 echo ""
