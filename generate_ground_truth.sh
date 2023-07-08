@@ -1,8 +1,15 @@
 #!/bin/bash
+
 # Generate the ground truth for a Defects4J bug.
 # Two ground truths are generated:
 # 1. Include all the original changes in the bug fix.
 # 2. Include only the source codes changes that are not comments, import, or test changes.
+#
+# The ground truth is outputed to stdout in a CSV format with the following columns:
+#   - file path (string): the path of the file where the change occurred.
+#   - source: the line number of the line that was deleted or changed in the buggy version.
+#   - target: the line number of the line that was added or changed in the fixed version.
+#   - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -14,21 +21,22 @@ if [[ $# -ne 4 ]] ; then
     exit 1
 fi
 
+project=$1
+vid=$2
+out_path=$3 # Path where the results are stored.
+repo_root=$4 # Path where the repo is checked out
+
 set -o allexport
 # shellcheck source=/dev/null
 source .env
 set +o allexport
 
 if [[ -z "${JAVA_11}" ]]; then
-  echo 'JAVA_11 environment variable not set.'
-  echo 'Please set it to the path of a Java 11 JDK.'
+  echo 'JAVA_11 environment variable is not set.'
+  echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
 
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
 workdir="${repo_root}/${project}_${vid}"
 
 evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
@@ -60,7 +68,7 @@ echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
 
-./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
+./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
 code=$?
 if [ $code -eq 0 ]
 then
@@ -70,7 +78,7 @@ else
 fi
 echo -ne '\n'
 
-./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
+./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
 code=$?
 if [ $code -eq 0 ]
 then
