@@ -25,6 +25,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
 9. Install GNU coreutils if you are on MacOS or Windows.
+10. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
