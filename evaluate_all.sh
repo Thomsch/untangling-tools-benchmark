@@ -35,7 +35,7 @@ fi
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
-cust_func(){
+score_bug(){
   local project=$1
   local vid=$2
 
@@ -53,8 +53,8 @@ cust_func(){
 }
 
 export error_counter=0
-export -f cust_func
-cat "$bugs_file" | parallel --colsep "," cust_func {1} {2}
+export -f score_bug
+cat "$bugs_file" | parallel --colsep "," score_bug {1} {2}
 
 echo ""
 echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
