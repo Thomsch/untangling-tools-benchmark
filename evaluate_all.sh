@@ -59,7 +59,7 @@ score_bug(){
 }
 
 export -f score_bug
-cat "$bugs_file" | parallel --colsep "," score_bug {1} {2}
+parallel --colsep "," score_bug {} < "$bugs_file"
 
 echo ""
 echo "Evaluation finished with for $(wc -l < "$bugs_file") commits."
