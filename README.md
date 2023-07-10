@@ -1,6 +1,6 @@
-# Untangling Tools Benchmark
+# Untangling Tools Evaluation Infrastructure
 
-Benchmark for comparing untangling tools on real bug-fixing commits.
+Experimental infrastructure for comparing untangling tools on real bug-fixing commits.
 
 ## Requirements
 
@@ -25,6 +25,7 @@ Benchmark for comparing untangling tools on real bug-fixing commits.
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA11_HOME`: Location of the **Java 11** executable to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
 9. Install GNU coreutils if you are on MacOS or Windows.
+10. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
@@ -36,19 +37,19 @@ The detailed description of these artifacts are listed in [diagrams/README.md](d
 If you encounter a term in the documentation or the source code that is not defined here, please open an issue. Thank you!
 
 ## Usage
-### Running the benchmark
+### Running the evaluation
 For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) for evaluation framework in `/evaluate.sh`.
 
 Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
 
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
-    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the benchmark end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
-    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the benchmark.
+    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the evaluation end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
+    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the experimental infrastructure.
       (see **Limitations** section).
       It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
     - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
-- `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/benchmark`). 
+- `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
 
 For example, use `./evaluate_all.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run the evaluation on 5 bugs from the Defects4J
 project.
@@ -58,7 +59,7 @@ The results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
   To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
 - `$UTB_OUTPUT/evaluation/`: Folder containing the decomposition results. Each bug has its own sub-folder and contains the following:
-  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as either a line removed from the original (buggy) file (-) or a line added to the modified (fixed) file (+). Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
+  - `truth.csv`: The ground truth of the bug-fixing commit. We define a changed line as a line from the diff from the buggy to the fixed version in CSV. The changed line can be a deletion or addition. Each changed line is assigned one of three groups: 'fix' (a bug-fixing line), 'other' (a non-bug-fixing line), or 'both' (a tangled line). The file has a CSV header.
   - `smartcommit.csv`: The decomposition results of SmartCommit in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `flexeme.csv`: The decomposition results of Flexeme in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
   - `file_untangling.csv`: The decomposition results of file-based untangling in CSV format. Each line corresponds to a changed line and its associated group. The file has a CSV header.
@@ -98,17 +99,17 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 ## Directory structure
 - `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.
 - `bin/`: Contains binaries of untangling tools (when applicable)
-- `data/`: Contains list of Defects4J bugs to run the benchmark on
-- `src/`: Python scripts to run the benchmark
+- `data/`: Contains list of Defects4J bugs to run the evaluation on
+- `src/`: Experimental infrastructure scripts
   - `python/`: Python files
-    - `main/`: Python source code for the benchmark
+    - `main/`: Python source code for the evaluation
     - `test/`: Python tests
   - `bash/`: Bash files
-    - `main/`: Bash source code for the benchmark
+    - `main/`: Bash source code for the evaluation
 - `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
 - `conftest.py`: Pytest configuration
-- `evaluate.sh`: Script to run the benchmark on one Defects4J bug
-- `evaluate_all.sh`: Script to run the benchmark for a list of Defects4J bugs
+- `evaluate.sh`: Script to run the evaluation on one Defects4J bug
+- `evaluate_all.sh`: Script to run the evaluation for a list of Defects4J bugs
 - `generate_all.sh` [WIP]: Script to only generate the ground truth for a list of Defects4J bugs
 - `generate_ground_truth.sh` [WIP]: Script to generate different versions of the ground truth per Defects4J bug
 
@@ -117,6 +118,8 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 The ground truth is calculated from the original bug-fixing commit diff and the minimal bug inducing patch.
 
 For visualization purpose, here is the [diagram](diagrams/diffs.drawio.svg) for ground truth construction.
+
+See `ground_truth.py` for how the ground truth is calculated.
 
 ## Metrics
 
@@ -129,9 +132,10 @@ The supported metrics are:
   - Number of lines changed (i.e. all lines with +/- indicators in the original diff generated from pre-fix and post-fix versions).
 
 ## Manual analysis
+This section explains how to manually analyse the decomposition results to qualitative assess the untangling tools compared to the ground truth.
 
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
-2. Open the diff for the bug `git diff -U0 <buggy-commit>^ <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
+2. The diff for the bug is `git diff -U0 <buggy-commit> <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
 3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`
 4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/flexeme.csv`.
