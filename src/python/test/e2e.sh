@@ -19,13 +19,13 @@ bugs_file="data/d4j-5-bugs.csv" # Path to the file containing the bugs to untang
 out_dir="src/python/test/e2e" # Path to the directory where the results are stored and repositories checked out.
 
 metrics_goal="${out_dir}/metrics_goal.csv"
-decompositions_goal="${out_dir}/decompositions_goal.csv"
+decompositions_goal="${out_dir}/decomposition_scores_goal.csv"
 
 # Run the 5_bug example and write output files to /e2e
 ./evaluate_all.sh "$bugs_file" "$out_dir"
 
 metrics_results="${out_dir}/metrics.csv"
-decompositions_results="${out_dir}/decompositions.csv"
+decompositions_results="${out_dir}/decomposition_scores.csv"
 
 # Diff the aggregated metrics file with the goal file
 if ! diff -u "$metrics_goal" "$metrics_results"; then
