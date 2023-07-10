@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-This script counts the number of projects with missing results in the benchmark and
+This script counts the number of projects with missing results in the evaluation and
 the number of times each tool didn't produce a result is missing.
 """
 import os
@@ -54,9 +54,9 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: count_missing_results.py <path/to/benchmark/root>")
+        print("usage: count_missing_results.py <path/to/evaluation/root>")
         sys.exit(1)
 
-    benchmark_root = os.path.abspath(args[0])
-    path = os.path.join(benchmark_root, "evaluation")
+    evaluation_root = os.path.abspath(args[0])
+    path = os.path.join(evaluation_root, "evaluation")
     main(path)
