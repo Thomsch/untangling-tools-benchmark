@@ -1,4 +1,5 @@
 #!/bin/bash
+## TODO: The script name "generate_all" is not descriptive.  The documentation is better -- this runs all untangling tools -- so change the name
 # Run the untangling tools on a single Defects4J (D4J) bug. Also calculates the bug's metrics and parse the bug's manual
 # untangling into a CSV file.
 # - $1: D4J Project name
@@ -187,7 +188,9 @@ else
     regenerate_results=true
 fi
 
-# Collate untangling results
+#
+# Retrieve untangling results from SmartCommit and parse them into a CSV file.
+#
 echo -ne '\n'
 echo -ne 'Parsing SmartCommit results ...............................................\r'
 
@@ -243,7 +246,9 @@ else
 fi
 echo -ne '\n'
 
-# Collate untangling results
+#
+# Retrieve untangling results from Flexeme and parse them into a CSV file.
+#
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
@@ -264,7 +269,6 @@ else
     echo -ne '\n'
 fi
 echo -ne '\n'
-
 
 #
 # Compute untangling score
