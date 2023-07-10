@@ -1,9 +1,9 @@
 #!/bin/bash
-# Run the untangling tools on a list of Defects4J (D4J) bugs by calling ./evaluate.sh.
+# Run the untangling tools on a list of Defects4J (D4J) bugs.  The implementation calls ./evaluate.sh.
 # - $1: Path to the file containing the bugs to untangle and evaluate.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 # The output of evaluate.sh for each bug file is reported individually in 5 folders: /decompositions, /evaluation, /logs, /metrics, /repositories.
-# Returns aggregated scores across all D4J bugs in 2 .csv files, where each row represents one bug in provided list of D4J bugs:
+# Writes aggregated scores across all D4J bugs in 2 .csv files, where each row represents one bug in provided list of D4J bugs:
 # - decomposition.csv: Decomposition scores, header line: {d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score}
 # - metrics.csv: Commit metrics scores, CSV header: {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
 
@@ -17,8 +17,8 @@ if [[ $# -ne 2 ]] ; then
     exit 1
 fi
 
-bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
+export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
 if ! [[ -f "$bugs_file" ]]; then
     echo "File ${bugs_file} not found. Exiting."
@@ -27,11 +27,11 @@ fi
 
 mkdir -p "$out_dir"
 
-out_file="${out_dir}/decompositions.csv" # Aggregated results.
-workdir="${out_dir}/repositories"
-metrics_dir="${out_dir}/metrics"
-evaluation_dir="${out_dir}/evaluation"
-logs_dir="${out_dir}/logs"
+export out_file="${out_dir}/decomposition_scores.csv" # Aggregated results.
+export workdir="${out_dir}/repositories"
+export metrics_dir="${out_dir}/metrics"
+export evaluation_dir="${out_dir}/evaluation"
+export logs_dir="${out_dir}/logs"
 
 mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
@@ -41,26 +41,28 @@ mkdir -p "$logs_dir"
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
-error_counter=0
-while IFS=, read -r project vid
-do
-    # TODO: Don't regenerate results when they already exist.
-    START=$(date +%s.%N)
-    ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
-    ret_code=$?
-    evaluation_status=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-    END=$(date +%s.%N)
-    # Must use `bc` because the computation is on floating-point numbers.
-    ELAPSED=$(echo "$END - $START" | bc)
-    if [ $ret_code -ne 0 ]; then
-        error_counter=$((error_counter+1))
-    fi
-    printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status}" "${ELAPSED}"
+score_bug(){
+  local project=$1
+  local vid=$2
 
-done < "$bugs_file"
+  START=$(date +%s.%N)
+  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
+  ret_code=$?
+  evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
+  END=$(date +%s.%N)
+  # Must use `bc` because the computation is on floating-point numbers.
+  ELAPSED=$(echo "$END - $START" | bc)
+  if [ $ret_code -ne 0 ]; then
+      error_counter=$((error_counter+1))
+  fi
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status_string}" "${ELAPSED}"
+}
+
+export -f score_bug
+parallel --colsep "," score_bug {} < "$bugs_file"
 
 echo ""
-echo "Evaluation finished with ${error_counter} errors out of $(wc -l < "$bugs_file") commits."
+echo "Evaluation finished with for $(wc -l < "$bugs_file") commits."
 
 cat "${evaluation_dir}"/*/scores.csv > "$out_file"
 echo ""
