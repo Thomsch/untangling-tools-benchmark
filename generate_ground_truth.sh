@@ -68,7 +68,7 @@ echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
 
-./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
+./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
 code=$?
 if [ $code -eq 0 ]
 then
@@ -78,7 +78,7 @@ else
 fi
 echo -ne '\n'
 
-./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
+./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
 code=$?
 if [ $code -eq 0 ]
 then

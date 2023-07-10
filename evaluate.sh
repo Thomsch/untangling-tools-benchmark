@@ -8,14 +8,14 @@
 # - $4: Path where the repo is checked out
 
 # Output: evaluate.sh calls the following scripts in order on each bug file, please refer to the particular script for detailed documentation of input & output:
-# - src/commit_metrics.py returns commit metrics in /metrics
-# - scripts/ground_truth.sh returns ground truth in /evaluation/truth.csv
-# - src/filename_untangling.py returns file-based untangling results in evaluation/file_untangling.csv
+# - src/python/main/commit_metrics.py returns commit metrics in /metrics
+# - src/bash/main/ground_truth.sh returns ground truth in /evaluation/truth.csv
+# - src/python/main/filename_untangling.py returns file-based untangling results in evaluation/file_untangling.csv
 # - bin/smartcommitcore-1.0-all.jar returns SmartCommit untangling results in decomposition/smartcommit
-# - src/parse_smartcommit_results.py returns collated SmartCommit results in evaluation/smartcommit.csv
-# - scripts/untangle_flexeme.sh returns Flexeme untangling results in /decomposition/flexeme
-# - src/parse_flexeme_results.py returns collated Flexeme untangling results in evaluation/flexeme.csv
-# - src/untangling_score.py returns untangling scores in evaluation/scores.csv
+# - src/python/main/parse_smartcommit_results.py returns collated SmartCommit results in evaluation/smartcommit.csv
+# - src/bash/main/untangle_flexeme.sh returns Flexeme untangling results in /decomposition/flexeme
+# - src/python/main/parse_flexeme_results.py returns collated Flexeme untangling results in evaluation/flexeme.csv
+# - src/python/main/untangling_score.py returns untangling scores in evaluation/scores.csv
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -83,13 +83,13 @@ metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
 if [[ -f "$metrics_csv" ]]; then
     echo -ne 'Calculating metrics ..................................................... CACHED\r'
 else
-    source ./scripts/d4j_utils.sh
+    source ./src/bash/main/d4j_utils.sh
 
     # Parse the returned result into two variables
     result=$(retrieve_revision_ids "$project" "$vid")
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -110,7 +110,7 @@ truth_csv="${evaluation_path}/truth.csv"
 if [[ -f "$truth_csv" ]]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    ./scripts/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
+    ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -141,7 +141,7 @@ file_untangling_out="${evaluation_path}/file_untangling.csv"
 if [[ -f "$file_untangling_out" ]]; then
     echo -ne 'Untangling with file-based approach ..................................... CACHED\r'
 else
-    python3 src/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
+    python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -185,7 +185,7 @@ if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
     echo -ne 'Parsing SmartCommit results ............................................. CACHED\r'
 else
     echo -ne '\n'
-    python3 src/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
+    python3 src/python/main/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
     code=$?
 
     if [ $code -eq 0 ]
@@ -215,7 +215,7 @@ else
     echo -ne '\n'
     mkdir -p "$flexeme_untangling_results"
     START_DECOMPOSITION=$(date +%s.%N)
-    ./scripts/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+    ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
     flexeme_untangling_code=$?
     if [ $flexeme_untangling_code -eq 0 ]
     then
@@ -243,7 +243,7 @@ then
     echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
     echo -ne '\n'
-    python3 src/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
+    python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
     code=$?
 
     if [ $code -eq 0 ]
@@ -261,6 +261,6 @@ echo -ne '\n'
 #
 echo -ne '\n'
 echo -ne 'Computing untangling scores ...............................................\r'
-python3 src/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
+python3 src/python/main/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
 echo -ne 'Computing untangling scores ............................................... OK'
 echo -ne '\n'

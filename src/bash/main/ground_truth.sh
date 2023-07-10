@@ -27,10 +27,10 @@ vid=$2
 repository=$3
 truth_csv=$4
 
-source ./scripts/d4j_utils.sh
+source ./src/bash/main/d4j_utils.sh
 
 # Parse the returned result into two variables
 result=$(retrieve_revision_ids "$project" "$vid")
 read -r revision_buggy revision_fixed <<< "$result"
 
-d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/ground_truth.py "$project" "$vid" "$truth_csv"
+d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
