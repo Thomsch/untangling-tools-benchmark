@@ -2,11 +2,12 @@
 
 """
 This script calculates the following 5 commit metrics for a provided D4J bug:
-    1. Total number of files updated (non-exclusive)
+    1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
     3. Number of hunks
     4. Average hunk size
-    5. Number of lines updated.
+    5. Number of lines changed (i.e. all lines with +/- indicators in the original
+       diff generated from pre-fix and post-fix versions).
 
 Command Line Args:
     project: D4J Project name
@@ -26,6 +27,10 @@ from unidiff.constants import LINE_TYPE_CONTEXT
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     args = sys.argv[1:]
 
     if len(args) != 2:

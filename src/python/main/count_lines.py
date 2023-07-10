@@ -23,6 +23,10 @@ import pandas as pd
 
 
 def main():
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
     args = sys.argv[1:]
 
     if len(args) != 3:
@@ -39,9 +43,9 @@ def main():
     truth_df = pd.read_csv(truth_file).convert_dtypes()
 
     fix_lines = truth_df["fix"].value_counts().get(True, default=0)
-    other_lines = truth_df["fix"].value_counts().get(False, default=0)
+    nonfix_lines = truth_df["fix"].value_counts().get(False, default=0)
 
-    print(f"{project},{vid},{fix_lines},{other_lines}")
+    print(f"{project},{vid},{fix_lines},{nonfix_lines}")
 
 
 if __name__ == "__main__":
