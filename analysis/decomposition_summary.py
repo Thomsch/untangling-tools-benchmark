@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-This script lists missing tool decompositions in the benchmark for each bug.
+This script lists missing tool decompositions in the evaluation for each bug.
 Input: the path to the evaluation foot folder.
-Output: a row for each bug in the benchmark, with the following columns:
+Output: a row for each bug in the evaluation, with the following columns:
     - project: the name of the project
     - bug_id: the id of the bug
     - flexeme_exists: true if flexeme decomposition is present, false otherwise

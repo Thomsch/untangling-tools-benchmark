@@ -88,7 +88,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: clean_decompositions.py <path/to/benchmark/evaluation/folder>")
+        print("usage: clean_decompositions.py <path/to/evaluation/folder>")
         sys.exit(1)
 
     main(os.path.abspath(args[0]))
