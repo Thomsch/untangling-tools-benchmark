@@ -185,13 +185,8 @@ def clean_diff(diff_file):
         for hunk in file:
             if hunk.source_length == 0 and hunk.target_length == 0:
                 continue
-            hunk_info = "@@ -%d,%d +%d,%d @@%s\n" % (
-                hunk.source_start,
-                hunk.source_length,
-                hunk.target_start,
-                hunk.target_length,
-                " " + hunk.section_header if hunk.section_header else "",
-            )
+            hunk.section_header = hunk.section_header if hunk.section_header else ""
+            hunk_info = f"@@ -{hunk.source_start},{hunk.source_length} +{hunk.target_start},{hunk.target_length} @@ {hunk.section_header}\n"
             cleaned_patch.append(hunk_info)
             for line in hunk:
                 # if not line.line_type == LINE_TYPE_CONTEXT:
