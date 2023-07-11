@@ -8,8 +8,8 @@ This script calculates the following 7 commit metrics for a provided D4J bug:
     4. Average hunk size
     5. Number of lines changed (i.e. all lines with +/- indicators in the original
        diff generated from pre-fix and post-fix versions).
-    6. A Boolean indicating if the commit has at least one tangled hunk
-    7. A Boolean tangled_lines indicating if the commit has at least one tangled line
+    6. Number of tangled lines in a diff file
+    7. Number of tangled hunks in a diff file
 
 Command Line Args:
     project: D4J Project name
@@ -25,7 +25,7 @@ import sys
 from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
-import clean_artifacts
+from clean_artifacts import clean_diff
 
 
 def get_lines_in_hunk(hunk):
@@ -59,8 +59,7 @@ def get_hunks_in_patch(patch):
 
 def flatten_patch_object(patch):
     """
-    As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored at a hunk-level.
-    Hunks from different files are sequentially stored as a List of diff Line objects.
+    As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
     All lines must be non-empty and must be either an added (+) or removed (-) line.
     """
     flat_patch = []
@@ -75,12 +74,12 @@ def flatten_patch_object(patch):
 def tangled_hunks(original_diff, fix_diff):
     """
     Count the number of tangled hunks in a Version Control diff.
-
+    If there is at least 1 tangled hunk, it means the commit contains tangled hunk.
     Args:
         original_diff <PatchSet Object>: the Version Control diff.
         fix_diff <PatchSet Object>: the bug-fixing diff.
     Returns:
-        Boolean: True if there is at least 1 tangled hunk.
+        tangled_hunks_count <Integer>: The number of tangles hunks.
     """
     tangled_hunks_count = 0
     hunks_VC = get_hunks_in_patch(original_diff)
@@ -104,7 +103,7 @@ def count_changed_lines(patch):
     Args:
         patch <PatchSet Object>: filtered, contain no context lines, comments, or import statements.
     Return:
-        count <Integer>: The number of hunks reported in the diff
+        count <Integer>: The number of changed lines in the diff
     """
     flat_patch = flatten_patch_object(patch)
     return len(flat_patch)
@@ -176,7 +175,7 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
-    clean_artifacts.clean_diff(
+    clean_diff(
         path.join(repository, "diff", "VC.diff")
     )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
     print(
