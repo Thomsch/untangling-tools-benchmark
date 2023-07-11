@@ -66,8 +66,8 @@ echo "Evaluating project $project, bug $vid, repository $workdir"
 mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
-# Get commit hash
-commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)    # Commit hash is the revision_fixed_ID
+# Commit hash is the revision_fixed_ID
+commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
 
 # Get source path and class path
 sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
