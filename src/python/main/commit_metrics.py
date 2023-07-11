@@ -139,15 +139,15 @@ def main():
     vid = args[1]
     repository = args[2]
 
-    patch = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
 
-    files_updated = len(patch)  # The number of files updated
+    files_updated = len(original_diff)  # The number of files updated
     test_files_updated = 0  # Number of test files updated
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
     lines_updated = 0  # The number of lines updated in the commit
 
-    for file in patch:
+    for file in original_diff:
         if file.path.endswith("Test.java"):
             test_files_updated += 1
 
