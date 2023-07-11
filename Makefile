@@ -18,7 +18,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	PYTHONPATH="${HOME}/untangling-tools-benchmark/src/python/main" pytest src/python/test
+	PYTHONPATH="${GITHUB_WORKSPACE}/untangling-tools-benchmark/src/python/main" pytest src/python/test
 
 clean: 
 	rm -rf ./tmp/
