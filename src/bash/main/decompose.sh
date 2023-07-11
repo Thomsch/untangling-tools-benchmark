@@ -86,7 +86,7 @@ else
   echo -ne '\n'
   mkdir -p "$flexeme_untangling_results"
   START_DECOMPOSITION=$(date +%s.%N)
-  ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}" &> "${logs_dir}/${project}_${vid}.log"
+  ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
   flexeme_untangling_code=$?
   if [ $flexeme_untangling_code -eq 0 ]
   then
