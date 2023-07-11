@@ -31,7 +31,7 @@ project=$1
 vid=$2
 out_path=$3 # Path where the results are stored.
 repo_root=$4 # Path where the repo is checked out
-workdir="${repo_root}/${project}_${vid}"
+repository="${repo_root}/${project}_${vid}"
 
 set -o allexport
 # shellcheck source=/dev/null
@@ -60,21 +60,21 @@ if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
     exit 1
 fi
 
-echo "Evaluating project $project, bug $vid, repository $workdir"
+echo "Evaluating project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
 mkdir -p "$workdir"
-defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
+defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Get commit hash
 commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
 
 # Get source path and class path
-sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
-sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${workdir}")"
+sourcepath=$(defects4j export -p dir.src.classes -w "${repository}")
+sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}")"
 
-classpath=$(defects4j export -p cp.compile -w "${workdir}")
-classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
+classpath=$(defects4j export -p cp.compile -w "${repository}")
+classpath="${classpath}:$(defects4j export -p cp.test -w "${repository}")"
 
 #
 # Compute commit metrics
@@ -89,7 +89,7 @@ else
     result=$(retrieve_revision_ids "$project" "$vid")
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     code=$?
     if [ $code -eq 0 ]
     then
@@ -110,7 +110,13 @@ truth_csv="${evaluation_path}/truth.csv"
 if [[ -f "$truth_csv" ]]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
+    source ./src/bash/main/d4j_utils.sh
+
+    # Parse the returned result into two variables
+    result=$(retrieve_revision_ids "$project" "$vid")
+    read -r revision_buggy revision_fixed <<< "$result" 
+
+    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
     code=$?
     if [ $code -eq 0 ]
     then
