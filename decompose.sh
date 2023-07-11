@@ -21,6 +21,13 @@ fi
 export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
 
+if ! [[ -f "$bugs_file" ]]; then
+    echo "File ${bugs_file} not found. Exiting."
+    exit 1
+fi
+
+mkdir -p "$out_dir"
+
 set -o allexport
 # shellcheck source=/dev/null
 source .env
@@ -40,37 +47,46 @@ if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
     exit 1
 fi
 
-
 export workdir="${out_dir}/repositories"
 export evaluation_dir="${out_dir}/evaluation"
 
+export decomposition_path="${out_dir}/decomposition"
+export smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
+export flexeme_untangling_path="${decomposition_path}/flexeme"
+
 mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
+mkdir -p "$decomposition_path"
+mkdir -p "$smartcommit_untangling_path"
+mkdir -p "$flexeme_untangling_path"
 
 decompose_bug(){
   local project=$1
   local vid=$2
 
-  echo "Decompositing project $project, bug $vid, repository $workdir"
+  repository="${workdir}/${project}_${vid}"
+  echo "Decompositing project $project, bug $vid, repository $repository"
 
   # Checkout Defects4J bug
-  defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
+  mkdir -p "$repository"
+  defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
   # Local variables
-  decomposition_path="${out_dir}/decomposition" # Path containing the decomposition results.
   evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
     # truth, decompositions in CSV format.
+  mkdir -p "${evaluation_path}"
+
+  # Get commit hash
   commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
 
   # Get source path and class path
-  sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
-  sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${workdir}")"
-  classpath=$(defects4j export -p cp.compile -w "${workdir}")
-  classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
+  sourcepath=$(defects4j export -p dir.src.classes -w "${repository}")
+  sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}")"
+  classpath=$(defects4j export -p cp.compile -w "${repository}")
+  classpath="${classpath}:$(defects4j export -p cp.test -w "${repository}")"
 
   echo -ne '\n'
   echo -ne 'Untangling with SmartCommit ...............................................\r'
-  smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
   smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
   # Untangle with SmartCommit
@@ -80,7 +96,7 @@ decompose_bug(){
   else
     echo -ne '\n'
     START_DECOMPOSITION=$(date +%s.%N)
-    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
+    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
@@ -92,7 +108,6 @@ decompose_bug(){
   echo -ne '\n'
   echo -ne 'Untangling with Flexeme ...............................................\r'
 
-  flexeme_untangling_path="${decomposition_path}/flexeme"
   flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
   flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
@@ -103,7 +118,7 @@ decompose_bug(){
     echo -ne '\n'
     mkdir -p "$flexeme_untangling_results"
     START_DECOMPOSITION=$(date +%s.%N)
-    ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+    ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
     flexeme_untangling_code=$?
     if [ $flexeme_untangling_code -eq 0 ]
     then
