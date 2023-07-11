@@ -10,7 +10,7 @@ library(flexplot)
 library(ggplot2)
 
 
-fileData <-"./collated_decompositions.csv"
+fileData <-"./combined_decompositions.csv"
 data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'Treatment', 'File', 'Source', 'Target', 'Group'))
 data$BugID <- as_factor(data$BugID)
 
