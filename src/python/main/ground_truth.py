@@ -25,8 +25,8 @@ import os
 import sys
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
-import clean_artifacts
-import commit_metrics
+from clean_artifacts import clean_diff
+from commit_metrics import flatten_patch_object
 
 COL_NAMES = ["file", "source", "target"]
 
@@ -64,11 +64,9 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
     Note: The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
     # TODO: We can use == for object equality, but only for bug fix lines
     """
-    original_lines = deque(
-        commit_metrics.flatten_patch_object(original_diff)
-    )  # Generated 3 Queue objects
-    fix_lines = deque(commit_metrics.flatten_patch_object(fix_diff))
-    nonfix_lines = deque(commit_metrics.flatten_patch_object(nonfix_diff))
+    original_lines = deque(flatten_patch_object(original_diff))  # Generated 3 Queue objects
+    fix_lines = deque(flatten_patch_object(fix_diff))
+    nonfix_lines = deque(flatten_patch_object(nonfix_diff))
     labels = [
         "o" for i in range(len(original_lines))
     ]  # Place holder for the truth label
@@ -121,7 +119,7 @@ def main():
 
     repository = args[0]
     out_path = args[1]
-    clean_artifacts.clean_diff(
+    clean_diff(
         os.path.join(repository, "diff", "VC.diff")
     )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
     original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC.diff"))

@@ -44,8 +44,8 @@ index 8422d40..682191b 100644
 """
     )
     labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "other"
-    assert labels[1] == "fix"
+    assert labels[0] == "other" # + ~ is a nonfix
+    assert labels[1] == "fix"   # + E is a fix
 
 
 def test_overlap_lines_correctly_labelled():
@@ -111,13 +111,13 @@ index 8422d40..682191b 100644
     )
 
     labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "fix"
-    assert labels[1] == "fix"
-    assert labels[2] == "fix"
-    assert labels[3] == "other"
-    assert labels[4] == "other"
-    assert labels[5] == "other"
-    assert labels[6] == "fix"
-    assert labels[7] == "other"
-    assert labels[8] == "other"
-    assert labels[9] == "other"
+    assert labels[0] == "fix"  # + ~~ is a fix
+    assert labels[1] == "fix"  # + ~ is a fix
+    assert labels[2] == "fix"   # + E is a fix
+    assert labels[3] == "other" # + // is a nonfix
+    assert labels[4] == "other" # + ~~ is a nonfix
+    assert labels[5] == "other" # + F is a fix
+    assert labels[6] == "fix"   # + E is a fix
+    assert labels[7] == "other" # + F is a nonfix
+    assert labels[8] == "other" # + G is a nonfix
+    assert labels[9] == "other" # + D is a nonfix

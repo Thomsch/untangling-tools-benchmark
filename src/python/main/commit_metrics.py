@@ -25,7 +25,7 @@ import sys
 from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
-import clean_artifacts
+from clean_artifacts import clean_diff
 
 
 def get_lines_in_hunk(hunk):
@@ -175,7 +175,7 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
-    clean_artifacts.clean_diff(
+    clean_diff(
         path.join(repository, "diff", "VC.diff")
     )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
     print(
