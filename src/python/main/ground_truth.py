@@ -64,7 +64,9 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
     Note: The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
     # TODO: We can use == for object equality, but only for bug fix lines
     """
-    original_lines = deque(flatten_patch_object(original_diff))  # Generated 3 Queue objects
+    original_lines = deque(
+        flatten_patch_object(original_diff)
+    )  # Generated 3 Queue objects
     fix_lines = deque(flatten_patch_object(fix_diff))
     nonfix_lines = deque(flatten_patch_object(nonfix_diff))
     labels = [
