@@ -18,7 +18,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	pytest src/python/test
+	PYTHONPATH="$(pwd)/src/python/main" pytest src/python/test
 
 clean: 
 	rm -rf ./tmp/
