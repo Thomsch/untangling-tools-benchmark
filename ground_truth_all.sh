@@ -15,7 +15,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
+    echo 'usage: ./ground_truth_all.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -45,6 +45,7 @@ generate_truth_for_bug() {
 
   export repository="${workdir}/${project}_${vid}"
   START=$(date +%s.%N)   # Record start time for bug decomposition
+  
   ./src/bash/main/ground_truth.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}.log"
   ret_code=$?
   truth_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")

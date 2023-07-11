@@ -29,7 +29,7 @@ fi
 
 project=$1
 vid=$2
-out_path=$3 # Path where the results are stored.
+out_dir=$3 # Path where the results are stored.
 repo_root=$4 # Path where the repo is checked out
 repository="${repo_root}/${project}_${vid}"
 
@@ -44,10 +44,10 @@ if [[ -z "${JAVA_11}" ]]; then
   exit 1
 fi
 
-decomposition_path="${out_path}/decomposition" # Path containing the decomposition results.
-evaluation_path="${out_path}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
+decomposition_path="${out_dir}/decomposition" # Path containing the decomposition results.
+evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
 # truth, decompositions in CSV format.
-metrics_path="${out_path}/metrics" # Path containing the commit metrics.
+metrics_path="${out_dir}/metrics" # Path containing the commit metrics.
 
 mkdir -p "${evaluation_path}"
 mkdir -p "${metrics_path}"
@@ -63,7 +63,7 @@ fi
 echo "Evaluating project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
-mkdir -p "$workdir"
+mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Get commit hash
@@ -163,7 +163,7 @@ echo -ne '\n'
 #
 echo -ne '\n'
 echo -ne 'Untangling with SmartCommit ...............................................\r'
-smartcommit_untangling_path="${out_path}/decomposition/smartcommit"
+smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
 if [[ -d "$smartcommit_untangling_results" ]]; then
@@ -172,7 +172,7 @@ if [[ -d "$smartcommit_untangling_results" ]]; then
 else
     echo -ne '\n'
     START_DECOMPOSITION=$(date +%s.%N)
-    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
+    $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
     END_DECOMPOSITION=$(date +%s.%N)
     DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
@@ -221,7 +221,7 @@ else
     echo -ne '\n'
     mkdir -p "$flexeme_untangling_results"
     START_DECOMPOSITION=$(date +%s.%N)
-    ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+    ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
     flexeme_untangling_code=$?
     if [ $flexeme_untangling_code -eq 0 ]
     then
