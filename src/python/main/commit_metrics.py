@@ -124,6 +124,21 @@ def tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     return tangled_lines_count
 
 
+def tangle_counts(repository):
+    """
+    Returns "tangled_lines_count,tangled_hunks_count".
+    """
+
+    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
+    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
+
+    tangled_lines_count = tangled_lines(original_diff, fix_diff, nonfix_diff)
+    tangled_hunks_count = tangled_hunks(original_diff, fix_diff)
+
+    return f"{tangled_lines_count},{tangled_hunks_count}"
+
+
 def main():
     """
     Implement the logic of the script. See the module docstring for more
@@ -141,7 +156,7 @@ def main():
 
     original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
 
-    files_updated = len(original_diff)  # The number of files updated
+    files_updated = len(original_diff)  # The number of files updated, including tests.
     test_files_updated = 0  # Number of test files updated
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
@@ -164,17 +179,10 @@ def main():
     clean_artifacts.clean_diff(
         path.join(repository, "diff", "VC.diff")
     )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
-    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
-    fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
-    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
-
-    tangled_lines_count = tangled_lines(original_diff, fix_diff, nonfix_diff)
-    tangled_hunks_count = tangled_hunks(original_diff, fix_diff)
-
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
         f"{hunks},{average_hunk_size},{lines_updated},"
-        f"{tangled_lines_count},{tangled_hunks_count}"
+        f"{tangle_counts(repository)}"
     )
 
 
