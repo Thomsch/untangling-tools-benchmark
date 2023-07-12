@@ -9,8 +9,8 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 #
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: analysis.sh <out-dir> <analysis-result-dir>'
-    echo 'example: analysis.sh ~/benchmark ~/analysis-results'
+    echo 'usage: analyze.sh <out-dir> <analysis-result-dir>'
+    echo 'example: analyze.sh ~/benchmark ~/analysis-results'
     exit 1
 fi
 
