@@ -50,7 +50,10 @@ mkdir "${diff_dir}"
 
 source ./src/bash/main/d4j_utils.sh
 
-# Parse the returned result into two variables
+revision_ids=$(retrieve_revision_ids "$project" "$vid")
+# Parse the returned revision_ids into two variables
+read -r revision_original revision_fixed <<< "$revision_ids"
+
 retrieve_revision_ids "$project" "$vid" | read -r revision_original revision_fixed
 
 cd "$repository" || exit 1
