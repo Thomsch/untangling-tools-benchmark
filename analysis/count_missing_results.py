@@ -11,8 +11,7 @@ from collections import defaultdict
 
 def main(path):
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
     required_files = [
         "flexeme.csv",
