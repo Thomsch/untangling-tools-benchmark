@@ -13,15 +13,15 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
-    echo 'usage: ./decompose.sh <bugs_file> <out_dir>'
+if [ $# -ne 2 ] ; then
+    echo 'usage: decompose.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
-export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
-if ! [[ -f "$bugs_file" ]]; then
+if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi
@@ -30,10 +30,10 @@ mkdir -p "$out_dir"
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
@@ -41,8 +41,8 @@ fi
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
-version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
-if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
+version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
+if [ "$version" != "1.8" ] ; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
@@ -53,23 +53,20 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
-echo ""
-
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
 decompose_bug(){
-  local project=$1
-  local vid=$2
+  local project="$1"
+  local vid="$2"
   export repository="${workdir}/${project}_${vid}"
-  START=$(date +%s.%N)   # Record start time for bug decomposition
-  ./src/bash/main/decompose.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}_decompose.log"
+  START="$(date +%s.%N)"   # Record start time for bug decomposition
+  ./src/bash/main/decompose.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_decompose.log" 2>&1
   ret_code=$?
-  decomposition_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-  END=$(date +%s.%N)
+  decomposition_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
-  ELAPSED=$(echo "$END - $START" | bc)
+  ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}"
 }
 

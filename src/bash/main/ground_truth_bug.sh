@@ -18,21 +18,23 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
-if [[ $# -ne 4 ]] ; then
-    echo 'usage: ./ground_truth_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
-    echo 'example: ./ground_truth_bug.sh Lang 1 path/to/Lang_1/ truth.csv'
+if [ $# -ne 4 ] ; then
+    echo 'usage: ground_truth_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
+    echo 'example: ground_truth_bug.sh Lang 1 path/to/Lang_1/ truth.csv'
     exit 1
 fi
 
-project=$1
-vid=$2
-out_dir=$3
-repository=$4
+project="$1"
+vid="$2"
+out_dir="$3"
+repository="$4"
 
-source ./src/bash/main/d4j_utils.sh
+# Initialize related directory for input and output
+export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground truth
+mkdir -p "$evaluation_path"
 
 # Calculates the ground truth
 echo -ne '\n'
@@ -42,28 +44,21 @@ echo "Calculating ground truth for project $project, bug $vid, repository $repos
 mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
-export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground truth
-mkdir -p "$evaluation_path"
-
 truth_csv="${evaluation_path}/truth.csv"
 
-if [[ -f "$truth_csv" ]]; then
+if [ -f "$truth_csv" ]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    source ./src/bash/main/d4j_utils.sh
+    . ./src/bash/main/d4j_utils.sh
     # Parse the returned result into two variables
-    result=$(retrieve_revision_ids "$project" "$vid")
-    read -r revision_buggy revision_fixed <<< "$result" 
-    echo "result=$result"
-    # echo "revision_fixed=$revision_fixed"
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
-    code=$?
-    if [ $code -eq 0 ]
+    result="$(retrieve_revision_ids "$project" "$vid")"
+    read -r revision_buggy revision_fixed <<< "$result"
+
+    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
     then
         echo -ne 'Calculating ground truth .................................................. OK\r'
     else
         echo -ne 'Calculating ground truth .................................................. FAIL\r'
-        return 1
     fi
 fi
 echo -ne '\n'

@@ -14,25 +14,25 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
-    echo 'usage: ./ground_truth.sh <bugs_file> <out_dir>'
+if [ $# -ne 2 ] ; then
+    echo 'usage: ground_truth.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
-version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
-if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
+version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
+if [ "$version" != "1.8" ] ; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
 
-source ./src/bash/main/d4j_utils.sh
+. ./src/bash/main/d4j_utils.sh
 
-export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
-if ! [[ -f "$bugs_file" ]]; then
+if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi
@@ -49,18 +49,18 @@ echo "Logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
-  local project=$1
-  local vid=$2
+  local project="$1"
+  local vid="$2"
 
   export repository="${workdir}/${project}_${vid}"
-  START=$(date +%s.%N)   # Record start time for bug decomposition
+  START="$(date +%s.%N)"  # Record start time for bug ground truth generation
   
-  ./src/bash/main/ground_truth.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}_ground_truth.log"
+  ./src/bash/main/ground_truth.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_ground_truth.log" 2>&1
   ret_code=$?
-  truth_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-  END=$(date +%s.%N)
+  truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
-  ELAPSED=$(echo "$END - $START" | bc)
+  ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
 }
 

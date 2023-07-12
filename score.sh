@@ -15,14 +15,14 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
-export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: ./score.sh <bugs_file> <out_dir>'
+    echo 'usage: score.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -40,18 +40,18 @@ echo "Logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
 echo ""
 
 parse_and_score_bug(){
-  local project=$1
-  local vid=$2
+  local project="$1"
+  local vid="$2"
 
   export repository="${workdir}/${project}_${vid}"
-  START=$(date +%s.%N)   # Record start time for bug scoring
+  START="$(date +%s.%N)"  # Record start time for bug scoring
   
-  ./src/bash/main/score.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}_score.log"
+  ./src/bash/main/score.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_score.log" 2>&1
   ret_code=$?
-  scoring_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-  END=$(date +%s.%N)
+  scoring_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
-  ELAPSED=$(echo "$END - $START" | bc)
+  ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}"
 }
 
