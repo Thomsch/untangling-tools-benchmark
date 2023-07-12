@@ -1,6 +1,11 @@
 # Data Analysis
 
-This folder contains the scripts used to analyze the results of the decomposition.
+This folder contains the scripts used to analyze the results of the decomposition. The folder is organized as follows:
+- `data/` contains the raw data of the decomposition use for data exploration.
+- `manual/` contains files related to the manual analysis.
+- `paper/` contains scripts to generate the results for the paper.
+- `generate-paper.sh` is a script to generate the results for the paper. See section [Paper](#paper).
+- The remaining files are scripts and notebook to explore data and generate results.
 
 ## Paper
 Use `./analysis/generate-paper.sh` to generate the analysis results of the decomposition and update the tables and figures in the paper.
