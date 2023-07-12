@@ -21,24 +21,24 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 4 ]] ; then
+if [ $# -ne 4 ] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
 fi
 
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
+project="$1"
+vid="$2"
+out_path="$3" # Path where the results are stored.
+repo_root="$4" # Path where the repo is checked out
 workdir="${repo_root}/${project}_${vid}"
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
@@ -54,8 +54,8 @@ mkdir -p "${metrics_path}"
 
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
-version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
-if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
+version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
+if [ "$version" != "1.8" ] ; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
@@ -66,32 +66,30 @@ echo "Evaluating project $project, bug $vid, repository $workdir"
 mkdir -p "$workdir"
 defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
-# Get commit hash
-commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
+# Commit hash is the revision_fixed_ID
+commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
 
 # Get source path and class path
-sourcepath=$(defects4j export -p dir.src.classes -w "${workdir}")
+sourcepath="$(defects4j export -p dir.src.classes -w "${workdir}")"
 sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${workdir}")"
 
-classpath=$(defects4j export -p cp.compile -w "${workdir}")
+classpath="$(defects4j export -p cp.compile -w "${workdir}")"
 classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 
 #
 # Compute commit metrics
 #
 metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
-if [[ -f "$metrics_csv" ]]; then
+if [ -f "$metrics_csv" ]; then
     echo -ne 'Calculating metrics ..................................................... CACHED\r'
 else
-    source ./src/bash/main/d4j_utils.sh
+    . ./src/bash/main/d4j_utils.sh
 
     # Parse the returned result into two variables
-    result=$(retrieve_revision_ids "$project" "$vid")
+    result="$(retrieve_revision_ids "$project" "$vid")"
     read -r revision_buggy revision_fixed <<< "$result"
 
-    d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
-    code=$?
-    if [ $code -eq 0 ]
+    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     then
         echo -ne 'Calculating metrics ..................................................... OK\r'
     else
@@ -107,12 +105,10 @@ echo -ne 'Calculating ground truth .............................................
 
 truth_csv="${evaluation_path}/truth.csv"
 
-if [[ -f "$truth_csv" ]]; then
+if [ -f "$truth_csv" ]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
-    code=$?
-    if [ $code -eq 0 ]
+    if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv"
     then
         echo -ne 'Calculating ground truth .................................................. OK\r'
     else
@@ -138,12 +134,10 @@ echo -ne 'Untangling with file-based approach ..................................
 
 file_untangling_out="${evaluation_path}/file_untangling.csv"
 
-if [[ -f "$file_untangling_out" ]]; then
+if [ -f "$file_untangling_out" ]; then
     echo -ne 'Untangling with file-based approach ..................................... CACHED\r'
 else
-    python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
-    code=$?
-    if [ $code -eq 0 ]
+    if python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
     then
         echo -ne 'Untangling with file-based approach ....................................... OK\r'
     else
@@ -160,15 +154,15 @@ echo -ne 'Untangling with SmartCommit ..........................................
 smartcommit_untangling_path="${out_path}/decomposition/smartcommit"
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
-if [[ -d "$smartcommit_untangling_results" ]]; then
+if [ -d "$smartcommit_untangling_results" ]; then
     echo -ne 'Untangling with SmartCommit ............................................. CACHED\r'
     regenerate_results=false
 else
     echo -ne '\n'
-    START_DECOMPOSITION=$(date +%s.%N)
+    START_DECOMPOSITION="$(date +%s.%N)"
     $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$workdir" -c "$commit" -o "$smartcommit_untangling_path"
-    END_DECOMPOSITION=$(date +%s.%N)
-    DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
+    END_DECOMPOSITION="$(date +%s.%N)"
+    DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
     echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
     echo -ne 'Untangling with SmartCommit ............................................... OK'
     regenerate_results=true
@@ -185,10 +179,7 @@ if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
     echo -ne 'Parsing SmartCommit results ............................................. CACHED\r'
 else
     echo -ne '\n'
-    python3 src/python/main/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
-    code=$?
-
-    if [ $code -eq 0 ]
+    if python3 src/python/main/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
     then
         echo -ne 'Parsing SmartCommit results ............................................... OK'
     else
@@ -208,16 +199,14 @@ flexeme_untangling_path="${decomposition_path}/flexeme"
 flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
-if [[ -f "$flexeme_untangling_graph" ]]; then
+if [ -f "$flexeme_untangling_graph" ]; then
     echo -ne 'Untangling with Flexeme ................................................. CACHED\r'
     regenerate_results=false
 else
     echo -ne '\n'
     mkdir -p "$flexeme_untangling_results"
-    START_DECOMPOSITION=$(date +%s.%N)
-    ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
-    flexeme_untangling_code=$?
-    if [ $flexeme_untangling_code -eq 0 ]
+    START_DECOMPOSITION="$(date +%s.%N)"
+    if ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
     then
         echo -ne 'Untangling with Flexeme ................................................... OK'
         regenerate_results=true
@@ -225,8 +214,8 @@ else
         echo -ne 'Untangling with Flexeme ................................................. FAIL'
         regenerate_results=false
     fi
-    END_DECOMPOSITION=$(date +%s.%N)
-    DIFF_DECOMPOSITION=$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)
+    END_DECOMPOSITION="$(date +%s.%N)"
+    DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
     echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
 
 fi
@@ -243,10 +232,7 @@ then
     echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
     echo -ne '\n'
-    python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
-    code=$?
-
-    if [ $code -eq 0 ]
+    if python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
     then
         echo -ne 'Parsing Flexeme results ................................................... OK\r'
     else

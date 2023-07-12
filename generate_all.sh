@@ -6,13 +6,13 @@
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
-bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
 mkdir -p "$out_dir"
 
@@ -24,7 +24,7 @@ mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
 
-if ! [[ -f "$bugs_file" ]]; then
+if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi

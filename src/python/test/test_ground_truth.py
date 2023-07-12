@@ -1,5 +1,5 @@
 """
-Tests for the ground_truth module.
+Test the ground_truth module.
 """
 import unidiff
 

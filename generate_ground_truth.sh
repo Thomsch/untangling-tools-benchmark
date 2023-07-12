@@ -15,23 +15,23 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 4 ]] ; then
+if [ $# -ne 4 ] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
 fi
 
-project=$1
-vid=$2
-out_path=$3 # Path where the results are stored.
-repo_root=$4 # Path where the repo is checked out
+project="$1"
+vid="$2"
+out_path="$3" # Path where the results are stored.
+repo_root="$4" # Path where the repo is checked out
 
 set -o allexport
 # shellcheck source=/dev/null
 source .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
@@ -68,9 +68,7 @@ echo -ne '\n'
 echo -ne 'Calculating ground truth ..................................................\r'
 
 
-./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
-code=$?
-if [ $code -eq 0 ]
+if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_all_out"
 then
     echo -ne 'Calculating ground truth (all) .................................................. OK\r'
 else
@@ -78,9 +76,7 @@ else
 fi
 echo -ne '\n'
 
-./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
-code=$?
-if [ $code -eq 0 ]
+if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_code_out"
 then
     echo -ne 'Calculating ground truth (code) .................................................. OK\r'
 else

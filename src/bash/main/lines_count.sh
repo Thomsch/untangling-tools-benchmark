@@ -26,16 +26,16 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: lines_count.sh <commit_file> <out_file>'
     echo 'example: lines_count.sh data/d4j-bugs.csv lines.csv'
     exit 1
 fi
 
-all_commits_file=$1
-out_file=$2
+all_commits_file="$1"
+out_file="$2"
 
-if ! [[ -f "$all_commits_file" ]]; then
+if ! [ -f "$all_commits_file" ]; then
     echo "File ${all_commits_file} not found. Exiting."
     exit 1
 fi
@@ -55,14 +55,16 @@ do
     # Get fix commit hash
     commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)  
 
-    if [[ -f "$truth_csv" ]]; then
+    if [ -f "$truth_csv" ]; then
         echo -ne 'Calculating ground truth ................................................ CACHED\n'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
-        ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
-        ret_code=$?
-        # TODO: Use an if statement to avoid spawning a new subshell.
-        evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
+        if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
+        then
+            evaluation_status_string="OK"
+        else
+            evaluation_status_string="FAIL"
+        fi
         echo -ne "Calculating ground truth .................................................. ${evaluation_status_string}\n"
     fi
 

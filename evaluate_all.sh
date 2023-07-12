@@ -12,15 +12,15 @@
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
-export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
-if ! [[ -f "$bugs_file" ]]; then
+if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi
@@ -42,16 +42,16 @@ echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
 score_bug(){
-  local project=$1
-  local vid=$2
+  local project="$1"
+  local vid="$2"
 
-  START=$(date +%s.%N)
-  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
+  START="$(date +%s.%N)"
+  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" > "${logs_dir}/${project}_${vid}.log" 2>&1
   ret_code=$?
-  evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
-  END=$(date +%s.%N)
+  evaluation_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
-  ELAPSED=$(echo "$END - $START" | bc)
+  ELAPSED="$(echo "$END - $START" | bc)"
   if [ $ret_code -ne 0 ]; then
       error_counter=$((error_counter+1))
   fi

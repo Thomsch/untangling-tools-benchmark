@@ -1,5 +1,5 @@
 """
-Tests for untangling_score.py
+Test untangling_score.py.
 """
 
 
