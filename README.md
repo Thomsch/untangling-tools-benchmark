@@ -38,10 +38,15 @@ If you encounter a term in the documentation or the source code that is not defi
 
 ## Usage
 ### Running the evaluation
-For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) for evaluation framework in `/evaluate.sh`.
+For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) for evaluation framework.
 
-Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
+The [pipeline](diagrams/pipeline.drawio.svg) contains 4 components corresponding to the 4 Bash scripts listed below:
+- `get_metrics.sh`: Compute Commit Metrics
+- `ground_truth.sh`: Calculate Ground Truth
+- `decompose.sh`: Run Each Tool on Bug + Parse Untangling Results Linewise and Collate
+- `score.sh`: Compute Untangling Score
 
+The scripts implement GNU parallelization to run on a list of desired Defects4J bugs `bug-file` with the command `./[script_name].sh <bug-file> $UTB_OUTPUT`. Their respective child scripts, `./[script_name]_bug.sh`, run on only one Defects4J bug file and are stored in `src/bash/main`. Note that the scripts are dependent, and they should be ran strictly as their dependencies are specified by the [pipeline](diagrams/pipeline.drawio.svg). For instance, `decompose.sh` and `ground_truth.sh` can be ran independently, but `score.sh` can only be run only after both of these scripts are completed:
 - `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
   use (to generate a new bug file see **Generating the bug file** section):
     - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the evaluation end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
@@ -51,8 +56,7 @@ Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
     - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
 - `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
 
-For example, use `./evaluate_all.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run the evaluation on 5 bugs from the Defects4J
-project.
+For example, use `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run Flexeme and SmartCommit on 5 bugs from the Defects4J project.
 
 The results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
