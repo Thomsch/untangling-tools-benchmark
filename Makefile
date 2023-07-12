@@ -3,8 +3,9 @@
 check: check-scripts check-python-format check-python-style python-test
 
 check-scripts:
-	shellcheck --version
 # Fail if any of these files have warnings
+# Note: as of 2023-07-11, the GitHub "ubuntu-latest" image contains shellcheck 0.8.0-2, which is not the latest version.
+# See https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md#installed-apt-packages .
 	shellcheck $(wildcard ./*.sh src/bash/main/*.sh)
 
 PYTHON_FILES=$(wildcard *.py analysis/*.py src/python/main/*.py src/python/test/*.py)
