@@ -53,8 +53,6 @@ source ./src/bash/main/d4j_utils.sh
 # Parse the returned revision_ids into two variables
 read -r revision_original revision_fixed <<< "$(retrieve_revision_ids "$project" "$vid")"
 
-retrieve_revision_ids "$project" "$vid" | read -r revision_original revision_fixed
-
 cd "$repository" || exit 1
 revision_buggy=$(git rev-parse HEAD)
 
