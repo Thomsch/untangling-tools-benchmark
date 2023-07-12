@@ -1,10 +1,16 @@
-import pandas as pd
-from analysis.median_performance import calculate_performance
-
+"""
+Tests for median_performance.py
+"""
 import pytest
+
+from analysis.paper.median_performance import calculate_performance
+
 
 @pytest.fixture
 def sample_decompositions_csv(tmpdir):
+    """
+    Create a sample decompositions.csv file.
+    """
     data = """A,1,0.8,0.7,0.6
 A,2,0.9,0.8,0.7
 B,1,0.7,0.6,0.5
@@ -16,6 +22,9 @@ B,2,0.6,0.5,0.4
 
 
 def test_calculate_performance(sample_decompositions_csv, capfd):
+    """
+    Tests that the performance metrics are calculated correctly.
+    """
     calculate_performance(sample_decompositions_csv)
     captured = capfd.readouterr()
     expected_output = (
