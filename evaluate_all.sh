@@ -37,10 +37,10 @@ mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
 
-# TODO: Parallelize
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
+# TODO: Override source of randomness with SmartCommit (in Java)
 score_bug(){
   local project=$1
   local vid=$2
@@ -52,9 +52,6 @@ score_bug(){
   END=$(date +%s.%N)
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED=$(echo "$END - $START" | bc)
-  if [ $ret_code -ne 0 ]; then
-      error_counter=$((error_counter+1))
-  fi
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${evaluation_status_string}" "${ELAPSED}"
 }
 
