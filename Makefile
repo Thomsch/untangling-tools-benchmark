@@ -3,6 +3,7 @@
 check: check-scripts check-python-format check-python-style python-test
 
 check-scripts:
+	shellcheck --version
 # Fail if any of these files have warnings
 	shellcheck $(wildcard ./*.sh src/bash/main/*.sh)
 
