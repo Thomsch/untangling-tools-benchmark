@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The script reads input from stdin and filter out comments, import statements, and empty lines from the unified diff file or Java source code.
+The script removes comments, import statements, and empty lines from a unified diff file or Java source code.
 A file is considered "clean" if it satisfies the criteria listed in ground truth construction in README.
 
 Command Line Args:
@@ -23,7 +23,7 @@ def remove_noncode_lines(patch):
     This implementation is not optimal, as the unidiff Python package does not have built-in remove method to manupulate the list-like Objects using list comprehensions. etc. The best solution is to use del to completely remove the object from memory space.
     Yet, I have not found a way to do it using indexing or object references.
 
-    Filter out comments, import statements, and empty lines from a diff by marking them as context lines.
+    Remove comments, import statements, and empty lines from a diff by marking them as context lines.
 
     Args:
         patch: a PatchSet object to be remove the Java comments, import statements, and whitespaces from.
@@ -150,7 +150,7 @@ def fix_hunk_info(patch):
 
 def filter(patch):
     """
-    Filter out comments, import statements, and empty lines from a diff.
+    Remove comments, import statements, and empty lines from a diff.
     Completely clean the diff files to adhere to the criteria listed in ground truth construction in README.
     """
     uncommented_patch = remove_noncode_lines(patch)
@@ -239,7 +239,7 @@ def clean_diff(diff_file):
 
 def clean_source_code(java_file):
     """
-    Filter out comments, import statements, and empty lines from the Java source code.
+    Remove comments, import statements, and empty lines from the Java source code.
     Completely clean the source code files to adhere to the criteria listed in ground truth construction in README.
     """
     with fileinput.FileInput(java_file, inplace=True) as file:
