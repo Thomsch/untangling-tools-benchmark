@@ -76,6 +76,7 @@ The results will be stored in `$UTB_OUTPUT`:
 
 
 #### Generating the bug file
+To generate a bug file, run `src/bash/main/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can run the following command: `./evaluate.sh <project> <bug-id> $UTB_OUTPUT <repo-dir>`.
