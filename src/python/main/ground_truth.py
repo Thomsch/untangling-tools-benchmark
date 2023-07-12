@@ -329,5 +329,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# LocalWords: dtypes, dataframe, bugfix

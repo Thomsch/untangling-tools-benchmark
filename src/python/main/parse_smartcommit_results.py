@@ -169,5 +169,3 @@ def export_csv(output_path, result):
 
 if __name__ == "__main__":
     main()
-
-# LocalWords: unidiff
