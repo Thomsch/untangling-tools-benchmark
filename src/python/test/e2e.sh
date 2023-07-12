@@ -8,7 +8,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [[ $# -ne 0 ]] ; then
+if [ $# -ne 0 ] ; then
     echo 'usage: ./src/python/test/e2e.sh'
     exit 1
 fi

@@ -10,17 +10,16 @@
 #set -o errexit    # Exit immediately if a command exits with a non-zero status. Disabled because we need to check
 # the return code of ./evaluate.sh.
 set -o nounset    # Exit if script tries to use an uninitialized variable
-set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 1 ] ; then
     echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
-export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
-export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
-if ! [[ -f "$bugs_file" ]]; then
+if [ ! -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi
@@ -42,11 +41,11 @@ echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
 score_bug(){
-  local project=$1
-  local vid=$2
+  project="$1"
+  vid="$2"
 
   START=$(date +%s.%N)
-  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" &> "${logs_dir}/${project}_${vid}.log"
+  ./evaluate.sh "$project" "$vid" "$out_dir" "$workdir" > "${logs_dir}/${project}_${vid}.log" 2>&1
   ret_code=$?
   evaluation_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
   END=$(date +%s.%N)

@@ -15,7 +15,7 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 4 ]] ; then
+if [ $# -ne 4 ] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
@@ -31,7 +31,7 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1

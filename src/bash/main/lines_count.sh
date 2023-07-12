@@ -26,7 +26,7 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: lines_count.sh <commit_file> <out_file>'
     echo 'example: lines_count.sh data/d4j-bugs.csv lines.csv'
     exit 1
@@ -35,7 +35,7 @@ fi
 all_commits_file=$1
 out_file=$2
 
-if ! [[ -f "$all_commits_file" ]]; then
+if ! [ -f "$all_commits_file" ]; then
     echo "File ${all_commits_file} not found. Exiting."
     exit 1
 fi
@@ -55,7 +55,7 @@ do
     # Get fix commit hash
     commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)  
 
-    if [[ -f "$truth_csv" ]]; then
+    if [ -f "$truth_csv" ]; then
         echo -ne 'Calculating ground truth ................................................ CACHED\n'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"

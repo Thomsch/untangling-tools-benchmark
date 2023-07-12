@@ -17,7 +17,7 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ $# -ne 3 ]] ; then
+if [ $# -ne 3 ] ; then
     echo 'usage: ./generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
     echo 'example: ./generate_artifacts.sh Lang 1 path/to/Lang_1/'
     exit 1
@@ -39,7 +39,7 @@ cd "$repository" || exit 1
 mkdir "${diff}"
 revision_buggy=$(git rev-parse HEAD)
 
-if [[ -z "${DEFECTS4J_HOME}" ]]; then
+if [ -z "${DEFECTS4J_HOME}" ]; then
   echo 'DEFECTS4J_HOME environment variable is not set.'
   echo 'Please set it to the path of the Defects4J repository.'
   exit 1

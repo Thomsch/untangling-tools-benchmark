@@ -34,7 +34,7 @@ d4j_diff () {
 # Returns the buggy and fixed revision IDs in the format:
 #   <revision_id_buggy> <revision_id_fixed>
 retrieve_revision_ids () {
-  if [[ $# -ne 2 ]] ; then
+  if [ $# -ne 2 ] ; then
       echo 'usage: retrieve_revision_ids <D4J Project> <D4J Bug id>'
       echo 'example: retrieve_revision_ids Lang 1'
       return 1
@@ -44,7 +44,7 @@ retrieve_revision_ids () {
   local bug_id="$2"
 
   # Check if the DEFECTS4J_HOME environment variable is set
-  if [[ -z "${DEFECTS4J_HOME}" ]]; then
+  if [ -z "${DEFECTS4J_HOME}" ]; then
     echo 'DEFECTS4J_HOME environment variable is not set.' 1>&2
     echo 'Please set it to the path of your Defects4J installation.' 1>&2
     return 1
@@ -57,7 +57,7 @@ retrieve_revision_ids () {
   local line
   line=$(grep "^$bug_id," "$csv_file")
 
-  if [[ -z $line ]]; then
+  if [ -z "$line" ]; then
     echo "Bug ID $bug_id not found." 1>&2
     return 1
   fi

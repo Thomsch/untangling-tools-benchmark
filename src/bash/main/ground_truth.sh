@@ -21,7 +21,7 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: ./ground_truth.sh <project repository> <truth file>'
     echo 'example: ./ground_truth.sh path/to/Lang_1/ evaluation_path/truth.csv'
     exit 1

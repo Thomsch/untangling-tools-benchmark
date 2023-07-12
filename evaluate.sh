@@ -19,9 +19,8 @@
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
-set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 4 ]] ; then
+if [ $# -ne 4 ] ; then
     echo 'usage: evaluate.sh <D4J Project> <D4J Bug id> <out_dir> <repo_root>'
     echo 'example: evaluate.sh Lang 1 out/ repositories/'
     exit 1
@@ -35,10 +34,10 @@ workdir="${repo_root}/${project}_${vid}"
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
   echo 'Please set it to the path of a Java 11 java.'
   exit 1
@@ -55,7 +54,7 @@ mkdir -p "${metrics_path}"
 # Check that Java is 1.8 for Defects4j.
 # Defects4J will use whatever is on JAVA_HOME.
 version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
-if [[ $(echo "$version != 1.8" | bc) == 1 ]] ; then
+if [ "$version" != "1.8" ] ; then
     echo "Unsupported Java Version: ${version}. Please use Java 8."
     exit 1
 fi
@@ -81,7 +80,7 @@ classpath="${classpath}:$(defects4j export -p cp.test -w "${workdir}")"
 # 
 bug_fix_diff_out="${workdir}/diff/BF.diff"
 
-if [[ -f "$bug_fix_diff_out" ]]; then
+if [ -f "$bug_fix_diff_out" ]; then
     echo -ne 'Generating diff and code artifacts ................................................ CACHED\r'
 else
     ./src/bash/main/generate_artifacts.sh "$project" "$vid" "$workdir"
@@ -99,7 +98,7 @@ echo -ne '\n'
 # Compute commit metrics
 #
 metrics_csv="${metrics_path}/${project}_${vid}.csv" # Metrics for this bug
-if [[ -f "$metrics_csv" ]]; then
+if [ -f "$metrics_csv" ]; then
     echo -ne 'Calculating metrics ..................................................... CACHED\r'
 else
     # Parse the returned result into two variables
@@ -121,7 +120,7 @@ echo -ne 'Calculating ground truth .............................................
 
 truth_csv="${evaluation_path}/truth.csv"
 
-if [[ -f "$truth_csv" ]]; then
+if [ -f "$truth_csv" ]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
     ./src/bash/main/ground_truth.sh "$workdir" "$truth_csv"
@@ -152,7 +151,7 @@ echo -ne 'Untangling with file-based approach ..................................
 
 file_untangling_out="${evaluation_path}/file_untangling.csv"
 
-if [[ -f "$file_untangling_out" ]]; then
+if [ -f "$file_untangling_out" ]; then
     echo -ne 'Untangling with file-based approach ..................................... CACHED\r'
 else
     python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
@@ -174,7 +173,7 @@ echo -ne 'Untangling with SmartCommit ..........................................
 smartcommit_untangling_path="${out_path}/decomposition/smartcommit"
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
-if [[ -d "$smartcommit_untangling_results" ]]; then
+if [ -d "$smartcommit_untangling_results" ]; then
     echo -ne 'Untangling with SmartCommit ............................................. CACHED\r'
     regenerate_results=false
 else
@@ -222,7 +221,7 @@ flexeme_untangling_path="${decomposition_path}/flexeme"
 flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
-if [[ -f "$flexeme_untangling_graph" ]]; then
+if [ -f "$flexeme_untangling_graph" ]; then
     echo -ne 'Untangling with Flexeme ................................................. CACHED\r'
     regenerate_results=false
 else
