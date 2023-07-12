@@ -36,10 +36,10 @@ mkdir -p "$workdir"
 mkdir -p "$metrics_dir"
 mkdir -p "$logs_dir"
 
-# TODO: Parallelize
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
 echo ""
 
+# TODO: Override source of randomness with SmartCommit (in Java)
 score_bug(){
   project="$1"
   vid="$2"

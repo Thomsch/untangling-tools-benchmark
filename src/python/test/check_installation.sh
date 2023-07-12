@@ -1,15 +1,14 @@
 #!/bin/bash
 
-# Check if the local machine satisfy requirements:
-# - Python 3.8.15 is the default
-# - JAVA 8 is the default
-# - JAVA 11 is available but is not the default
-# Check for PyGraphviz and GNU coreutiles
+# Check for requirements:
+# - Python 3.8.15 is the version used and on the PATH.
+# - JAVA 8 is the default version on the PATH, but not used to run SmartCommit and Flexeme.
+# - JAVA 11 is installed, but not on the PATH.
+# Check for PyGraphviz and GNU coreutiles.
 
 set -o errexit
 set -o nounset
 set -o allexport
-# shellcheck source=/dev/null
 source .env
 set +o allexport
 
@@ -28,20 +27,18 @@ if [ "$java_version" != "1.8" ] ; then
 fi
 
 # Check JAVA 11 is installed and on PATH. Defects4J will use whatever is on JAVA_HOME.
-if [ -z "${JAVA_11}" ]; then
-  echo 'JAVA_11 environment variable is not set.'
-  echo 'Please set it to the path of a Java 11 Java.'
+if [[ -z "${JAVA11_HOME}" ]]; then
+  echo 'JAVA11_HOME environment variable is not set.'
+  echo 'Please set it to the path of a Java 11 java.'
   exit 1
 fi
 
 # Check for each program in the system's PATH 
-required_packages=("defects4j" "flexeme" "date" "cpanm")
-
-for package in "${required_packages[@]}"; do
+for package in defects4j flexeme date cpanm ; do
     if ! command -v "$package" >/dev/null 2>&1; then
         echo "Error: Required package '$package' is not installed."
         exit 1
     fi
 done
-echo 'All required packages, installations and dependencies are satisfied. The tool is ready.'
+echo 'The tool dependencies are satisfied.'
 
