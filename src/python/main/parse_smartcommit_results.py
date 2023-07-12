@@ -39,8 +39,7 @@ def list_json_files(dir):
 
 def main():
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
     args = sys.argv[1:]
 
@@ -169,5 +168,3 @@ def export_csv(output_path, result):
 
 if __name__ == "__main__":
     main()
-
-# LocalWords: unidiff
