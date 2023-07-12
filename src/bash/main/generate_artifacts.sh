@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generates the three diff artifacts based on the minimized bug-inducing patch in Defects4J.
+# Generates 3 diffs and 3 source code versions, for a Defects4J bug.
 # - $1: D4J Project name
 # - $2: D4J Bug id
 # - $3: Path to the checked out project repository
@@ -10,7 +10,7 @@
 # - NBF.diff: Non bug-fixing diff
 # - original.java: The buggy source code in version control
 # - buggy.java: The buggy source code after all non-bug fixes are applied
-# - fixed.java: The fixed source code after all minimal bug fixes are applied
+# - fixed.java: The fixed source code in version control
 
 set -o allexport
 # shellcheck source=/dev/null
@@ -26,18 +26,6 @@ fi
 project=$1
 vid=$2
 repository=$3
-diff="diff"
-workdir=$(pwd)
-
-source ./src/bash/main/d4j_utils.sh
-
-# Parse the returned result into two variables
-result=$(retrieve_revision_ids "$project" "$vid")
-read -r revision_original revision_fixed <<< "$result"
-
-cd "$repository" || exit 1
-mkdir "${diff}"
-revision_buggy=$(git rev-parse HEAD)
 
 if [ -z "${DEFECTS4J_HOME}" ]; then
   echo 'DEFECTS4J_HOME environment variable is not set.'
@@ -45,21 +33,50 @@ if [ -z "${DEFECTS4J_HOME}" ]; then
   exit 1
 fi
 
-inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"    # Retrieve the path to D4J bug-inducing minimized patch
+if [ -z "${DEFECTS4J_HOME}" ]; then
+  echo 'DEFECTS4J_HOME environment variable is not set.'
+  echo 'Please set it to the path of the Defects4J repository.'
+  exit 1
+fi
+
+if [ ! -d "${repository}" ] ; then
+  echo "Directory does not exist: ${repository}"
+  exit 1
+fi
+
+workdir="$(pwd)"
+diff_dir="${repository}/diff"
+mkdir "${diff_dir}"
+
+source ./src/bash/main/d4j_utils.sh
+
+# Parse the returned result into two variables
+retrieve_revision_ids "$project" "$vid" | read -r revision_original revision_fixed
+
+cd "$repository" || exit 1
+revision_buggy=$(git rev-parse HEAD)
+
+# D4J bug-inducing minimized patch
+inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
+if [ ! -f "${inverted_patch}" ] ; then
+  echo "Bad project or bug id; file does not exist: ${inverted_patch}"
+  exit 1
+fi
+
 # target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" \
 #   | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
 source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
   | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
 
 cd - || exit 1
-# Generate the three unified diff file with no context lines, then clean the diff
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${repository}/${diff}/VC.diff" 
+# Generate the three diff files with no context lines, then clean the diffs.
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
 d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" \
-    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/NBF.diff"
+    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
 d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" \
-    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${repository}/${diff}/BF.diff"
+    | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
 
-# Obtain and filter comments, empty lines, whitespaces, and import statements ouf of 3 source code files: 
+# Remove comments, empty lines, whitespaces, and import statements from 3 source code files:
 #       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
 # TODO: This doesn't handle when source file contain multiple filenames
 cd "$repository" || exit 1
