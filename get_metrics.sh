@@ -10,7 +10,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: ground_truth.sh <bugs_file> <out_dir>'
+    echo 'usage: get_metrics.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -21,10 +21,13 @@ if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
     exit 1
 fi
-
+export workdir="${out_dir}/repositories"
 export metrics_dir="${out_dir}/metrics" # Path containing the commit metrics.
+export logs_dir="${out_dir}/logs" # Path containing the commit metrics.
 
+mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
+mkdir -p "${logs_dir}"
 
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>_get_metrics.log"
 echo ""
