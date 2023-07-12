@@ -16,7 +16,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 4 ]] ; then
-    echo 'usage: ./score.sh <project> <vid> <out_dir> <repository>'
+    echo 'usage: ./score_bug.sh <project> <vid> <out_dir> <repository>'
     exit 1
 fi
 
@@ -24,6 +24,10 @@ project=$1
 vid=$2
 out_dir=$3
 repository=$4
+
+# Initialize related directory for input and output
+evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results
+truth_csv="${evaluation_path}/truth.csv"
 
 echo -ne '\n'
 echo "Calculating Rand Index score for project $project, bug $vid, repository $repository"
@@ -36,9 +40,6 @@ set -o allexport
 # shellcheck source=/dev/null
 source .env
 set +o allexport
-
-evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results
-truth_csv="${evaluation_path}/truth.csv"
 
 # Untangle with file-based approach
 echo -ne '\n'

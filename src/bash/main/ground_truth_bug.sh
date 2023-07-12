@@ -12,17 +12,18 @@
 #     - target: The line number of the change if the change is an addition
 #     - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
-#set -o errexit    # Exit immediately if a command exits with a non-zero status
-#set -o nounset    # Exit if script tries to use an uninitialized variable
-#set -o pipefail   # Produce a failure status if any command in the pipeline fails
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
+
 set -o allexport
 # shellcheck source=/dev/null
 source .env
 set +o allexport
 
 if [[ $# -ne 4 ]] ; then
-    echo 'usage: ./ground_truth.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
-    echo 'example: ./ground_truth.sh Lang 1 path/to/Lang_1/ truth.csv'
+    echo 'usage: ./ground_truth_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
+    echo 'example: ./ground_truth_bug.sh Lang 1 path/to/Lang_1/ truth.csv'
     exit 1
 fi
 

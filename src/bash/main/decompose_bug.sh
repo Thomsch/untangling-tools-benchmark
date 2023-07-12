@@ -16,7 +16,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 4 ]] ; then
-    echo 'usage: ./decompose.sh <project> <vid> <out_dir> <repository>'
+    echo 'usage: ./decompose_bug.sh <project> <vid> <out_dir> <repository>'
     exit 1
 fi
 
