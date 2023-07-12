@@ -71,7 +71,7 @@ def flatten_patch_object(patch):
     return flat_patch
 
 
-def tangled_hunks_count(original_diff, fix_diff):
+def count_tangled_hunks(original_diff, fix_diff):
     """
     Count the number of tangled hunks in a Version Control diff.
     If there is at least 1 tangled hunk, it means the commit contains tangled hunk.
@@ -109,7 +109,7 @@ def count_changed_lines(patch):
     return len(flat_patch)
 
 
-def tangled_lines_count(original_diff, bug_fix_diff, nonfix_diff):
+def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
     Return the number of tangled lines found in original VC diff.
     For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
@@ -132,8 +132,8 @@ def tangle_counts(repository):
     fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
 
-    tangled_lines_count = tangled_lines_count(original_diff, fix_diff, nonfix_diff)
-    tangled_hunks_count = tangled_hunks_count(original_diff, fix_diff)
+    tangled_lines_count = count_tangled_lines(original_diff, fix_diff, nonfix_diff)
+    tangled_hunks_count = count_tangled_hunks(original_diff, fix_diff)
 
     return f"{tangled_lines_count},{tangled_hunks_count}"
 
