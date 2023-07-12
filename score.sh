@@ -13,13 +13,19 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 2 ]] ; then
-    echo 'usage: ./score_all.sh <bugs_file> <out_dir>'
-    exit 1
-fi
+set -o allexport
+# shellcheck source=/dev/null
+source .env
+set +o allexport
 
 export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+
+if [[ $# -ne 2 ]] ; then
+    echo 'usage: ./score.sh <bugs_file> <out_dir>'
+    exit 1
+fi
+
 export out_file="${out_dir}/decomposition_scores.csv" # Aggregated results.
 export workdir="${out_dir}/repositories"
 export evaluation_dir="${out_dir}/evaluation"
@@ -30,17 +36,15 @@ mkdir -p "$evaluation_dir"
 mkdir -p "$decomposition_dir"
 mkdir -p "$logs_dir"
 
-set -o allexport
-# shellcheck source=/dev/null
-source .env
-set +o allexport
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
+echo ""
 
 parse_and_score_bug(){
   local project=$1
   local vid=$2
 
   export repository="${workdir}/${project}_${vid}"
-  START=$(date +%s.%N)   # Record start time for bug decomposition
+  START=$(date +%s.%N)   # Record start time for bug scoring
   
   ./src/bash/main/score.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}_score.log"
   ret_code=$?

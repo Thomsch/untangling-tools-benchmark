@@ -15,7 +15,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: ./ground_truth_all.sh <bugs_file> <out_dir>'
+    echo 'usage: ./ground_truth.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -31,6 +31,12 @@ source ./src/bash/main/d4j_utils.sh
 
 export bugs_file=$1 # Path to the file containing the bugs to untangle and evaluate.
 export out_dir=$2 # Path to the directory where the results are stored and repositories checked out.
+
+if ! [[ -f "$bugs_file" ]]; then
+    echo "File ${bugs_file} not found. Exiting."
+    exit 1
+fi
+
 export workdir="${out_dir}/repositories"
 export evaluation_dir="${out_dir}/evaluation"
 export logs_dir="${out_dir}/logs"
@@ -38,6 +44,9 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
+
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo ""
 
 generate_truth_for_bug() {
   local project=$1

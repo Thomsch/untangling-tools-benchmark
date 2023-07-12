@@ -14,7 +14,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
+    echo 'usage: ./decompose.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -50,14 +50,13 @@ fi
 export workdir="${out_dir}/repositories"
 export logs_dir="${out_dir}/logs"
 
-# export decomposition_path="${out_dir}/decomposition"
-# export smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
-# export flexeme_untangling_path="${decomposition_path}/flexeme"
-
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>.log"
+echo ""
+
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
 decompose_bug(){
