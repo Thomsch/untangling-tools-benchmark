@@ -46,7 +46,7 @@ generate_truth_for_bug() {
   export repository="${workdir}/${project}_${vid}"
   START=$(date +%s.%N)   # Record start time for bug decomposition
   
-  ./src/bash/main/ground_truth.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}.log"
+  ./src/bash/main/ground_truth.sh "$project" "$vid" "$out_dir" "$repository" &> "${logs_dir}/${project}_${vid}_ground_truth.log"
   ret_code=$?
   truth_status_string=$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")
   END=$(date +%s.%N)
