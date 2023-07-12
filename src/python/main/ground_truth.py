@@ -272,8 +272,7 @@ def repair_line_numbers(patch_diff, original_diff):
 
 def main():
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
 
     args = sys.argv[1:]
