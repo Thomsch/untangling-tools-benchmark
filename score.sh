@@ -46,7 +46,7 @@ parse_and_score_bug(){
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug scoring
   
-  ./src/bash/main/score.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_score.log" 2>&1
+  ./src/bash/main/score_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_score.log" 2>&1
   ret_code=$?
   scoring_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"

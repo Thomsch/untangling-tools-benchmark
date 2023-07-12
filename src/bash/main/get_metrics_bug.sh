@@ -50,7 +50,9 @@ else
     # Parse the returned result into two variables
     result="$(retrieve_revision_ids "$project" "$vid")"
     read -r revision_buggy revision_fixed <<< "$result"
-    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$workdir" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
+
+    echo "revision_buggy=$result"
+    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     then
         echo -ne 'Calculating metrics ..................................................... OK\r'
     else

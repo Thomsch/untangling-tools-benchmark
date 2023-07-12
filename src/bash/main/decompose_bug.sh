@@ -48,9 +48,9 @@ defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
 
 # Get source path and class path
-sourcepath="$(defects4j export -p dir.src.classes -w "${workdir}")"
+sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
 sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}")"
-classpath="$(defects4j export -p cp.compile -w "${workdir}")"
+classpath="$(defects4j export -p cp.compile -w "${repository}")"
 classpath="${classpath}:$(defects4j export -p cp.test -w "${repository}")"
 
 echo -ne '\n'
@@ -86,7 +86,7 @@ else
   echo -ne '\n'
   mkdir -p "$flexeme_untangling_results"
   START_DECOMPOSITION="$(date +%s.%N)"
-  if ./src/bash/main/untangle_flexeme.sh "$workdir" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+  if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
   then
     echo -ne 'Untangling with Flexeme ................................................... OK'
     regenerate_results=true
