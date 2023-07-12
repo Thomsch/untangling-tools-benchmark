@@ -15,7 +15,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: ground_truth.sh <bugs_file> <out_dir>'
+    echo 'usage: generate_ground_truth.sh <bugs_file> <out_dir>'
     exit 1
 fi
 

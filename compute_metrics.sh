@@ -10,7 +10,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: get_metrics.sh <bugs_file> <out_dir>'
+    echo 'usage: compute_metrics.sh <bugs_file> <out_dir>'
     exit 1
 fi
 
@@ -29,7 +29,7 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_get_metrics.log"
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 echo ""
 
 generate_commit_metrics() {
@@ -38,7 +38,7 @@ generate_commit_metrics() {
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug commit metrics generation
   
-  ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_get_metrics.log" 2>&1
+  ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
   ret_code=$?
   truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
