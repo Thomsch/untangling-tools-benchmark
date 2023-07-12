@@ -1,0 +1,112 @@
+{
+  "repoID": "-265909808",
+  "repoName": "Closure_103",
+  "fileID": "08977fce0efc4f67a163416d63d60b04",
+  "index": 1,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+  "currentRelativePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "e4166348f4994ec4b64f0f864a20155f": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "08977fce0efc4f67a163416d63d60b04",
+      "diffHunkID": "e4166348f4994ec4b64f0f864a20155f",
+      "fileIndex": 1,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+        "startLine": 760,
+        "endLine": 759,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+        "startLine": 761,
+        "endLine": 772,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "      // If the property does not exist on the referenced type but the original",
+          "      // type is an object type, see if any subtype has the property.",
+          "      if (foundType == null) {",
+          "        ObjectType maybeType = ObjectType.cast(",
+          "            registry.getGreatestSubtypeWithProperty(type, field));",
+          "        // getGreatestSubtypeWithProperty does not guarantee that the property",
+          "        // is defined on the returned type, it just indicates that it might be,",
+          "        // so we have to double check.",
+          "        if (maybeType != null && maybeType.hasOwnProperty(field)) {",
+          "          foundType = maybeType;",
+          "        }",
+          "      }"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add InfixExpression.\nAdd VariableDeclarationStatement \"maybeType\".\nAdd IfStatement.\n",
+      "rawDiffs": [
+        "@@ -760,0 +761,12 @@ class DisambiguateProperties<T> implements CompilerPass {",
+        "+      // If the property does not exist on the referenced type but the original",
+        "+      // type is an object type, see if any subtype has the property.",
+        "+      if (foundType == null) {",
+        "+        ObjectType maybeType = ObjectType.cast(",
+        "+            registry.getGreatestSubtypeWithProperty(type, field));",
+        "+        // getGreatestSubtypeWithProperty does not guarantee that the property",
+        "+        // is defined on the returned type, it just indicates that it might be,",
+        "+        // so we have to double check.",
+        "+        if (maybeType != null && maybeType.hasOwnProperty(field)) {",
+        "+          foundType = maybeType;",
+        "+        }",
+        "+      }"
+      ]
+    },
+    "5733679721c04d259a44419f1eac4446": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "08977fce0efc4f67a163416d63d60b04",
+      "diffHunkID": "5733679721c04d259a44419f1eac4446",
+      "fileIndex": 1,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+        "startLine": 736,
+        "endLine": 736,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    @Override public JSType getTypeWithProperty(String field, JSType type) {"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/DisambiguateProperties.java",
+        "startLine": 736,
+        "endLine": 736,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    @Override public ObjectType getTypeWithProperty(String field, JSType type) {"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update MarkerAnnotation.\nUpdate MethodDeclaration \"getTypeWithProperty\".\nChange Type \"JSType\" To: \"ObjectType\".\n",
+      "rawDiffs": [
+        "@@ -736 +736 @@ class DisambiguateProperties<T> implements CompilerPass {",
+        "-    @Override public JSType getTypeWithProperty(String field, JSType type) {",
+        "+    @Override public ObjectType getTypeWithProperty(String field, JSType type) {"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/com/google/javascript/jscomp/DisambiguateProperties.java b/src/com/google/javascript/jscomp/DisambiguateProperties.java",
+    "index 9d9de035..ca5edbd6 100644",
+    "--- a/src/com/google/javascript/jscomp/DisambiguateProperties.java",
+    "+++ b/src/com/google/javascript/jscomp/DisambiguateProperties.java"
+  ]
+}

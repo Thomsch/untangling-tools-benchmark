@@ -1,0 +1,126 @@
+{
+  "repoID": "407064453",
+  "repoName": "Closure_78",
+  "fileID": "a4482c0bb2ff45b183165f4c40abceef",
+  "index": 0,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "currentRelativePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "143fbc4a328540f0a6f47ec802b1e999": {
+      "repoID": "407064453",
+      "repoName": "Closure_78",
+      "fileID": "a4482c0bb2ff45b183165f4c40abceef",
+      "diffHunkID": "143fbc4a328540f0a6f47ec802b1e999",
+      "fileIndex": 0,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 35,
+        "endLine": 38,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "  static final DiagnosticType DIVIDE_BY_0_ERROR = DiagnosticType.error(",
+          "      \"JSC_DIVIDE_BY_0_ERROR\",",
+          "      \"Divide by 0\");",
+          ""
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 34,
+        "endLine": 33,
+        "version": "CURRENT",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "fileType": "JAVA",
+      "changeType": "DELETED",
+      "description": "Delete FieldDeclaration \"DIVIDE_BY_0_ERROR\".\n",
+      "rawDiffs": [
+        "@@ -35,4 +34,0 @@ class PeepholeFoldConstants extends AbstractPeepholeOptimization {",
+        "-  static final DiagnosticType DIVIDE_BY_0_ERROR = DiagnosticType.error(",
+        "-      \"JSC_DIVIDE_BY_0_ERROR\",",
+        "-      \"Divide by 0\");",
+        "-"
+      ]
+    },
+    "b3130c0c67bd483eac9deeb8cf46a795": {
+      "repoID": "407064453",
+      "repoName": "Closure_78",
+      "fileID": "a4482c0bb2ff45b183165f4c40abceef",
+      "diffHunkID": "b3130c0c67bd483eac9deeb8cf46a795",
+      "fileIndex": 0,
+      "index": 2,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 722,
+        "endLine": 722,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "          error(DIVIDE_BY_0_ERROR, right);"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 716,
+        "endLine": 715,
+        "version": "CURRENT",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "fileType": "JAVA",
+      "changeType": "DELETED",
+      "description": "Delete MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -722 +716,0 @@ class PeepholeFoldConstants extends AbstractPeepholeOptimization {",
+        "-          error(DIVIDE_BY_0_ERROR, right);"
+      ]
+    },
+    "a6df848d35ed4052a8393167c467ca40": {
+      "repoID": "407064453",
+      "repoName": "Closure_78",
+      "fileID": "a4482c0bb2ff45b183165f4c40abceef",
+      "diffHunkID": "a6df848d35ed4052a8393167c467ca40",
+      "fileIndex": 0,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 715,
+        "endLine": 715,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "          error(DIVIDE_BY_0_ERROR, right);"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+        "startLine": 710,
+        "endLine": 709,
+        "version": "CURRENT",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "fileType": "JAVA",
+      "changeType": "DELETED",
+      "description": "Delete MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -715 +710,0 @@ class PeepholeFoldConstants extends AbstractPeepholeOptimization {",
+        "-          error(DIVIDE_BY_0_ERROR, right);"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/com/google/javascript/jscomp/PeepholeFoldConstants.java b/src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+    "index 0df495dc..1afb7a80 100644",
+    "--- a/src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+    "+++ b/src/com/google/javascript/jscomp/PeepholeFoldConstants.java"
+  ]
+}

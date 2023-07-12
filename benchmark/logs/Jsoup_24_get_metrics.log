@@ -1,0 +1,5 @@
+
+Calculating ground truth for project Jsoup, bug 24, repository benchmark//repositories/Jsoup_24
+Check out program version: Jsoup-24b....................................... OK
+revision_buggy=1d37cef1d8367af963fee4dc99164708f5d3c6f8 04b8921d4dcab019b02588620d953c4f19d43a58
+Calculating metrics ..................................................... OK

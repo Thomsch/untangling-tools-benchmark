@@ -1,0 +1,114 @@
+Evaluating project Lang, bug 8, repository src/python/test/e2e/repositories/Lang_8
+Checking out a4a45505 to /Users/thanhdang/untangling-tools-benchmark/src/py OK
+Init local repository...................................................... OK
+Tag post-fix revision...................................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Initialize fixed program version........................................... OK
+Apply patch................................................................ OK
+Initialize buggy program version........................................... OK
+Diff a4a45505:8d192d70..................................................... OK
+Apply patch................................................................ OK
+Tag pre-fix revision....................................................... OK
+Check out program version: Lang-8b......................................... OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+/Users/thanhdang/untangling-tools-benchmark
+Previous HEAD position was 632b0aad D4J_Lang_8_BUGGY_VERSION
+HEAD is now at 8d192d70 LANG-815 DurationFormatUtils.formatPeriod() mis-calculation Add test case to show there is no issue
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:79:15: warning: missing terminating ' character [-Winvalid-pp-token]
+    // So, don't change this code! It works and is very fast.
+              ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:28: warning: empty character constant [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                           ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:53: warning: missing terminating ' character [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                                                    ^
+3 warnings generated.
+Previous HEAD position was 8d192d70 LANG-815 DurationFormatUtils.formatPeriod() mis-calculation Add test case to show there is no issue
+HEAD is now at 632b0aad D4J_Lang_8_BUGGY_VERSION
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:79:15: warning: missing terminating ' character [-Winvalid-pp-token]
+    // So, don't change this code! It works and is very fast.
+              ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:28: warning: empty character constant [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                           ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:53: warning: missing terminating ' character [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                                                    ^
+3 warnings generated.
+Previous HEAD position was 632b0aad D4J_Lang_8_BUGGY_VERSION
+HEAD is now at a4a45505 LANG-818 FastDateFormat's "z" pattern does not respect timezone of Calendar instances passed to format()
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:79:15: warning: missing terminating ' character [-Winvalid-pp-token]
+    // So, don't change this code! It works and is very fast.
+              ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:28: warning: empty character constant [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                           ^
+src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java:329:53: warning: missing terminating ' character [-Winvalid-pp-token]
+                        // '' is treated as escaped '
+                                                    ^
+3 warnings generated.
+Previous HEAD position was a4a45505 LANG-818 FastDateFormat's "z" pattern does not respect timezone of Calendar instances passed to format()
+HEAD is now at 632b0aad D4J_Lang_8_BUGGY_VERSION
+/Users/thanhdang/untangling-tools-benchmark
+Generating diff and code artifacts .................................................. OK
+Calculating metrics ..................................................... OK
+Calculating ground truth ..................................................These are tangled lines: 
++        private final TimeZone zone;
+
+-        private final TimeZone zone;
+
+These are tangled lines: 
++            zone = timeZone;
+
+-            zone = timeZone;
+
+Calculating ground truth .................................................. OK
+
+Untangling with file-based approach .........................................Untangling with file-based approach ....................................... OK
+
+Untangling with SmartCommit ...............................................
+Begin analysis, [repo] Lang_8 [branch] 632b0aad106cd55ec60f69bf5ababee3e55ab0ff
+End analysis, results saved under: src/python/test/e2e/decomposition/smartcommit/Lang_8
+Untangling with SmartCommit ............................................... OK
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+
+Untangling with Flexeme ...............................................
+[2023-07-10 14:24:38][root] INFO: Flexeme generate PDG for a4a455053e7e4a77320efd6db0814f4de82d754d in /Users/thanhdang/untangling-tools-benchmark/src/python/test/e2e/repositories/Lang_8
+[2023-07-10 14:24:49][root] INFO: Generating PDGs for /src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
+[2023-07-10 14:24:49][root] INFO: Generating PDG for /src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java@a4a455053e7e4a77320efd6db0814f4de82d754d^
+[2023-07-10 14:24:56][root] INFO: Generating PDG for /src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java@a4a455053e7e4a77320efd6db0814f4de82d754d
+[2023-07-10 14:25:02][root] INFO: Building ∂PDG for /src/main/java/org/apache/commons/lang3/time/FastDatePrinter.java
+[2023-07-10 14:25:34][root] INFO: Generating PDGs for /src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java
+[2023-07-10 14:25:34][root] INFO: Generating PDG for /src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java@a4a455053e7e4a77320efd6db0814f4de82d754d^
+[2023-07-10 14:25:38][root] INFO: Generating PDG for /src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java@a4a455053e7e4a77320efd6db0814f4de82d754d
+[2023-07-10 14:25:41][root] INFO: Building ∂PDG for /src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java
+[Scan and clean] Cleaning data-point a4a455053e7e4a77320efd6db0814f4de82d754d
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-10 14:27:16][root] INFO: List of graph length 72
+[2023-07-10 14:27:20][root] INFO: n=72
+[2023-07-10 14:27:20][root] INFO: affinity=[0. 0. 0. ... 0. 0. 0.]
+[2023-07-10 14:27:20][root] INFO: Affinity: [0.78699284 0.44271041 0.2778972  ... 0.81536276 0.3090578  0.8822397 ]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:29<00:00, 29.85s/it]                                             Untangling with Flexeme ................................................... OK
+Parsing Flexeme results ...............................................
+Parsing Flexeme results ................................................... OK
+
+
+Computing untangling scores ...............................................Computing untangling scores ............................................... OK

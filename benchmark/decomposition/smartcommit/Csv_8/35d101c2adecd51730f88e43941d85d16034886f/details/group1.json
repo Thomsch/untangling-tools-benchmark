@@ -1,0 +1,116 @@
+FEATURE
+feature: Add or modify feature ...
+------------
+1:2
+Delete InfixExpression.
+Delete VariableDeclarationStatement "set".
+Delete ExpressionStatement "set.addAll(Arrays.asList(header));".
+Delete IfStatement.
+
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 661,
+  "endLine": 667,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "        if (header != null) {",
+    "            final Set<String> set = new HashSet<String>(header.length);",
+    "            set.addAll(Arrays.asList(header));",
+    "            if (set.size() != header.length) {",
+    "                throw new IllegalStateException(\"The header contains duplicate names: \" + Arrays.toString(header));",
+    "            }",
+    "        }"
+  ]
+}
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 670,
+  "endLine": 669,
+  "version": "CURRENT",
+  "contentType": "EMPTY",
+  "codeSnippet": []
+}
+------------
+2:0
+Update NormalAnnotation.
+Modify Annotation "@Test(expected = IllegalStateException.class)" To: "@Test(expected = IllegalArgumentException.class)".
+
+{
+  "relativeFilePath": "src/test/java/org/apache/commons/csv/CSVFormatTest.java",
+  "startLine": 64,
+  "endLine": 64,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    @Test(expected = IllegalStateException.class)"
+  ]
+}
+{
+  "relativeFilePath": "src/test/java/org/apache/commons/csv/CSVFormatTest.java",
+  "startLine": 64,
+  "endLine": 64,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    @Test(expected = IllegalArgumentException.class)"
+  ]
+}
+------------
+1:0
+Update FieldDeclaration "header".
+
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 158,
+  "endLine": 158,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    private final String[] header;"
+  ]
+}
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 158,
+  "endLine": 158,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    private final String[] header; // array of header column names"
+  ]
+}
+------------
+1:1
+Update Assignment To InfixExpression.
+
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 313,
+  "endLine": 313,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "        this.header = header == null ? null : header.clone();"
+  ]
+}
+{
+  "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "startLine": 313,
+  "endLine": 323,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "        if (header == null) {",
+    "        \tthis.header = null;",
+    "        } else {",
+    "        \tSet<String> dupCheck = new HashSet<String>();",
+    "        \tfor(String hdr : header) {",
+    "        \t\tif (!dupCheck.add(hdr)) {",
+    "        \t\t\tthrow new IllegalArgumentException(\"The header contains a duplicate entry: '\" + hdr + \"' in \" + Arrays.toString(header));",
+    "        \t\t}",
+    "        \t}",
+    "            this.header = header.clone();        \t",
+    "        }"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "repoID": "-1902995968",
+  "repoName": "Jsoup_24",
+  "fileID": "cfbd4154f26a403e836dc624ca150642",
+  "index": 1,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/main/java/org/jsoup/parser/TokeniserState.java",
+  "currentRelativePath": "src/main/java/org/jsoup/parser/TokeniserState.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "40aab52dfcf44d3cab5cd6c31f13df99": {
+      "repoID": "-1902995968",
+      "repoName": "Jsoup_24",
+      "fileID": "cfbd4154f26a403e836dc624ca150642",
+      "diffHunkID": "40aab52dfcf44d3cab5cd6c31f13df99",
+      "fileIndex": 1,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/main/java/org/jsoup/parser/TokeniserState.java",
+        "startLine": 558,
+        "endLine": 558,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "                r.advance();"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/main/java/org/jsoup/parser/TokeniserState.java",
+        "startLine": 557,
+        "endLine": 556,
+        "version": "CURRENT",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "fileType": "JAVA",
+      "changeType": "DELETED",
+      "description": "Delete MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -558 +557,0 @@ enum TokeniserState {",
+        "-                r.advance();"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/main/java/org/jsoup/parser/TokeniserState.java b/src/main/java/org/jsoup/parser/TokeniserState.java",
+    "index e530264..e3013c7 100644",
+    "--- a/src/main/java/org/jsoup/parser/TokeniserState.java",
+    "+++ b/src/main/java/org/jsoup/parser/TokeniserState.java"
+  ]
+}

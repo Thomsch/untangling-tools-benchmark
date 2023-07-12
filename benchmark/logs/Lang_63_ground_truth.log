@@ -1,0 +1,18 @@
+
+Calculating ground truth for project Lang, bug 63, repository benchmark//repositories/Lang_63
+Checking out 0695c3f7 to /Users/thanhdang/untangling-tools-benchmark/benchm OK
+Init local repository...................................................... OK
+Tag post-fix revision...................................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Initialize fixed program version........................................... OK
+Apply patch................................................................ OK
+Initialize buggy program version........................................... OK
+Diff 0695c3f7:3333dcc1..................................................... OK
+Apply patch................................................................ OK
+Tag pre-fix revision....................................................... OK
+Check out program version: Lang-63b........................................ OK
+Line not found (306, None): '-            days += 31;
+'
+Calculating ground truth .................................................. OK

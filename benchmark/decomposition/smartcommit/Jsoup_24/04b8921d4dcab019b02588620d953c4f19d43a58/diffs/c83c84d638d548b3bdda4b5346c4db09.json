@@ -1,0 +1,80 @@
+{
+  "repoID": "-1902995968",
+  "repoName": "Jsoup_24",
+  "fileID": "c83c84d638d548b3bdda4b5346c4db09",
+  "index": 2,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+  "currentRelativePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "5c164154d94c46f2b8142b3045e34614": {
+      "repoID": "-1902995968",
+      "repoName": "Jsoup_24",
+      "fileID": "c83c84d638d548b3bdda4b5346c4db09",
+      "diffHunkID": "5c164154d94c46f2b8142b3045e34614",
+      "fileIndex": 2,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+        "startLine": 681,
+        "endLine": 680,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+        "startLine": 682,
+        "endLine": 695,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "",
+          "    @Test public void handlesQuotesInCommentsInScripts() {",
+          "        String html = \"<script>\\n\" +",
+          "                \"  <!--\\n\" +",
+          "                \"    document.write('</scr' + 'ipt>');\\n\" +",
+          "                \"  // -->\\n\" +",
+          "                \"</script>\";",
+          "        Document node = Jsoup.parseBodyFragment(html);",
+          "        assertEquals(\"<script>\\n\" +",
+          "                \"  <!--\\n\" +",
+          "                \"    document.write('</scr' + 'ipt>');\\n\" +",
+          "                \"  // -->\\n\" +",
+          "                \"</script>\", node.body().html());",
+          "    }"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add MarkerAnnotation.\nAdd MethodDeclaration \"handlesQuotesInCommentsInScripts\".\nAdd VariableDeclarationStatement \"html\".\nAdd VariableDeclarationStatement \"node\".\nAdd ExpressionStatement \"assertEquals(\"<script>\\n\" + \"  <!--\\n\" + \"    document.write('</scr' + 'ipt>');\\n\"+ \"  // -->\\n\"+ \"</script>\",node.body().html());\".\n",
+      "rawDiffs": [
+        "@@ -681,0 +682,14 @@ public class HtmlParserTest {",
+        "+",
+        "+    @Test public void handlesQuotesInCommentsInScripts() {",
+        "+        String html = \"<script>\\n\" +",
+        "+                \"  <!--\\n\" +",
+        "+                \"    document.write('</scr' + 'ipt>');\\n\" +",
+        "+                \"  // -->\\n\" +",
+        "+                \"</script>\";",
+        "+        Document node = Jsoup.parseBodyFragment(html);",
+        "+        assertEquals(\"<script>\\n\" +",
+        "+                \"  <!--\\n\" +",
+        "+                \"    document.write('</scr' + 'ipt>');\\n\" +",
+        "+                \"  // -->\\n\" +",
+        "+                \"</script>\", node.body().html());",
+        "+    }"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/test/java/org/jsoup/parser/HtmlParserTest.java b/src/test/java/org/jsoup/parser/HtmlParserTest.java",
+    "index 76ac270..2e4c877 100644",
+    "--- a/src/test/java/org/jsoup/parser/HtmlParserTest.java",
+    "+++ b/src/test/java/org/jsoup/parser/HtmlParserTest.java"
+  ]
+}

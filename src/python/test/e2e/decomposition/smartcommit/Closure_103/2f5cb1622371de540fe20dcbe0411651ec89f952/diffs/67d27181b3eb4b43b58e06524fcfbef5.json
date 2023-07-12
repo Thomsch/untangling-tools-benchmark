@@ -1,0 +1,100 @@
+{
+  "repoID": "-265909808",
+  "repoName": "Closure_103",
+  "fileID": "67d27181b3eb4b43b58e06524fcfbef5",
+  "index": 3,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+  "currentRelativePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "41a6bb6d0c9f409bb446546bc193080b": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "67d27181b3eb4b43b58e06524fcfbef5",
+      "diffHunkID": "41a6bb6d0c9f409bb446546bc193080b",
+      "fileIndex": 3,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+        "startLine": 1248,
+        "endLine": 1248,
+        "version": "BASE",
+        "contentType": "BLANKLINE",
+        "codeSnippet": [
+          ""
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+        "startLine": 1254,
+        "endLine": 1254,
+        "version": "CURRENT",
+        "contentType": "BLANKLINE",
+        "codeSnippet": [
+          "  "
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Add Code.\n",
+      "rawDiffs": [
+        "@@ -1248 +1254 @@ public class ControlFlowAnalysisTest extends TestCase {",
+        "-",
+        "+  "
+      ]
+    },
+    "05caa6c1e512409cb225df1be1edf1af": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "67d27181b3eb4b43b58e06524fcfbef5",
+      "diffHunkID": "05caa6c1e512409cb225df1be1edf1af",
+      "fileIndex": 3,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+        "startLine": 1242,
+        "endLine": 1241,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+        "startLine": 1243,
+        "endLine": 1248,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "  public void testInstanceOf() {",
+          "    String src = \"try { x instanceof 'x' } catch (e) { }\";",
+          "    ControlFlowGraph<Node> cfg = createCfg(src, true);",
+          "    assertCrossEdge(cfg, Token.EXPR_RESULT, Token.BLOCK, Branch.ON_EX);",
+          "  }",
+          "  "
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add MethodDeclaration \"testInstanceOf\".\n",
+      "rawDiffs": [
+        "@@ -1242,0 +1243,6 @@ public class ControlFlowAnalysisTest extends TestCase {",
+        "+  public void testInstanceOf() {",
+        "+    String src = \"try { x instanceof 'x' } catch (e) { }\";",
+        "+    ControlFlowGraph<Node> cfg = createCfg(src, true);",
+        "+    assertCrossEdge(cfg, Token.EXPR_RESULT, Token.BLOCK, Branch.ON_EX);",
+        "+  }",
+        "+  "
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java b/test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+    "index 4175682a..f63e9370 100644",
+    "--- a/test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java",
+    "+++ b/test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java"
+  ]
+}

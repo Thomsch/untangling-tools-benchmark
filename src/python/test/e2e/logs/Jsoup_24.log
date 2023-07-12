@@ -1,0 +1,101 @@
+Evaluating project Jsoup, bug 24, repository src/python/test/e2e/repositories/Jsoup_24
+Checking out 04b8921d to /Users/thanhdang/untangling-tools-benchmark/src/py OK
+Init local repository...................................................... OK
+Tag post-fix revision...................................................... OK
+Copy generated Ant build file.............................................. OK
+Run post-checkout hook..................................................... OK
+Excluding broken/flaky tests............................................... OK
+Initialize fixed program version........................................... OK
+Apply patch................................................................ OK
+Initialize buggy program version........................................... OK
+Diff 04b8921d:1d37cef1..................................................... OK
+Apply patch................................................................ OK
+Tag pre-fix revision....................................................... OK
+Check out program version: Jsoup-24b....................................... OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+/Users/thanhdang/untangling-tools-benchmark
+Previous HEAD position was 7d935f6 D4J_Jsoup_24_BUGGY_VERSION
+HEAD is now at 1d37cef Fixed HTML entity parser to correctly parse entities like frac14 (letter + number combo).
+src/main/java/org/jsoup/parser/TokeniserState.java:219:65: warning: missing terminating ' character [-Winvalid-pp-token]
+                // diverge from spec: got a start tag, but there's no appropriate end tag (</title>), so rather than
+                                                                ^
+src/main/java/org/jsoup/parser/TokeniserState.java:1102:107: warning: missing terminating ' character [-Winvalid-pp-token]
+                t.advanceTransition(BogusComment); // advance so this character gets in bogus comment data's rewind
+                                                                                                          ^
+2 warnings generated.
+Previous HEAD position was 1d37cef Fixed HTML entity parser to correctly parse entities like frac14 (letter + number combo).
+HEAD is now at 7d935f6 D4J_Jsoup_24_BUGGY_VERSION
+src/main/java/org/jsoup/parser/TokeniserState.java:219:65: warning: missing terminating ' character [-Winvalid-pp-token]
+                // diverge from spec: got a start tag, but there's no appropriate end tag (</title>), so rather than
+                                                                ^
+src/main/java/org/jsoup/parser/TokeniserState.java:1102:107: warning: missing terminating ' character [-Winvalid-pp-token]
+                t.advanceTransition(BogusComment); // advance so this character gets in bogus comment data's rewind
+                                                                                                          ^
+2 warnings generated.
+Previous HEAD position was 7d935f6 D4J_Jsoup_24_BUGGY_VERSION
+HEAD is now at 04b8921 Fixed issue where contents of a script tag within a comment could be incorrectly parsed.
+src/main/java/org/jsoup/parser/TokeniserState.java:219:65: warning: missing terminating ' character [-Winvalid-pp-token]
+                // diverge from spec: got a start tag, but there's no appropriate end tag (</title>), so rather than
+                                                                ^
+src/main/java/org/jsoup/parser/TokeniserState.java:1101:107: warning: missing terminating ' character [-Winvalid-pp-token]
+                t.advanceTransition(BogusComment); // advance so this character gets in bogus comment data's rewind
+                                                                                                          ^
+2 warnings generated.
+Previous HEAD position was 04b8921 Fixed issue where contents of a script tag within a comment could be incorrectly parsed.
+HEAD is now at 7d935f6 D4J_Jsoup_24_BUGGY_VERSION
+/Users/thanhdang/untangling-tools-benchmark
+Generating diff and code artifacts .................................................. OK
+Calculating metrics ..................................................... OK
+Calculating ground truth ..................................................Calculating ground truth .................................................. OK
+
+Untangling with file-based approach .........................................Untangling with file-based approach ....................................... OK
+
+Untangling with SmartCommit ...............................................
+Begin analysis, [repo] Jsoup_24 [branch] 7d935f6042ecf95e793321228cff9c86c6655980
+End analysis, results saved under: src/python/test/e2e/decomposition/smartcommit/Jsoup_24
+Untangling with SmartCommit ............................................... OK
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+
+Untangling with Flexeme ...............................................
+[2023-07-10 14:24:32][root] INFO: Flexeme generate PDG for 04b8921d4dcab019b02588620d953c4f19d43a58 in /Users/thanhdang/untangling-tools-benchmark/src/python/test/e2e/repositories/Jsoup_24
+[2023-07-10 14:24:33][root] INFO: Generating PDGs for /src/main/java/org/jsoup/parser/TokeniserState.java
+[2023-07-10 14:24:33][root] INFO: Generating PDG for /src/main/java/org/jsoup/parser/TokeniserState.java@04b8921d4dcab019b02588620d953c4f19d43a58^
+[2023-07-10 14:24:37][root] INFO: Generating PDG for /src/main/java/org/jsoup/parser/TokeniserState.java@04b8921d4dcab019b02588620d953c4f19d43a58
+[2023-07-10 14:24:42][root] INFO: Building ∂PDG for /src/main/java/org/jsoup/parser/TokeniserState.java
+[2023-07-10 14:26:18][root] INFO: Generating PDGs for /src/test/java/org/jsoup/parser/HtmlParserTest.java
+[2023-07-10 14:26:18][root] INFO: Generating PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java@04b8921d4dcab019b02588620d953c4f19d43a58^
+[2023-07-10 14:26:22][root] INFO: Generating PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java@04b8921d4dcab019b02588620d953c4f19d43a58
+[2023-07-10 14:26:26][root] INFO: Building ∂PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java
+n2542 [cluster="null.HtmlParserTest.handlesUnclosedScriptAtEof()", label="<script>Data</script n=\", span="589-589"];
+      ^
+Expected '}', found '['  (at char 98212), (line:2550, col:7)
+n2542 [cluster="null.HtmlParserTest.handlesUnclosedScriptAtEof()", label="<script>Data</script n=\", span="589-589"];
+      ^
+Expected '}', found '['  (at char 98212), (line:2550, col:7)
+[Scan and clean] Cleaning data-point 04b8921d4dcab019b02588620d953c4f19d43a58
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-10 14:28:28][root] INFO: List of graph length 3
+[2023-07-10 14:28:28][root] INFO: n=3
+[2023-07-10 14:28:28][root] INFO: affinity=[0. 0. 0.]
+[2023-07-10 14:28:28][root] INFO: Affinity: [0.15016341 0.3090578  0.3745927 ]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:32<00:00, 32.64s/it]                                             Untangling with Flexeme ................................................... OK
+Parsing Flexeme results ...............................................
+Parsing Flexeme results ................................................... OK
+
+
+Computing untangling scores ...............................................Computing untangling scores ............................................... OK

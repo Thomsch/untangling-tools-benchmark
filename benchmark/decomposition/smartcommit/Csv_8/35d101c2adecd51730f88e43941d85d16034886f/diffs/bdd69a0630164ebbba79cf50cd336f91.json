@@ -1,0 +1,54 @@
+{
+  "repoID": "65418271",
+  "repoName": "Csv_8",
+  "fileID": "bdd69a0630164ebbba79cf50cd336f91",
+  "index": 0,
+  "status": "MODIFIED",
+  "fileType": "XML",
+  "baseRelativePath": "src/changes/changes.xml",
+  "currentRelativePath": "src/changes/changes.xml",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "9cbfef193fad4752993baa9ae1df4b65": {
+      "repoID": "65418271",
+      "repoName": "Csv_8",
+      "fileID": "bdd69a0630164ebbba79cf50cd336f91",
+      "diffHunkID": "9cbfef193fad4752993baa9ae1df4b65",
+      "fileIndex": 0,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/changes/changes.xml",
+        "startLine": 42,
+        "endLine": 41,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/changes/changes.xml",
+        "startLine": 43,
+        "endLine": 43,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "        <action issue=\"CSV-114\" type=\"fix\" dev=\"sebb\">CSVFormat constructor should reject a header array with duplicate entries</action>"
+        ]
+      },
+      "fileType": "XML",
+      "changeType": "ADDED",
+      "description": "Add Code.\n",
+      "rawDiffs": [
+        "@@ -42,0 +43 @@ The <action> type attribute can be add,update,fix,remove.",
+        "+        <action issue=\"CSV-114\" type=\"fix\" dev=\"sebb\">CSVFormat constructor should reject a header array with duplicate entries</action>"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/changes/changes.xml b/src/changes/changes.xml",
+    "index 384a032..0e128b8 100644",
+    "--- a/src/changes/changes.xml",
+    "+++ b/src/changes/changes.xml"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "repoID": "-2026191289",
+  "repoName": "Lang_8",
+  "fileID": "8967baeee179494aac9efd5428450573",
+  "index": 0,
+  "status": "MODIFIED",
+  "fileType": "XML",
+  "baseRelativePath": "src/changes/changes.xml",
+  "currentRelativePath": "src/changes/changes.xml",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "547b057819e94dd6a6937e1be0a0b304": {
+      "repoID": "-2026191289",
+      "repoName": "Lang_8",
+      "fileID": "8967baeee179494aac9efd5428450573",
+      "diffHunkID": "547b057819e94dd6a6937e1be0a0b304",
+      "fileIndex": 0,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/changes/changes.xml",
+        "startLine": 30,
+        "endLine": 29,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/changes/changes.xml",
+        "startLine": 31,
+        "endLine": 31,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    <action issue=\"LANG-818\" type=\"fix\">FastDateFormat's \"z\" pattern does not respect timezone of Calendar instances passed to format()</action>"
+        ]
+      },
+      "fileType": "XML",
+      "changeType": "ADDED",
+      "description": "Add Code.\n",
+      "rawDiffs": [
+        "@@ -30,0 +31 @@",
+        "+    <action issue=\"LANG-818\" type=\"fix\">FastDateFormat's \"z\" pattern does not respect timezone of Calendar instances passed to format()</action>"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/changes/changes.xml b/src/changes/changes.xml",
+    "index 47345b56..d0c5d36f 100644",
+    "--- a/src/changes/changes.xml",
+    "+++ b/src/changes/changes.xml"
+  ]
+}

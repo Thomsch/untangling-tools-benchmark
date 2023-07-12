@@ -1,0 +1,24 @@
+{
+  "repoID": "65418271",
+  "repoName": "Csv_8",
+  "groupID": "group1",
+  "diffHunkIndices": [
+    "1:2",
+    "2:0",
+    "1:0",
+    "1:1"
+  ],
+  "diffHunkIDs": [
+    "c149dedf2db444a49fa96bc8bba81258:1c82a07b413048f689d9c9af6f50a00c",
+    "d7b81c4a6d884e47a8add6b7d290fcc5:903c6a2ea7174c2998b19b9820372b42",
+    "c149dedf2db444a49fa96bc8bba81258:22c2964cb3914119ada151aae3667a87",
+    "c149dedf2db444a49fa96bc8bba81258:f8e9d110b05442839d56f3bc2adb6d6c"
+  ],
+  "intentLabel": "FEATURE",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "feature: Add or modify feature ...",
+  "linkCategories": [
+    3
+  ]
+}

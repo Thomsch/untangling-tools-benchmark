@@ -1,0 +1,5 @@
+
+Calculating ground truth for project Closure, bug 78, repository benchmark//repositories/Closure_78
+Check out program version: Closure-78b..................................... OK
+revision_buggy=b40c6c7e0e323f1b69fe7f9686ed8f763b01faf8 25829b0395164533782d608399096803321225a7
+Calculating metrics ..................................................... OK

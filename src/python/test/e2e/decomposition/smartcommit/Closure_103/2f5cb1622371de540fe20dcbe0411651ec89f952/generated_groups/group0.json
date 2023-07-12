@@ -1,0 +1,35 @@
+{
+  "repoID": "-265909808",
+  "repoName": "Closure_103",
+  "groupID": "group0",
+  "diffHunkIndices": [
+    "1:0",
+    "1:1",
+    "4:0",
+    "4:1",
+    "3:1",
+    "0:0",
+    "3:0",
+    "0:1",
+    "2:0"
+  ],
+  "diffHunkIDs": [
+    "08977fce0efc4f67a163416d63d60b04:5733679721c04d259a44419f1eac4446",
+    "08977fce0efc4f67a163416d63d60b04:e4166348f4994ec4b64f0f864a20155f",
+    "ae68734ce78a4f93bb7991cd62c15ee0:c118e2ee5f804a81b48598a2ab064c04",
+    "ae68734ce78a4f93bb7991cd62c15ee0:1539d463ae79482284c8025678c38ac2",
+    "67d27181b3eb4b43b58e06524fcfbef5:41a6bb6d0c9f409bb446546bc193080b",
+    "ef37e240403c4d4d960d8acafb761ed6:37247406fae64ba1a74590606c08c3c2",
+    "67d27181b3eb4b43b58e06524fcfbef5:05caa6c1e512409cb225df1be1edf1af",
+    "ef37e240403c4d4d960d8acafb761ed6:2ceec704f0f441aebfe8b8c14a402a36",
+    "8c6c738726584125b6d944e27bdfdf4f:60c483a1e28048af8dc4a70b579bbee6"
+  ],
+  "intentLabel": "REFACTOR",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "refactor: Refactor code structure ...",
+  "linkCategories": [
+    2,
+    3
+  ]
+}

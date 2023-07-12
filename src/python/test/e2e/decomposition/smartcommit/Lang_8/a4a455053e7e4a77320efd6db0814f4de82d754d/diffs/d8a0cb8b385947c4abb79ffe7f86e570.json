@@ -1,0 +1,133 @@
+{
+  "repoID": "-2026191289",
+  "repoName": "Lang_8",
+  "fileID": "d8a0cb8b385947c4abb79ffe7f86e570",
+  "index": 2,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+  "currentRelativePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "40239e53105c4ae4bb13504ec061e9d6": {
+      "repoID": "-2026191289",
+      "repoName": "Lang_8",
+      "fileID": "d8a0cb8b385947c4abb79ffe7f86e570",
+      "diffHunkID": "40239e53105c4ae4bb13504ec061e9d6",
+      "fileIndex": 2,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+        "startLine": 262,
+        "endLine": 261,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+        "startLine": 264,
+        "endLine": 287,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    ",
+          "    @Test",
+          "    public void testCalendarTimezoneRespected() {",
+          "        String[] availableZones = TimeZone.getAvailableIDs();",
+          "        TimeZone currentZone = TimeZone.getDefault();",
+          "        ",
+          "        TimeZone anotherZone = null;",
+          "        for (String zone : availableZones) {",
+          "            if (!zone.equals(currentZone.getID())) {",
+          "                anotherZone = TimeZone.getTimeZone(zone);",
+          "            }",
+          "        }",
+          "        ",
+          "        assertNotNull(\"Cannot find another timezone\", anotherZone);",
+          "        ",
+          "        final String pattern = \"h:mma z\";",
+          "        final Calendar cal = Calendar.getInstance(anotherZone);",
+          "        ",
+          "        SimpleDateFormat sdf = new SimpleDateFormat(pattern);",
+          "        sdf.setTimeZone(anotherZone);",
+          "        String expectedValue = sdf.format(cal.getTime());",
+          "        String actualValue = FastDateFormat.getInstance(pattern).format(cal);",
+          "        assertEquals(expectedValue, actualValue);",
+          "    }"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add MarkerAnnotation.\nAdd MethodDeclaration \"testCalendarTimezoneRespected\".\nAdd VariableDeclarationStatement \"availableZones\".\nAdd VariableDeclarationStatement \"currentZone\".\nAdd VariableDeclarationStatement \"anotherZone\".\nAdd EnhancedForStatement.\nAdd ExpressionStatement \"assertNotNull(\"Cannot find another timezone\",anotherZone);\".\nAdd VariableDeclarationStatement \"pattern\".\nAdd VariableDeclarationStatement \"cal\".\nAdd VariableDeclarationStatement \"sdf\".\nAdd ExpressionStatement \"sdf.setTimeZone(anotherZone);\".\nAdd VariableDeclarationStatement \"expectedValue\".\nAdd VariableDeclarationStatement \"actualValue\".\nAdd ExpressionStatement \"assertEquals(expectedValue,actualValue);\".\n",
+      "rawDiffs": [
+        "@@ -262,0 +264,24 @@ public class FastDatePrinterTest {",
+        "+    ",
+        "+    @Test",
+        "+    public void testCalendarTimezoneRespected() {",
+        "+        String[] availableZones = TimeZone.getAvailableIDs();",
+        "+        TimeZone currentZone = TimeZone.getDefault();",
+        "+        ",
+        "+        TimeZone anotherZone = null;",
+        "+        for (String zone : availableZones) {",
+        "+            if (!zone.equals(currentZone.getID())) {",
+        "+                anotherZone = TimeZone.getTimeZone(zone);",
+        "+            }",
+        "+        }",
+        "+        ",
+        "+        assertNotNull(\"Cannot find another timezone\", anotherZone);",
+        "+        ",
+        "+        final String pattern = \"h:mma z\";",
+        "+        final Calendar cal = Calendar.getInstance(anotherZone);",
+        "+        ",
+        "+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);",
+        "+        sdf.setTimeZone(anotherZone);",
+        "+        String expectedValue = sdf.format(cal.getTime());",
+        "+        String actualValue = FastDateFormat.getInstance(pattern).format(cal);",
+        "+        assertEquals(expectedValue, actualValue);",
+        "+    }"
+      ]
+    },
+    "ece8ebb257ce4b9eac42a00540deb073": {
+      "repoID": "-2026191289",
+      "repoName": "Lang_8",
+      "fileID": "d8a0cb8b385947c4abb79ffe7f86e570",
+      "diffHunkID": "ece8ebb257ce4b9eac42a00540deb073",
+      "fileIndex": 2,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+        "startLine": 18,
+        "endLine": 17,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+        "startLine": 19,
+        "endLine": 19,
+        "version": "CURRENT",
+        "contentType": "IMPORT",
+        "codeSnippet": [
+          "import static org.junit.Assert.assertNotNull;"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add ImportStatement.\n",
+      "rawDiffs": [
+        "@@ -18,0 +19 @@ package org.apache.commons.lang3.time;",
+        "+import static org.junit.Assert.assertNotNull;"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java b/src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+    "index 85ac8a98..bcea1a03 100644",
+    "--- a/src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java",
+    "+++ b/src/test/java/org/apache/commons/lang3/time/FastDatePrinterTest.java"
+  ]
+}

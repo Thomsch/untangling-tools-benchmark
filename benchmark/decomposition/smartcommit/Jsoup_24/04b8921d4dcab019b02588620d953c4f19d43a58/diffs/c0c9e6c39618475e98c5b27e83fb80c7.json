@@ -1,0 +1,58 @@
+{
+  "repoID": "-1902995968",
+  "repoName": "Jsoup_24",
+  "fileID": "c0c9e6c39618475e98c5b27e83fb80c7",
+  "index": 0,
+  "status": "MODIFIED",
+  "fileType": "OTHER",
+  "baseRelativePath": "CHANGES",
+  "currentRelativePath": "CHANGES",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "649b0522c7114777907b188175c0cc87": {
+      "repoID": "-1902995968",
+      "repoName": "Jsoup_24",
+      "fileID": "c0c9e6c39618475e98c5b27e83fb80c7",
+      "diffHunkID": "649b0522c7114777907b188175c0cc87",
+      "fileIndex": 0,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "CHANGES",
+        "startLine": 14,
+        "endLine": 13,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "CHANGES",
+        "startLine": 15,
+        "endLine": 17,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          " * Fixed issue where contents of a script tag within a comment could be incorrectly parsed.",
+          "   <https://github.com/jhy/jsoup/issues/115>",
+          ""
+        ]
+      },
+      "fileType": "OTHER",
+      "changeType": "ADDED",
+      "description": "Add Code.\n",
+      "rawDiffs": [
+        "@@ -14,0 +15,3 @@ jsoup changelog",
+        "+ * Fixed issue where contents of a script tag within a comment could be incorrectly parsed.",
+        "+   <https://github.com/jhy/jsoup/issues/115>",
+        "+"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/CHANGES b/CHANGES",
+    "index 8faa8a0..93ed6a8 100644",
+    "--- a/CHANGES",
+    "+++ b/CHANGES"
+  ]
+}

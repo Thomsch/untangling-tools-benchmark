@@ -1,0 +1,93 @@
+{
+  "repoID": "407064453",
+  "repoName": "Closure_78",
+  "fileID": "d9d1dfa0fa344dbb84d9e7e09437456d",
+  "index": 1,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "currentRelativePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "1ef4c7878b7e42e79ea7f59706951a1c": {
+      "repoID": "407064453",
+      "repoName": "Closure_78",
+      "fileID": "d9d1dfa0fa344dbb84d9e7e09437456d",
+      "diffHunkID": "1ef4c7878b7e42e79ea7f59706951a1c",
+      "fileIndex": 1,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+        "startLine": 558,
+        "endLine": 558,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    fold(\"x = 1 / 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+        "startLine": 558,
+        "endLine": 558,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    fold(\"x = 1 / 0\", \"x = 1 / 0\");"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -558 +558 @@ public class PeepholeFoldConstantsTest extends CompilerTestCase {",
+        "-    fold(\"x = 1 / 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);",
+        "+    fold(\"x = 1 / 0\", \"x = 1 / 0\");"
+      ]
+    },
+    "80e331bdfcb74116928b35d5de05c507": {
+      "repoID": "407064453",
+      "repoName": "Closure_78",
+      "fileID": "d9d1dfa0fa344dbb84d9e7e09437456d",
+      "diffHunkID": "80e331bdfcb74116928b35d5de05c507",
+      "fileIndex": 1,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+        "startLine": 562,
+        "endLine": 562,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    fold(\"x = 1 % 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+        "startLine": 562,
+        "endLine": 562,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    fold(\"x = 1 % 0\", \"x = 1 % 0\");"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -562 +562 @@ public class PeepholeFoldConstantsTest extends CompilerTestCase {",
+        "-    fold(\"x = 1 % 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);",
+        "+    fold(\"x = 1 % 0\", \"x = 1 % 0\");"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java b/test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+    "index 7919be50..848acbd5 100644",
+    "--- a/test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+    "+++ b/test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java"
+  ]
+}

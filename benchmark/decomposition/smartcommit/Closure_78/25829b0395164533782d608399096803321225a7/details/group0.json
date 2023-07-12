@@ -1,0 +1,119 @@
+FEATURE
+feature: Add or modify feature ...
+------------
+0:0
+Delete FieldDeclaration "DIVIDE_BY_0_ERROR".
+
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 35,
+  "endLine": 38,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "  static final DiagnosticType DIVIDE_BY_0_ERROR = DiagnosticType.error(",
+    "      \"JSC_DIVIDE_BY_0_ERROR\",",
+    "      \"Divide by 0\");",
+    ""
+  ]
+}
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 34,
+  "endLine": 33,
+  "version": "CURRENT",
+  "contentType": "EMPTY",
+  "codeSnippet": []
+}
+------------
+1:0
+Update MethodInvocation.
+
+{
+  "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "startLine": 558,
+  "endLine": 558,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    fold(\"x = 1 / 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);"
+  ]
+}
+{
+  "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "startLine": 558,
+  "endLine": 558,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    fold(\"x = 1 / 0\", \"x = 1 / 0\");"
+  ]
+}
+------------
+1:1
+Update MethodInvocation.
+
+{
+  "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "startLine": 562,
+  "endLine": 562,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    fold(\"x = 1 % 0\", \"\", PeepholeFoldConstants.DIVIDE_BY_0_ERROR);"
+  ]
+}
+{
+  "relativeFilePath": "test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java",
+  "startLine": 562,
+  "endLine": 562,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "    fold(\"x = 1 % 0\", \"x = 1 % 0\");"
+  ]
+}
+------------
+0:1
+Delete MethodInvocation.
+
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 715,
+  "endLine": 715,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "          error(DIVIDE_BY_0_ERROR, right);"
+  ]
+}
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 710,
+  "endLine": 709,
+  "version": "CURRENT",
+  "contentType": "EMPTY",
+  "codeSnippet": []
+}
+------------
+0:2
+Delete MethodInvocation.
+
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 722,
+  "endLine": 722,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "          error(DIVIDE_BY_0_ERROR, right);"
+  ]
+}
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/PeepholeFoldConstants.java",
+  "startLine": 716,
+  "endLine": 715,
+  "version": "CURRENT",
+  "contentType": "EMPTY",
+  "codeSnippet": []
+}

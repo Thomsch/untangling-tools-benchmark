@@ -1,0 +1,815 @@
+
+Decompositing project Lang, bug 63, repository benchmark//repositories/Lang_63
+Check out program version: Lang-63b........................................ OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+
+Untangling with SmartCommit ...............................................Untangling with SmartCommit ............................................. CACHED
+Untangling with Flexeme ...............................................
+[2023-07-12 14:50:46][root] INFO: Flexeme generate PDG for 0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf in /Users/thanhdang/untangling-tools-benchmark/benchmark/repositories/Lang_63
+[2023-07-12 14:50:55][root] INFO: Generating PDGs for /src/java/org/apache/commons/lang/time/DurationFormatUtils.java
+[2023-07-12 14:50:55][root] INFO: Generating PDG for /src/java/org/apache/commons/lang/time/DurationFormatUtils.java@0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf^
+src/java/org/apache/commons/lang/Entities.java:63: error: unmappable character (0xA9) for encoding UTF-8
+        {"copy", "169"}, // � - copyright sign
+                            ^
+src/java/org/apache/commons/lang/Entities.java:68: error: unmappable character (0xAE) for encoding UTF-8
+        {"reg", "174"}, // � - registered trademark sign
+                           ^
+src/java/org/apache/commons/lang/Entities.java:86: error: unmappable character (0xC0) for encoding UTF-8
+        {"Agrave", "192"}, // � - uppercase A, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:87: error: unmappable character (0xC1) for encoding UTF-8
+        {"Aacute", "193"}, // � - uppercase A, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:88: error: unmappable character (0xC2) for encoding UTF-8
+        {"Acirc", "194"}, // � - uppercase A, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:89: error: unmappable character (0xC3) for encoding UTF-8
+        {"Atilde", "195"}, // � - uppercase A, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:90: error: unmappable character (0xC4) for encoding UTF-8
+        {"Auml", "196"}, // � - uppercase A, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:91: error: unmappable character (0xC5) for encoding UTF-8
+        {"Aring", "197"}, // � - uppercase A, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:92: error: unmappable character (0xC6) for encoding UTF-8
+        {"AElig", "198"}, // � - uppercase AE
+                             ^
+src/java/org/apache/commons/lang/Entities.java:93: error: unmappable character (0xC7) for encoding UTF-8
+        {"Ccedil", "199"}, // � - uppercase C, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:94: error: unmappable character (0xC8) for encoding UTF-8
+        {"Egrave", "200"}, // � - uppercase E, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:95: error: unmappable character (0xC9) for encoding UTF-8
+        {"Eacute", "201"}, // � - uppercase E, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:96: error: unmappable character (0xCA) for encoding UTF-8
+        {"Ecirc", "202"}, // � - uppercase E, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:97: error: unmappable character (0xCB) for encoding UTF-8
+        {"Euml", "203"}, // � - uppercase E, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:98: error: unmappable character (0xCC) for encoding UTF-8
+        {"Igrave", "204"}, // � - uppercase I, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:99: error: unmappable character (0xCD) for encoding UTF-8
+        {"Iacute", "205"}, // � - uppercase I, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:100: error: unmappable character (0xCE) for encoding UTF-8
+        {"Icirc", "206"}, // � - uppercase I, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:101: error: unmappable character (0xCF) for encoding UTF-8
+        {"Iuml", "207"}, // � - uppercase I, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:102: error: unmappable character (0xD0) for encoding UTF-8
+        {"ETH", "208"}, // � - uppercase Eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:103: error: unmappable character (0xD1) for encoding UTF-8
+        {"Ntilde", "209"}, // � - uppercase N, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:104: error: unmappable character (0xD2) for encoding UTF-8
+        {"Ograve", "210"}, // � - uppercase O, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:105: error: unmappable character (0xD3) for encoding UTF-8
+        {"Oacute", "211"}, // � - uppercase O, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:106: error: unmappable character (0xD4) for encoding UTF-8
+        {"Ocirc", "212"}, // � - uppercase O, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:107: error: unmappable character (0xD5) for encoding UTF-8
+        {"Otilde", "213"}, // � - uppercase O, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:108: error: unmappable character (0xD6) for encoding UTF-8
+        {"Ouml", "214"}, // � - uppercase O, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:110: error: unmappable character (0xD8) for encoding UTF-8
+        {"Oslash", "216"}, // � - uppercase O, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:111: error: unmappable character (0xD9) for encoding UTF-8
+        {"Ugrave", "217"}, // � - uppercase U, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:112: error: unmappable character (0xDA) for encoding UTF-8
+        {"Uacute", "218"}, // � - uppercase U, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:113: error: unmappable character (0xDB) for encoding UTF-8
+        {"Ucirc", "219"}, // � - uppercase U, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:114: error: unmappable character (0xDC) for encoding UTF-8
+        {"Uuml", "220"}, // � - uppercase U, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:115: error: unmappable character (0xDD) for encoding UTF-8
+        {"Yacute", "221"}, // � - uppercase Y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:116: error: unmappable character (0xDE) for encoding UTF-8
+        {"THORN", "222"}, // � - uppercase THORN, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:117: error: unmappable character (0xDF) for encoding UTF-8
+        {"szlig", "223"}, // � - lowercase sharps, German
+                             ^
+src/java/org/apache/commons/lang/Entities.java:118: error: unmappable character (0xE0) for encoding UTF-8
+        {"agrave", "224"}, // � - lowercase a, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:119: error: unmappable character (0xE1) for encoding UTF-8
+        {"aacute", "225"}, // � - lowercase a, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:120: error: unmappable character (0xE2) for encoding UTF-8
+        {"acirc", "226"}, // � - lowercase a, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:121: error: unmappable character (0xE3) for encoding UTF-8
+        {"atilde", "227"}, // � - lowercase a, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:122: error: unmappable character (0xE4) for encoding UTF-8
+        {"auml", "228"}, // � - lowercase a, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:123: error: unmappable character (0xE5) for encoding UTF-8
+        {"aring", "229"}, // � - lowercase a, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:124: error: unmappable character (0xE6) for encoding UTF-8
+        {"aelig", "230"}, // � - lowercase ae
+                             ^
+src/java/org/apache/commons/lang/Entities.java:125: error: unmappable character (0xE7) for encoding UTF-8
+        {"ccedil", "231"}, // � - lowercase c, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:126: error: unmappable character (0xE8) for encoding UTF-8
+        {"egrave", "232"}, // � - lowercase e, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:127: error: unmappable character (0xE9) for encoding UTF-8
+        {"eacute", "233"}, // � - lowercase e, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:128: error: unmappable character (0xEA) for encoding UTF-8
+        {"ecirc", "234"}, // � - lowercase e, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:129: error: unmappable character (0xEB) for encoding UTF-8
+        {"euml", "235"}, // � - lowercase e, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:130: error: unmappable character (0xEC) for encoding UTF-8
+        {"igrave", "236"}, // � - lowercase i, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:131: error: unmappable character (0xED) for encoding UTF-8
+        {"iacute", "237"}, // � - lowercase i, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:132: error: unmappable character (0xEE) for encoding UTF-8
+        {"icirc", "238"}, // � - lowercase i, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:133: error: unmappable character (0xEF) for encoding UTF-8
+        {"iuml", "239"}, // � - lowercase i, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:134: error: unmappable character (0xF0) for encoding UTF-8
+        {"eth", "240"}, // � - lowercase eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:135: error: unmappable character (0xF1) for encoding UTF-8
+        {"ntilde", "241"}, // � - lowercase n, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:136: error: unmappable character (0xF2) for encoding UTF-8
+        {"ograve", "242"}, // � - lowercase o, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:137: error: unmappable character (0xF3) for encoding UTF-8
+        {"oacute", "243"}, // � - lowercase o, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:138: error: unmappable character (0xF4) for encoding UTF-8
+        {"ocirc", "244"}, // � - lowercase o, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:139: error: unmappable character (0xF5) for encoding UTF-8
+        {"otilde", "245"}, // � - lowercase o, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:140: error: unmappable character (0xF6) for encoding UTF-8
+        {"ouml", "246"}, // � - lowercase o, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:142: error: unmappable character (0xF8) for encoding UTF-8
+        {"oslash", "248"}, // � - lowercase o, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:143: error: unmappable character (0xF9) for encoding UTF-8
+        {"ugrave", "249"}, // � - lowercase u, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:144: error: unmappable character (0xFA) for encoding UTF-8
+        {"uacute", "250"}, // � - lowercase u, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:145: error: unmappable character (0xFB) for encoding UTF-8
+        {"ucirc", "251"}, // � - lowercase u, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:146: error: unmappable character (0xFC) for encoding UTF-8
+        {"uuml", "252"}, // � - lowercase u, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:147: error: unmappable character (0xFD) for encoding UTF-8
+        {"yacute", "253"}, // � - lowercase y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:148: error: unmappable character (0xFE) for encoding UTF-8
+        {"thorn", "254"}, // � - lowercase thorn, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:149: error: unmappable character (0xFF) for encoding UTF-8
+        {"yuml", "255"}, // � - lowercase y, umlaut
+                            ^
+[2023-07-12 14:51:00][root] INFO: Generating PDG for /src/java/org/apache/commons/lang/time/DurationFormatUtils.java@0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf
+src/java/org/apache/commons/lang/Entities.java:63: error: unmappable character (0xA9) for encoding UTF-8
+        {"copy", "169"}, // � - copyright sign
+                            ^
+src/java/org/apache/commons/lang/Entities.java:68: error: unmappable character (0xAE) for encoding UTF-8
+        {"reg", "174"}, // � - registered trademark sign
+                           ^
+src/java/org/apache/commons/lang/Entities.java:86: error: unmappable character (0xC0) for encoding UTF-8
+        {"Agrave", "192"}, // � - uppercase A, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:87: error: unmappable character (0xC1) for encoding UTF-8
+        {"Aacute", "193"}, // � - uppercase A, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:88: error: unmappable character (0xC2) for encoding UTF-8
+        {"Acirc", "194"}, // � - uppercase A, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:89: error: unmappable character (0xC3) for encoding UTF-8
+        {"Atilde", "195"}, // � - uppercase A, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:90: error: unmappable character (0xC4) for encoding UTF-8
+        {"Auml", "196"}, // � - uppercase A, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:91: error: unmappable character (0xC5) for encoding UTF-8
+        {"Aring", "197"}, // � - uppercase A, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:92: error: unmappable character (0xC6) for encoding UTF-8
+        {"AElig", "198"}, // � - uppercase AE
+                             ^
+src/java/org/apache/commons/lang/Entities.java:93: error: unmappable character (0xC7) for encoding UTF-8
+        {"Ccedil", "199"}, // � - uppercase C, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:94: error: unmappable character (0xC8) for encoding UTF-8
+        {"Egrave", "200"}, // � - uppercase E, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:95: error: unmappable character (0xC9) for encoding UTF-8
+        {"Eacute", "201"}, // � - uppercase E, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:96: error: unmappable character (0xCA) for encoding UTF-8
+        {"Ecirc", "202"}, // � - uppercase E, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:97: error: unmappable character (0xCB) for encoding UTF-8
+        {"Euml", "203"}, // � - uppercase E, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:98: error: unmappable character (0xCC) for encoding UTF-8
+        {"Igrave", "204"}, // � - uppercase I, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:99: error: unmappable character (0xCD) for encoding UTF-8
+        {"Iacute", "205"}, // � - uppercase I, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:100: error: unmappable character (0xCE) for encoding UTF-8
+        {"Icirc", "206"}, // � - uppercase I, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:101: error: unmappable character (0xCF) for encoding UTF-8
+        {"Iuml", "207"}, // � - uppercase I, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:102: error: unmappable character (0xD0) for encoding UTF-8
+        {"ETH", "208"}, // � - uppercase Eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:103: error: unmappable character (0xD1) for encoding UTF-8
+        {"Ntilde", "209"}, // � - uppercase N, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:104: error: unmappable character (0xD2) for encoding UTF-8
+        {"Ograve", "210"}, // � - uppercase O, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:105: error: unmappable character (0xD3) for encoding UTF-8
+        {"Oacute", "211"}, // � - uppercase O, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:106: error: unmappable character (0xD4) for encoding UTF-8
+        {"Ocirc", "212"}, // � - uppercase O, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:107: error: unmappable character (0xD5) for encoding UTF-8
+        {"Otilde", "213"}, // � - uppercase O, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:108: error: unmappable character (0xD6) for encoding UTF-8
+        {"Ouml", "214"}, // � - uppercase O, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:110: error: unmappable character (0xD8) for encoding UTF-8
+        {"Oslash", "216"}, // � - uppercase O, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:111: error: unmappable character (0xD9) for encoding UTF-8
+        {"Ugrave", "217"}, // � - uppercase U, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:112: error: unmappable character (0xDA) for encoding UTF-8
+        {"Uacute", "218"}, // � - uppercase U, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:113: error: unmappable character (0xDB) for encoding UTF-8
+        {"Ucirc", "219"}, // � - uppercase U, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:114: error: unmappable character (0xDC) for encoding UTF-8
+        {"Uuml", "220"}, // � - uppercase U, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:115: error: unmappable character (0xDD) for encoding UTF-8
+        {"Yacute", "221"}, // � - uppercase Y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:116: error: unmappable character (0xDE) for encoding UTF-8
+        {"THORN", "222"}, // � - uppercase THORN, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:117: error: unmappable character (0xDF) for encoding UTF-8
+        {"szlig", "223"}, // � - lowercase sharps, German
+                             ^
+src/java/org/apache/commons/lang/Entities.java:118: error: unmappable character (0xE0) for encoding UTF-8
+        {"agrave", "224"}, // � - lowercase a, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:119: error: unmappable character (0xE1) for encoding UTF-8
+        {"aacute", "225"}, // � - lowercase a, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:120: error: unmappable character (0xE2) for encoding UTF-8
+        {"acirc", "226"}, // � - lowercase a, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:121: error: unmappable character (0xE3) for encoding UTF-8
+        {"atilde", "227"}, // � - lowercase a, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:122: error: unmappable character (0xE4) for encoding UTF-8
+        {"auml", "228"}, // � - lowercase a, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:123: error: unmappable character (0xE5) for encoding UTF-8
+        {"aring", "229"}, // � - lowercase a, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:124: error: unmappable character (0xE6) for encoding UTF-8
+        {"aelig", "230"}, // � - lowercase ae
+                             ^
+src/java/org/apache/commons/lang/Entities.java:125: error: unmappable character (0xE7) for encoding UTF-8
+        {"ccedil", "231"}, // � - lowercase c, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:126: error: unmappable character (0xE8) for encoding UTF-8
+        {"egrave", "232"}, // � - lowercase e, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:127: error: unmappable character (0xE9) for encoding UTF-8
+        {"eacute", "233"}, // � - lowercase e, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:128: error: unmappable character (0xEA) for encoding UTF-8
+        {"ecirc", "234"}, // � - lowercase e, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:129: error: unmappable character (0xEB) for encoding UTF-8
+        {"euml", "235"}, // � - lowercase e, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:130: error: unmappable character (0xEC) for encoding UTF-8
+        {"igrave", "236"}, // � - lowercase i, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:131: error: unmappable character (0xED) for encoding UTF-8
+        {"iacute", "237"}, // � - lowercase i, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:132: error: unmappable character (0xEE) for encoding UTF-8
+        {"icirc", "238"}, // � - lowercase i, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:133: error: unmappable character (0xEF) for encoding UTF-8
+        {"iuml", "239"}, // � - lowercase i, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:134: error: unmappable character (0xF0) for encoding UTF-8
+        {"eth", "240"}, // � - lowercase eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:135: error: unmappable character (0xF1) for encoding UTF-8
+        {"ntilde", "241"}, // � - lowercase n, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:136: error: unmappable character (0xF2) for encoding UTF-8
+        {"ograve", "242"}, // � - lowercase o, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:137: error: unmappable character (0xF3) for encoding UTF-8
+        {"oacute", "243"}, // � - lowercase o, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:138: error: unmappable character (0xF4) for encoding UTF-8
+        {"ocirc", "244"}, // � - lowercase o, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:139: error: unmappable character (0xF5) for encoding UTF-8
+        {"otilde", "245"}, // � - lowercase o, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:140: error: unmappable character (0xF6) for encoding UTF-8
+        {"ouml", "246"}, // � - lowercase o, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:142: error: unmappable character (0xF8) for encoding UTF-8
+        {"oslash", "248"}, // � - lowercase o, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:143: error: unmappable character (0xF9) for encoding UTF-8
+        {"ugrave", "249"}, // � - lowercase u, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:144: error: unmappable character (0xFA) for encoding UTF-8
+        {"uacute", "250"}, // � - lowercase u, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:145: error: unmappable character (0xFB) for encoding UTF-8
+        {"ucirc", "251"}, // � - lowercase u, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:146: error: unmappable character (0xFC) for encoding UTF-8
+        {"uuml", "252"}, // � - lowercase u, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:147: error: unmappable character (0xFD) for encoding UTF-8
+        {"yacute", "253"}, // � - lowercase y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:148: error: unmappable character (0xFE) for encoding UTF-8
+        {"thorn", "254"}, // � - lowercase thorn, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:149: error: unmappable character (0xFF) for encoding UTF-8
+        {"yuml", "255"}, // � - lowercase y, umlaut
+                            ^
+[2023-07-12 14:51:06][root] INFO: Building ∂PDG for /src/java/org/apache/commons/lang/time/DurationFormatUtils.java
+[2023-07-12 14:52:08][root] INFO: Generating PDGs for /src/test/org/apache/commons/lang/time/DurationFormatUtilsTest.java
+[2023-07-12 14:52:08][root] INFO: Generating PDG for /src/test/org/apache/commons/lang/time/DurationFormatUtilsTest.java@0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf^
+src/java/org/apache/commons/lang/Entities.java:63: error: unmappable character (0xA9) for encoding UTF-8
+        {"copy", "169"}, // � - copyright sign
+                            ^
+src/java/org/apache/commons/lang/Entities.java:68: error: unmappable character (0xAE) for encoding UTF-8
+        {"reg", "174"}, // � - registered trademark sign
+                           ^
+src/java/org/apache/commons/lang/Entities.java:86: error: unmappable character (0xC0) for encoding UTF-8
+        {"Agrave", "192"}, // � - uppercase A, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:87: error: unmappable character (0xC1) for encoding UTF-8
+        {"Aacute", "193"}, // � - uppercase A, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:88: error: unmappable character (0xC2) for encoding UTF-8
+        {"Acirc", "194"}, // � - uppercase A, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:89: error: unmappable character (0xC3) for encoding UTF-8
+        {"Atilde", "195"}, // � - uppercase A, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:90: error: unmappable character (0xC4) for encoding UTF-8
+        {"Auml", "196"}, // � - uppercase A, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:91: error: unmappable character (0xC5) for encoding UTF-8
+        {"Aring", "197"}, // � - uppercase A, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:92: error: unmappable character (0xC6) for encoding UTF-8
+        {"AElig", "198"}, // � - uppercase AE
+                             ^
+src/java/org/apache/commons/lang/Entities.java:93: error: unmappable character (0xC7) for encoding UTF-8
+        {"Ccedil", "199"}, // � - uppercase C, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:94: error: unmappable character (0xC8) for encoding UTF-8
+        {"Egrave", "200"}, // � - uppercase E, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:95: error: unmappable character (0xC9) for encoding UTF-8
+        {"Eacute", "201"}, // � - uppercase E, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:96: error: unmappable character (0xCA) for encoding UTF-8
+        {"Ecirc", "202"}, // � - uppercase E, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:97: error: unmappable character (0xCB) for encoding UTF-8
+        {"Euml", "203"}, // � - uppercase E, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:98: error: unmappable character (0xCC) for encoding UTF-8
+        {"Igrave", "204"}, // � - uppercase I, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:99: error: unmappable character (0xCD) for encoding UTF-8
+        {"Iacute", "205"}, // � - uppercase I, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:100: error: unmappable character (0xCE) for encoding UTF-8
+        {"Icirc", "206"}, // � - uppercase I, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:101: error: unmappable character (0xCF) for encoding UTF-8
+        {"Iuml", "207"}, // � - uppercase I, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:102: error: unmappable character (0xD0) for encoding UTF-8
+        {"ETH", "208"}, // � - uppercase Eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:103: error: unmappable character (0xD1) for encoding UTF-8
+        {"Ntilde", "209"}, // � - uppercase N, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:104: error: unmappable character (0xD2) for encoding UTF-8
+        {"Ograve", "210"}, // � - uppercase O, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:105: error: unmappable character (0xD3) for encoding UTF-8
+        {"Oacute", "211"}, // � - uppercase O, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:106: error: unmappable character (0xD4) for encoding UTF-8
+        {"Ocirc", "212"}, // � - uppercase O, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:107: error: unmappable character (0xD5) for encoding UTF-8
+        {"Otilde", "213"}, // � - uppercase O, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:108: error: unmappable character (0xD6) for encoding UTF-8
+        {"Ouml", "214"}, // � - uppercase O, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:110: error: unmappable character (0xD8) for encoding UTF-8
+        {"Oslash", "216"}, // � - uppercase O, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:111: error: unmappable character (0xD9) for encoding UTF-8
+        {"Ugrave", "217"}, // � - uppercase U, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:112: error: unmappable character (0xDA) for encoding UTF-8
+        {"Uacute", "218"}, // � - uppercase U, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:113: error: unmappable character (0xDB) for encoding UTF-8
+        {"Ucirc", "219"}, // � - uppercase U, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:114: error: unmappable character (0xDC) for encoding UTF-8
+        {"Uuml", "220"}, // � - uppercase U, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:115: error: unmappable character (0xDD) for encoding UTF-8
+        {"Yacute", "221"}, // � - uppercase Y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:116: error: unmappable character (0xDE) for encoding UTF-8
+        {"THORN", "222"}, // � - uppercase THORN, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:117: error: unmappable character (0xDF) for encoding UTF-8
+        {"szlig", "223"}, // � - lowercase sharps, German
+                             ^
+src/java/org/apache/commons/lang/Entities.java:118: error: unmappable character (0xE0) for encoding UTF-8
+        {"agrave", "224"}, // � - lowercase a, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:119: error: unmappable character (0xE1) for encoding UTF-8
+        {"aacute", "225"}, // � - lowercase a, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:120: error: unmappable character (0xE2) for encoding UTF-8
+        {"acirc", "226"}, // � - lowercase a, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:121: error: unmappable character (0xE3) for encoding UTF-8
+        {"atilde", "227"}, // � - lowercase a, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:122: error: unmappable character (0xE4) for encoding UTF-8
+        {"auml", "228"}, // � - lowercase a, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:123: error: unmappable character (0xE5) for encoding UTF-8
+        {"aring", "229"}, // � - lowercase a, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:124: error: unmappable character (0xE6) for encoding UTF-8
+        {"aelig", "230"}, // � - lowercase ae
+                             ^
+src/java/org/apache/commons/lang/Entities.java:125: error: unmappable character (0xE7) for encoding UTF-8
+        {"ccedil", "231"}, // � - lowercase c, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:126: error: unmappable character (0xE8) for encoding UTF-8
+        {"egrave", "232"}, // � - lowercase e, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:127: error: unmappable character (0xE9) for encoding UTF-8
+        {"eacute", "233"}, // � - lowercase e, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:128: error: unmappable character (0xEA) for encoding UTF-8
+        {"ecirc", "234"}, // � - lowercase e, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:129: error: unmappable character (0xEB) for encoding UTF-8
+        {"euml", "235"}, // � - lowercase e, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:130: error: unmappable character (0xEC) for encoding UTF-8
+        {"igrave", "236"}, // � - lowercase i, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:131: error: unmappable character (0xED) for encoding UTF-8
+        {"iacute", "237"}, // � - lowercase i, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:132: error: unmappable character (0xEE) for encoding UTF-8
+        {"icirc", "238"}, // � - lowercase i, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:133: error: unmappable character (0xEF) for encoding UTF-8
+        {"iuml", "239"}, // � - lowercase i, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:134: error: unmappable character (0xF0) for encoding UTF-8
+        {"eth", "240"}, // � - lowercase eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:135: error: unmappable character (0xF1) for encoding UTF-8
+        {"ntilde", "241"}, // � - lowercase n, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:136: error: unmappable character (0xF2) for encoding UTF-8
+        {"ograve", "242"}, // � - lowercase o, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:137: error: unmappable character (0xF3) for encoding UTF-8
+        {"oacute", "243"}, // � - lowercase o, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:138: error: unmappable character (0xF4) for encoding UTF-8
+        {"ocirc", "244"}, // � - lowercase o, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:139: error: unmappable character (0xF5) for encoding UTF-8
+        {"otilde", "245"}, // � - lowercase o, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:140: error: unmappable character (0xF6) for encoding UTF-8
+        {"ouml", "246"}, // � - lowercase o, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:142: error: unmappable character (0xF8) for encoding UTF-8
+        {"oslash", "248"}, // � - lowercase o, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:143: error: unmappable character (0xF9) for encoding UTF-8
+        {"ugrave", "249"}, // � - lowercase u, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:144: error: unmappable character (0xFA) for encoding UTF-8
+        {"uacute", "250"}, // � - lowercase u, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:145: error: unmappable character (0xFB) for encoding UTF-8
+        {"ucirc", "251"}, // � - lowercase u, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:146: error: unmappable character (0xFC) for encoding UTF-8
+        {"uuml", "252"}, // � - lowercase u, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:147: error: unmappable character (0xFD) for encoding UTF-8
+        {"yacute", "253"}, // � - lowercase y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:148: error: unmappable character (0xFE) for encoding UTF-8
+        {"thorn", "254"}, // � - lowercase thorn, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:149: error: unmappable character (0xFF) for encoding UTF-8
+        {"yuml", "255"}, // � - lowercase y, umlaut
+                            ^
+[2023-07-12 14:52:11][root] INFO: Generating PDG for /src/test/org/apache/commons/lang/time/DurationFormatUtilsTest.java@0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf
+src/java/org/apache/commons/lang/Entities.java:63: error: unmappable character (0xA9) for encoding UTF-8
+        {"copy", "169"}, // � - copyright sign
+                            ^
+src/java/org/apache/commons/lang/Entities.java:68: error: unmappable character (0xAE) for encoding UTF-8
+        {"reg", "174"}, // � - registered trademark sign
+                           ^
+src/java/org/apache/commons/lang/Entities.java:86: error: unmappable character (0xC0) for encoding UTF-8
+        {"Agrave", "192"}, // � - uppercase A, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:87: error: unmappable character (0xC1) for encoding UTF-8
+        {"Aacute", "193"}, // � - uppercase A, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:88: error: unmappable character (0xC2) for encoding UTF-8
+        {"Acirc", "194"}, // � - uppercase A, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:89: error: unmappable character (0xC3) for encoding UTF-8
+        {"Atilde", "195"}, // � - uppercase A, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:90: error: unmappable character (0xC4) for encoding UTF-8
+        {"Auml", "196"}, // � - uppercase A, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:91: error: unmappable character (0xC5) for encoding UTF-8
+        {"Aring", "197"}, // � - uppercase A, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:92: error: unmappable character (0xC6) for encoding UTF-8
+        {"AElig", "198"}, // � - uppercase AE
+                             ^
+src/java/org/apache/commons/lang/Entities.java:93: error: unmappable character (0xC7) for encoding UTF-8
+        {"Ccedil", "199"}, // � - uppercase C, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:94: error: unmappable character (0xC8) for encoding UTF-8
+        {"Egrave", "200"}, // � - uppercase E, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:95: error: unmappable character (0xC9) for encoding UTF-8
+        {"Eacute", "201"}, // � - uppercase E, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:96: error: unmappable character (0xCA) for encoding UTF-8
+        {"Ecirc", "202"}, // � - uppercase E, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:97: error: unmappable character (0xCB) for encoding UTF-8
+        {"Euml", "203"}, // � - uppercase E, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:98: error: unmappable character (0xCC) for encoding UTF-8
+        {"Igrave", "204"}, // � - uppercase I, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:99: error: unmappable character (0xCD) for encoding UTF-8
+        {"Iacute", "205"}, // � - uppercase I, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:100: error: unmappable character (0xCE) for encoding UTF-8
+        {"Icirc", "206"}, // � - uppercase I, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:101: error: unmappable character (0xCF) for encoding UTF-8
+        {"Iuml", "207"}, // � - uppercase I, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:102: error: unmappable character (0xD0) for encoding UTF-8
+        {"ETH", "208"}, // � - uppercase Eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:103: error: unmappable character (0xD1) for encoding UTF-8
+        {"Ntilde", "209"}, // � - uppercase N, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:104: error: unmappable character (0xD2) for encoding UTF-8
+        {"Ograve", "210"}, // � - uppercase O, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:105: error: unmappable character (0xD3) for encoding UTF-8
+        {"Oacute", "211"}, // � - uppercase O, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:106: error: unmappable character (0xD4) for encoding UTF-8
+        {"Ocirc", "212"}, // � - uppercase O, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:107: error: unmappable character (0xD5) for encoding UTF-8
+        {"Otilde", "213"}, // � - uppercase O, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:108: error: unmappable character (0xD6) for encoding UTF-8
+        {"Ouml", "214"}, // � - uppercase O, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:110: error: unmappable character (0xD8) for encoding UTF-8
+        {"Oslash", "216"}, // � - uppercase O, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:111: error: unmappable character (0xD9) for encoding UTF-8
+        {"Ugrave", "217"}, // � - uppercase U, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:112: error: unmappable character (0xDA) for encoding UTF-8
+        {"Uacute", "218"}, // � - uppercase U, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:113: error: unmappable character (0xDB) for encoding UTF-8
+        {"Ucirc", "219"}, // � - uppercase U, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:114: error: unmappable character (0xDC) for encoding UTF-8
+        {"Uuml", "220"}, // � - uppercase U, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:115: error: unmappable character (0xDD) for encoding UTF-8
+        {"Yacute", "221"}, // � - uppercase Y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:116: error: unmappable character (0xDE) for encoding UTF-8
+        {"THORN", "222"}, // � - uppercase THORN, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:117: error: unmappable character (0xDF) for encoding UTF-8
+        {"szlig", "223"}, // � - lowercase sharps, German
+                             ^
+src/java/org/apache/commons/lang/Entities.java:118: error: unmappable character (0xE0) for encoding UTF-8
+        {"agrave", "224"}, // � - lowercase a, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:119: error: unmappable character (0xE1) for encoding UTF-8
+        {"aacute", "225"}, // � - lowercase a, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:120: error: unmappable character (0xE2) for encoding UTF-8
+        {"acirc", "226"}, // � - lowercase a, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:121: error: unmappable character (0xE3) for encoding UTF-8
+        {"atilde", "227"}, // � - lowercase a, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:122: error: unmappable character (0xE4) for encoding UTF-8
+        {"auml", "228"}, // � - lowercase a, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:123: error: unmappable character (0xE5) for encoding UTF-8
+        {"aring", "229"}, // � - lowercase a, ring
+                             ^
+src/java/org/apache/commons/lang/Entities.java:124: error: unmappable character (0xE6) for encoding UTF-8
+        {"aelig", "230"}, // � - lowercase ae
+                             ^
+src/java/org/apache/commons/lang/Entities.java:125: error: unmappable character (0xE7) for encoding UTF-8
+        {"ccedil", "231"}, // � - lowercase c, cedilla
+                              ^
+src/java/org/apache/commons/lang/Entities.java:126: error: unmappable character (0xE8) for encoding UTF-8
+        {"egrave", "232"}, // � - lowercase e, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:127: error: unmappable character (0xE9) for encoding UTF-8
+        {"eacute", "233"}, // � - lowercase e, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:128: error: unmappable character (0xEA) for encoding UTF-8
+        {"ecirc", "234"}, // � - lowercase e, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:129: error: unmappable character (0xEB) for encoding UTF-8
+        {"euml", "235"}, // � - lowercase e, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:130: error: unmappable character (0xEC) for encoding UTF-8
+        {"igrave", "236"}, // � - lowercase i, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:131: error: unmappable character (0xED) for encoding UTF-8
+        {"iacute", "237"}, // � - lowercase i, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:132: error: unmappable character (0xEE) for encoding UTF-8
+        {"icirc", "238"}, // � - lowercase i, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:133: error: unmappable character (0xEF) for encoding UTF-8
+        {"iuml", "239"}, // � - lowercase i, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:134: error: unmappable character (0xF0) for encoding UTF-8
+        {"eth", "240"}, // � - lowercase eth, Icelandic
+                           ^
+src/java/org/apache/commons/lang/Entities.java:135: error: unmappable character (0xF1) for encoding UTF-8
+        {"ntilde", "241"}, // � - lowercase n, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:136: error: unmappable character (0xF2) for encoding UTF-8
+        {"ograve", "242"}, // � - lowercase o, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:137: error: unmappable character (0xF3) for encoding UTF-8
+        {"oacute", "243"}, // � - lowercase o, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:138: error: unmappable character (0xF4) for encoding UTF-8
+        {"ocirc", "244"}, // � - lowercase o, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:139: error: unmappable character (0xF5) for encoding UTF-8
+        {"otilde", "245"}, // � - lowercase o, tilde
+                              ^
+src/java/org/apache/commons/lang/Entities.java:140: error: unmappable character (0xF6) for encoding UTF-8
+        {"ouml", "246"}, // � - lowercase o, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:142: error: unmappable character (0xF8) for encoding UTF-8
+        {"oslash", "248"}, // � - lowercase o, slash
+                              ^
+src/java/org/apache/commons/lang/Entities.java:143: error: unmappable character (0xF9) for encoding UTF-8
+        {"ugrave", "249"}, // � - lowercase u, grave accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:144: error: unmappable character (0xFA) for encoding UTF-8
+        {"uacute", "250"}, // � - lowercase u, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:145: error: unmappable character (0xFB) for encoding UTF-8
+        {"ucirc", "251"}, // � - lowercase u, circumflex accent
+                             ^
+src/java/org/apache/commons/lang/Entities.java:146: error: unmappable character (0xFC) for encoding UTF-8
+        {"uuml", "252"}, // � - lowercase u, umlaut
+                            ^
+src/java/org/apache/commons/lang/Entities.java:147: error: unmappable character (0xFD) for encoding UTF-8
+        {"yacute", "253"}, // � - lowercase y, acute accent
+                              ^
+src/java/org/apache/commons/lang/Entities.java:148: error: unmappable character (0xFE) for encoding UTF-8
+        {"thorn", "254"}, // � - lowercase thorn, Icelandic
+                             ^
+src/java/org/apache/commons/lang/Entities.java:149: error: unmappable character (0xFF) for encoding UTF-8
+        {"yuml", "255"}, // � - lowercase y, umlaut
+                            ^
+[2023-07-12 14:52:15][root] INFO: Building ∂PDG for /src/test/org/apache/commons/lang/time/DurationFormatUtilsTest.java
+n2196 [cluster="null.PeepholeFoldConstantsTest.testFoldTypeof()", label="x = \number\", span="744-744"];
+      ^
+Expected '}', found '['  (at char 47332), (line:1039, col:7)
+n669 [cluster="null.DurationFormatUtilsTest.testFormatPeriod()", filepath="src/test/org/apache/commons/lang/time/DurationFormatUtilsTest.java", label=01:00, span="322-322"];
+     ^
+Expected '}', found '['  (at char 129380), (line:671, col:6)
+[Scan and clean] Cleaning data-point 0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-12 14:53:57][root] INFO: List of graph length 91
+[2023-07-12 14:54:01][root] INFO: n=91
+[2023-07-12 14:54:01][root] INFO: affinity=[0. 0. 0. ... 0. 0. 0.]
+[2023-07-12 14:54:01][root] INFO: Affinity: [0.8822397  0.45297147 0.         ... 0.80687818 0.81536276 0.44433762]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:30<00:00, 30.92s/it]                                             Untangling with Flexeme ................................................... OK
+
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+Parsing Flexeme results ...............................................Parsing Flexeme results ................................................. CACHED

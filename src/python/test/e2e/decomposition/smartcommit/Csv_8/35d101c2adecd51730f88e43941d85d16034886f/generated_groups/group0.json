@@ -1,0 +1,18 @@
+{
+  "repoID": "65418271",
+  "repoName": "Csv_8",
+  "groupID": "group0",
+  "diffHunkIndices": [
+    "0:0"
+  ],
+  "diffHunkIDs": [
+    "28a5aa7a397e49e793d9ca4b0a33ee53:302400e09a0a4765a3c4c8fe4a8adc2f"
+  ],
+  "intentLabel": "CONFIG",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "config: Change config file ...",
+  "linkCategories": [
+    4
+  ]
+}

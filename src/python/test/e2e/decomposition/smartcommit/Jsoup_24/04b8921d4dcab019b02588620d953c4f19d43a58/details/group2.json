@@ -1,0 +1,41 @@
+OTHER
+other: Other changes ...
+------------
+2:0
+Add MarkerAnnotation.
+Add MethodDeclaration "handlesQuotesInCommentsInScripts".
+Add VariableDeclarationStatement "html".
+Add VariableDeclarationStatement "node".
+Add ExpressionStatement "assertEquals("<script>\n" + "  <!--\n" + "    document.write('</scr' + 'ipt>');\n"+ "  // -->\n"+ "</script>",node.body().html());".
+
+{
+  "relativeFilePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+  "startLine": 681,
+  "endLine": 680,
+  "version": "BASE",
+  "contentType": "EMPTY",
+  "codeSnippet": []
+}
+{
+  "relativeFilePath": "src/test/java/org/jsoup/parser/HtmlParserTest.java",
+  "startLine": 682,
+  "endLine": 695,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "",
+    "    @Test public void handlesQuotesInCommentsInScripts() {",
+    "        String html = \"<script>\\n\" +",
+    "                \"  <!--\\n\" +",
+    "                \"    document.write('</scr' + 'ipt>');\\n\" +",
+    "                \"  // -->\\n\" +",
+    "                \"</script>\";",
+    "        Document node = Jsoup.parseBodyFragment(html);",
+    "        assertEquals(\"<script>\\n\" +",
+    "                \"  <!--\\n\" +",
+    "                \"    document.write('</scr' + 'ipt>');\\n\" +",
+    "                \"  // -->\\n\" +",
+    "                \"</script>\", node.body().html());",
+    "    }"
+  ]
+}

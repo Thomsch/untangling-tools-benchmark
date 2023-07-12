@@ -1,0 +1,50 @@
+FEATURE
+feature: Add or modify feature ...
+------------
+3:5
+Update Comment.
+
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/ReferenceCollectingCallback.java",
+  "startLine": 456,
+  "endLine": 456,
+  "version": "BASE",
+  "contentType": "COMMENT",
+  "codeSnippet": [
+    "    * @return For an assignment, variable declaration, or function declaration "
+  ]
+}
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/ReferenceCollectingCallback.java",
+  "startLine": 480,
+  "endLine": 480,
+  "version": "CURRENT",
+  "contentType": "COMMENT",
+  "codeSnippet": [
+    "    * @return For an assignment, variable declaration, or function declaration"
+  ]
+}
+------------
+3:4
+Update ReturnStatement.
+
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/ReferenceCollectingCallback.java",
+  "startLine": 366,
+  "endLine": 366,
+  "version": "BASE",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "      return assigned;"
+  ]
+}
+{
+  "relativeFilePath": "src/com/google/javascript/jscomp/ReferenceCollectingCallback.java",
+  "startLine": 390,
+  "endLine": 390,
+  "version": "CURRENT",
+  "contentType": "CODE",
+  "codeSnippet": [
+    "      return assignment;"
+  ]
+}

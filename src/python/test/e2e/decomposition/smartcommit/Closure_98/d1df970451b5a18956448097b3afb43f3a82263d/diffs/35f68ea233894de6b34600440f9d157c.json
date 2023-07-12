@@ -1,0 +1,60 @@
+{
+  "repoID": "407064515",
+  "repoName": "Closure_98",
+  "fileID": "35f68ea233894de6b34600440f9d157c",
+  "index": 1,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/com/google/javascript/jscomp/CollapseProperties.java",
+  "currentRelativePath": "src/com/google/javascript/jscomp/CollapseProperties.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "2e549367a7a6473988dee9b0df417849": {
+      "repoID": "407064515",
+      "repoName": "Closure_98",
+      "fileID": "35f68ea233894de6b34600440f9d157c",
+      "diffHunkID": "2e549367a7a6473988dee9b0df417849",
+      "fileIndex": 1,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/CollapseProperties.java",
+        "startLine": 217,
+        "endLine": 217,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "          && aliasRefs.isAssignedOnce()) {"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/CollapseProperties.java",
+        "startLine": 217,
+        "endLine": 217,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "          && aliasRefs.isAssignedOnceInLifetime()) {"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update MethodInvocation.\n",
+      "rawDiffs": [
+        "@@ -217 +217 @@ class CollapseProperties implements CompilerPass {",
+        "-          && aliasRefs.isAssignedOnce()) {",
+        "+          && aliasRefs.isAssignedOnceInLifetime()) {"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/lib/protobuf_deploy.jar b/lib/protobuf_deploy.jar",
+    "index 6d3c117b..0ba2e33b 100755",
+    "Binary files a/lib/protobuf_deploy.jar and b/lib/protobuf_deploy.jar differ",
+    "diff --git a/src/com/google/javascript/jscomp/CollapseProperties.java b/src/com/google/javascript/jscomp/CollapseProperties.java",
+    "index 0e3c9864..b29886e0 100644",
+    "--- a/src/com/google/javascript/jscomp/CollapseProperties.java",
+    "+++ b/src/com/google/javascript/jscomp/CollapseProperties.java"
+  ]
+}

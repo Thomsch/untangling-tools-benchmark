@@ -1,0 +1,5 @@
+
+Calculating ground truth for project Lang, bug 63, repository benchmark//repositories/Lang_63
+Check out program version: Lang-63b........................................ OK
+revision_buggy=3333dcc11f2d65ee99043945502102dcf3bca50c 0695c3f71e3fc5abe29d8b9b33eed7faac7e73bf
+Calculating metrics ..................................................... OK

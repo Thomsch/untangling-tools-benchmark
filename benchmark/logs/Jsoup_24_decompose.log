@@ -1,0 +1,47 @@
+
+Decompositing project Jsoup, bug 24, repository benchmark//repositories/Jsoup_24
+Check out program version: Jsoup-24b....................................... OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+
+Untangling with SmartCommit ...............................................Untangling with SmartCommit ............................................. CACHED
+Untangling with Flexeme ...............................................
+[2023-07-12 14:50:46][root] INFO: Flexeme generate PDG for 04b8921d4dcab019b02588620d953c4f19d43a58 in /Users/thanhdang/untangling-tools-benchmark/benchmark/repositories/Jsoup_24
+[2023-07-12 14:50:47][root] INFO: Generating PDGs for /src/main/java/org/jsoup/parser/TokeniserState.java
+[2023-07-12 14:50:47][root] INFO: Generating PDG for /src/main/java/org/jsoup/parser/TokeniserState.java@04b8921d4dcab019b02588620d953c4f19d43a58^
+[2023-07-12 14:50:51][root] INFO: Generating PDG for /src/main/java/org/jsoup/parser/TokeniserState.java@04b8921d4dcab019b02588620d953c4f19d43a58
+[2023-07-12 14:50:54][root] INFO: Building ∂PDG for /src/main/java/org/jsoup/parser/TokeniserState.java
+[2023-07-12 14:52:41][root] INFO: Generating PDGs for /src/test/java/org/jsoup/parser/HtmlParserTest.java
+[2023-07-12 14:52:41][root] INFO: Generating PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java@04b8921d4dcab019b02588620d953c4f19d43a58^
+[2023-07-12 14:52:44][root] INFO: Generating PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java@04b8921d4dcab019b02588620d953c4f19d43a58
+[2023-07-12 14:52:47][root] INFO: Building ∂PDG for /src/test/java/org/jsoup/parser/HtmlParserTest.java
+n2542 [cluster="null.HtmlParserTest.handlesUnclosedScriptAtEof()", label="<script>Data</script n=\", span="589-589"];
+      ^
+Expected '}', found '['  (at char 98212), (line:2550, col:7)
+n2542 [cluster="null.HtmlParserTest.handlesUnclosedScriptAtEof()", label="<script>Data</script n=\", span="589-589"];
+      ^
+Expected '}', found '['  (at char 98212), (line:2550, col:7)
+[Scan and clean] Cleaning data-point 04b8921d4dcab019b02588620d953c4f19d43a58
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-12 14:54:21][root] INFO: List of graph length 3
+[2023-07-12 14:54:21][root] INFO: n=3
+[2023-07-12 14:54:21][root] INFO: affinity=[0. 0. 0.]
+[2023-07-12 14:54:21][root] INFO: Affinity: [0.15016341 0.3090578  0.3745927 ]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:26<00:00, 26.72s/it]                                             Untangling with Flexeme ................................................... OK
+
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+Parsing Flexeme results ...............................................Parsing Flexeme results ................................................. CACHED

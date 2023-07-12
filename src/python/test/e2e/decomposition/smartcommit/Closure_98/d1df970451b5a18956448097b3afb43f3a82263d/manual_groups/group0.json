@@ -1,0 +1,35 @@
+{
+  "repoID": "407064515",
+  "repoName": "Closure_98",
+  "groupID": "group0",
+  "diffHunkIndices": [
+    "1:0",
+    "3:1",
+    "3:6",
+    "3:7",
+    "2:2",
+    "4:0",
+    "2:0",
+    "2:1"
+  ],
+  "diffHunkIDs": [
+    "35f68ea233894de6b34600440f9d157c:2e549367a7a6473988dee9b0df417849",
+    "9f35d5144b114c3c9f7e1a6fe1993462:4fe946bbedf04545a41cb739dea39407",
+    "9f35d5144b114c3c9f7e1a6fe1993462:bc227d2db62b49a29711d7b3c56a98e0",
+    "9f35d5144b114c3c9f7e1a6fe1993462:3f3b2092f949482b8d38514b061104fe",
+    "f3a331b10d4448338d2c6864c7f31fab:28e1e3c908494e9d83df3b3770b03af8",
+    "77e8a0b96d7e4fdc821fe262d602073a:9188cf30faf94bae938fc6934ed13b13",
+    "f3a331b10d4448338d2c6864c7f31fab:22f7b2f3f781476c9dd8752c8bba8d79",
+    "f3a331b10d4448338d2c6864c7f31fab:51f00c847caf4e3194407e670eb629d5",
+    "9f35d5144b114c3c9f7e1a6fe1993462:1f0ca3570b3847cda266de0406c510e7",
+    "9f35d5144b114c3c9f7e1a6fe1993462:2ff249f76f3c435a8c0bec9cd2acb336"
+  ],
+  "intentLabel": "FEATURE",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "feature: Add or modify feature ...",
+  "linkCategories": [
+    0,
+    1
+  ]
+}

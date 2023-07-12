@@ -1,0 +1,8 @@
+./src/bash/main/score_bug.sh: line 18: [4: command not found
+
+Calculating Rand Index score for project Csv, bug 8, repository benchmark//repositories/Csv_8
+Check out program version: Csv-8b.......................................... OK
+
+Untangling with file-based approach .........................................Untangling with file-based approach ....................................... OK
+
+Computing untangling scores ...............................................Computing untangling scores ............................................... OK

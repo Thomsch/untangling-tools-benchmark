@@ -1,0 +1,90 @@
+{
+  "repoID": "-265909808",
+  "repoName": "Closure_103",
+  "fileID": "ef37e240403c4d4d960d8acafb761ed6",
+  "index": 0,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+  "currentRelativePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "2ceec704f0f441aebfe8b8c14a402a36": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "ef37e240403c4d4d960d8acafb761ed6",
+      "diffHunkID": "2ceec704f0f441aebfe8b8c14a402a36",
+      "fileIndex": 0,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+        "startLine": 899,
+        "endLine": 899,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "      if (mayThrowException(c)) {"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+        "startLine": 900,
+        "endLine": 900,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "      if (!ControlFlowGraph.isEnteringNewCfgNode(c) && mayThrowException(c)) {"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update MethodInvocation To InfixExpression.\n",
+      "rawDiffs": [
+        "@@ -899 +900 @@ final class ControlFlowAnalysis implements Callback, CompilerPass {",
+        "-      if (mayThrowException(c)) {",
+        "+      if (!ControlFlowGraph.isEnteringNewCfgNode(c) && mayThrowException(c)) {"
+      ]
+    },
+    "37247406fae64ba1a74590606c08c3c2": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "ef37e240403c4d4d960d8acafb761ed6",
+      "diffHunkID": "37247406fae64ba1a74590606c08c3c2",
+      "fileIndex": 0,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+        "startLine": 893,
+        "endLine": 892,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+        "startLine": 894,
+        "endLine": 894,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "      case Token.INSTANCEOF:"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add SwitchCase.\n",
+      "rawDiffs": [
+        "@@ -893,0 +894 @@ final class ControlFlowAnalysis implements Callback, CompilerPass {",
+        "+      case Token.INSTANCEOF:"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/com/google/javascript/jscomp/ControlFlowAnalysis.java b/src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+    "index d5bcabe1..6ef25483 100644",
+    "--- a/src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+    "+++ b/src/com/google/javascript/jscomp/ControlFlowAnalysis.java"
+  ]
+}

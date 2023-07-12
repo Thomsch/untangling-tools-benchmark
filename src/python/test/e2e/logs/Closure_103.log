@@ -1,0 +1,232 @@
+Evaluating project Closure, bug 103, repository src/python/test/e2e/repositories/Closure_103
+Checking out 2f5cb162 to /Users/thanhdang/untangling-tools-benchmark/src/py OK
+Init local repository...................................................... OK
+Tag post-fix revision...................................................... OK
+Run post-checkout hook..................................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Initialize fixed program version........................................... OK
+Apply patch................................................................ OK
+Initialize buggy program version........................................... OK
+Diff 2f5cb162:67289ae4..................................................... OK
+Apply patch................................................................ OK
+Tag pre-fix revision....................................................... OK
+Check out program version: Closure-103b.................................... OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+/Users/thanhdang/untangling-tools-benchmark
+Previous HEAD position was 06f207f0 D4J_Closure_103_BUGGY_VERSION
+HEAD is now at 67289ae4 Fixes a bug in getGreatestSubtype (Andrew)
+clang: error: no such file or directory: 'src/com/google/javascript/jscomp/ControlFlowAnalysis.java
+src/com/google/javascript/jscomp/DisambiguateProperties.java'
+clang: error: no input files
+Previous HEAD position was 67289ae4 Fixes a bug in getGreatestSubtype (Andrew)
+HEAD is now at 06f207f0 D4J_Closure_103_BUGGY_VERSION
+clang: error: no such file or directory: 'src/com/google/javascript/jscomp/ControlFlowAnalysis.java
+src/com/google/javascript/jscomp/DisambiguateProperties.java'
+clang: error: no input files
+Previous HEAD position was 06f207f0 D4J_Closure_103_BUGGY_VERSION
+HEAD is now at 2f5cb162 Make the CFA recognize possible ON_EX edges for instanceof operations. Fixes issue 113. (Alan)
+clang: error: no such file or directory: 'src/com/google/javascript/jscomp/ControlFlowAnalysis.java
+src/com/google/javascript/jscomp/DisambiguateProperties.java'
+clang: error: no input files
+Previous HEAD position was 2f5cb162 Make the CFA recognize possible ON_EX edges for instanceof operations. Fixes issue 113. (Alan)
+HEAD is now at 06f207f0 D4J_Closure_103_BUGGY_VERSION
+/Users/thanhdang/untangling-tools-benchmark
+Generating diff and code artifacts .................................................. OK
+Calculating metrics ..................................................... OK
+Calculating ground truth ..................................................Calculating ground truth .................................................. OK
+
+Untangling with file-based approach .........................................Untangling with file-based approach ....................................... OK
+
+Untangling with SmartCommit ...............................................
+Begin analysis, [repo] Closure_103 [branch] 06f207f0c4edce01d2fbc4289b69343defd7dcaf
+End analysis, results saved under: src/python/test/e2e/decomposition/smartcommit/Closure_103
+Untangling with SmartCommit ............................................... OK
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+
+Untangling with Flexeme ...............................................
+[2023-07-10 14:24:38][root] INFO: Flexeme generate PDG for 2f5cb1622371de540fe20dcbe0411651ec89f952 in /Users/thanhdang/untangling-tools-benchmark/src/python/test/e2e/repositories/Closure_103
+[2023-07-10 14:24:43][root] INFO: Generating PDGs for /src/com/google/javascript/jscomp/ControlFlowAnalysis.java
+[2023-07-10 14:24:43][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/ControlFlowAnalysis.java@2f5cb1622371de540fe20dcbe0411651ec89f952^
+[2023-07-10 14:24:55][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/ControlFlowAnalysis.java@2f5cb1622371de540fe20dcbe0411651ec89f952
+[2023-07-10 14:25:04][root] INFO: Building ∂PDG for /src/com/google/javascript/jscomp/ControlFlowAnalysis.java
+[2023-07-10 14:25:36][root] INFO: Generating PDGs for /src/com/google/javascript/jscomp/DisambiguateProperties.java
+[2023-07-10 14:25:36][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/DisambiguateProperties.java@2f5cb1622371de540fe20dcbe0411651ec89f952^
+[2023-07-10 14:25:44][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/DisambiguateProperties.java@2f5cb1622371de540fe20dcbe0411651ec89f952
+[2023-07-10 14:25:53][root] INFO: Building ∂PDG for /src/com/google/javascript/jscomp/DisambiguateProperties.java
+[2023-07-10 14:26:20][root] INFO: Generating PDGs for /test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java
+[2023-07-10 14:26:20][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952^
+[2023-07-10 14:26:27][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952
+[2023-07-10 14:26:34][root] INFO: Building ∂PDG for /test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java
+[2023-07-10 14:26:50][root] INFO: Generating PDGs for /test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java
+[2023-07-10 14:26:50][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952^
+[2023-07-10 14:26:57][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952
+[2023-07-10 14:27:04][root] INFO: Building ∂PDG for /test/com/google/javascript/jscomp/ControlFlowAnalysisTest.java
+[2023-07-10 14:27:22][root] INFO: Generating PDGs for /test/com/google/javascript/jscomp/DisambiguatePropertiesTest.java
+[2023-07-10 14:27:22][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/DisambiguatePropertiesTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952^
+[2023-07-10 14:27:29][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/DisambiguatePropertiesTest.java@2f5cb1622371de540fe20dcbe0411651ec89f952
+[2023-07-10 14:27:36][root] INFO: Building ∂PDG for /test/com/google/javascript/jscomp/DisambiguatePropertiesTest.java
+[Scan and clean] Cleaning data-point 2f5cb1622371de540fe20dcbe0411651ec89f952
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-10 14:29:46][root] INFO: List of graph length 37
+[2023-07-10 14:29:46][root] INFO: n=37
+[2023-07-10 14:29:46][root] INFO: affinity=[0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[2023-07-10 14:29:46][root] INFO: Affinity: [0.3090578  0.3745927  0.3090578  0.         0.3090578  0.3745927
+ 0.3090578  0.8822397  0.79667908 0.3745927  0.         0.
+ 0.         0.3090578  0.3745927  0.3090578  0.         0.3090578
+ 0.3745927  0.3090578  0.         0.3090578  0.3745927  0.3090578
+ 0.8822397  0.79667908 0.         0.         0.83050847 0.47457627
+ 0.14842932 0.3090578  0.3745927  0.223448   0.         0.
+ 0.15016341 0.         0.3090578  0.         0.15016341 0.
+ 0.81536276 0.74496931 0.15016341 0.3090578  0.3090578  0.3090578
+ 0.         0.15016341 0.         0.3090578  0.         0.15016341
+ 0.         0.3090578  0.         0.15016341 0.         0.81536276
+ 0.74496931 0.3090578  0.3090578  0.7874024  0.5748048  0.29727163
+ 0.         0.44433762 0.32097529 0.3090578  0.3090578  0.15016341
+ 0.3745927  0.15016341 0.         0.15016341 0.80687818 0.69990621
+ 0.         0.3745927  0.3745927  0.3745927  0.15016341 0.
+ 0.15016341 0.3745927  0.15016341 0.         0.15016341 0.3745927
+ 0.15016341 0.         0.15016341 0.80687818 0.69990621 0.3745927
+ 0.3745927  0.74983708 0.56221489 0.36604469 0.15016341 0.43589744
+ 0.39385735 0.3745927  0.3745927  0.3090578  0.         0.15016341
+ 0.         0.81536276 0.74496931 0.15016341 0.3090578  0.3090578
+ 0.3090578  0.         0.15016341 0.         0.3090578  0.
+ 0.15016341 0.         0.3090578  0.         0.15016341 0.
+ 0.81536276 0.74496931 0.3090578  0.3090578  0.7874024  0.5748048
+ 0.29727163 0.         0.44433762 0.32097529 0.3090578  0.3090578
+ 0.3090578  0.3745927  0.3090578  0.8822397  0.79667908 0.3745927
+ 0.         0.         0.         0.3090578  0.3745927  0.3090578
+ 0.         0.3090578  0.3745927  0.3090578  0.         0.3090578
+ 0.3745927  0.3090578  0.8822397  0.79667908 0.         0.
+ 0.83050847 0.47457627 0.14842932 0.3090578  0.3745927  0.223448
+ 0.         0.         0.15016341 0.         0.81536276 0.74496931
+ 0.15016341 0.3090578  0.3090578  0.3090578  0.         0.15016341
+ 0.         0.3090578  0.         0.15016341 0.         0.3090578
+ 0.         0.15016341 0.         0.81536276 0.74496931 0.3090578
+ 0.3090578  0.7874024  0.5748048  0.29727163 0.         0.44433762
+ 0.32097529 0.3090578  0.3090578  0.15016341 0.80687818 0.69990621
+ 0.         0.3745927  0.3745927  0.3745927  0.15016341 0.
+ 0.15016341 0.3745927  0.15016341 0.         0.15016341 0.3745927
+ 0.15016341 0.         0.15016341 0.80687818 0.69990621 0.3745927
+ 0.3745927  0.74983708 0.56221489 0.36604469 0.15016341 0.43589744
+ 0.39385735 0.3745927  0.3745927  0.81536276 0.74496931 0.15016341
+ 0.3090578  0.3090578  0.3090578  0.         0.15016341 0.
+ 0.3090578  0.         0.15016341 0.         0.3090578  0.
+ 0.15016341 0.         0.81536276 0.74496931 0.3090578  0.3090578
+ 0.7874024  0.5748048  0.29727163 0.         0.44433762 0.32097529
+ 0.3090578  0.3090578  0.71747103 0.80687818 0.8822397  0.8822397
+ 0.8822397  0.81536276 0.80687818 0.81536276 0.8822397  0.81536276
+ 0.80687818 0.81536276 0.8822397  0.81536276 0.80687818 0.81536276
+ 0.         0.71747103 0.8822397  0.8822397  0.09717103 0.8822397
+ 0.87025018 0.81536276 0.80687818 0.82707138 0.8822397  0.8822397
+ 0.69990621 0.79667908 0.79667908 0.79667908 0.74496931 0.69990621
+ 0.74496931 0.79667908 0.74496931 0.69990621 0.74496931 0.79667908
+ 0.74496931 0.69990621 0.74496931 0.71747103 0.         0.79667908
+ 0.79667908 0.65435444 0.77634699 0.78493924 0.74496931 0.67489839
+ 0.74919897 0.79667908 0.79667908 0.3745927  0.3745927  0.3745927
+ 0.15016341 0.         0.15016341 0.3745927  0.15016341 0.
+ 0.15016341 0.3745927  0.15016341 0.         0.15016341 0.80687818
+ 0.69990621 0.3745927  0.3745927  0.74983708 0.56221489 0.36604469
+ 0.15016341 0.43589744 0.39385735 0.3745927  0.3745927  0.
+ 0.         0.3090578  0.3745927  0.3090578  0.         0.3090578
+ 0.3745927  0.3090578  0.         0.3090578  0.3745927  0.3090578
+ 0.8822397  0.79667908 0.         0.         0.83050847 0.47457627
+ 0.14842932 0.3090578  0.3745927  0.223448   0.         0.
+ 0.         0.3090578  0.3745927  0.3090578  0.         0.3090578
+ 0.3745927  0.3090578  0.         0.3090578  0.3745927  0.3090578
+ 0.8822397  0.79667908 0.         0.         0.83050847 0.47457627
+ 0.14842932 0.3090578  0.3745927  0.223448   0.         0.
+ 0.3090578  0.3745927  0.3090578  0.         0.3090578  0.3745927
+ 0.3090578  0.         0.3090578  0.3745927  0.3090578  0.8822397
+ 0.79667908 0.         0.         0.83050847 0.47457627 0.14842932
+ 0.3090578  0.3745927  0.223448   0.         0.         0.15016341
+ 0.         0.3090578  0.         0.15016341 0.         0.3090578
+ 0.         0.15016341 0.         0.81536276 0.74496931 0.3090578
+ 0.3090578  0.7874024  0.5748048  0.29727163 0.         0.44433762
+ 0.32097529 0.3090578  0.3090578  0.15016341 0.3745927  0.15016341
+ 0.         0.15016341 0.3745927  0.15016341 0.         0.15016341
+ 0.80687818 0.69990621 0.3745927  0.3745927  0.74983708 0.56221489
+ 0.36604469 0.15016341 0.43589744 0.39385735 0.3745927  0.3745927
+ 0.3090578  0.         0.15016341 0.         0.3090578  0.
+ 0.15016341 0.         0.81536276 0.74496931 0.3090578  0.3090578
+ 0.7874024  0.5748048  0.29727163 0.         0.44433762 0.32097529
+ 0.3090578  0.3090578  0.3090578  0.3745927  0.3090578  0.
+ 0.3090578  0.3745927  0.3090578  0.8822397  0.79667908 0.
+ 0.         0.83050847 0.47457627 0.14842932 0.3090578  0.3745927
+ 0.223448   0.         0.         0.15016341 0.         0.3090578
+ 0.         0.15016341 0.         0.81536276 0.74496931 0.3090578
+ 0.3090578  0.7874024  0.5748048  0.29727163 0.         0.44433762
+ 0.32097529 0.3090578  0.3090578  0.15016341 0.3745927  0.15016341
+ 0.         0.15016341 0.80687818 0.69990621 0.3745927  0.3745927
+ 0.74983708 0.56221489 0.36604469 0.15016341 0.43589744 0.39385735
+ 0.3745927  0.3745927  0.3090578  0.         0.15016341 0.
+ 0.81536276 0.74496931 0.3090578  0.3090578  0.7874024  0.5748048
+ 0.29727163 0.         0.44433762 0.32097529 0.3090578  0.3090578
+ 0.3090578  0.3745927  0.3090578  0.8822397  0.79667908 0.
+ 0.         0.83050847 0.47457627 0.14842932 0.3090578  0.3745927
+ 0.223448   0.         0.         0.15016341 0.         0.81536276
+ 0.74496931 0.3090578  0.3090578  0.7874024  0.5748048  0.29727163
+ 0.         0.44433762 0.32097529 0.3090578  0.3090578  0.15016341
+ 0.80687818 0.69990621 0.3745927  0.3745927  0.74983708 0.56221489
+ 0.36604469 0.15016341 0.43589744 0.39385735 0.3745927  0.3745927
+ 0.81536276 0.74496931 0.3090578  0.3090578  0.7874024  0.5748048
+ 0.29727163 0.         0.44433762 0.32097529 0.3090578  0.3090578
+ 0.71747103 0.8822397  0.8822397  0.09717103 0.8822397  0.87025018
+ 0.81536276 0.80687818 0.82707138 0.8822397  0.8822397  0.79667908
+ 0.79667908 0.65435444 0.77634699 0.78493924 0.74496931 0.67489839
+ 0.74919897 0.79667908 0.79667908 0.         0.83050847 0.47457627
+ 0.14842932 0.3090578  0.3745927  0.223448   0.         0.
+ 0.83050847 0.47457627 0.14842932 0.3090578  0.3745927  0.223448
+ 0.         0.         0.81355932 0.82072196 0.7874024  0.74983708
+ 0.79092831 0.83050847 0.83050847 0.47337076 0.5748048  0.56221489
+ 0.52212185 0.47457627 0.47457627 0.29727163 0.36604469 0.2102015
+ 0.14842932 0.14842932 0.44433762 0.32097529 0.3090578  0.3090578
+ 0.39385735 0.3745927  0.3745927  0.223448   0.223448   0.        ]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:33<00:00, 33.05s/it]                                             Untangling with Flexeme ................................................... OK
+Parsing Flexeme results ...............................................
+Parsing Flexeme results ................................................... OK
+
+
+Computing untangling scores ...............................................Computing untangling scores ............................................... OK

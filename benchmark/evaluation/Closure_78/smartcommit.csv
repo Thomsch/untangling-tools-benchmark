@@ -1,0 +1,11 @@
+file,source,target,group
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,35,,group0
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,36,,group0
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,37,,group0
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,38,,group0
+test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java,558,,group0
+test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java,,558,group0
+test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java,562,,group0
+test/com/google/javascript/jscomp/PeepholeFoldConstantsTest.java,,562,group0
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,715,,group0
+src/com/google/javascript/jscomp/PeepholeFoldConstants.java,722,,group0

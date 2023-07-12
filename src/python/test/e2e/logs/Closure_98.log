@@ -1,0 +1,94 @@
+Evaluating project Closure, bug 98, repository src/python/test/e2e/repositories/Closure_98
+Checking out d1df9704 to /Users/thanhdang/untangling-tools-benchmark/src/py OK
+Init local repository...................................................... OK
+Tag post-fix revision...................................................... OK
+Run post-checkout hook..................................................... OK
+Excluding broken/flaky tests............................................... OK
+Excluding broken/flaky tests............................................... OK
+Initialize fixed program version........................................... OK
+Apply patch................................................................ OK
+Initialize buggy program version........................................... OK
+Diff d1df9704:d768bbc4..................................................... OK
+Apply patch................................................................ OK
+Tag pre-fix revision....................................................... OK
+Check out program version: Closure-98b..................................... OK
+Determine revision date.................................................... OK
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.classes)....................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.dir.src.tests)......................................... OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.compile)............................................ OK
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
+Running ant (export.cp.test)............................................... OK
+
+/Users/thanhdang/untangling-tools-benchmark
+Previous HEAD position was 80724786 D4J_Closure_98_BUGGY_VERSION
+HEAD is now at d768bbc4 Update repository after moequake
+src/com/google/javascript/jscomp/ReferenceCollectingCallback.java:250:12: warning: missing terminating ' character [-Winvalid-pp-token]
+      // it's not well-defined.
+           ^
+1 warning generated.
+Previous HEAD position was d768bbc4 Update repository after moequake
+HEAD is now at 80724786 D4J_Closure_98_BUGGY_VERSION
+src/com/google/javascript/jscomp/ReferenceCollectingCallback.java:250:12: warning: missing terminating ' character [-Winvalid-pp-token]
+      // it's not well-defined.
+           ^
+1 warning generated.
+Previous HEAD position was 80724786 D4J_Closure_98_BUGGY_VERSION
+HEAD is now at d1df9704 Change on 2010/06/09 by nicksantos
+src/com/google/javascript/jscomp/ReferenceCollectingCallback.java:250:12: warning: missing terminating ' character [-Winvalid-pp-token]
+      // it's not well-defined.
+           ^
+1 warning generated.
+Previous HEAD position was d1df9704 Change on 2010/06/09 by nicksantos
+HEAD is now at 80724786 D4J_Closure_98_BUGGY_VERSION
+/Users/thanhdang/untangling-tools-benchmark
+Generating diff and code artifacts .................................................. OK
+Calculating metrics ..................................................... OK
+Calculating ground truth ..................................................Calculating ground truth .................................................. OK
+
+Untangling with file-based approach .........................................Untangling with file-based approach ....................................... OK
+
+Untangling with SmartCommit ...............................................
+Begin analysis, [repo] Closure_98 [branch] 80724786ca813a50eec8214ab4aab46d2c9562b9
+End analysis, results saved under: src/python/test/e2e/decomposition/smartcommit/Closure_98
+Untangling with SmartCommit ............................................... OK
+Parsing SmartCommit results ...............................................
+Parsing SmartCommit results ............................................... OK
+
+
+Untangling with Flexeme ...............................................
+[2023-07-10 14:24:40][root] INFO: Flexeme generate PDG for d1df970451b5a18956448097b3afb43f3a82263d in /Users/thanhdang/untangling-tools-benchmark/src/python/test/e2e/repositories/Closure_98
+[2023-07-10 14:24:45][root] INFO: Generating PDGs for /src/com/google/javascript/jscomp/CollapseProperties.java
+[2023-07-10 14:24:45][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/CollapseProperties.java@d1df970451b5a18956448097b3afb43f3a82263d^
+[2023-07-10 14:24:59][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/CollapseProperties.java@d1df970451b5a18956448097b3afb43f3a82263d
+[2023-07-10 14:25:08][root] INFO: Building ∂PDG for /src/com/google/javascript/jscomp/CollapseProperties.java
+[2023-07-10 14:25:41][root] INFO: Generating PDGs for /src/com/google/javascript/jscomp/InlineVariables.java
+[2023-07-10 14:25:41][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/InlineVariables.java@d1df970451b5a18956448097b3afb43f3a82263d^
+[2023-07-10 14:25:50][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/InlineVariables.java@d1df970451b5a18956448097b3afb43f3a82263d
+[2023-07-10 14:25:58][root] INFO: Building ∂PDG for /src/com/google/javascript/jscomp/InlineVariables.java
+[2023-07-10 14:26:25][root] INFO: Generating PDGs for /src/com/google/javascript/jscomp/ReferenceCollectingCallback.java
+[2023-07-10 14:26:25][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/ReferenceCollectingCallback.java@d1df970451b5a18956448097b3afb43f3a82263d^
+[2023-07-10 14:26:32][root] INFO: Generating PDG for /src/com/google/javascript/jscomp/ReferenceCollectingCallback.java@d1df970451b5a18956448097b3afb43f3a82263d
+[2023-07-10 14:26:39][root] INFO: Building ∂PDG for /src/com/google/javascript/jscomp/ReferenceCollectingCallback.java
+[2023-07-10 14:26:55][root] INFO: Generating PDGs for /test/com/google/javascript/jscomp/InlineVariablesTest.java
+[2023-07-10 14:26:55][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/InlineVariablesTest.java@d1df970451b5a18956448097b3afb43f3a82263d^
+[2023-07-10 14:27:03][root] INFO: Generating PDG for /test/com/google/javascript/jscomp/InlineVariablesTest.java@d1df970451b5a18956448097b3afb43f3a82263d
+[2023-07-10 14:27:09][root] INFO: Building ∂PDG for /test/com/google/javascript/jscomp/InlineVariablesTest.java
+[Scan and clean] Cleaning data-point d1df970451b5a18956448097b3afb43f3a82263d
+  0%|          | 0/1 [00:00<?, ?it/s][2023-07-10 14:29:12][root] INFO: List of graph length 118
+[2023-07-10 14:29:20][root] INFO: n=118
+[2023-07-10 14:29:20][root] INFO: affinity=[0. 0. 0. ... 0. 0. 0.]
+[2023-07-10 14:29:20][root] INFO: Affinity: [0.5164053  0.45297147 0.45297147 ... 0.11147668 0.17992243 0.12098395]
+/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
+  warnings.warn(
+100%|██████████| 1/1 [00:40<00:00, 40.30s/it]                                             Untangling with Flexeme ................................................... OK
+Parsing Flexeme results ...............................................
+Parsing Flexeme results ................................................... OK
+
+
+Computing untangling scores ...............................................Computing untangling scores ............................................... OK

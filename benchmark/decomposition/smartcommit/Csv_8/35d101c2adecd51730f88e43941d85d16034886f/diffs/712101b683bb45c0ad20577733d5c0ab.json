@@ -1,0 +1,158 @@
+{
+  "repoID": "65418271",
+  "repoName": "Csv_8",
+  "fileID": "712101b683bb45c0ad20577733d5c0ab",
+  "index": 1,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "currentRelativePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "a32bcaf812ba4f41b87ab19aed25efa5": {
+      "repoID": "65418271",
+      "repoName": "Csv_8",
+      "fileID": "712101b683bb45c0ad20577733d5c0ab",
+      "diffHunkID": "a32bcaf812ba4f41b87ab19aed25efa5",
+      "fileIndex": 1,
+      "index": 1,
+      "baseHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 313,
+        "endLine": 313,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "        this.header = header == null ? null : header.clone();"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 313,
+        "endLine": 323,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "        if (header == null) {",
+          "        \tthis.header = null;",
+          "        } else {",
+          "        \tSet<String> dupCheck = new HashSet<String>();",
+          "        \tfor(String hdr : header) {",
+          "        \t\tif (!dupCheck.add(hdr)) {",
+          "        \t\t\tthrow new IllegalArgumentException(\"The header contains a duplicate entry: '\" + hdr + \"' in \" + Arrays.toString(header));",
+          "        \t\t}",
+          "        \t}",
+          "            this.header = header.clone();        \t",
+          "        }"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update Assignment To InfixExpression.\n",
+      "rawDiffs": [
+        "@@ -313 +313,11 @@ public final class CSVFormat implements Serializable {",
+        "-        this.header = header == null ? null : header.clone();",
+        "+        if (header == null) {",
+        "+        \tthis.header = null;",
+        "+        } else {",
+        "+        \tSet<String> dupCheck = new HashSet<String>();",
+        "+        \tfor(String hdr : header) {",
+        "+        \t\tif (!dupCheck.add(hdr)) {",
+        "+        \t\t\tthrow new IllegalArgumentException(\"The header contains a duplicate entry: '\" + hdr + \"' in \" + Arrays.toString(header));",
+        "+        \t\t}",
+        "+        \t}",
+        "+            this.header = header.clone();        \t",
+        "+        }"
+      ]
+    },
+    "51063651c5904295ae7e176e37ff9c19": {
+      "repoID": "65418271",
+      "repoName": "Csv_8",
+      "fileID": "712101b683bb45c0ad20577733d5c0ab",
+      "diffHunkID": "51063651c5904295ae7e176e37ff9c19",
+      "fileIndex": 1,
+      "index": 2,
+      "baseHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 661,
+        "endLine": 667,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "        if (header != null) {",
+          "            final Set<String> set = new HashSet<String>(header.length);",
+          "            set.addAll(Arrays.asList(header));",
+          "            if (set.size() != header.length) {",
+          "                throw new IllegalStateException(\"The header contains duplicate names: \" + Arrays.toString(header));",
+          "            }",
+          "        }"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 670,
+        "endLine": 669,
+        "version": "CURRENT",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "fileType": "JAVA",
+      "changeType": "DELETED",
+      "description": "Delete InfixExpression.\nDelete VariableDeclarationStatement \"set\".\nDelete ExpressionStatement \"set.addAll(Arrays.asList(header));\".\nDelete IfStatement.\n",
+      "rawDiffs": [
+        "@@ -661,7 +670,0 @@ public final class CSVFormat implements Serializable {",
+        "-        if (header != null) {",
+        "-            final Set<String> set = new HashSet<String>(header.length);",
+        "-            set.addAll(Arrays.asList(header));",
+        "-            if (set.size() != header.length) {",
+        "-                throw new IllegalStateException(\"The header contains duplicate names: \" + Arrays.toString(header));",
+        "-            }",
+        "-        }"
+      ]
+    },
+    "a379f14f31074d4b8063d4786dc2f407": {
+      "repoID": "65418271",
+      "repoName": "Csv_8",
+      "fileID": "712101b683bb45c0ad20577733d5c0ab",
+      "diffHunkID": "a379f14f31074d4b8063d4786dc2f407",
+      "fileIndex": 1,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 158,
+        "endLine": 158,
+        "version": "BASE",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    private final String[] header;"
+        ]
+      },
+      "currentHunk": {
+        "relativeFilePath": "src/main/java/org/apache/commons/csv/CSVFormat.java",
+        "startLine": 158,
+        "endLine": 158,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "    private final String[] header; // array of header column names"
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "MODIFIED",
+      "description": "Update FieldDeclaration \"header\".\n",
+      "rawDiffs": [
+        "@@ -158 +158 @@ public final class CSVFormat implements Serializable {",
+        "-    private final String[] header;",
+        "+    private final String[] header; // array of header column names"
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/src/main/java/org/apache/commons/csv/CSVFormat.java b/src/main/java/org/apache/commons/csv/CSVFormat.java",
+    "index a553dfa..772aaf0 100644",
+    "--- a/src/main/java/org/apache/commons/csv/CSVFormat.java",
+    "+++ b/src/main/java/org/apache/commons/csv/CSVFormat.java"
+  ]
+}

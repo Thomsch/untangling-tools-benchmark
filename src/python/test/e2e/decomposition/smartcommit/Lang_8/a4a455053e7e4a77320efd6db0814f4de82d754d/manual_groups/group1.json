@@ -1,0 +1,30 @@
+{
+  "repoID": "-2026191289",
+  "repoName": "Lang_8",
+  "groupID": "group1",
+  "diffHunkIndices": [
+    "1:4",
+    "2:1",
+    "2:0",
+    "1:0",
+    "1:3",
+    "1:2",
+    "1:1"
+  ],
+  "diffHunkIDs": [
+    "c9d8ff9d68a34b11ac37133be30a6ffb:9887f1bb0d2045649d70ad9130c79dff",
+    "d8a0cb8b385947c4abb79ffe7f86e570:40239e53105c4ae4bb13504ec061e9d6",
+    "d8a0cb8b385947c4abb79ffe7f86e570:ece8ebb257ce4b9eac42a00540deb073",
+    "c9d8ff9d68a34b11ac37133be30a6ffb:25394a8ac4944359ae39aa18567093cb",
+    "c9d8ff9d68a34b11ac37133be30a6ffb:37d23dece4ec46a19125d94f80da1a20",
+    "c9d8ff9d68a34b11ac37133be30a6ffb:37f40d1d4d354b8181400eae15f896c5",
+    "c9d8ff9d68a34b11ac37133be30a6ffb:def57ce116ed4425931ab7b6742605b4"
+  ],
+  "intentLabel": "FEATURE",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "feature: Add or modify feature ...",
+  "linkCategories": [
+    3
+  ]
+}

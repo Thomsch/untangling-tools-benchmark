@@ -1,0 +1,62 @@
+{
+  "repoID": "-265909808",
+  "repoName": "Closure_103",
+  "fileID": "8c6c738726584125b6d944e27bdfdf4f",
+  "index": 2,
+  "status": "MODIFIED",
+  "fileType": "JAVA",
+  "baseRelativePath": "test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+  "currentRelativePath": "test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+  "baseContent": "",
+  "currentContent": "",
+  "description": "modified",
+  "diffHunksMap": {
+    "60c483a1e28048af8dc4a70b579bbee6": {
+      "repoID": "-265909808",
+      "repoName": "Closure_103",
+      "fileID": "8c6c738726584125b6d944e27bdfdf4f",
+      "diffHunkID": "60c483a1e28048af8dc4a70b579bbee6",
+      "fileIndex": 2,
+      "index": 0,
+      "baseHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+        "startLine": 138,
+        "endLine": 137,
+        "version": "BASE",
+        "contentType": "EMPTY",
+        "codeSnippet": []
+      },
+      "currentHunk": {
+        "relativeFilePath": "test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+        "startLine": 139,
+        "endLine": 143,
+        "version": "CURRENT",
+        "contentType": "CODE",
+        "codeSnippet": [
+          "  public void testInstanceOfThrowsException() {",
+          "    testSame(\"function f() {try { if (value instanceof type) return true; } \" +",
+          "             \"catch (e) { }}\");",
+          "  }",
+          "  "
+        ]
+      },
+      "fileType": "JAVA",
+      "changeType": "ADDED",
+      "description": "Add MethodDeclaration \"testInstanceOfThrowsException\".\n",
+      "rawDiffs": [
+        "@@ -138,0 +139,5 @@ public class CheckUnreachableCodeTest extends CompilerTestCase {",
+        "+  public void testInstanceOfThrowsException() {",
+        "+    testSame(\"function f() {try { if (value instanceof type) return true; } \" +",
+        "+             \"catch (e) { }}\");",
+        "+  }",
+        "+  "
+      ]
+    }
+  },
+  "rawHeaders": [
+    "diff --git a/test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java b/test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+    "index a76b4a49..82d7bd9a 100644",
+    "--- a/test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java",
+    "+++ b/test/com/google/javascript/jscomp/CheckUnreachableCodeTest.java"
+  ]
+}

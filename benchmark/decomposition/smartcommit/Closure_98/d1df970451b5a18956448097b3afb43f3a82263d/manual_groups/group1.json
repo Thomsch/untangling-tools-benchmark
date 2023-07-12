@@ -1,0 +1,20 @@
+{
+  "repoID": "407064515",
+  "repoName": "Closure_98",
+  "groupID": "group1",
+  "diffHunkIndices": [
+    "3:5"
+  ],
+  "diffHunkIDs": [
+    "43ab523091a041c69e44edaf66fe72c5:e3eefebd731641168364953103f5173f",
+    "43ab523091a041c69e44edaf66fe72c5:40439edf6f64446abc76e82a15f33741"
+  ],
+  "intentLabel": "FEATURE",
+  "recommendedCommitMsgs": [],
+  "commitID": "",
+  "commitMsg": "feature: Add or modify feature ...",
+  "linkCategories": [
+    0,
+    3
+  ]
+}
