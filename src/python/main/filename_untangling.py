@@ -23,8 +23,7 @@ import sys
 
 def main(file_path, output_file):
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
 
     # Print project name

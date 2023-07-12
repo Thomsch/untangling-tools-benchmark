@@ -38,9 +38,9 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ -z "${JAVA11_HOME}" ]]; then
+if [ -z "${JAVA11_HOME}" ]; then
   echo 'JAVA11_HOME environment variable is not set.'
-  echo 'Please set it to the path of a Java 11 java.'
+  echo 'Please set it to the path of a Java 11 installation.'
   exit 1
 fi
 
