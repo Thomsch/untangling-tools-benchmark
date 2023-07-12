@@ -42,10 +42,7 @@ evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the 
 
 flexeme_untangling_path="${decomposition_path}/flexeme"
 flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
-flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
-smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
 truth_csv="${evaluation_path}/truth.csv"
-commit=$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)
 
 # Untangle with file-based approach
 echo -ne '\n'
