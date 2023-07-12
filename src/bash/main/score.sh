@@ -37,11 +37,7 @@ set -o allexport
 source .env
 set +o allexport
 
-decomposition_path="${out_dir}/decomposition" # Path containing the decomposition results.
 evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results
-
-flexeme_untangling_path="${decomposition_path}/flexeme"
-flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
 truth_csv="${evaluation_path}/truth.csv"
 
 # Untangle with file-based approach
