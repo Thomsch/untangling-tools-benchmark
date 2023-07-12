@@ -57,7 +57,7 @@ retrieve_revision_ids () {
   local line
   line=$(grep "^$bug_id," "$csv_file")
 
-  if [ -z $line ]; then
+  if [ -z "$line" ]; then
     echo "Bug ID $bug_id not found." 1>&2
     return 1
   fi

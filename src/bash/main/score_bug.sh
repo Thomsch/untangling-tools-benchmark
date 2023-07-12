@@ -15,7 +15,7 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [$# -ne 4 ] ; then
+if [ $# -ne 4 ] ; then
     echo 'usage: score_bug.sh <project> <vid> <out_dir> <repository>'
     exit 1
 fi
