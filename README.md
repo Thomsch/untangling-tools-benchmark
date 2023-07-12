@@ -43,7 +43,7 @@ For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) 
 The [pipeline](diagrams/pipeline.drawio.svg) contains 4 components corresponding to the 4 Bash scripts listed below:
 - `get_metrics.sh`: Compute Commit Metrics
 - `ground_truth.sh`: Calculate Ground Truth
-- `decompose.sh`: Run Each Tool on Bug + Parse Untangling Results Linewise and Collate
+- `decompose.sh`: Run Each Tool on Bug
 - `score.sh`: Compute Untangling Score
 
 The scripts implement GNU parallelization to run on a list of desired Defects4J bugs `bug-file` with the command `./[script_name].sh <bug-file> $UTB_OUTPUT`. Their respective child scripts, `./[script_name]_bug.sh`, run on only one Defects4J bug file and are stored in `src/bash/main`. Note that the scripts are dependent, and they should be ran strictly as their dependencies are specified by the [pipeline](diagrams/pipeline.drawio.svg). For instance, `decompose.sh` and `ground_truth.sh` can be ran independently, but `score.sh` can only be run only after both of these scripts are completed:
