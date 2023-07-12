@@ -1,5 +1,5 @@
 """
-Tests for the clean_artifacts module.
+Test the clean_artifacts module.
 """
 from unidiff import (
     PatchSet,

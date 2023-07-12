@@ -110,8 +110,7 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
 
 def main():
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
     args = sys.argv[1:]
 
@@ -138,5 +137,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# LocalWords: dtypes, dataframe, bugfix

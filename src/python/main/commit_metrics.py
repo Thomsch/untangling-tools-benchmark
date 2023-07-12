@@ -140,8 +140,7 @@ def tangle_counts(repository):
 
 def main():
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
     args = sys.argv[1:]
 

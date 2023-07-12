@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Check if the local machine satisfy requirements:
-# - Python 3.8.15 is the version used and on the PATh.
-# - JAVA 8 is the default version on the PATH, but not used.
-# - JAVA 11 is installed, but not on the PATH
+# - Python 3.8.15 is the default
+# - JAVA 8 is the default
+# - JAVA 11 is available but is not the default
 # Check for PyGraphviz and GNU coreutiles
 
 set -o errexit
@@ -22,15 +22,15 @@ fi
 
 # Check Java is 1.8 for Defects4j. 
 java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
-if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
-    echo "Unsupported Java Version: ${java_version}. Please use Java 8."
+if [ "$java_version" != "1.8" ] ; then
+    echo "Use Java 8, not ${java_version}."
     exit 1
 fi
 
 # Check JAVA 11 is installed and on PATH. Defects4J will use whatever is on JAVA_HOME.
-if [[ -z "${JAVA_11}" ]]; then
+if [ -z "${JAVA_11}" ]; then
   echo 'JAVA_11 environment variable is not set.'
-  echo 'Please set it to the path of a Java 11 java.'
+  echo 'Please set it to the path of a Java 11 Java.'
   exit 1
 fi
 
