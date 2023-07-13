@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 
 """
-This script calculates the following 5 commit metrics for a provided D4J bug:
+A diff file is a unified diff representation of the differences between the source (pre-fix version) and target (post-fix version) files of a D4J bug.
+This script calculates the following 7 diff metrics for a Version Control diff file of a Defects4J bug:
     1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
     3. Number of hunks
     4. Average hunk size
-    5. Number of lines changed (i.e. all lines with +/- indicators in the original
-       diff generated from pre-fix and post-fix versions).
-
+    5. Number of diff lines changed (i.e. all lines with +/- indicators in the original diff)
+       If a source code line is modified (not removed or added), this corresponds to 2 diff lines changed.
+    6. Number of tangled lines in a diff file
+    7. Number of tangled hunks in a diff file
+- Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator
+('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
+a line value (i.e. the textual content of the source code line).
+- The program treats a diff line as either a Python unidiff Line Object, or as a String representation (e.g. "+         x = 3;").
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug Id
@@ -17,13 +23,138 @@ Command Line Args:
 Returns:
     The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
     CSV header:
-    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated}
+    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated, tangled_hunks_count, tangled_lines_count}
 """
-
 import sys
-
+from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
+from clean_artifacts import clean_diff
+
+
+def get_lines_in_hunk(hunk):
+    """
+    Return an ordered List of all Lines Objects in the given hunk.
+    All Lines Objects must be non-empty and must be either an added (+) or removed (-) line.
+    """
+    changed_lines = []
+    for line in hunk:
+        if line.line_type != LINE_TYPE_CONTEXT and line.value.strip():
+            line.diff_line_no = None
+            changed_lines.append(line)
+    return changed_lines
+
+def get_hunks_in_patch(patch):
+    """
+    Return an ordered List of all hunks in the given file.
+    A hunks is represented as a List of Line Objects.
+    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    We ignore empty hunks.
+    """
+    hunked_lines = []
+    for file in patch:
+        for hunk in file:
+            lines_in_hunk = get_lines_in_hunk(hunk)
+            if len(lines_in_hunk) > 0:
+                hunked_lines.append(lines_in_hunk)
+    return hunked_lines
+
+
+def flatten_patch_object(patch):
+    """
+    As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
+    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    """
+    flat_patch = []
+    for file in patch:
+        for hunk in file:
+            lines_in_hunk = get_lines_in_hunk(hunk)
+            for line in lines_in_hunk:
+                flat_patch.append(line)
+    return flat_patch
+
+
+def count_tangled_hunks(original_diff, fix_diff):
+    """
+    Count the number of tangled hunks in a Version Control diff.
+    If there is at least 1 tangled hunk, it means the commit contains tangled hunk.
+    Args:
+        original_diff <PatchSet Object>: the Version Control diff.
+        fix_diff <PatchSet Object>: the bug-fixing diff.
+    Returns:
+        tangled_hunks_count <Integer>: The number of tangles hunks.
+    """
+    tangled_hunks_count = 0
+    hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
+    fix_lines_str = [
+        str(line) for line in flatten_patch_object(fix_diff)
+    ]  # Obtain string representations of all Line Objects
+    if len(fix_lines_str) > 0 or len(fix_lines_str) != count_changed_lines(
+        original_diff
+    ):
+        for hunk in hunks_VC:
+            fix_lines_VC = [
+                line for line in hunk if str(line) in fix_lines_str
+            ]  # Find all fix lines in the hunk by matching diff line strings
+            if len(fix_lines_VC) == 0 or len(fix_lines_VC) == len(hunk):
+                # TODO: Ideal to use object identity here, but now opt for identity by string representation instead; possible for this to be error prone
+                continue  # The hunk is purely bug-fixing or non bug-fixing
+            tangled_hunks_count += 1
+    return tangled_hunks_count
+
+
+def count_changed_lines(patch):
+    """
+    Return the number of nonempty changed diff lines (+)/(-) in the diff file (i.e. we ignore both blank lines and context lines).
+    A diff line is called "changed" if it is either removed from the source file or added to the target file.
+
+    Args:
+        patch <PatchSet Object>: cleaned, contain no context lines, comments, or import statements.
+    Return:
+        count <Integer>: The number of changed diff lines in the diff file
+    """
+    flat_patch = flatten_patch_object(patch)
+    return len(flat_patch)
+
+
+def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
+    """
+    Return the number of tangled diff lines found in original VC diff.
+    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix.
+    Thus, this tangled diff line in original VC diff will be duplicated: once in bug_fix.diff, once in non_bug_fix.diff.
+
+    For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
+    As tangled lines are duplicated, we return the count divided by 2.
+    """
+    all_lines_count = count_changed_lines(original_diff)
+    fix_lines_count = count_changed_lines(bug_fix_diff)
+    nonfix_lines_count = count_changed_lines(nonfix_diff)
+    try:
+        tangled_lines_count = (
+            fix_lines_count + nonfix_lines_count - all_lines_count
+        ) / 2
+        assert tangled_lines_count % 2 == 0
+    except AssertionError:
+        print(
+            "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!"
+        )
+        return 0
+    return tangled_lines_count
+
+
+def tangle_counts(repository):
+    """
+    Returns "tangled_lines_count,tangled_hunks_count".
+    """
+
+    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
+    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
+
+    tangled_lines_count = count_tangled_lines(original_diff, fix_diff, nonfix_diff)
+    tangled_hunks_count = count_tangled_hunks(original_diff, fix_diff)
+
+    return f"{tangled_lines_count},{tangled_hunks_count}"
 
 
 def main():
@@ -32,22 +163,23 @@ def main():
     """
     args = sys.argv[1:]
 
-    if len(args) != 2:
-        print("usage: patch | python3 commit_metrics.py <project> <bug_id>")
+    if len(args) != 3:
+        print("usage: patch | python3 commit_metrics.py <project> <bug_id> <repo_root>")
         sys.exit(1)
 
     project = args[0]
     vid = args[1]
+    repository = args[2]
 
-    patch = PatchSet.from_string(sys.stdin.read())
+    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
 
-    files_updated = len(patch)  # The number of files updated
+    files_updated = len(original_diff)  # The number of files updated, including tests.
     test_files_updated = 0  # Number of test files updated
     hunks = 0  # Number of hunks
     hunk_sizes = []  # Average size of hunks
     lines_updated = 0  # The number of lines updated in the commit
 
-    for file in patch:
+    for file in original_diff:
         if file.path.endswith("Test.java"):
             test_files_updated += 1
 
@@ -61,9 +193,13 @@ def main():
 
     average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
 
+    clean_diff(
+        path.join(repository, "diff", "VC.diff")
+    )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
-        f"{hunks},{average_hunk_size},{lines_updated}"
+        f"{hunks},{average_hunk_size},{lines_updated},"
+        f"{tangle_counts(repository)}"
     )
 
 
