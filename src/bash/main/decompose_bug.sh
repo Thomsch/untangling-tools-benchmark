@@ -64,7 +64,7 @@ if [ -d "$smartcommit_untangling_results" ]; then
 else
   echo -ne '\n'
   START_DECOMPOSITION="$(date +%s.%N)"
-  $JAVA_11 -jar bin/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
+  "${JAVA11_HOME}/bin/java" -jar bin/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
   echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
