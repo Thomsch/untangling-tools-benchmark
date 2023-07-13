@@ -124,8 +124,12 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     all_lines_count = count_changed_lines(original_diff)
     fix_lines_count = count_changed_lines(bug_fix_diff)
     nonfix_lines_count = count_changed_lines(nonfix_diff)
-    
-    tangled_lines_count = (fix_lines_count + nonfix_lines_count - all_lines_count) / 2
+    try:
+        assert tangled_lines_count % 2 == 0
+        tangled_lines_count = (fix_lines_count + nonfix_lines_count - all_lines_count) / 2
+    except:
+        print("The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!")
+        return 0
     return tangled_lines_count
 
 
