@@ -11,7 +11,7 @@ This script calculates the following 7 diff metrics for a Version Control diff f
        If a source code line is modified (not removed or added), this corresponds to 2 diff lines changed.
     6. Number of tangled lines in a diff file
     7. Number of tangled hunks in a diff file
-- Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator 
+- Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator
 ('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
 a line value (i.e. the textual content of the source code line).
 - The program treats a diff line as either a Python unidiff Line Object, or as a String representation (e.g. "+         x = 3;").
@@ -131,11 +131,11 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     fix_lines_count = count_changed_lines(bug_fix_diff)
     nonfix_lines_count = count_changed_lines(nonfix_diff)
     try:
-        assert tangled_lines_count % 2 == 0
         tangled_lines_count = (
             fix_lines_count + nonfix_lines_count - all_lines_count
         ) / 2
-    except:
+        assert tangled_lines_count % 2 == 0
+    except AssertionError:
         print(
             "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!"
         )
