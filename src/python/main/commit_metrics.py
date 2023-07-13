@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 
 """
-This script calculates the following 7 commit metrics for a provided D4J bug:
+A diff file is a unified diff representation of the differences between the source (pre-fix version) and target (post-fix version) files of a D4J bug.
+This script calculates the following 7 diff metrics for a Version Control diff file of a Defects4J bug:
     1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
     3. Number of hunks
     4. Average hunk size
-    5. Number of lines changed (i.e. all lines with +/- indicators in the original
-       diff generated from pre-fix and post-fix versions).
+    5. Number of diff lines changed (i.e. all lines with +/- indicators in the original diff)
+       If a source code line is modified (not removed or added), this corresponds to 2 diff lines changed.
     6. Number of tangled lines in a diff file
     7. Number of tangled hunks in a diff file
-
+- Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator 
+('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
+a line value (i.e. the textual content of the source code line).
+- The program treats a diff line as either a Python unidiff Line Object, or as a String representation (e.g. "+         x = 3;").
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug Id
@@ -30,8 +34,8 @@ from clean_artifacts import clean_diff
 
 def get_lines_in_hunk(hunk):
     """
-    Return an ordered List of all diff lines Objects in the given hunk.
-    All lines must be non-empty and must be either an added (+) or removed (-) line.
+    Return an ordered List of all Lines Objects in the given hunk.
+    All Lines Objects must be non-empty and must be either an added (+) or removed (-) line.
     """
     changed_lines = []
     for line in hunk:
@@ -44,8 +48,8 @@ def get_lines_in_hunk(hunk):
 def get_hunks_in_patch(patch):
     """
     Return an ordered List of all hunks in the given file.
-    A hunk is represented as a List of Line objects.
-    All lines must be non-empty and must be either an added (+) or removed (-) line.
+    A hunks is represented as a List of Line Objects.
+    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
     We ignore empty hunks.
     """
     hunked_lines = []
@@ -60,7 +64,7 @@ def get_hunks_in_patch(patch):
 def flatten_patch_object(patch):
     """
     As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
-    All lines must be non-empty and must be either an added (+) or removed (-) line.
+    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
     """
     flat_patch = []
     for file in patch:
@@ -82,28 +86,27 @@ def count_tangled_hunks(original_diff, fix_diff):
         tangled_hunks_count <Integer>: The number of tangles hunks.
     """
     tangled_hunks_count = 0
-    hunks_VC = get_hunks_in_patch(original_diff)
-    fix_lines = [str(line) for line in flatten_patch_object(fix_diff)]
-    if len(fix_lines) > 0 or len(fix_lines) != sum(
-        len(hunk) for hunk in hunks_VC
-    ):  # TODO: Ideal to use object identity here, but now opt for identity by string representation instead; possible for this to be error prone
+    hunks_VC = get_hunks_in_patch(original_diff)                                 # List of hunks
+    fix_lines_str = [str(line) for line in flatten_patch_object(fix_diff)]       # Obtain string representations of all Line Objects
+    if len(fix_lines_str) > 0 or len(fix_lines_str) != count_changed_lines(original_diff):  
         for hunk in hunks_VC:
-            fix_lines_VC = [line for line in hunk if str(line) in fix_lines]
+            fix_lines_VC = [line for line in hunk if str(line) in fix_lines_str]  # Find all fix lines in the hunk by matching diff line strings
             if len(fix_lines_VC) == 0 or len(fix_lines_VC) == len(hunk):
-                continue
+                # TODO: Ideal to use object identity here, but now opt for identity by string representation instead; possible for this to be error prone
+                continue            # The hunk is purely bug-fixing or non bug-fixing
             tangled_hunks_count += 1
     return tangled_hunks_count
 
 
 def count_changed_lines(patch):
     """
-    Return the number of nonempty changed lines (+)/(-) in the diff file.
-    A line is called "changed" if it is either removed from the source file or added to the target file
+    Return the number of nonempty changed diff lines (+)/(-) in the diff file (i.e. we ignore both blank lines and context lines).
+    A diff line is called "changed" if it is either removed from the source file or added to the target file.
 
     Args:
-        patch <PatchSet Object>: filtered, contain no context lines, comments, or import statements.
+        patch <PatchSet Object>: cleaned, contain no context lines, comments, or import statements.
     Return:
-        count <Integer>: The number of changed lines in the diff
+        count <Integer>: The number of changed diff lines in the diff file
     """
     flat_patch = flatten_patch_object(patch)
     return len(flat_patch)
@@ -111,15 +114,18 @@ def count_changed_lines(patch):
 
 def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
-    Return the number of tangled lines found in original VC diff.
+    Return the number of tangled diff lines found in original VC diff. 
+    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix. 
+    Thus, this tangled diff line in original VC diff will be duplicated: once in bug_fix.diff, once in non_bug_fix.diff.
+
     For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
-    As tangled lines are duplicated, we return the count divided by 2. # TODO: Is this correct?
+    As tangled lines are duplicated, we return the count divided by 2.
     """
     all_lines_count = count_changed_lines(original_diff)
     fix_lines_count = count_changed_lines(bug_fix_diff)
     nonfix_lines_count = count_changed_lines(nonfix_diff)
-
-    tangled_lines_count = (fix_lines_count + nonfix_lines_count - all_lines_count) // 2
+    
+    tangled_lines_count = (fix_lines_count + nonfix_lines_count - all_lines_count) / 2
     return tangled_lines_count
 
 
