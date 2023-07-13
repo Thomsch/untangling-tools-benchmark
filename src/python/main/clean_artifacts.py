@@ -271,10 +271,10 @@ def main():
         with open(filename, "w") as file:
             file.write(sys.stdin.read())
         clean_source_code(filename)
-    if filename.endswith(".diff"):
+    elif filename.endswith(".diff"):
         with open(filename, "w") as file:
             file.write(sys.stdin.read())
-    clean_diff(filename)
+        clean_diff(filename)
 
 
 if __name__ == "__main__":

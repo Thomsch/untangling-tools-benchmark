@@ -14,24 +14,18 @@
 
 set -o allexport
 # shellcheck source=/dev/null
-source .env
+. .env
 set +o allexport
 
 if [ $# -ne 3 ] ; then
-    echo 'usage: ./generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
-    echo 'example: ./generate_artifacts.sh Lang 1 path/to/Lang_1/'
+    echo 'usage: generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
+    echo 'example: generate_artifacts.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
 
-project=$1
-vid=$2
-repository=$3
-
-if [ -z "${DEFECTS4J_HOME}" ]; then
-  echo 'DEFECTS4J_HOME environment variable is not set.'
-  echo 'Please set it to the path of the Defects4J repository.'
-  exit 1
-fi
+project="$1"
+vid="$2"
+repository="$3"
 
 if [ -z "${DEFECTS4J_HOME}" ]; then
   echo 'DEFECTS4J_HOME environment variable is not set.'
@@ -48,7 +42,7 @@ workdir="$(pwd)"
 diff_dir="${repository}/diff"
 mkdir "${diff_dir}"
 
-source ./src/bash/main/d4j_utils.sh
+. ./src/bash/main/d4j_utils.sh
 
 # Parse the returned revision_ids into two variables
 read -r revision_original revision_fixed <<< "$(retrieve_revision_ids "$project" "$vid")"
@@ -69,8 +63,10 @@ source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
   | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
 
 cd - || exit 1
-# Generate the three diff files with no context lines, then clean the diffs.
+
+# Generate the VC diff but not clean yet, to generate commit metrics first
 d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
+# Generate the NBF and BF diff files with no context lines, then clean the diffs.
 d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" \
     | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
 d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" \
