@@ -3,7 +3,7 @@
 """
 Generates the line-wise ground truth using the original changes and the minimized version
 of the D4J bug.
-Each diff line is classified into either a non-bug-fixing or bug-fixing change.
+Each diff line is classified into a non-bug-fixing change (group='other), a bug-fixing change (group='fix'), or a tangled change (group='both').
 
 The tests, comments, and imports are ignored from the original changes.
 The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
@@ -15,7 +15,7 @@ Command Line Args:
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-    CSV header: {file, source, target, group='fix','other'}
+    CSV header: {file, source, target, group='fix','other','both'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
