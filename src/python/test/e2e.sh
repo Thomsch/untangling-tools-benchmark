@@ -23,10 +23,13 @@ decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
-./evaluate_all.sh "$bugs_file" "$out_dir"
+./compute_metrics.sh "$bugs_file" "$out_dir"
+./generate_ground_truth.sh "$bugs_file" "$out_dir"
+./decompose.sh "$bugs_file" "$out_dir"
+./score.sh "$bugs_file" "$out_dir"
 
 metrics_results="${out_dir}/metrics.csv"
-decompositions_results="${out_dir}/decompositions.csv"
+decomposition_scores_results="${out_dir}/decomposition_scores.csv"
 
 # Diff the aggregated metrics file with the goal file
 if ! diff -u "$metrics_goal" "$metrics_results"; then
@@ -35,7 +38,7 @@ if ! diff -u "$metrics_goal" "$metrics_results"; then
 fi
 
 # Diff the aggregated Rand Index scores file with the goal file
-if ! diff -u "$decompositions_goal" "$decompositions_results"; then
+if ! diff -u "$decomposition_scores_goal" "$decomposition_scores_results"; then
     echo "Error: The Rand Index scores computed are different."
     exit 1
 fi
