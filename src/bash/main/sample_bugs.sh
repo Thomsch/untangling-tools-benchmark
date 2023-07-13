@@ -11,8 +11,8 @@ if [ $# -ne 2 ] ; then
     exit 1
 fi
 
-all_commits_file=$1 # Path to the file containing all bugs.
-sample_size=$2 # Number of bugs to sample.
+all_commits_file="$1" # Path to the file containing all bugs.
+sample_size="$2" # Number of bugs to sample.
 
 if ! [ -f "$all_commits_file" ]; then
     echo "File ${all_commits_file} not found. Exiting."
