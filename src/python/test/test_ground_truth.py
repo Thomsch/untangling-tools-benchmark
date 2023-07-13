@@ -1,5 +1,9 @@
 """
+<<<<<<< HEAD
 Test the ground truth module.
+=======
+Test the ground_truth module.
+>>>>>>> 34f9599801a811f19d51c0b5048968d449eb437e
 """
 import unidiff
 from src.python.main import ground_truth
