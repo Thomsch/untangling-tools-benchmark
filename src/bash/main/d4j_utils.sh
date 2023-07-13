@@ -3,19 +3,19 @@
 
 # Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
 d4j_diff () {
-    if [[ $# -ne 5 ]] ; then
+    if [ $# -ne 5 ] ; then
       echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Repository>'
       echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
       return 1
     fi
 
-    local PROJECT=$1
-    local VID=$2
-    local REVISION_BUGGY=$3
-    local REVISION_FIXED=$4
-    local REPO_DIR=$5
+    local PROJECT="$1"
+    local VID="$2"
+    local REVISION_BUGGY="$3"
+    local REVISION_FIXED="$4"
+    local REPO_DIR="$5"
 
-    vcs=$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')
+    vcs="$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')"
 
     if [[ $vcs == "Vcs::Git" ]] ; then
         git --git-dir="${REPO_DIR}/.git" diff --ignore-all-space -U0 "$REVISION_BUGGY" "$REVISION_FIXED"
