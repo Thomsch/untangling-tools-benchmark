@@ -1,44 +1,0 @@
-
-Decompositing project Csv, bug 8, repository benchmark//repositories/Csv_8
-Check out program version: Csv-8b.......................................... OK
-Determine revision date.................................................... OK
-OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
-Running ant (export.dir.src.classes)....................................... OK
-
-OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
-Running ant (export.dir.src.tests)......................................... OK
-
-OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
-Running ant (export.cp.compile)............................................ OK
-
-OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1G; support was removed in 8.0
-Running ant (export.cp.test)............................................... OK
-
-
-Untangling with SmartCommit ...............................................Untangling with SmartCommit ............................................. CACHED
-Untangling with Flexeme ...............................................
-[2023-07-12 14:50:45][root] INFO: Flexeme generate PDG for 35d101c2adecd51730f88e43941d85d16034886f in /Users/thanhdang/untangling-tools-benchmark/benchmark/repositories/Csv_8
-[2023-07-12 14:50:46][root] INFO: Generating PDGs for /src/main/java/org/apache/commons/csv/CSVFormat.java
-[2023-07-12 14:50:46][root] INFO: Generating PDG for /src/main/java/org/apache/commons/csv/CSVFormat.java@35d101c2adecd51730f88e43941d85d16034886f^
-[2023-07-12 14:50:49][root] INFO: Generating PDG for /src/main/java/org/apache/commons/csv/CSVFormat.java@35d101c2adecd51730f88e43941d85d16034886f
-[2023-07-12 14:50:51][root] INFO: Building ∂PDG for /src/main/java/org/apache/commons/csv/CSVFormat.java
-[2023-07-12 14:52:39][root] INFO: Generating PDGs for /src/test/java/org/apache/commons/csv/CSVFormatTest.java
-[2023-07-12 14:52:39][root] INFO: Generating PDG for /src/test/java/org/apache/commons/csv/CSVFormatTest.java@35d101c2adecd51730f88e43941d85d16034886f^
-[2023-07-12 14:52:41][root] INFO: Generating PDG for /src/test/java/org/apache/commons/csv/CSVFormatTest.java@35d101c2adecd51730f88e43941d85d16034886f
-[2023-07-12 14:52:43][root] INFO: Building ∂PDG for /src/test/java/org/apache/commons/csv/CSVFormatTest.java
-n2542 [cluster="null.HtmlParserTest.handlesUnclosedScriptAtEof()", label="<script>Data</script n=\", span="589-589"];
-      ^
-Expected '}', found '['  (at char 98212), (line:2550, col:7)
-[Scan and clean] Cleaning data-point 35d101c2adecd51730f88e43941d85d16034886f
-  0%|          | 0/1 [00:00<?, ?it/s][2023-07-12 14:54:41][root] INFO: List of graph length 53
-[2023-07-12 14:54:42][root] INFO: n=53
-[2023-07-12 14:54:42][root] INFO: affinity=[0. 0. 0. ... 0. 0. 0.]
-[2023-07-12 14:54:42][root] INFO: Affinity: [0.3090578 0.3090578 0.3090578 ... 0.        0.3090578 0.3090578]
-/Users/thanhdang/.pyenv/versions/3.8.15/lib/python3.8/site-packages/sklearn/cluster/_agglomerative.py:983: FutureWarning: Attribute `affinity` was deprecated in version 1.2 and will be removed in 1.4. Use `metric` instead
-  warnings.warn(
-100%|██████████| 1/1 [00:31<00:00, 31.48s/it]                                             Untangling with Flexeme ................................................... OK
-
-Parsing SmartCommit results ...............................................
-Parsing SmartCommit results ............................................... OK
-
-Parsing Flexeme results ...............................................Parsing Flexeme results ................................................. CACHED
