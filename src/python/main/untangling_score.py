@@ -116,8 +116,7 @@ def calculate_score_for_tool(truth_df, tool_df):
 
 def main(args):
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
 
     Args:
         args: command line arguments
@@ -163,5 +162,3 @@ def main(args):
 if __name__ == "__main__":
     args = sys.argv[1:]
     main(args)
-
-# LocalWords: smartcommit dtypes isin sklearn flexeme astype nonbugfixing

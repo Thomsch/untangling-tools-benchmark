@@ -16,8 +16,7 @@ import sys
 
 def main(path):
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
     print("project,bug_id,flexeme_exists,smartcommit_exists")
 

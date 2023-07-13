@@ -23,7 +23,7 @@ Experimental infrastructure for comparing untangling tools on real bug-fixing co
 7. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
 8. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
-    - `JAVA_11`: Location of the **Java 11** executable to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn/bin/java`")
+    - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
 9. Install GNU coreutils if you are on MacOS or Windows.
 10. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
 
@@ -38,23 +38,16 @@ If you encounter a term in the documentation or the source code that is not defi
 
 ## Usage
 ### Running the evaluation
-For visualization purpose, here is the [pipeline](diagrams/pipeline.drawio.svg) for evaluation framework in `/evaluate.sh`.
+The evaluation run the untangling tools on a list of Defects4J bugs and compute the untangling performance of the tools. It is composed of 3 steps.
 
-Run `./evaluate_all.sh <bug-file> $UTB_OUTPUT`.
+For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv`, run the following scripts in order:
 
-- `<bug-file>` is a CSV file containing the list of bugs to evaluate. There are 2 pre-computed bug files that you can
-  use (to generate a new bug file see **Generating the bug file** section):
-    - `data/d4j-5-bugs.csv`: 5 bugs from the Defects4J project. Useful to test the evaluation end to end.  You can generate a new bug file using `scripts/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
-    - `data/d4j-compatible-bugs.csv`: All the Defects4J bugs that are compatible with the experimental infrastructure.
-      (see **Limitations** section).
-      It is generated from `data/d4j-bugs-all.csv` by removing manually all the bugs from the `Chart` project.
-    - `data/d4j-bugs-all.csv`: All the Defects4J bugs.  To generate, run `scripts/defects4j_bugs.sh > data/d4j-bugs-all.csv`.
-- `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
+1. `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Run the untangling tools to obtain the decompositions
+   - `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
+2. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
+3. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
-For example, use `./evaluate_all.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to run the evaluation on 5 bugs from the Defects4J
-project.
-
-The results will be stored in `$UTB_OUTPUT`:
+All results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `$UTB_OUTPUT/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
   To aggregate all the results in one file, run `scripts/aggregate_time.sh <out-dir>`.
@@ -70,14 +63,22 @@ The results will be stored in `$UTB_OUTPUT`:
 - `decomposition_scores.csv`: Decomposition scores for each D4J bug evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,smartcommit_score,flexeme_score,file_untangling_score.
 - `metrics.csv`: Aggregated metrics across all the D4J bugs evaluated. The file has no CSV header. The columns are d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated.
 
+The detailed pipeline can be visualized in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
+
+In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are compatible with the experimental infrastructure.
+To generate a new bug file, see **Generating the bug file** section.
+
+#### Optional steps
+Run `./compute_metrics.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to compute the metrics of the D4J bugs. See section [Metrics](#metrics) for more details.
+
+The folder `analysis/` contains scripts to analyze the results of the evaluation. See `analysis/README.md` for more details.
 
 #### Generating the bug file
+To generate a bug file, run `src/bash/main/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
+Do not use `data/d4j-bugs-all.csv` as it contains bugs that are not compatible with the experimental infrastructure (see **Limitations** section).
 
 ### Untangling one Defects4J bug
-If you only want to evaluate the decomposition of one Defects4J bug, you can run the following command: `./evaluate.sh <project> <bug-id> $UTB_OUTPUT <repo-dir>`.
-- This will run the decomposition evaluation on the specified Defects4J `<bug-id>` in `<project>`.
-- `$UTB_OUTPUT` will contain the results of the decomposition.
-- `<repo-dir>` directory used by Defects4J to checkout the specified project.
+If you only want to evaluate the decomposition of one Defects4J bug, you can follow the pipeline presented in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
 
 ### Aggregating decomposition elapsed time
 
