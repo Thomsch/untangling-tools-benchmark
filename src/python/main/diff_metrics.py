@@ -44,6 +44,7 @@ def get_lines_in_hunk(hunk):
             changed_lines.append(line)
     return changed_lines
 
+
 def get_hunks_in_patch(patch):
     """
     Return an ordered List of all hunks in the given file.

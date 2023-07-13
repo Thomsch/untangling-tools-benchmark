@@ -31,6 +31,7 @@ from diff_metrics import flatten_patch_object
 
 COL_NAMES = ["file", "source", "target"]
 
+
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-Java files.
@@ -55,6 +56,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                     )
                     df = pd.concat([df, entry], ignore_index=True)
     return df
+
 
 def tag_truth_label(original_diff, fix_diff, nonfix_diff):
     """
@@ -109,6 +111,7 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
             nonfix_lines.popleft()
         i += 1
     return labels
+
 
 def main():
     """
