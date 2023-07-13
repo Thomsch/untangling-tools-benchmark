@@ -11,7 +11,7 @@
 # the return code of ./evaluate.sh.
 set -o nounset    # Exit if script tries to use an uninitialized variable
 
-if [ $# -ne 1 ] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: evaluate_all.sh <bugs_file> <out_dir>'
     exit 1
 fi
