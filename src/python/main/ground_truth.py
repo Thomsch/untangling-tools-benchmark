@@ -33,9 +33,9 @@ COL_NAMES = ["file", "source", "target"]
 
 def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
-    Convert the nested PatchSet object to a Dataframe to:
+    Convert a PatchSet object to a Dataframe to:
     - Remove comments, blank lines, and import statements
-    - Easier manipulate data as PatchSet is a nested iterable Object.
+    - Easier manipulate data, since PatchSet is a deeply nested iterable Object.
     """
     df = pd.DataFrame(columns=COL_NAMES)
     for file in patch:
