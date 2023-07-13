@@ -86,14 +86,20 @@ def count_tangled_hunks(original_diff, fix_diff):
         tangled_hunks_count <Integer>: The number of tangles hunks.
     """
     tangled_hunks_count = 0
-    hunks_VC = get_hunks_in_patch(original_diff)                                 # List of hunks
-    fix_lines_str = [str(line) for line in flatten_patch_object(fix_diff)]       # Obtain string representations of all Line Objects
-    if len(fix_lines_str) > 0 or len(fix_lines_str) != count_changed_lines(original_diff):  
+    hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
+    fix_lines_str = [
+        str(line) for line in flatten_patch_object(fix_diff)
+    ]  # Obtain string representations of all Line Objects
+    if len(fix_lines_str) > 0 or len(fix_lines_str) != count_changed_lines(
+        original_diff
+    ):
         for hunk in hunks_VC:
-            fix_lines_VC = [line for line in hunk if str(line) in fix_lines_str]  # Find all fix lines in the hunk by matching diff line strings
+            fix_lines_VC = [
+                line for line in hunk if str(line) in fix_lines_str
+            ]  # Find all fix lines in the hunk by matching diff line strings
             if len(fix_lines_VC) == 0 or len(fix_lines_VC) == len(hunk):
                 # TODO: Ideal to use object identity here, but now opt for identity by string representation instead; possible for this to be error prone
-                continue            # The hunk is purely bug-fixing or non bug-fixing
+                continue  # The hunk is purely bug-fixing or non bug-fixing
             tangled_hunks_count += 1
     return tangled_hunks_count
 
@@ -114,8 +120,8 @@ def count_changed_lines(patch):
 
 def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
-    Return the number of tangled diff lines found in original VC diff. 
-    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix. 
+    Return the number of tangled diff lines found in original VC diff.
+    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix.
     Thus, this tangled diff line in original VC diff will be duplicated: once in bug_fix.diff, once in non_bug_fix.diff.
 
     For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
@@ -126,9 +132,13 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     nonfix_lines_count = count_changed_lines(nonfix_diff)
     try:
         assert tangled_lines_count % 2 == 0
-        tangled_lines_count = (fix_lines_count + nonfix_lines_count - all_lines_count) / 2
+        tangled_lines_count = (
+            fix_lines_count + nonfix_lines_count - all_lines_count
+        ) / 2
     except:
-        print("The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!")
+        print(
+            "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!"
+        )
         return 0
     return tangled_lines_count
 
