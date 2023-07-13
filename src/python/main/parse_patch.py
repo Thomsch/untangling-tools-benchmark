@@ -43,8 +43,7 @@ def from_file(filename):
 
 def main():
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
+    Implement the logic of the script. See the module docstring.
     """
 
     patch = PatchSet.from_string(sys.stdin.read())
@@ -55,5 +54,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# LocalWords: unidiff
