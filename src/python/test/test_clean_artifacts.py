@@ -82,7 +82,7 @@ index 8422d40..fb47f45 100644
 
 def test_fix_short_hunk_info():
     """
-    Test that hunk info is fixed when lines are filtered.
+    Test that hunk info is fixed when hunk is cleaned.
     """
     clean_patch = test_cancelled_out_lines_are_removed()
     fixed_patch = clean_artifacts.fix_hunk_info(clean_patch)
@@ -92,7 +92,7 @@ def test_fix_short_hunk_info():
 
 def test_fix_long_hunk_info():
     """
-    Test that hunk info is fixed when lines are filtered.
+    Test that hunk info is fixed when hunk is cleaned.
     """
     clean_patch = test_identical_line_contents()
     fixed_patch = clean_artifacts.fix_hunk_info(clean_patch)

@@ -1,5 +1,5 @@
 """
-Test the clean_artifacts module.
+Test the ground truth module.
 """
 import unidiff
 from src.python.main import ground_truth
