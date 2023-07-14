@@ -53,7 +53,6 @@ else
     result="$(retrieve_revision_ids "$project" "$vid")"
     read -r revision_buggy revision_fixed <<< "$result"
 
-    echo "revision_buggy=$result"
     if python3 src/python/main/diff_metrics.py "${project}" "${vid}" "${repository}" > "$metrics_csv"
     then
         echo -ne 'Calculating metrics ..................................................... OK\r'
