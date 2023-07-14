@@ -165,7 +165,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 3:
-        print("usage: patch | python3 commit_metrics.py <project> <bug_id> <repo_root>")
+        print("usage: patch | python3 diff_metrics.py <project> <bug_id> <repo_root>")
         sys.exit(1)
 
     project = args[0]
@@ -197,6 +197,9 @@ def main():
     clean_diff(
         path.join(repository, "diff", "VC.diff")
     )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
+    print(
+        "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated,tangled_lines_count,tangled_hunks_count"
+    )
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
         f"{hunks},{average_hunk_size},{lines_updated},"
