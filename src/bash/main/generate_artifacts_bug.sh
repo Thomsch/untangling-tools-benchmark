@@ -61,8 +61,6 @@ else
         exit 1
     fi
 
-    # target_file=$(grep -E "^\+\+\+ b/(.*)" "$inverted_patch" \
-    #   | sed -E "s/^\+\+\+ b\/(.*)/\1/")   # Retrieve target file name
     source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
     | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
 
