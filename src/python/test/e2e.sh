@@ -13,6 +13,11 @@ if [ $# -ne 0 ] ; then
     exit 1
 fi
 
+if [ ! -f .env ] ; then
+    echo "No .env file found"
+    exit 1
+fi
+
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
 bugs_file="data/d4j-5-bugs.csv" # The file containing the bugs to untangle.
