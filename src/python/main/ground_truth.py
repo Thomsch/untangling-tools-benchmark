@@ -79,7 +79,6 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
 
     i = 0
     while i < len(original_lines):
-        is_tangled_change = False
         line = original_lines[i]
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
             print("This is a bug")
