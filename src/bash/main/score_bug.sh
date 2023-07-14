@@ -32,6 +32,7 @@ truth_csv="${evaluation_path}/truth.csv"
 echo -ne '\n'
 echo "Calculating Rand Index score for project $project, bug $vid, repository $repository"
 
+# If the D4J bug does not exist, this means the tools have yet been ran on the bug file's VC commit
 if [ ! -d "${repository}" ] ; then
   echo "Directory does not exist: ${repository}"
   exit 1
