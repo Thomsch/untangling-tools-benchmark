@@ -156,7 +156,9 @@ def tangle_counts(repository):
     Returns "tangled_lines_count,tangled_hunks_count".
     """
 
-    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC_clean.diff"))
+    original_diff = PatchSet.from_filename(
+        path.join(repository, "diff", "VC_clean.diff")
+    )
     fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
 
@@ -180,11 +182,17 @@ def main():
     vid = args[1]
     repository = args[2]
 
-    unclean_original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
-    clean_original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC_clean.diff"))
+    unclean_original_diff = PatchSet.from_filename(
+        path.join(repository, "diff", "VC.diff")
+    )
+    clean_original_diff = PatchSet.from_filename(
+        path.join(repository, "diff", "VC_clean.diff")
+    )
 
     # Generate diff metrics on clean VC diff
-    files_updated = len(clean_original_diff)  # The number of files updated, not including tests.
+    files_updated = len(
+        clean_original_diff
+    )  # The number of files updated, not including tests.
     # test_files_updated = 0  # Number of test files updated
 
     # hunks = 0  # Number of hunks
@@ -202,14 +210,16 @@ def main():
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
                 all_changed_lines += 1
-    
+
     # Generate diff metrics on clean VC diff
-    files_updated = len(clean_original_diff)  # The number of files updated, not including tests.
+    files_updated = len(
+        clean_original_diff
+    )  # The number of files updated, not including tests.
     hunks_count = len(get_hunks_in_patch(clean_original_diff))
     code_changed_lines = len(flatten_patch_object(clean_original_diff))
     average_hunk_size = code_changed_lines / hunks_count
     noncode_changed_lines = all_changed_lines - code_changed_lines
-    
+
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
         f"{hunks_count},{average_hunk_size},{code_changed_lines},{noncode_changed_lines},"

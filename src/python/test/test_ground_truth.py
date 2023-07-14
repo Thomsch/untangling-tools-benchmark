@@ -122,12 +122,13 @@ index 8422d40..682191b 100644
     assert labels[8] == "other"  # + G is a nonfix
     assert labels[9] == "other"  # + D is a nonfix
 
+
 def test_overlap_lines_correctly_labelled():
     """
     Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
     """
     original_diff = unidiff.PatchSet.from_string(
-         """
+        """
 diff --git a/test/before.txt b/test/after.txt
 index 8422d40..e2c9801 100644
 --- a/test/before.txt
@@ -163,4 +164,4 @@ index 8422d40..682191b 100644
     )
     labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
     assert labels[0] == "other"  # + ~~ is a nonfix
-    assert labels[1] == "both"   # + E is tangled
+    assert labels[1] == "both"  # + E is tangled

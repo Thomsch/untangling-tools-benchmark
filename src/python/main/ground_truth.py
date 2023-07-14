@@ -126,7 +126,9 @@ def main():
 
     repository = args[0]
     out_path = args[1]
-    original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC_clean.diff"))
+    original_diff = PatchSet.from_filename(
+        os.path.join(repository, "diff", "VC_clean.diff")
+    )
     bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"))
 
