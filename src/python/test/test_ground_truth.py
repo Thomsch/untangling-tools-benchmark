@@ -123,7 +123,7 @@ index 8422d40..682191b 100644
     assert labels[9] == "other"  # + D is a nonfix
 
 
-def test_overlap_lines_correctly_labelled():
+def test_both_label_correctly_tagged():
     """
     Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
     """

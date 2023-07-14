@@ -26,7 +26,6 @@ import os
 import sys
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
-from clean_artifacts import clean_diff
 from diff_metrics import flatten_patch_object
 
 COL_NAMES = ["file", "source", "target"]

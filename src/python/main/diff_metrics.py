@@ -37,7 +37,6 @@ import sys
 from os import path
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
-from clean_artifacts import clean_diff
 
 
 def get_lines_in_hunk(hunk):
