@@ -1,6 +1,6 @@
 #!/bin/bash
 # Generates the ground truth using the original fix and the minimized version for a list of Defects4J (D4J) bugs.
-# - $1: Path to the file containing the bugs to untangle and evaluate.
+# - $1: Path to the file containing the bugs to untangle.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 
 # Writes the ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
@@ -19,18 +19,18 @@ if [ $# -ne 2 ] ; then
     exit 1
 fi
 
-# Check that Java is 1.8 for Defects4j.
+# Check that Java is 1.8 for Defects4J.
 # Defects4J will use whatever is on JAVA_HOME.
-version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
-if [ "$version" != "1.8" ] ; then
-    echo "Unsupported Java Version: ${version}. Please use Java 8."
+java_version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
+if [ "$java_version" != "1.8" ] ; then
+    echo "Please use Java 8 instead of ${java_version}."
     exit 1
 fi
 
 . ./src/bash/main/d4j_utils.sh
 
-export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
-export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # The file containing the bugs to untangle.
+export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
