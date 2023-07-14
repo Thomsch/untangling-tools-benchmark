@@ -2,15 +2,23 @@
 
 """
 A diff file is a unified diff representation of the differences between the source (pre-fix version) and target (post-fix version) files of a D4J bug.
-This script calculates the following 7 diff metrics for a Version Control diff file of a Defects4J bug:
+This script calculates the following 8 diff metrics for a Version Control diff file of a Defects4J bug:
+    For unclean VC diff:
     1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
+    For clean VC diff:
     3. Number of hunks
     4. Average hunk size
-    5. Number of diff lines changed (i.e. all lines with +/- indicators in the original diff)
+    5. Number of code diff lines changed (i.e. all lines with +/- indicators in the original diff)
        If a source code line is modified (not removed or added), this corresponds to 2 diff lines changed.
-    6. Number of tangled lines in a diff file
-    7. Number of tangled hunks in a diff file
+    6. Number of noncode diff lines changed
+    7. Number of tangled lines in a diff file
+    8. Number of tangled hunks in a diff file
+
+    f"{project},{vid},{files_updated},{test_files_updated},"
+        f"{hunks},{average_hunk_size},{code_changed_lines},{noncode_changed_lines}"
+        f"{tangle_counts(repository)}"
+
 - Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator
 ('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
 a line value (i.e. the textual content of the source code line).
@@ -139,7 +147,7 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
         print(
             "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!"
         )
-        return 0
+        return tangled_lines_count
     return tangled_lines_count
 
 
@@ -148,7 +156,7 @@ def tangle_counts(repository):
     Returns "tangled_lines_count,tangled_hunks_count".
     """
 
-    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC_clean.diff"))
     fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
 
@@ -172,34 +180,40 @@ def main():
     vid = args[1]
     repository = args[2]
 
-    original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    unclean_original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC.diff"))
+    clean_original_diff = PatchSet.from_filename(path.join(repository, "diff", "VC_clean.diff"))
 
-    files_updated = len(original_diff)  # The number of files updated, including tests.
-    test_files_updated = 0  # Number of test files updated
-    hunks = 0  # Number of hunks
-    hunk_sizes = []  # Average size of hunks
-    lines_updated = 0  # The number of lines updated in the commit
+    # Generate diff metrics on clean VC diff
+    files_updated = len(clean_original_diff)  # The number of files updated, not including tests.
+    # test_files_updated = 0  # Number of test files updated
 
-    for file in original_diff:
+    # hunks = 0  # Number of hunks
+    # hunk_sizes = []  # Average size of hunks
+    # lines_updated = 0  # The number of lines updated in the commit
+
+    # Count the number of changed lines in the unclean VC diff
+    all_changed_lines = 0
+    test_files_updated = 0
+    for file in unclean_original_diff:
         if file.path.endswith("Test.java"):
             test_files_updated += 1
-
         for hunk in file:
-            hunks += 1
-            hunk_sizes.append(len(hunk))
             for line in hunk:
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
-                lines_updated += 1
-
-    average_hunk_size = sum(hunk_sizes) / len(hunk_sizes)
-
-    clean_diff(
-        path.join(repository, "diff", "VC.diff")
-    )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
+                all_changed_lines += 1
+    
+    # Generate diff metrics on clean VC diff
+    files_updated = len(clean_original_diff)  # The number of files updated, not including tests.
+    hunks_count = len(get_hunks_in_patch(clean_original_diff))
+    code_changed_lines = len(flatten_patch_object(clean_original_diff))
+    average_hunk_size = code_changed_lines / hunks_count
+    noncode_changed_lines = all_changed_lines - code_changed_lines
+    
+    # TODO: Print CSV header to make it less confusing -> Does this affect the statistical analysis code?
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
-        f"{hunks},{average_hunk_size},{lines_updated},"
+        f"{hunks_count},{average_hunk_size},{code_changed_lines},{noncode_changed_lines},"
         f"{tangle_counts(repository)}"
     )
 
