@@ -41,8 +41,10 @@ echo -ne '\n'
 echo "Decompositing project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
-mkdir -p "$repository"
-defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+if [ ! -d "${repository}" ] ; then
+  mkdir -p "$repository"
+  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+fi
 
 # Commit hash is the revision_fixed_ID
 commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
@@ -123,8 +125,7 @@ echo -ne '\n'
 echo -ne 'Parsing Flexeme results ...............................................\r'
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ "${flexeme_untangling_code:-1}" -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
-then
+if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
   echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
   echo -ne '\n'

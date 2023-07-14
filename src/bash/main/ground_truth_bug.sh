@@ -41,8 +41,10 @@ echo -ne '\n'
 echo "Calculating ground truth for project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
-mkdir -p "$repository"
-defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+if [ ! -d "${repository}" ] ; then
+  mkdir -p "$repository"
+  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+fi
 
 truth_csv="${evaluation_path}/truth.csv"
 
