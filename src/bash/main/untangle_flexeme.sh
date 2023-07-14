@@ -12,7 +12,7 @@ if [ $# -ne 5 ] ; then
 fi
 
 
-repository="$1" # Path to the repository to run on
+repository="$1" # The repository to run on
 commit="$2" # Commit to untangle
 sourcepath="$3" # Java source path for compilation
 classpath="$4" # Java class path for compilation
