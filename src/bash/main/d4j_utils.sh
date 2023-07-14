@@ -45,8 +45,7 @@ retrieve_revision_ids () {
 
   # Check if the DEFECTS4J_HOME environment variable is set
   if [ -z "${DEFECTS4J_HOME}" ]; then
-    echo 'DEFECTS4J_HOME environment variable is not set.' 1>&2
-    echo 'Please set it to the path of your Defects4J installation.' 1>&2
+    echo 'Please set the JAVA11_HOME environment variable to a Java 11 installation.'
     return 1
   fi
 
