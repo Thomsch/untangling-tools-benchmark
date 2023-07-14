@@ -32,10 +32,10 @@ truth_csv="${evaluation_path}/truth.csv"
 echo -ne '\n'
 echo "Calculating Rand Index score for project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
+# If the D4J bug does not exist, this means the tools have yet been ran on the bug file's VC commit
 if [ ! -d "${repository}" ] ; then
-  mkdir -p "$repository"
-  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+  echo "Directory does not exist: ${repository}"
+  exit 1
 fi
 
 set -o allexport

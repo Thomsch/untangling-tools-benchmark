@@ -21,7 +21,7 @@ set +o allexport
 export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
 export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: score.sh <bugs_file> <out_dir>'
     exit 1
 fi

@@ -40,7 +40,7 @@ mkdir -p "$flexeme_untangling_path"
 echo -ne '\n'
 echo "Decompositing project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
+# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
   ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"

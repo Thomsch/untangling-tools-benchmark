@@ -32,11 +32,11 @@ repository="$4"
 export metrics_dir="${out_dir}/metrics"
 mkdir -p "$metrics_dir"
 
-# Calculates the ground truth
+# Calculates the diff metrics
 echo -ne '\n'
-echo "Calculating ground truth for project $project, bug $vid, repository $repository"
+echo "Calculating diff metrics for project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
+# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
   ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"

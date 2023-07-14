@@ -173,7 +173,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 3:
-        print("usage: patch | python3 commit_metrics.py <project> <bug_id> <repo_root>")
+        print("usage: patch | python3 diff_metrics.py <project> <bug_id> <repo_root>")
         sys.exit(1)
 
     project = args[0]
