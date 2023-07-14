@@ -193,11 +193,6 @@ def main():
     files_updated = len(
         clean_original_diff
     )  # The number of files updated, not including tests.
-    # test_files_updated = 0  # Number of test files updated
-
-    # hunks = 0  # Number of hunks
-    # hunk_sizes = []  # Average size of hunks
-    # lines_updated = 0  # The number of lines updated in the commit
 
     # Count the number of changed lines in the unclean VC diff
     all_changed_lines = 0
@@ -218,11 +213,10 @@ def main():
     hunks_count = len(get_hunks_in_patch(clean_original_diff))
     code_changed_lines = len(flatten_patch_object(clean_original_diff))
     average_hunk_size = code_changed_lines / hunks_count
-    noncode_changed_lines = all_changed_lines - code_changed_lines
 
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
-        f"{hunks_count},{average_hunk_size},{code_changed_lines},{noncode_changed_lines},"
+        f"{hunks_count},{average_hunk_size},{code_changed_lines},{all_changed_lines - code_changed_lines},"
         f"{tangle_counts(repository)}"
     )
 
