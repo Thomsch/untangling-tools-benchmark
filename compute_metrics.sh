@@ -40,11 +40,11 @@ generate_commit_metrics() {
   
   ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
   ret_code=$?
-  truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  metrics_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}"
 }
 
 export -f generate_commit_metrics
