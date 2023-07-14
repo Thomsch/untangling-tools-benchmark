@@ -11,6 +11,10 @@ data/corpora_clean
 # Python
 __pycache__
 .venv/
+.pytest_cache
 analysis/.RData
 
 analysis/.Rhistory
+
+# Mac OS X
+.DS_Store
