@@ -108,7 +108,7 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
             continue
         else:
             labels[i] = "both"
-            print("There is a line tagged both!",file=sys.stderr)
+            print("There is a line tagged both!", file=sys.stderr)
             fix_lines.popleft()
             nonfix_lines.popleft()
         i += 1
