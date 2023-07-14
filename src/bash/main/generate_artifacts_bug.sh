@@ -95,6 +95,7 @@ else
         echo -ne 'Generating diff and code artifacts .................................................. OK\r'
     else
         echo -ne 'Generating diff and code artifacts .................................................. FAIL\r'
+        exit 1                  # Return exit code 1 to mark this run as FAIl when called in generate_artifacts.sh
     fi
 fi
 echo -ne '\n'
