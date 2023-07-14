@@ -51,11 +51,6 @@ truth_csv="${evaluation_path}/truth.csv"
 if [ -f "$truth_csv" ]; then
     echo -ne 'Calculating ground truth ................................................ CACHED\r'
 else
-    . ./src/bash/main/d4j_utils.sh
-    # Parse the returned result into two variables
-    result="$(retrieve_revision_ids "$project" "$vid")"
-    read -r revision_buggy revision_fixed <<< "$result"
-
     if python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
     then
         echo -ne 'Calculating ground truth .................................................. OK\r'

@@ -2,7 +2,7 @@
 # Given a list of Defects4J (D4J) bugs, the script translates SmartCommit results (JSON files) and Flexeme graphs ().dot files) in decomposition/D4J_bug for each D4J bug
 # file to the line level. Each line is labelled with the group it belongs to and this is reported in
 # a readable CSV file. Then, calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
-# - $1: Path to the file containing the bugs to untangle and evaluate.
+# - $1: Path to the file containing the bugs to untangle.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 
 # Results are outputted to evaluation/<D4J_bug> respective subfolder.
@@ -18,8 +18,8 @@ set -o allexport
 . .env
 set +o allexport
 
-export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
-export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # The file containing the bugs to untangle.
+export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if [ $# -ne 2 ] ; then
     echo 'usage: score.sh <bugs_file> <out_dir>'
