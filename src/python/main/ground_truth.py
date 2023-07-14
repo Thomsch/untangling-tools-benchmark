@@ -125,10 +125,7 @@ def main():
 
     repository = args[0]
     out_path = args[1]
-    clean_diff(
-        os.path.join(repository, "diff", "VC.diff")
-    )  # Remove blank lines, comments, import statements from VC diff for tangled line and hunk support
-    original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC.diff"))
+    original_diff = PatchSet.from_filename(os.path.join(repository, "diff", "VC_clean.diff"))
     bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"))
     nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"))
 
