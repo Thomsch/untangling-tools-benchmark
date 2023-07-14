@@ -19,21 +19,20 @@ if [[ "$python_version" != "3.8.15" ]]; then
     exit 1
 fi
 
-# Check Java is 1.8 for Defects4j. 
+# Check Java is 1.8 for Defects4J.
 java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
 if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
-    echo "Unsupported Java Version: ${java_version}. Please use Java 8."
+    echo "Please use Java 8 instead of ${java_version}."
     exit 1
 fi
 
 # Check JAVA 11 is installed and on PATH. Defects4J will use whatever is on JAVA_HOME.
 if [[ -z "${JAVA11_HOME}" ]]; then
-  echo 'JAVA11_HOME environment variable is not set.'
-  echo 'Please set it to the path of a Java 11 java.'
+  echo 'Please set the JAVA11_HOME environment variable to a Java 11 installation.'
   exit 1
 fi
 
-# Check for each program in the system's PATH 
+# Check for each program in the system's PATH
 for package in defects4j flexeme date cpanm ; do
     if ! command -v "$package" >/dev/null 2>&1; then
         echo "Error: Required package '$package' is not installed."
@@ -41,4 +40,3 @@ for package in defects4j flexeme date cpanm ; do
     fi
 done
 echo 'The tool dependencies are satisfied.'
-

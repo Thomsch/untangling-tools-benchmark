@@ -1,7 +1,7 @@
 #!/bin/bash
 # Computes 7 commit metrics for a list of Defects4J (D4J) bugs.
 # Aggregates commit across all bug files into 1 metrics.csv file.
-# - $1: Path to the file containing the bugs to untangle and evaluate.
+# - $1: Path to the file containing the bugs to untangle.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 # Writes aggregated results to untangling-eval/metrics.csv.
 
@@ -14,8 +14,8 @@ if [ $# -ne 2 ] ; then
     exit 1
 fi
 
-export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
-export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # The file containing the bugs to untangle.
+export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if ! [ -f "$bugs_file" ]; then
     echo "File ${bugs_file} not found. Exiting."
