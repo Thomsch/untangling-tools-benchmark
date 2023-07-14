@@ -100,14 +100,15 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
         elif str(line) != str(nonfix) and str(line) != str(
             fix
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            print("These are tangled lines: ")
-            print(str(nonfix))
-            print(str(fix))
+            print("These are tangled lines: ", file=sys.stderr)
+            print(str(nonfix), file=sys.stderr)
+            print(str(fix), file=sys.stderr)
             fix_lines.popleft()
             nonfix_lines.popleft()
             continue
-        else:  # TODO: Does this really happen though?
+        else:
             labels[i] = "both"
+            print("There is a line tagged both!",file=sys.stderr)
             fix_lines.popleft()
             nonfix_lines.popleft()
         i += 1

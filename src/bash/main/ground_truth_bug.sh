@@ -56,6 +56,7 @@ else
         echo -ne 'Calculating ground truth .................................................. OK\r'
     else
         echo -ne 'Calculating ground truth .................................................. FAIL\r'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in generate_ground_truth.sh
     fi
 fi
 echo -ne '\n'

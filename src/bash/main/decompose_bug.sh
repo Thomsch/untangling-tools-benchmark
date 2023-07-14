@@ -116,6 +116,7 @@ else
       echo -ne 'Parsing SmartCommit results ............................................... OK'
   else
       echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+      exit 1
   fi
   echo -ne '\n'
 fi
@@ -134,6 +135,7 @@ else
       echo -ne 'Parsing Flexeme results ................................................... OK\r'
   else
       echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
+      exit 1
   fi
   echo -ne '\n'
 fi

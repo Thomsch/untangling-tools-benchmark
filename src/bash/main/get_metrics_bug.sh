@@ -53,6 +53,7 @@ else
         echo -ne 'Calculating metrics ..................................................... OK\r'
     else
         echo -ne 'Calculating metrics ..................................................... FAIL\r'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
     fi
 fi
 echo -ne '\n'

@@ -144,10 +144,8 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
         ) / 2
         assert tangled_lines_count % 2 == 0
     except AssertionError:
-        print(
-            "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!"
-        )
-        return tangled_lines_count
+        print("The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!", file=sys.stderr)
+        sys.exit(1)
     return tangled_lines_count
 
 
