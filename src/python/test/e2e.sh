@@ -23,6 +23,7 @@ decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
+./generate_artifacts.sh "$bugs_file" "$out_dir"
 ./compute_metrics.sh "$bugs_file" "$out_dir"
 ./generate_ground_truth.sh "$bugs_file" "$out_dir"
 ./decompose.sh "$bugs_file" "$out_dir"
