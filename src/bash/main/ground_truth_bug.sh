@@ -54,7 +54,7 @@ else
     result="$(retrieve_revision_ids "$project" "$vid")"
     read -r revision_buggy revision_fixed <<< "$result"
 
-    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
+    if python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
     then
         echo -ne 'Calculating ground truth .................................................. OK\r'
     else
