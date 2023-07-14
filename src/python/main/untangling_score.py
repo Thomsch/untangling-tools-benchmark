@@ -155,7 +155,7 @@ def main(args):
 
         # Add Rand Index in respective tool order
         tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)
-
+    print("project,vid,SmartCommit_score,Flexeme_score,FileUntangling_score")
     print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
 
 
