@@ -27,11 +27,6 @@ project="$1"
 vid="$2"
 repository="$3"
 
-if [ ! -d "${repository}" ] ; then
-  echo "Directory does not exist: ${repository}"
-  exit 1
-fi
-
 # Generate 6 artifacts
 echo -ne '\n'
 echo "Generating diff and code artifacts for project $project, bug $vid, repository $repository"
@@ -75,7 +70,9 @@ else
 
     # Generate the VC diff but not clean yet, to generate commit metrics first
     d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
-    # Generate the NBF and BF diff files with no context lines, then clean the diffs.
+    # Generate the 3 diff files with no context lines, then clean the diffs.
+    d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" \
+        | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/VC_clean.diff"
     d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" \
         | python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
     d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" \
