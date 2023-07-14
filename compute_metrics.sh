@@ -52,7 +52,7 @@ parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
 
 metrics_results="${out_dir}/metrics.csv"
 
-echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated,tangled_lines,tangled_hunks" > "$metrics_results"
+echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
 cat "${metrics_dir}"/*.csv >> "$metrics_results"
 echo ""
 echo "Commit metrics aggregated and saved in ${metrics_results}"

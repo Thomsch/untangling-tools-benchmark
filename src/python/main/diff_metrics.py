@@ -210,7 +210,6 @@ def main():
     average_hunk_size = code_changed_lines / hunks_count
     noncode_changed_lines = all_changed_lines - code_changed_lines
     
-    # TODO: Print CSV header to make it less confusing -> Does this affect the statistical analysis code?
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
         f"{hunks_count},{average_hunk_size},{code_changed_lines},{noncode_changed_lines},"
