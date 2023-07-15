@@ -28,15 +28,16 @@ mkdir -p "${PAPER_REPOSITORY}/tables"
 mkdir -p "${PAPER_REPOSITORY}/data" # In case the paper repository does not exist yet
 
 #
-# Data directory for the data that is not importable directly into the paper.
+# Data
+# Directory for the data that is not importable directly into the paper.
 # e.g., statistics for the number of decompositions per tool.
 #
 
 # Counts the total number of D4J bugs that were evaluated and how many decomposition failed per tool
-python analysis/paper/count_missing_results.py "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/missing_results.txt"
+python analysis/paper/count_missing_results.py "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
 
 # Generates the performance statistics
-python analysis/paper/median_performance.py "${UNTANGLING_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performance.txt"
+python analysis/paper/median_performance.py "${UNTANGLING_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performances.txt"
 
 #
 # Tables
@@ -45,3 +46,21 @@ python analysis/paper/clean_decompositions.py "${UNTANGLING_DIR}/evaluation"
 python analysis/paper/combine_decompositions.py "${UNTANGLING_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"
 Rscript analysis/paper/group_size.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-size.tex"
 Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-count.tex"
+
+#
+# RQ1
+#
+Rscript analysis/paper/performance_distribution.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/figures/rq1-performance-distribution.pdf"
+Rscript analysis/paper/rq1.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/data/rq1.txt"
+Rscript analysis/paper/compare_models.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex"
+
+#
+# RQ2
+#
+Rscript analysis/paper/rq1.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNTANGLING_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data/rq2.txt"
+
+#
+# Manual Evaluation
+#
+# TODO: Generate "${TMP_DIR}/changed_lines.csv" with `line_count.sh`
+Rscript analysis/paper/manual_evaluation.R "analysis/manual/d4j-manual-bugs.csv" "${TMP_DIR}/changed_lines.csv" "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/manual-evaluation.tex"
