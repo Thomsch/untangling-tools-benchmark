@@ -180,8 +180,8 @@ def clean_diff(diff_file):
                 file.target_file,
                 "\t" + file.target_timestamp if file.target_timestamp else "",
             )
-        cleaned_patch.append(source)
-        cleaned_patch.append(target)
+            cleaned_patch.append(source)
+            cleaned_patch.append(target)
         for hunk in file:
             if hunk.source_length == 0 and hunk.target_length == 0:
                 continue
