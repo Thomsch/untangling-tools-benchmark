@@ -213,7 +213,7 @@ def main():
     )  # The number of files updated, not including tests.
     hunks_count = len(get_hunks_in_patch(clean_original_diff))
     code_changed_lines = len(flatten_patch_object(clean_original_diff))
-    average_hunk_size = code_changed_lines / hunks_count
+    average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else 0
 
     print(
         f"{project},{vid},{files_updated},{test_files_updated},"
