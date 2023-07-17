@@ -20,7 +20,8 @@ fi
 
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
-export workdir="$(pwd)"
+workdir="$(pwd)"
+export workdir
 export bugs_file="${workdir}/data/d4j-compatible-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
 export out_dir="${workdir}/benchmark-all" # Path to the directory where the results are stored and repositories checked out.
 
