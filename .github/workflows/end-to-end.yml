@@ -16,7 +16,7 @@ jobs:
 
       - name: Install Flexeme
         run: |
-          git clone https://github.com/Thomsch/Flexeme ../Flexeme
+          git clone --depth 1 --branch no-python-requirement https://github.com/Thomsch/Flexeme ../Flexeme
           pip install -e ../Flexeme
 
       - name: .env file
