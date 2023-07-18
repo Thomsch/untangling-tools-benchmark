@@ -9,6 +9,7 @@
 set -o errexit
 set -o nounset
 set -o allexport
+# shellcheck disable=SC1091 # File does not exist in repository.
 source .env
 set +o allexport
 
