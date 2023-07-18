@@ -24,3 +24,6 @@ jobs:
       run:
         echo "DEFECTS4J_HOME=\"${DEFECTS4J_HOME}\"" > .env
         echo "JAVA11_HOME=\"${JAVA11_HOME}\"" >> .env
+
+    - name: e2e.sh
+      run: src/python/test/e2e.sh
