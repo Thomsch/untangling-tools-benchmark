@@ -1,10 +1,17 @@
 # .DEFAULT_GOAL := out/decomposition.csv
 
-check: check-scripts check-python-format check-python-style python-test
+check: shell-script-style check-python-format check-python-style python-test
 
-check-scripts:
-# Fail if any of these files have warnings
-	shellcheck $(wildcard ./*.sh src/bash/main/*.sh)
+SH_SCRIPTS   = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)sh'   * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
+BASH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)bash' * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
+
+shell-script-style:
+	shellcheck -x -P SCRIPTDIR --format=gcc ${SH_SCRIPTS} ${BASH_SCRIPTS}
+	checkbashisms ${SH_SCRIPTS} /dev/null
+
+showvars:
+	@echo "SH_SCRIPTS=${SH_SCRIPTS}"
+	@echo "BASH_SCRIPTS=${BASH_SCRIPTS}"
 
 PYTHON_FILES=$(wildcard *.py analysis/*.py src/python/main/*.py src/python/test/*.py)
 check-python-style:
@@ -20,7 +27,6 @@ format-python:
 python-test:
 	pytest src/python/test
 
+.PHONY: clean
 clean: 
 	rm -rf ./tmp/
-
-.PHONY: clean
