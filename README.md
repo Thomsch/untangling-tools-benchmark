@@ -28,7 +28,7 @@ touch ${HOME}/.parallel will-cite
 
 4. Install GNU coreutils if you are on MacOS or Windows.
 
-### Part 1: The untangling evaluation itself
+### Part 2: The untangling evaluation itself
 
 1.
 
@@ -47,7 +47,7 @@ git clone https://github.com/Thomsch/Flexeme ../Flexeme
 pip install -e ../Flexeme
 ```
 
-If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
+If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 
 3. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)

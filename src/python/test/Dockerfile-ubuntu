@@ -21,17 +21,26 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && aptitude -y install \
   openjdk-11-jdk \
   openjdk-8-jdk
+ENV JAVA8_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-# gcc is required to run `cpanm --installdeps .` below.
+# curl and gcc are required to run `cpanm --installdeps .` below.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && aptitude -y install \
   cpanminus \
-  gcc \
   git \
   graphviz \
   subversion \
   wget
+
+# Required to run `cpanm --installdeps .` below.
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& aptitude -y install \
+  curl \
+  gcc \
+  unzip
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && export PARALLEL_DEB=parallel_20230622_all.deb \
@@ -45,11 +54,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && cd defects4j \
 && cpanm --installdeps . \
 && ./init.sh
+ENV DEFECTS4J_HOME=/defects4j
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
-
 
 # export PATH=$PATH:$HOME/defects4j/framework/bin
