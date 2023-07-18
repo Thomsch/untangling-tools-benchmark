@@ -76,22 +76,6 @@ else
     d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" >> "${diff_dir}/BF.diff"
     python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
 
-    # Remove comments, empty lines, whitespaces, and import statements from 3 source code files:
-    #       original.java (V_{n-1}), source_file (V_buggy), fixed.java (V_fixed)
-    # TODO: This doesn't handle when source file contain multiple filenames
-    cd "$repository" || exit 1
-    git checkout "$revision_original"
-    cpp "$source_file" >> "original.java"                                       # V_{n-1}
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "original.java"
-    git checkout "$revision_buggy"
-    cpp "$source_file" >> "buggy.java"                                          # V_buggy
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "buggy.java"
-    git checkout "$revision_fixed"
-    cpp "$source_file" >>  "fixed.java"                                         # V_fixed
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "fixed.java"
-    git checkout "$revision_buggy"                                                                                       # Return to project repository
-
-    cd - || exit 1                                                                                    # Return to project repository
     code=$?
     if [ $code -eq 0 ]
     then
