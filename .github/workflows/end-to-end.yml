@@ -10,9 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-## TODO: Does this need the following?
-#         python3 -m venv .venv
-#         source .venv/bin/activate
       - name: Python requirements
         run: |
           pip install -U -r requirements.txt
