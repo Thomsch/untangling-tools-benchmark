@@ -1,7 +1,9 @@
 name: End-to-end test
+
 on: [push, pull_request]
+
 jobs:
-  end-to-end-test-job:
+  end-to-end-test:
     runs-on: ubuntu-latest
     container: mdernst/untangling-ubuntu
 

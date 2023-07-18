@@ -13,6 +13,5 @@ jobs:
         run: pip install -U -r requirements.txt
       - name: install checkbashisms
         run: apt-get -y install devscripts
-
       - name: make check
         run: make check
