@@ -37,7 +37,7 @@ mkdir -p "$decomposition_path"
 mkdir -p "$smartcommit_untangling_path"
 mkdir -p "$flexeme_untangling_path"
 
-echo -ne '\n'
+echo ""
 echo "Decompositing project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
@@ -53,87 +53,79 @@ sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}"
 classpath="$(defects4j export -p cp.compile -w "${repository}")"
 classpath="${classpath}:$(defects4j export -p cp.test -w "${repository}")"
 
-echo -ne '\n'
-echo -ne 'Untangling with SmartCommit ...............................................\r' 
+echo ""
 smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
 # Untangle with SmartCommit
 if [ -d "$smartcommit_untangling_results" ]; then
-  echo -ne 'Untangling with SmartCommit ............................................. CACHED\r'
+  echo 'Untangling with SmartCommit ............................................. CACHED'
   regenerate_results=false
 else
-  echo -ne '\n'
+  echo 'Untangling with SmartCommit ...............................................'
   START_DECOMPOSITION="$(date +%s.%N)"
   "${JAVA11_HOME}/bin/java" -jar bin/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
   echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
-  echo -ne 'Untangling with SmartCommit ............................................... OK'
+  echo 'Untangling with SmartCommit ............................................... OK'
   regenerate_results=true
 fi
 
 # Untangle with Flexeme
-echo -ne '\n'
-echo -ne 'Untangling with Flexeme ...............................................\r'
 
 flexeme_untangling_results="${flexeme_untangling_path}/${project}_${vid}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
 if [ -f "$flexeme_untangling_graph" ]; then
-  echo -ne 'Untangling with Flexeme ................................................. CACHED\r'
+  echo 'Untangling with Flexeme ................................................. CACHED'
   regenerate_results=false
 else
-  echo -ne '\n'
+  echo 'Untangling with Flexeme ...............................................'
   mkdir -p "$flexeme_untangling_results"
   START_DECOMPOSITION="$(date +%s.%N)"
   if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
   then
-    echo -ne 'Untangling with Flexeme ................................................... OK'
+    echo 'Untangling with Flexeme ................................................... OK'
     regenerate_results=true
   else
-    echo -ne 'Untangling with Flexeme ................................................. FAIL'
+    echo 'Untangling with Flexeme ................................................. FAIL'
     regenerate_results=false
   fi
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
   echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
 fi
-echo -ne '\n'
 
 # Retrieve untangling results from SmartCommit and parse them into a CSV file.
-echo -ne '\n'
-echo -ne 'Parsing SmartCommit results ...............................................\r'
+echo ""
 
 smartcommit_result_out="${evaluation_path}/smartcommit.csv"
 if [ -f "$smartcommit_result_out" ] && [ $regenerate_results == false ]; then
-  echo -ne 'Parsing SmartCommit results ............................................. CACHED\r'
+  echo 'Parsing SmartCommit results ............................................. CACHED'
 else
-  echo -ne '\n'
+  echo 'Parsing SmartCommit results ...............................................'
   if python3 src/python/main/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
   then
-      echo -ne 'Parsing SmartCommit results ............................................... OK'
+      echo 'Parsing SmartCommit results ............................................... OK'
   else
-      echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+      echo 'Parsing SmartCommit results ............................................. FAIL'
   fi
-  echo -ne '\n'
 fi
-echo -ne '\n'
 
 # Retrieve untangling results from Flexeme and parse them into a CSV file.
-echo -ne 'Parsing Flexeme results ...............................................\r'
+echo ""
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
 if [ "${flexeme_untangling_code:-1}" -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; } ;
 then
-  echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
+  echo 'Parsing Flexeme results ................................................. CACHED'
 else
-  echo -ne '\n'
+  echo 'Parsing Flexeme results ...............................................'
   if python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
   then
-      echo -ne 'Parsing Flexeme results ................................................... OK\r'
+      echo 'Parsing Flexeme results ................................................... OK'
   else
-      echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
+      echo 'Parsing Flexeme results ................................................. FAIL'
   fi
-  echo -ne '\n'
 fi
-echo -ne '\n'
+echo ""

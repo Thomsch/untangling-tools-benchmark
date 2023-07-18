@@ -29,7 +29,7 @@ repository="$4"
 evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results
 truth_csv="${evaluation_path}/truth.csv"
 
-echo -ne '\n'
+echo ""
 echo "Calculating Rand Index score for project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
@@ -42,26 +42,23 @@ set -o allexport
 set +o allexport
 
 # Untangle with file-based approach
-echo -ne '\n'
-echo -ne 'Untangling with file-based approach .........................................\r'
+echo ""
 
 file_untangling_out="${evaluation_path}/file_untangling.csv"
 
 if [ -f "$file_untangling_out" ]; then
-  echo -ne 'Untangling with file-based approach ..................................... CACHED\r'
+  echo 'Untangling with file-based approach ..................................... CACHED'
 else
+  echo -ne 'Untangling with file-based approach .......................................\r'
   if python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
   then
-      echo -ne 'Untangling with file-based approach ....................................... OK\r'
+      echo 'Untangling with file-based approach ....................................... OK'
   else
-      echo -ne 'Untangling with file-based approach ..................................... FAIL\r'
+      echo 'Untangling with file-based approach ..................................... FAIL'
   fi
 fi
-echo -ne '\n'
 
 # Compute untangling score
-echo -ne '\n'
 echo -ne 'Computing untangling scores ...............................................\r'
 python3 src/python/main/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
-echo -ne 'Computing untangling scores ............................................... OK'
-echo -ne '\n'
+echo 'Computing untangling scores ............................................... OK'
