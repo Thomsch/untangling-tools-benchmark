@@ -9,7 +9,6 @@ Returns:
     Creates and writes to the desired file the cleaned input.
 """
 import fileinput
-import io
 import sys
 from unidiff import (
     PatchSet,
