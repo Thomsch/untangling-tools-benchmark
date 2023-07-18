@@ -25,6 +25,8 @@ alias create_upload_docker_image=' \
   rm -rf dockerdir && \
   mkdir -p dockerdir && \
   (cd dockerdir && \
+  \cp -p ../../../../requirements.txt requirements-untangling.txt && \
+  \cp -p ../../../../../Flexeme/requirements.txt requirements-flexeme.txt && \
   \cp -pf ../Dockerfile-$OS Dockerfile && \
   DOCKERIMAGE="mdernst/$PROJECT-$OS$DOCKERTESTING"
   docker build -t $DOCKERIMAGE . && \
