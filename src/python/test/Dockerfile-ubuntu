@@ -24,25 +24,21 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 ENV JAVA8_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-# curl and gcc are required to run `cpanm --installdeps .` below.
+# curl, gcc, and graphviz-dev are required to run `cpanm --installdeps .` below.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && aptitude -y install \
+  bc \
   cpanminus \
+  curl \
+  gcc \
   git \
   graphviz \
   graphviz-dev \
   python3-pip \
   subversion \
+  unzip \
   wget
-
-# Required to run `cpanm --installdeps .` below.
-RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt-get -qqy update \
-&& aptitude -y install \
-  curl \
-  gcc \
-  unzip
 
 COPY requirements-untangling.txt /tmp/requirements-untangling.txt
 COPY requirements-flexeme.txt /tmp/requirements-flexeme.txt
