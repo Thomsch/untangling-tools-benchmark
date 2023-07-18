@@ -9,6 +9,7 @@ Returns:
     Creates and writes to the desired file the cleaned input.
 """
 import fileinput
+import io
 import sys
 from unidiff import (
     PatchSet,
@@ -163,7 +164,7 @@ def clean_diff(diff_file):
     """
     Remove blank lines and split the hunk accordingly.
     """
-    patch = PatchSet.from_filename(diff_file)
+    patch = PatchSet.from_filename(filename=diff_file, encoding="latin-1")
     patch = filter(patch)
     cleaned_patch = []
     for file in patch:
@@ -233,7 +234,7 @@ def clean_diff(diff_file):
         #             cleaned_patch.append(new_hunk_info)
         #             for line in consecutive_lines:
         #                 cleaned_patch.append(str(line))
-    with open(diff_file, "w") as file:
+    with open(diff_file, "w", encoding="latin-1") as file:
         file.writelines(cleaned_patch)
 
 
@@ -268,12 +269,8 @@ def main():
     filename = args[0]
 
     if filename.endswith(".java"):
-        with open(filename, "w") as file:
-            file.write(sys.stdin.read())
         clean_source_code(filename)
     elif filename.endswith(".diff"):
-        with open(filename, "w") as file:
-            file.write(sys.stdin.read())
         clean_diff(filename)
 
 
