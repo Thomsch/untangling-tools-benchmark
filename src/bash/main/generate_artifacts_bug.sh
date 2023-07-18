@@ -61,9 +61,6 @@ else
         exit 1
     fi
 
-    source_file=$(grep -E "^\-\-\- a/(.*)" "$inverted_patch"  \
-    | sed -E "s/^\-\-\- a\/(.*)/\1/")   # Retrieve source file containing the bug
-
     cd - || exit 1
 
     # Generate the VC diff but not clean yet, to generate commit metrics first
