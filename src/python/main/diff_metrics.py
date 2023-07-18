@@ -156,10 +156,14 @@ def tangle_counts(repository):
     """
 
     original_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "VC_clean.diff")
+        path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
     )
-    fix_diff = PatchSet.from_filename(path.join(repository, "diff", "BF.diff"))
-    nonfix_diff = PatchSet.from_filename(path.join(repository, "diff", "NBF.diff"))
+    fix_diff = PatchSet.from_filename(
+        path.join(repository, "diff", "BF.diff"), encoding="latin-1"
+    )
+    nonfix_diff = PatchSet.from_filename(
+        path.join(repository, "diff", "NBF.diff"), encoding="latin-1"
+    )
 
     tangled_lines_count = count_tangled_lines(original_diff, fix_diff, nonfix_diff)
     tangled_hunks_count = count_tangled_hunks(original_diff, fix_diff)
@@ -182,10 +186,10 @@ def main():
     repository = args[2]
 
     unclean_original_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "VC.diff")
+        filename=path.join(repository, "diff", "VC.diff"), encoding="latin-1"
     )
     clean_original_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "VC_clean.diff")
+        path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
     )
 
     # Generate diff metrics on clean VC diff
