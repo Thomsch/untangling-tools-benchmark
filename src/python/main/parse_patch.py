@@ -34,7 +34,7 @@ def from_file(filename):
     result = ""
 
     if os.path.exists(filename):
-        patch = PatchSet.from_filename(filename)
+        patch = PatchSet.from_filename(filename, encoding="latin-1")
         for line in to_csv(patch):
             result += line + "\n"
 

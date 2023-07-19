@@ -68,13 +68,11 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
     Note: The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
     # TODO: We can use == for object equality, but only for bug fix lines
     """
-    original_lines = deque(
-        flatten_patch_object(original_diff)
-    )  # Generated 3 Queue objects
-    fix_lines = deque(flatten_patch_object(fix_diff))
-    nonfix_lines = deque(flatten_patch_object(nonfix_diff))
+    original_lines = deque([str(line) for line in flatten_patch_object(original_diff)])  # Generated 3 Queue objects
+    fix_lines = deque([str(line) for line in flatten_patch_object(fix_diff)])
+    nonfix_lines = deque([str(line) for line in flatten_patch_object(nonfix_diff)])
     labels = [
-        "o" for i in range(len(original_lines))
+        "other" for i in range(len(original_lines))
     ]  # Place holder for the truth label
 
     i = 0
@@ -86,24 +84,31 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
         if (
-            not nonfix or str(line) == str(fix) and str(line) != str(nonfix)
+            not nonfix or (line == fix and line != nonfix)
         ):  # If line is identical to head of fix_lines, it is bug-fixing
             labels[i] = "fix"
             fix_lines.popleft()
         elif (
-            not fix or str(line) == str(nonfix) and str(line) != str(fix)
+            not fix or (line == nonfix and line != fix)
         ):  # If line is identical to head of nonfix_lines, it is non bug-fixing
             labels[i] = "other"
             nonfix_lines.popleft()
-        elif str(line) != str(nonfix) and str(line) != str(
-            fix
-        ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            print("These are tangled lines: ", file=sys.stderr)
-            print(str(nonfix), file=sys.stderr)
-            print(str(fix), file=sys.stderr)
-            fix_lines.popleft()
-            nonfix_lines.popleft()
-            continue
+        elif line != nonfix and line != fix:  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
+            if fix == nonfix:
+                print("These are tangled lines: ", file=sys.stderr)
+                fix_lines.popleft()
+                nonfix_lines.popleft()
+                continue
+            else:
+                # Switch truth labelling scheme, always match with first occurrence
+                if line in nonfix:
+                    labels[i] = "other"
+                    nonfix_lines.remove(line)
+                elif line in fix:
+                    labels[i] = "fix"
+                    fix_lines.remove(line)
+                else:
+                    labels[i] = "both"
         else:
             labels[i] = "both"
             print("There is a line tagged both!", file=sys.stderr)
@@ -126,10 +131,10 @@ def main():
     repository = args[0]
     out_path = args[1]
     original_diff = PatchSet.from_filename(
-        os.path.join(repository, "diff", "VC_clean.diff")
+        os.path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
     )
-    bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"))
-    nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"))
+    bug_fix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "BF.diff"), encoding="latin-1")
+    nonfix_diff = PatchSet.from_filename(os.path.join(repository, "diff", "NBF.diff"), encoding="latin-1")
 
     original_diff_df = convert_to_dataframe(original_diff)
     truth_labels = tag_truth_label(original_diff, bug_fix_diff, nonfix_diff)
