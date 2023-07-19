@@ -18,6 +18,8 @@ if [ ! -f .env ] ; then
     exit 1
 fi
 
+echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"
+
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
 bugs_file="data/d4j-5-bugs.csv" # The file containing the bugs to untangle.
@@ -28,22 +30,27 @@ decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
+echo "about to run compute_metrics.sh"
 ./compute_metrics.sh "$bugs_file" "$out_dir"
+echo "compute_metrics.sh: done"
 ./generate_ground_truth.sh "$bugs_file" "$out_dir"
+echo "generate_ground_truth.sh: done"
 ./decompose.sh "$bugs_file" "$out_dir"
+echo "decompose.sh: done"
 ./score.sh "$bugs_file" "$out_dir"
+echo "score.sh: done"
 
 metrics_results="${out_dir}/metrics.csv"
 decomposition_scores_results="${out_dir}/decomposition_scores.csv"
 
 # Diff the aggregated metrics file with the goal file
 if ! diff -u "$metrics_goal" "$metrics_results"; then
-    echo "Error: The metrics computed are different."
+    echo "$0: error: The metrics computed are different."
     exit 1
 fi
 
 # Diff the aggregated Rand Index scores file with the goal file
 if ! diff -u "$decomposition_scores_goal" "$decomposition_scores_results"; then
-    echo "Error: The Rand Index scores computed are different."
+    echo "$0: error: The Rand Index scores computed are different."
     exit 1
 fi

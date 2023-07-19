@@ -1,0 +1,36 @@
+name: End-to-end test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: mdernst/untangling-ubuntu
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: pwd && ls -al && ls -al ..
+
+      - name: Python requirements
+        run: |
+          pip install -U -r requirements.txt
+
+      - name: Install Flexeme
+        run: |
+          git clone --depth 1 --branch no-python-requirement https://github.com/Thomsch/Flexeme ../Flexeme
+          pip install -e ../Flexeme
+
+      - run: pwd && ls -al && ls -al ..
+
+      - name: .env file
+        run:
+          echo "DEFECTS4J_HOME=\"${DEFECTS4J_HOME}\"" > .env
+          echo "JAVA11_HOME=\"${JAVA11_HOME}\"" >> .env
+
+      - run: pwd && ls -al && ls -al ..
+
+      - run: git config --system --add safe.directory '*'
+
+      - name: e2e.sh
+        run: src/python/test/e2e.sh
