@@ -95,24 +95,24 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
         ):  # If line is identical to head of nonfix_lines, it is non bug-fixing
             labels[i] = "other"
             nonfix_lines.popleft()
-        elif (
-            line != nonfix and line != fix
+        elif line not in (
+            nonfix,
+            fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
             if fix == nonfix:
                 print("These are tangled lines: ", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
                 continue
+            # Else, switch truth labelling scheme, always match with first occurrence
+            if line in nonfix_lines:
+                labels[i] = "other"
+                nonfix_lines.remove(line)
+            elif line in fix_lines:
+                labels[i] = "fix"
+                fix_lines.remove(line)
             else:
-                # Switch truth labelling scheme, always match with first occurrence
-                if line in nonfix_lines:
-                    labels[i] = "other"
-                    nonfix_lines.remove(line)
-                elif line in fix_lines:
-                    labels[i] = "fix"
-                    fix_lines.remove(line)
-                else:
-                    labels[i] = "both"
+                labels[i] = "both"
         else:
             labels[i] = "both"
             print("There is a line tagged both!", file=sys.stderr)
