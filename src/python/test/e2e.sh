@@ -18,6 +18,8 @@ if [ ! -f .env ] ; then
     exit 1
 fi
 
+git show --oneline | head -1
+
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
 bugs_file="data/d4j-5-bugs.csv" # The file containing the bugs to untangle.
