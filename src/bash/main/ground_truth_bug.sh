@@ -22,8 +22,8 @@ set -o allexport
 set +o allexport
 
 if [ $# -ne 4 ] ; then
-    echo 'usage: ground_truth_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
-    echo 'example: ground_truth_bug.sh Lang 1 path/to/Lang_1/ truth.csv'
+    echo 'usage: ground_truth_bug.sh <D4J Project> <D4J Bug id> <out file> <project repository>'
+    echo 'example: ground_truth_bug.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
 
