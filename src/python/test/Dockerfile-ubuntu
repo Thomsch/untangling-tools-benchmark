@@ -21,7 +21,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && aptitude -y install \
   openjdk-11-jdk \
   openjdk-8-jdk
-ENV JAVA8_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 # curl, gcc, and graphviz-dev are required to run `cpanm --installdeps .` below.
