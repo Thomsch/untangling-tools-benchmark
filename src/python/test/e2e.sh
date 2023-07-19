@@ -18,7 +18,7 @@ if [ ! -f .env ] ; then
     exit 1
 fi
 
-git show --oneline | head -1
+echo "Using commit: $(git show --oneline | head -1)"
 
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
@@ -30,6 +30,7 @@ decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
+echo "about to run compute_metrics.sh"
 ./compute_metrics.sh "$bugs_file" "$out_dir"
 echo "compute_metrics.sh: done"
 ./generate_ground_truth.sh "$bugs_file" "$out_dir"
