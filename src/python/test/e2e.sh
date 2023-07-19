@@ -14,7 +14,7 @@ if [ $# -ne 0 ] ; then
 fi
 
 if [ ! -f .env ] ; then
-    echo "No .env file found"
+    echo "$0: no .env file found"
     exit 1
 fi
 

@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: install Python modules
         run: pip install -U -r requirements.txt
-      - name: install checkbashisms
-        run: sudo apt-get -y install devscripts
+      - name: Install shellcheck and checkbashisms
+        run: sudo apt install -y shellcheck devscripts
       - name: make check
         run: make check
