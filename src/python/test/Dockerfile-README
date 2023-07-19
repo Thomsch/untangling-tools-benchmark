@@ -35,7 +35,7 @@ alias create_upload_docker_image=' \
 
 export OS=ubuntu
 export PROJECT=untangling
-create_upload_docker_image
+create_upload_docker_image && git push
 
 
 Cleanup:
