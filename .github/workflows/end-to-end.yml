@@ -30,5 +30,7 @@ jobs:
 
       - run: pwd && ls -al && ls -al ..
 
+      - run: git config --system --add safe.directory '*'
+
       - name: e2e.sh
         run: src/python/test/e2e.sh
