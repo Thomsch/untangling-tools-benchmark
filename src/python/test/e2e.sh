@@ -18,7 +18,7 @@ if [ ! -f .env ] ; then
     exit 1
 fi
 
-echo "Using commit: $(git show --oneline | head -1)"
+echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"
 
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
