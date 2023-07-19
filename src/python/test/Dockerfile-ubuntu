@@ -16,12 +16,12 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && aptitude -y install \
   apt-utils
 
-# Java 8 appears first in this list, so that it is the default version of Java.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && aptitude -y install \
   openjdk-8-jdk \
-  openjdk-11-jdk
+  openjdk-11-jdk \
+&& update-java-alternatives --set java-1.8.0-openjdk-amd64
 ENV JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
