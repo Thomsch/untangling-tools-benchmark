@@ -61,11 +61,13 @@ export -f generate_commit_metrics
 parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
 
 if [ -n "${DEBUG}" ] ; then
-  echo "Contents of ${logs_dir}:"
+  echo "Contents of logs_dir ${logs_dir}:"
   ls -al "${logs_dir}"
+  echo "Contents of metrics_dir ${metrics_dir}:"
+  ls -al "${metrics_dir}"
 fi
 
 metrics_results="${out_dir}/metrics.csv"
 cat "${metrics_dir}"/*.csv > "$metrics_results"
 echo ""
-echo "Commit metrics aggregated and saved in ${metrics_results}"
+echo "Commit metrics are aggregated and saved in ${metrics_results}"
