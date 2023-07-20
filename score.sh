@@ -58,6 +58,6 @@ parse_and_score_bug(){
 export -f parse_and_score_bug
 parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
 
-cat "${evaluation_dir}"/*/scores.csv > "$out_file"
+cat "${evaluation_dir}"/*/scores.csv > "$out_file" || (find "${evaluation_dir}" && false)
 echo ""
 echo "Decomposition scores aggregated and saved in ${out_file}"
