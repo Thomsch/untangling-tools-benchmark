@@ -25,6 +25,7 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
+export PYTHONHASHSEED=0
 # Initialize related directory for input and output
 export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
 # truth, decompositions in CSV format.
@@ -40,9 +41,11 @@ mkdir -p "$flexeme_untangling_path"
 echo ""
 echo "Decompositing project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
-mkdir -p "$repository"
-defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
+if [ ! -d "${repository}" ] ; then
+  mkdir -p "$repository"
+  defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+fi
 
 # Commit hash is the revision_fixed_ID
 commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
