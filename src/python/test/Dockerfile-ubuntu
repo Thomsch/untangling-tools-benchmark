@@ -2,7 +2,7 @@
 # using JDK 11.
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
-FROM ubuntu
+FROM ubuntu:rolling
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
