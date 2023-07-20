@@ -36,7 +36,7 @@ all_commits_file="$1"
 out_file="$2"
 
 if ! [ -f "$all_commits_file" ]; then
-    echo "File ${all_commits_file} not found. Exiting."
+    echo "$0: file ${all_commits_file} not found. Exiting."
     exit 1
 fi
 
