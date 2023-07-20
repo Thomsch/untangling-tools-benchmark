@@ -45,7 +45,7 @@ COPY requirements-untangling.txt /tmp/requirements-untangling.txt
 COPY requirements-flexeme.txt /tmp/requirements-flexeme.txt
 RUN export DEBIAN_FRONTEND=noninteractive \
 && python3 -m venv .venv \
-&& source .venv/bin/activate \
+&& . .venv/bin/activate \
 && pip install -r /tmp/requirements-untangling.txt \
 && pip install -r /tmp/requirements-flexeme.txt
 
