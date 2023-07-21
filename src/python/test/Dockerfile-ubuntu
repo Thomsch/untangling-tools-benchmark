@@ -62,6 +62,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && cpanm --installdeps . \
 && ./init.sh
 ENV DEFECTS4J_HOME=/defects4j
+ENV PATH="${DEFECTS4J_HOME}/framework/bin:${PATH}"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && git config --global --add safe.directory '*'
