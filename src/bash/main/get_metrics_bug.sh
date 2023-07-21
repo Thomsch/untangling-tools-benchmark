@@ -32,9 +32,9 @@ repository="$4"
 export metrics_dir="${out_dir}/metrics"
 mkdir -p "$metrics_dir"
 
-# Calculates the ground truth
+# Calculates the metric
 echo ""
-echo "Calculating ground truth for project $project, bug $vid, repository $repository"
+echo "Calculating commit metrics for project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
 mkdir -p "$repository"

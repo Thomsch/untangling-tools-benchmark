@@ -40,9 +40,11 @@ mkdir -p "$evaluation_path"
 echo ""
 echo "Calculating ground truth for project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
-mkdir -p "$repository"
-defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
+if [ ! -d "${repository}" ] ; then
+  mkdir -p "$repository"
+  defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+fi
 
 truth_csv="${evaluation_path}/truth.csv"
 

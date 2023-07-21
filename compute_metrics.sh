@@ -54,7 +54,7 @@ generate_commit_metrics() {
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}" > "${metrics_dir}/${project}_${vid}_metrics.csv"
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
 }
 
 export -f generate_commit_metrics
