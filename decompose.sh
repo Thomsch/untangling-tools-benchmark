@@ -68,10 +68,6 @@ decompose_bug(){
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}"
-
-  if [ $ret_code -ne 0 ]; then
-    cat "${logs_dir}/${project}_${vid}_decompose.log"
-  fi
 }
 
 export -f decompose_bug
