@@ -92,6 +92,7 @@ else
   else
     echo 'Untangling with Flexeme ................................................. FAIL'
     regenerate_results=false
+    exit 1
   fi
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
