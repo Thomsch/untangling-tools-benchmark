@@ -10,8 +10,8 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 2 ]] ; then
-    echo 'usage: analyze.sh <evaluation-results-folder> <paper-repository>'
-    echo 'example: analyze.sh ~/evaluation-results ~/papers/untangling-tools-evaluation'
+    echo 'usage: generate_paper.sh <evaluation-results-folder> <paper-repository>'
+    echo 'example: generate_paper.sh ~/evaluation-results ~/papers/untangling-tools-evaluation'
     exit 1
 fi
 
