@@ -36,7 +36,8 @@ mkdir -p "$evaluation_dir"
 mkdir -p "$decomposition_dir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
+echo "Parallelization jobs log stored in /tmp/score.log"
+echo "Individual bug decomposition logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
 echo ""
 
 parse_and_score_bug(){
@@ -56,7 +57,7 @@ parse_and_score_bug(){
 }
 
 export -f parse_and_score_bug
-parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
+parallel --joblog /tmp/scores.log --colsep "," parse_and_score_bug {} < "$bugs_file"
 
 cat "${evaluation_dir}"/*/scores.csv > "$out_file"
 echo ""

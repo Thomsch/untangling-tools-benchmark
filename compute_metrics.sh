@@ -29,7 +29,8 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
+echo "Parallelization jobs log stored in /tmp/metrics.log"
+echo "Individual bug decomposition logs stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 echo ""
 
 generate_commit_metrics() {
@@ -48,7 +49,7 @@ generate_commit_metrics() {
 }
 
 export -f generate_commit_metrics
-parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
+parallel --joblog /tmp/metrics.log --colsep "," generate_commit_metrics {} < "$bugs_file"
 
 metrics_results="${out_dir}/metrics.csv"
 cat "${metrics_dir}"/*.csv > "$metrics_results"
