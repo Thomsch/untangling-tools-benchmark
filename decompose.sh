@@ -56,6 +56,7 @@ echo "Parallelization jobs log stored in /tmp/decompose.log"
 echo "Individual bug decomposition logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
+export PYTHONHASHSEED=0
 decompose_bug(){
   local project="$1"
   local vid="$2"

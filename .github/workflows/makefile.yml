@@ -1,4 +1,4 @@
-name: Makefile CI
+name: make check
 
 on: [push, pull_request]
 
@@ -13,6 +13,5 @@ jobs:
         run: pip install -U -r requirements.txt
       - name: Install shellcheck and checkbashisms
         run: sudo apt install -y shellcheck devscripts
-
       - name: make check
         run: make check

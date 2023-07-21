@@ -14,6 +14,9 @@ __pycache__
 .pytest_cache
 analysis/.RData
 
+# Docker
+src/python/test/dockerdir/
+
 analysis/.Rhistory
 
 # Mac OS X

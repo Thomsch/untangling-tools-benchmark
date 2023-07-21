@@ -18,20 +18,29 @@ if [ ! -f .env ] ; then
     exit 1
 fi
 
+echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"
+
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
-bugs_file="data/d4j-5-bugs.csv" # The file containing the bugs to untangle.
-out_dir="src/python/test/e2e" # The directory where the results are stored and repositories checked out.
+workdir="$(pwd)"
+export workdir
+export bugs_file="${workdir}/data/d4j-5-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="${workdir}/src/python/test/e2e" # Path to the directory where the results are stored and repositories checked out.
 
 metrics_goal="${out_dir}/metrics_goal.csv"
 decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e
+echo "about to run compute_metrics.sh"
 ./compute_metrics.sh "$bugs_file" "$out_dir"
+echo "compute_metrics.sh: done"
 ./generate_ground_truth.sh "$bugs_file" "$out_dir"
+echo "generate_ground_truth.sh: done"
 ./decompose.sh "$bugs_file" "$out_dir"
+echo "decompose.sh: done"
 ./score.sh "$bugs_file" "$out_dir"
+echo "score.sh: done"
 
 metrics_results="${out_dir}/metrics.csv"
 decomposition_scores_results="${out_dir}/decomposition_scores.csv"
