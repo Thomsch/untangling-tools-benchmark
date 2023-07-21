@@ -21,7 +21,7 @@ export bugs_file="$1" # The file containing the bugs to untangle.
 export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if ! [ -f "$bugs_file" ]; then
-    echo "File ${bugs_file} not found. Exiting."
+    echo "$0: file ${bugs_file} not found. Exiting."
     exit 1
 fi
 export workdir="${out_dir}/repositories"
