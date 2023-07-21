@@ -10,7 +10,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 DEBUG=
-DEBUG=YES
+# DEBUG=YES
 
 if [ $# -ne 2 ] ; then
     echo 'usage: compute_metrics.sh <bugs_file> <out_dir>'
@@ -54,7 +54,7 @@ generate_commit_metrics() {
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}" > "${metrics_dir}/${project}_${vid}_metrics.csv"
 }
 
 export -f generate_commit_metrics

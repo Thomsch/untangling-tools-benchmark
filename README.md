@@ -91,7 +91,7 @@ All results will be stored in `$UTB_OUTPUT`:
 
 The detailed pipeline can be visualized in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
 
-In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are compatible with the experimental infrastructure.
+In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are active and compatible with the experimental infrastructure. Bug projects marked as deprecated by Defects4J's authors are not included in this list of compatible bugs.
 To generate a new bug file, see **Generating the bug file** section.
 
 #### Optional steps
@@ -101,7 +101,7 @@ The folder `analysis/` contains scripts to analyze the results of the evaluation
 
 #### Generating the bug file
 To generate a bug file, run `src/bash/main/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
-Do not use `data/d4j-bugs-all.csv` as it contains bugs that are not compatible with the experimental infrastructure (see **Limitations** section).
+Do not use `data/d4j-bugs-all.csv` as it contains bugs that are deprecated or not compatible with the experimental infrastructure (see **Limitations** section).
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can follow the pipeline presented in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
