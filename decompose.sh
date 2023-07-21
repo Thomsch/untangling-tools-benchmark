@@ -52,7 +52,8 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
+echo "Parallelization jobs log stored in /tmp/decompose.log"
+echo "Individual bug decomposition logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
 decompose_bug(){
@@ -70,4 +71,4 @@ decompose_bug(){
 }
 
 export -f decompose_bug
-parallel --colsep "," decompose_bug {} < "$bugs_file"
+parallel --joblog /tmp/decompose.log --colsep "," decompose_bug {} < "$bugs_file"
