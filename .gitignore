@@ -11,6 +11,13 @@ data/corpora_clean
 # Python
 __pycache__
 .venv/
+.pytest_cache
 analysis/.RData
 
+# Docker
+src/python/test/dockerdir/
+
 analysis/.Rhistory
+
+# Mac OS X
+.DS_Store

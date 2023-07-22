@@ -3,19 +3,19 @@
 
 # Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
 d4j_diff () {
-    if [[ $# -ne 5 ]] ; then
+    if [ $# -ne 5 ] ; then
       echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Repository>'
       echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
       return 1
     fi
 
-    local PROJECT=$1
-    local VID=$2
-    local REVISION_BUGGY=$3
-    local REVISION_FIXED=$4
-    local REPO_DIR=$5
+    local PROJECT="$1"
+    local VID="$2"
+    local REVISION_BUGGY="$3"
+    local REVISION_FIXED="$4"
+    local REPO_DIR="$5"
 
-    vcs=$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')
+    vcs="$(defects4j query -p "$PROJECT" -q "project.vcs" | awk -v vid="$VID" -F',' '{ if ($1 == vid) { print $2 } }')"
 
     if [[ $vcs == "Vcs::Git" ]] ; then
         git --git-dir="${REPO_DIR}/.git" diff --ignore-all-space -U0 "$REVISION_BUGGY" "$REVISION_FIXED"
@@ -34,7 +34,7 @@ d4j_diff () {
 # Returns the buggy and fixed revision IDs in the format:
 #   <revision_id_buggy> <revision_id_fixed>
 retrieve_revision_ids () {
-  if [[ $# -ne 2 ]] ; then
+  if [ $# -ne 2 ] ; then
       echo 'usage: retrieve_revision_ids <D4J Project> <D4J Bug id>'
       echo 'example: retrieve_revision_ids Lang 1'
       return 1
@@ -44,9 +44,8 @@ retrieve_revision_ids () {
   local bug_id="$2"
 
   # Check if the DEFECTS4J_HOME environment variable is set
-  if [[ -z "${DEFECTS4J_HOME}" ]]; then
-    echo 'DEFECTS4J_HOME environment variable is not set.' 1>&2
-    echo 'Please set it to the path of your Defects4J installation.' 1>&2
+  if [ -z "${DEFECTS4J_HOME}" ]; then
+    echo 'Please set the JAVA11_HOME environment variable to a Java 11 installation.'
     return 1
   fi
 
@@ -57,7 +56,7 @@ retrieve_revision_ids () {
   local line
   line=$(grep "^$bug_id," "$csv_file")
 
-  if [[ -z $line ]]; then
+  if [ -z "$line" ]; then
     echo "Bug ID $bug_id not found." 1>&2
     return 1
   fi
