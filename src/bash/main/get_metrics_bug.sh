@@ -46,7 +46,7 @@ metrics_csv="${metrics_dir}/${project}_${vid}.csv" # Metrics for this bug
 
 # Compute commit metrics
 if [ -f "$metrics_csv" ]; then
-    echo -ne 'Calculating metrics ..................................................... CACHED\r'
+    echo 'Calculating metrics ..................................................... CACHED'
 else
     . ./src/bash/main/d4j_utils.sh
     # Parse the returned result into two variables
@@ -56,9 +56,8 @@ else
     echo "revision_buggy=$result"
     if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/diff_metrics.py "${project}" "${vid}" "${repository}" > "$metrics_csv"
     then
-        echo -ne 'Calculating metrics ..................................................... OK\r'
+        echo 'Calculating metrics ..................................................... OK'
     else
-        echo -ne 'Calculating metrics ..................................................... FAIL\r'
+        echo 'Calculating metrics ..................................................... FAIL'
     fi
 fi
-echo -ne '\n'

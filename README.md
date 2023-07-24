@@ -10,6 +10,26 @@ Experimental infrastructure for comparing untangling tools on real bug-fixing co
 
 ## Installation
 
+### Part 1: prerequisites
+
+1. Install Graphviz https://graphviz.org/.  On Debian or Ubuntu: `sudo apt install graphviz`
+2. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
+   For Ubuntu:
+
+```
+PARALLEL_DEB=parallel_20230622_all.deb
+wget --no-verbose https://download.opensuse.org/repositories/home:/tange/xUbuntu_22.04/all/${PARALLEL_DEB}
+sudo dpkg -i ${PARALLEL_DEB}
+mkdir ${HOME}/.parallel
+touch ${HOME}/.parallel will-cite
+```
+
+3. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
+
+4. Install GNU coreutils if you are on MacOS or Windows.
+
+### Part 2: The untangling evaluation itself
+
 1.
 
 ```
@@ -20,30 +40,16 @@ source .venv/bin/activate
 pip install -U -r requirements.txt
 ```
 
-2. Install Graphviz https://graphviz.org/.  On Debian or Ubuntu: `sudo apt install graphviz`
-3. Install Flexeme for Java
+2. Install Flexeme for Java
 
 ```
 git clone https://github.com/Thomsch/Flexeme ../Flexeme
 pip install -e ../Flexeme
 ```
 
-If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
+If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 
-4. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
-5. Install GNU coreutils if you are on MacOS or Windows.
-6. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
-   For Ubuntu:
-
-```
-PARALLEL_DEB=parallel_20230622_all.deb
-wget https://download.opensuse.org/repositories/home:/tange/xUbuntu_22.04/all/${PARALLEL_DEB}
-sudo dpkg -i ${PARALLEL_DEB}
-mkdir ${HOME}/.parallel
-touch ${HOME}/.parallel will-cite
-```
-
-7. Run `cp .env-template .env` and fill in the environment variables in `.env`:
+3. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
     - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
 
@@ -86,7 +92,7 @@ All results will be stored in `$UTB_OUTPUT`:
 
 The detailed pipeline can be visualized in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
 
-In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are compatible with the experimental infrastructure.
+In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are active and compatible with the experimental infrastructure. Bug projects marked as deprecated by Defects4J's authors are not included in this list of compatible bugs.
 To generate a new bug file, see **Generating the bug file** section.
 
 #### Optional steps
@@ -96,7 +102,7 @@ The folder `analysis/` contains scripts to analyze the results of the evaluation
 
 #### Generating the bug file
 To generate a bug file, run `src/bash/main/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
-Do not use `data/d4j-bugs-all.csv` as it contains bugs that are not compatible with the experimental infrastructure (see **Limitations** section).
+Do not use `data/d4j-bugs-all.csv` as it contains bugs that are deprecated or not compatible with the experimental infrastructure (see **Limitations** section).
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can follow the pipeline presented in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).

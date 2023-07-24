@@ -22,7 +22,7 @@ export bugs_file="$1" # The file containing the bugs to untangle.
 export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if ! [ -f "$bugs_file" ]; then
-    echo "File ${bugs_file} not found. Exiting."
+    echo "$0: file ${bugs_file} not found. Exiting."
     exit 1
 fi
 
@@ -34,7 +34,7 @@ set -o allexport
 set +o allexport
 
 if [ -z "${JAVA11_HOME}" ]; then
-  echo 'Please set the JAVA11_HOME environment variable to a Java 11 installation.'
+  echo "$0: Please set the JAVA11_HOME environment variable to a Java 11 installation."
   exit 1
 fi
 
@@ -42,7 +42,7 @@ fi
 # Defects4J will use whatever is on JAVA_HOME.
 java_version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
 if [ "$java_version" != "1.8" ] ; then
-    echo "Please use Java 8 instead of ${java_version}."
+    echo "$0: please use Java 8 instead of ${java_version}"
     exit 1
 fi
 
@@ -55,6 +55,7 @@ mkdir -p "$logs_dir"
 echo "Logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
+export PYTHONHASHSEED=0
 decompose_bug(){
   local project="$1"
   local vid="$2"
