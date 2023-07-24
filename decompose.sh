@@ -64,9 +64,6 @@ decompose_bug(){
   ./src/bash/main/decompose_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_decompose.log" 2>&1
   ret_code=$?
   decomposition_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
-  if [ $ret_code -ne 0 ]; then
-    cat "${logs_dir}/${project}_${vid}_decompose.log"
-  fi
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
