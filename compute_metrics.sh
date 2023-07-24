@@ -32,7 +32,7 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "Parallelization jobs log stored in /tmp/metrics.log"
+echo "Parallelization jobs log will be stored in /tmp/metrics.log"
 echo "$0: Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of ${logs_dir}:"

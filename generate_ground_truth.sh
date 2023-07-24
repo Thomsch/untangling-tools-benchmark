@@ -45,8 +45,8 @@ mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
 
-echo "Parallelization jobs log stored in /tmp/ground_truth.log"
-echo "Individual bug decomposition logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo "Parallelization jobs log will be stored in /tmp/ground_truth.log"
+echo "Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
