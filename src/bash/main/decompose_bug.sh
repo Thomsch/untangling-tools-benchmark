@@ -25,6 +25,7 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
+# Make Flexeme deterministic
 export PYTHONHASHSEED=0
 # Initialize related directory for input and output
 export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
