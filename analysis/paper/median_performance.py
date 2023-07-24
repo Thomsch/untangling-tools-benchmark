@@ -2,7 +2,7 @@
 
 """
 Calculates the median performance for the untangling tools.
-Input: `decompositions.csv` file produced by `evaluate.sh`
+Input: `decomposition_socres.csv` file produced by `score.sh`
 Output: Print the median performance for each untangling tool.
 """
 import sys
@@ -33,7 +33,7 @@ def main():
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("Expected 1 argument: <decompositions.csv>")
+        print("Expected 1 argument: <decomposition_scores.csv>")
         exit(-1)
 
     decomposition_path = args[0]
