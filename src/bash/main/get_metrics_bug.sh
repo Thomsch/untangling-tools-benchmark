@@ -32,9 +32,9 @@ repository="$4"
 export metrics_dir="${out_dir}/metrics"
 mkdir -p "$metrics_dir"
 
-# Calculates the ground truth
-echo -ne '\n'
-echo "Calculating ground truth for project $project, bug $vid, repository $repository"
+# Calculates the metric
+echo ""
+echo "Calculating commit metrics for project $project, bug $vid, repository $repository"
 
 # Checkout Defects4J bug
 if [ ! -d "${repository}" ] ; then
@@ -46,7 +46,7 @@ metrics_csv="${metrics_dir}/${project}_${vid}.csv" # Metrics for this bug
 
 # Compute commit metrics
 if [ -f "$metrics_csv" ]; then
-    echo -ne 'Calculating metrics ..................................................... CACHED\r'
+    echo 'Calculating metrics ..................................................... CACHED'
 else
     . ./src/bash/main/d4j_utils.sh
     # Parse the returned result into two variables
@@ -56,9 +56,8 @@ else
     echo "revision_buggy=$result"
     if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
     then
-        echo -ne 'Calculating metrics ..................................................... OK\r'
+        echo 'Calculating metrics ..................................................... OK'
     else
-        echo -ne 'Calculating metrics ..................................................... FAIL\r'
+        echo 'Calculating metrics ..................................................... FAIL'
     fi
 fi
-echo -ne '\n'
