@@ -21,7 +21,7 @@ if (length(args)!=2) {
 inputFile = args[1]
 outputFile = args[2]
 
-data <- read.csv(fileData, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
+data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
 data <- subset(data, select = -c(FileUntangling))
 data$BugID <- as_factor(data$BugID)
 
@@ -33,13 +33,13 @@ data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Perfo
 # The second row, containing the other treatment shows whether the other treatment is significantly different from
 # the intercept.
 
-model <- lm(Performance ~ Treatment, data=data_long)
+model <- lm(Performance ~ Tool, data=data_long)
 summary(model)
 #estimates(model_simple)
 
 # Residuals
 # It is recommended to look at the residuals to check for normality rather than apply a statistical test.
-visualize(model_simple, "residuals")
+visualize(model, "residuals")
 
 # Effect size
-cohen.d(data_long$Performance[data_long$Treatment == "SmartCommit"], data_long$Performance[data_long$Treatment == "Flexeme"])
+cohen.d(data_long$Performance[data_long$Tool == "SmartCommit"], data_long$Performance[data_long$Tool == "Flexeme"])
