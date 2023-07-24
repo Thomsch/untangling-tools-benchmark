@@ -13,7 +13,7 @@ library(lmerTest)
 library(flexplot)
 library(rsq)
 
-
+args = commandArgs(trailingOnly=TRUE)
 
 if (length(args)!=2) {
   stop("Please provide an input file and output file.", call.=FALSE)
