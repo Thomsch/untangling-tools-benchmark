@@ -4,7 +4,7 @@
 # The script calls evaluate.sh on the 5 bugs and writes to 2 output files: `decompositions.csv` and `metrics.csv`.
 # These 2 aggregated files are expected to be identical to the corresponding goal files.
 
-set -o errexit
+# set -o errexit
 set -o nounset
 set -o pipefail
 

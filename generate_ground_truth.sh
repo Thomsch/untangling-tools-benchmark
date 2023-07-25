@@ -10,7 +10,7 @@
 #     - target: The line number of the change if the change is an addition
 #     - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 

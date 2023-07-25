@@ -11,7 +11,7 @@
 # - buggy.java: The buggy source code after all non-bug fixes are applied
 # - fixed.java: The fixed source code in version control
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
