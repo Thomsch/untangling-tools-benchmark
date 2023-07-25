@@ -32,8 +32,7 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "Parallelization jobs log will be stored in /tmp/metrics.log"
-echo "$0: Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
+echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of ${logs_dir}:"
   ls -al "${logs_dir}"
@@ -59,7 +58,7 @@ generate_commit_metrics() {
 }
 
 export -f generate_commit_metrics
-parallel --joblog /tmp/metrics.log --colsep "," generate_commit_metrics {} < "$bugs_file"
+parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
 
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of logs_dir ${logs_dir}:"
