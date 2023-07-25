@@ -73,12 +73,13 @@ For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv
 2. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
 3. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
-**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation &> d4j-20.log &`. 
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
 
 This command does the following:
 - `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  
 - `time`: Print the time taken to run the script. This is useful to estimate the time taken to run the evaluation.
-- `&> d4j-20.log`: Redirect the output of the script to the file `d4j-20.log`.
+- `> d4j-20.log`: Redirect the output of the script to the file `d4j-20.log`.
+- `2>&1`: Redirect the error output to the same file as the standard output.
 - `&`: Run the script in the background immediately.
 
 All results will be stored in `$UTB_OUTPUT`:
