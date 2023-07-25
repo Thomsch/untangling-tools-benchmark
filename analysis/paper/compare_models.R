@@ -32,7 +32,7 @@ data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Perfo
 # Random model
 model_mixed <- lmer(Performance ~ Tool + (1|Project) + (1|BugID), data=data_long)
 
-# Simplified model
+# Simplified m
 model_simple <- lm(Performance ~ Tool, data=data_long)
 
 # Printing on the console
@@ -44,7 +44,38 @@ print("Model without Random Effects")
 summary(model_simple) # Coefficients and P-Value
 rsq(model_simple, adj=TRUE) # Adjusted R^2
 
-# TODO: Print results in tidy format.
+# Print results in tidy format.
+# names(model_mixed$coefficients) <- c('Flexeme', 'SmartCommit') # Make sure Flexeme is always the intercept!
 # Rename: names(model_simple$coefficients) <- c('Flexeme', 'SmartCommit') # Make sure Flexeme is always the intercept!
 # Coefficients: summary(model_simple)$coefficients[,1]
 # P-Value: summary(model_simple)$coefficients[,4]
+
+# Create Coefficients dataframe
+coeffs = rbind(summary(model_mixed)$coefficients[, "Estimate"], summary(model_simple)$coefficients[, "Estimate"])
+colnames(coeffs) <- c('Flexeme', 'SmartCommit')
+# Create p-values dataframe
+p_vals = rbind(summary(model_mixed)$coefficients[, "Pr(>|t|)"], summary(model_simple)$coefficients[, "Pr(>|t|)"])
+colnames(p_vals) <- c('Flexeme', 'SmartCommit')
+
+# tool_stats <- cbind(coeffs, p_vals)
+# tool_stats <- rbind(data.frame(Name = rownames(tool_stats)), tool_stats)
+# names(tool_stats[,0]) <- "Model"
+# rownames(tool_stats) <- c("With Random Effects", "Without Random Effects")
+# tool_stats <- xtable(tool_stats)
+# addtorow <- list()
+# addtorow$pos <- list(0)
+# addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-value"), '}', collapse=''), "", '\\\\')
+
+
+# print(tool_stats, add.to.row=addtorow, include.colnames=F)
+
+summary <- data.frame(
+  Model = c("With Random Effects", "Without Random Effects"),
+  Coef = coeffs,
+  P_val = p_vals,
+  Adjusted_R = c(summary(model_mixed)$adj.r.squared, summary(model_simple)$adj.r.squared)
+)
+
+summary.table <- xtable(summary)
+
+print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = FALSE, include.rownames = FALSE, file=outputFile)
