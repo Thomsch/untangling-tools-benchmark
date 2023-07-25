@@ -34,12 +34,13 @@ data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Perfo
 # the intercept.
 
 model <- lm(Performance ~ Tool, data=data_long)
-summary(model)
-#estimates(model_simple)
-
 # Residuals
 # It is recommended to look at the residuals to check for normality rather than apply a statistical test.
 visualize(model, "residuals")
 
-# Effect size
+sink(outputFile)
+summary(model)
+#estimates(model_simple)
+
 cohen.d(data_long$Performance[data_long$Tool == "SmartCommit"], data_long$Performance[data_long$Tool == "Flexeme"])
+sink()
