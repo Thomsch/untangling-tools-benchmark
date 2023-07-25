@@ -15,11 +15,11 @@ if [[ $# -ne 2 ]] ; then
     exit 1
 fi
 
-UNTANGLING_DIR=$1
-PAPER_REPOSITORY=$2
+export UNTANGLING_DIR=$1
+export PAPER_REPOSITORY=$2
 
 # Temporary directory for intermediate results
-TMP_DIR="${UNTANGLING_DIR}/.tmp"
+export TMP_DIR="${UNTANGLING_DIR}/.tmp"
 mkdir -p "${TMP_DIR}"
 
 # In case the paper repository does not exist yet
