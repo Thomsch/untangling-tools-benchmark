@@ -24,6 +24,8 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
+# Initialize exit code variable
+export decompose_exit_code=0
 # Make Flexeme deterministic
 export PYTHONHASHSEED=0
 # Initialize related directory for input and output
@@ -88,15 +90,16 @@ else
   START_DECOMPOSITION="$(date +%s.%N)"
   if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
   then
+    END_DECOMPOSITION="$(date +%s.%N)"
+    DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
+    echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
     echo 'Untangling with Flexeme ................................................... OK'
     regenerate_results=true
   else
     echo 'Untangling with Flexeme ................................................. FAIL'
     regenerate_results=false
+    decompose_exit_code=1
   fi
-  END_DECOMPOSITION="$(date +%s.%N)"
-  DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
-  echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
 fi
 
 # Retrieve untangling results from SmartCommit and parse them into a CSV file.
@@ -112,7 +115,7 @@ else
       echo 'Parsing SmartCommit results ............................................... OK'
   else
       echo -ne 'Parsing SmartCommit results ............................................. FAIL'
-      return 1
+      decompose_exit_code=1
   fi
 fi
 
@@ -129,7 +132,8 @@ else
       echo 'Parsing Flexeme results ................................................... OK'
   else
       echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
-      return 1
+      decompose_exit_code=1
   fi
 fi
+exit $decompose_exit_code
 echo ""
