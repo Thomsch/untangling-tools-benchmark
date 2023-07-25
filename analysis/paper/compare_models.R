@@ -9,6 +9,7 @@ library(lmerTest)
 library(flexplot)
 library(ggplot2)
 library(rsq)
+library(xtable)
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -57,22 +58,21 @@ colnames(coeffs) <- c('Flexeme', 'SmartCommit')
 p_vals = rbind(summary(model_mixed)$coefficients[, "Pr(>|t|)"], summary(model_simple)$coefficients[, "Pr(>|t|)"])
 colnames(p_vals) <- c('Flexeme', 'SmartCommit')
 
-# tool_stats <- cbind(coeffs, p_vals)
-# tool_stats <- rbind(data.frame(Name = rownames(tool_stats)), tool_stats)
-# names(tool_stats[,0]) <- "Model"
-# rownames(tool_stats) <- c("With Random Effects", "Without Random Effects")
-# tool_stats <- xtable(tool_stats)
-# addtorow <- list()
-# addtorow$pos <- list(0)
-# addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-value"), '}', collapse=''), "", '\\\\')
+tool_stats <- cbind(coeffs, p_vals)
+tool_stats <- rbind(colnames(tool_stats),tool_stats)
+colnames(tool_stats) = NULL
+tool_stats <- cbind(c("Model","With Random Effects", "Without Random Effects"), tool_stats)
+rownames(tool_stats) <- c("","With Random Effects", "Without Random Effects")
+tool_stats <- xtable(tool_stats)
+addtorow <- list()
+addtorow$pos <- list(0)
+addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-value"), '}', collapse=''), "", '\\\\')
 
 
-# print(tool_stats, add.to.row=addtorow, include.colnames=F)
+print(tool_stats, add.to.row=addtorow, include.colnames=F, timestamp	= NULL, comment = FALSE, include.rownames = TRUE, file=outputFile)
 
 summary <- data.frame(
   Model = c("With Random Effects", "Without Random Effects"),
-  Coef = coeffs,
-  P_val = p_vals,
   Adjusted_R = c(summary(model_mixed)$adj.r.squared, summary(model_simple)$adj.r.squared)
 )
 
