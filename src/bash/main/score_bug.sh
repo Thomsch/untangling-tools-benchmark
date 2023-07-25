@@ -57,7 +57,7 @@ else
       echo 'Untangling with file-based approach ....................................... OK'
   else
       echo -ne 'Untangling with file-based approach ..................................... FAIL\r'
-      exit 1                # Return exit code 1 to mark this run as FAIl when called in score.sh
+      return 1                # Return exit code 1 to mark this run as FAIl when called in score.sh
   fi
 fi
 

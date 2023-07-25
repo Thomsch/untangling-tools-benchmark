@@ -94,7 +94,6 @@ else
   else
     echo 'Untangling with Flexeme ................................................. FAIL'
     regenerate_results=false
-    exit 1
   fi
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
@@ -114,7 +113,7 @@ else
       echo 'Parsing SmartCommit results ............................................... OK'
   else
       echo -ne 'Parsing SmartCommit results ............................................. FAIL'
-      exit 1
+      return 1
   fi
 fi
 
@@ -131,7 +130,7 @@ else
       echo 'Parsing Flexeme results ................................................... OK'
   else
       echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
-      exit 1
+      return 1
   fi
 fi
 echo ""
