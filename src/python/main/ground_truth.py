@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 """
-Generates the line-wise ground truth using the original changes and the minimized version
-of the D4J bug.
-Each diff line is classified into a non-bug-fixing change (group='other), a bug-fixing change (group='fix'), or a tangled change (group='both').
+Generates the line-wise ground truth.
+
+The ground truth classifies each diff line as a non-bug-fixing change
+(group='other'), a bug-fixing change (group='fix'), or a tangled change
+(group='both').
 
 The tests, comments, and imports are ignored from the original changes.
 The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
