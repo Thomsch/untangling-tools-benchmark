@@ -4,12 +4,13 @@
 This script counts the number of projects with missing results in the evaluation and
 the number of times each tool didn't produce a result is missing.
 """
+
 import os
 import sys
 from collections import defaultdict
 
 
-def main(path):
+def main(evaluation_dir):
     """
     Implement the logic of the script. See the module docstring.
     """
@@ -25,25 +26,31 @@ def main(path):
     project_counter = 0
 
     # Walk through the directory tree starting from 'evaluation'
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in os.walk(evaluation_dir):
         # Check if the current directory is a project folder
         if root != "evaluation" and len(files) > 0:
             # Check if all the required CSV files are present in the project folder
-            missing = set(required_files) - set(files)
+            missing_files_for_project = set(required_files) - set(files)
             project_counter += 1
-            if missing:
-                missing_files.append((os.path.basename(root), list(missing)))
-                projects_missing_files[os.path.basename(root)] += len(missing)
+            if missing_files_for_project:
+                missing_files.append(
+                    (os.path.basename(root), list(missing_files_for_project))
+                )
+                projects_missing_files[os.path.basename(root)] += len(
+                    missing_files_for_project
+                )
 
     # Print the list of projects and missing files
     print(f"Total number of projects visited: {project_counter}")
     print(f"Total number of projects with missing files: {len(missing_files)}")
     print("Number of times each file is missing:")
-    for file in required_files:
+    for required_file in required_files:
         count = sum(
-            1 for project_missing in missing_files if file in project_missing[1]
+            1
+            for project_missing in missing_files
+            if required_file in project_missing[1]
         )
-        print(f"{file}: {count}")
+        print(f"{required_file}: {count}")
     print("The following projects are missing the following files:")
     for project, missing in missing_files:
         print(f'{project}: {", ".join(missing)}')
@@ -57,5 +64,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     evaluation_root = os.path.abspath(args[0])
-    path = os.path.join(evaluation_root, "evaluation")
-    main(path)
+    evaluation_dir = os.path.join(evaluation_root, "evaluation")
+    main(evaluation_dir)
