@@ -40,7 +40,7 @@ visualize(model_simple)
 rsq(model_simple, adj=TRUE)
 
 
-f = flexplot(Performance ~ Tool, data = data_long) 
+f = flexplot(Performance ~ Tool, data = data_long)
 
 flexplot(Performance ~ Tool, data=data_long, jitter = c(0.1,0), spread = "quartile")
 #visualize(model, jitter = T, spread = "quartile")
@@ -55,7 +55,7 @@ summary(model)
 visualize(model, formula = Performance ~ Tool | Project, plot = 'model', ghost.line = 'blue') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
 visualize(model, formula = Performance ~ Tool, plot = 'residuals') + theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.2))
 
-# flexplot(Performance ~ BugID | Treatment, data=data_long, jitter = c(0.2,0), spread = "quartile") + theme(axis.text.x = element_blank(), axis.ticks = element_blank())
+# flexplot(Performance ~ BugID | Tool, data=data_long, jitter = c(0.2,0), spread = "quartile") + theme(axis.text.x = element_blank(), axis.ticks = element_blank())
 
 estimates(model_simple)
 
