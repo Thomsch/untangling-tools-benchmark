@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-A diff file is a unified diff representation of the differences between the source (pre-fix version) and target (post-fix version) files of a D4J bug.
-This script calculates the following 8 diff metrics for a Version Control diff file of a Defects4J bug:
+This script calculates the following diff metrics for a version control diff file of a Defects4J bug.
+The diff file represents of the differences between the source (pre-fix version) and target (post-fix version) files.
     For unclean VC diff:
     1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
@@ -73,14 +73,14 @@ def flatten_patch_object(patch):
     return flat_patch
 
 
-def count_tangled_hunks(original_diff, fix_diff):
+def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet) -> Integer:
     """
     Count the number of tangled hunks in a Version Control diff.
     Args:
-        original_diff <PatchSet Object>: the Version Control diff.
-        fix_diff <PatchSet Object>: the bug-fixing diff.
+        original_diff: the Version Control diff.
+        fix_diff: the bug-fixing diff.
     Returns:
-        tangled_hunks_count <Integer>: The number of tangles hunks.
+        the number of tangles hunks.
     """
     tangled_hunks_count = 0
     hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
