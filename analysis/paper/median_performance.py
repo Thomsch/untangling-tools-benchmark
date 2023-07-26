@@ -2,7 +2,7 @@
 
 """
 Calculates the median performance for the untangling tools.
-Input: `decomposition_socres.csv` file produced by `score.sh`
+Input: `decomposition_socres.csv` file produced by `score.sh`.
 Output: Print the median performance for each untangling tool.
 """
 import sys
@@ -11,17 +11,30 @@ import pandas as pd
 
 
 def calculate_performance(decomposition_path):
-    df_performance = pd.read_csv(decomposition_path,
-                                 names=['project', 'bug_id', 'smartcommit_rand_index', 'flexeme_rand_index',
-                                        'file_rand_index.csv'])
+    df_performance = pd.read_csv(
+        decomposition_path,
+        names=[
+            "project",
+            "bug_id",
+            "smartcommit_rand_index",
+            "flexeme_rand_index",
+            "file_rand_index.csv",
+        ],
+    )
 
-    agg_results = df_performance.agg({'bug_id': 'count', 'smartcommit_rand_index': 'median',
-                                      'flexeme_rand_index': 'median', 'file_rand_index.csv': 'median'})
+    agg_results = df_performance.agg(
+        {
+            "bug_id": "count",
+            "smartcommit_rand_index": "median",
+            "flexeme_rand_index": "median",
+            "file_rand_index.csv": "median",
+        }
+    )
 
-    bug_count = int(agg_results['bug_id'])
-    smartcommit_median = agg_results['smartcommit_rand_index']
-    flexeme_median = agg_results['flexeme_rand_index']
-    file_rand_index_median = agg_results['file_rand_index.csv']
+    bug_count = int(agg_results["bug_id"])
+    smartcommit_median = agg_results["smartcommit_rand_index"]
+    flexeme_median = agg_results["flexeme_rand_index"]
+    file_rand_index_median = agg_results["file_rand_index.csv"]
 
     print(f"Number of D4J bugs: {bug_count}")
     print(f"SmartCommit Median: {smartcommit_median:.2f}")
