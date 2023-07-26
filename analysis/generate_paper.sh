@@ -57,7 +57,7 @@ Rscript analysis/paper/compare_models.R "${UNTANGLING_DIR}/decomposition_scores.
 #
 # RQ2
 #
-Rscript analysis/paper/rq1.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNTANGLING_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data/rq2.txt"
+Rscript analysis/paper/rq2.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNTANGLING_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data/rq2.txt"
 
 #
 # Manual Evaluation
