@@ -140,7 +140,8 @@ def main():
     repository = args[0]
     out_path = args[1]
     original_diff = PatchSet.from_filename(
-        os.path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
+        os.path.join(repository, "diff", "VC_clean.diff"),
+        encoding="latin-1",  # latin-1 is the best choice for an ASCII-compatible encoding
     )
     bug_fix_diff = PatchSet.from_filename(
         os.path.join(repository, "diff", "BF.diff"), encoding="latin-1"
