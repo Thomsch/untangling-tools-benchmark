@@ -119,7 +119,7 @@ fi
 echo ""
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ "${flexeme_untangling_code:-1}" -ne 0 ] || { [ -f "$flexeme_result_out" ] && [ $regenerate_results = false ]; } ;
+if [ -f "$flexeme_result_out" ] && [ $regenerate_results = false ];
 then
   echo 'Parsing Flexeme results ................................................. CACHED'
 else
