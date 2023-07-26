@@ -73,7 +73,7 @@ def flatten_patch_object(patch):
     return flat_patch
 
 
-def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet) -> Integer:
+def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
     """
     Count the number of tangled hunks in a Version Control diff.
     Args:
