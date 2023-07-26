@@ -29,9 +29,10 @@ data$BugID <- as_factor(data$BugID)
 data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Performance')
 
 # The summary can be interpreted as follows:
+
 # Intercept row shows whether the baseline treatment (whichever is first) is significantly different from 0.
-# The second row, containing the other treatment shows whether the other treatment is significantly different from
-# the intercept.
+# The second row, containing the other treatment, shows whether the other treatment is significantly
+# different from the intercept.
 
 model <- lm(Performance ~ Tool, data=data_long)
 # Residuals

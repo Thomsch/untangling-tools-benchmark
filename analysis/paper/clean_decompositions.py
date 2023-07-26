@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-"""
-Clean the decomposition results from Flexeme and SmartCommit for all bugs in the given directory.
-The cleaning will remove decomposition results that are not present in the ground truth. For example, SmartCommit will
-assign a group to all changed files, including non-Java files. This script will remove those non-Java files from the
+"""Clean the decomposition results from Flexeme and SmartCommit for all bugs in the given directory.
+The cleaning will remove decomposition results that are not present in the
+ground truth. For example, SmartCommit will assign a group to all changed files,
+including non-Java files. This script will remove those non-Java files from the
 decomposition results.
 
 Outputs two CSV files for each bug:
 - flexeme_clean.csv: Cleaned results for the Flexeme decomposition
 - smartcommit_clean.csv: Cleaned results for the SmartCommit decomposition
+
 """
+
 import os
 import sys
 
