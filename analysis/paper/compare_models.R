@@ -46,10 +46,6 @@ summary(model_simple) # Coefficients and P-Value
 rsq(model_simple, adj=TRUE) # Adjusted R^2
 
 # Print results in tidy format.
-# names(model_mixed$coefficients) <- c('Flexeme', 'SmartCommit') # Make sure Flexeme is always the intercept!
-# Rename: names(model_simple$coefficients) <- c('Flexeme', 'SmartCommit') # Make sure Flexeme is always the intercept!
-# Coefficients: summary(model_simple)$coefficients[,1]
-# P-Value: summary(model_simple)$coefficients[,4]
 
 # Create Coefficients dataframe
 coeffs = rbind(summary(model_mixed)$coefficients[, "Estimate"], summary(model_simple)$coefficients[, "Estimate"])
@@ -61,21 +57,19 @@ colnames(p_vals) <- c('Flexeme', 'SmartCommit')
 tool_stats <- cbind(coeffs, p_vals)
 tool_stats <- rbind(colnames(tool_stats),tool_stats)
 colnames(tool_stats) = NULL
-tool_stats <- cbind(c("Model","With Random Effects", "Without Random Effects"), tool_stats)
 rownames(tool_stats) <- c("","With Random Effects", "Without Random Effects")
 tool_stats <- xtable(tool_stats)
 addtorow <- list()
 addtorow$pos <- list(0)
 addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-value"), '}', collapse=''), "", '\\\\')
 
-
+# Multicolumn table with 2 tools as independent variables
 print(tool_stats, add.to.row=addtorow, include.colnames=F, timestamp	= NULL, comment = FALSE, include.rownames = TRUE, file=outputFile)
 
+# Adjusted R-squared for the 2 models
 summary <- data.frame(
   Model = c("With Random Effects", "Without Random Effects"),
-  Adjusted_R = c(summary(model_mixed)$adj.r.squared, summary(model_simple)$adj.r.squared)
+  Adjusted_R = t(cbind(rsq(model_mixed, adj=TRUE)[1], rsq(model_simple, adj=TRUE)[1]))
 )
-
-summary.table <- xtable(summary)
-
-print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = FALSE, include.rownames = FALSE, file=outputFile)
+colnames(summary) <- c("Model", "Adjusted R^2")
+print(summary)
