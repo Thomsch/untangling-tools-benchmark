@@ -43,7 +43,7 @@ index 8422d40..682191b 100644
 +~
 """
     )
-    labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
+    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
     assert labels[0] == "other"  # + ~ is a nonfix
     assert labels[1] == "fix"  # + E is a fix
 
@@ -110,7 +110,7 @@ index 8422d40..682191b 100644
 """
     )
 
-    labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
+    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
     assert labels[0] == "fix"  # + ~~ is a fix
     assert labels[1] == "fix"  # + ~ is a fix
     assert labels[2] == "fix"  # + E is a fix
@@ -162,6 +162,6 @@ index 8422d40..682191b 100644
 +E
 """
     )
-    labels = ground_truth.tag_truth_label(original_diff, fix_diff, nonfix_diff)
+    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
     assert labels[0] == "other"  # + ~~ is a nonfix
     assert labels[1] == "both"  # + E is tangled
