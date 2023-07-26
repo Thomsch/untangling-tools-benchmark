@@ -13,7 +13,7 @@ The current implementation cannot identify tangled lines (i.e. a line that belon
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug id
-    path/to/root/results: Specified path to store CSV file returned
+    path/to/root/results: Specified file to store CSV file returned
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv

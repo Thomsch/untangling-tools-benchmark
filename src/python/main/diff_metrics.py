@@ -26,8 +26,8 @@ a line value (i.e. the textual content of the source code line).
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug Id
-    out_dir: Path where results are stored
-    repo_root: Path where the repo is checked out
+    out_dir: Directory where results are stored
+    repo_root: Directory where the repo is checked out
 Returns:
     The results are stored in a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
     CSV header:
