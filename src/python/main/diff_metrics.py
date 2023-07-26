@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-A diff file is a unified diff representation of the differences between the source (pre-fix version) and target (post-fix version) files of a D4J bug.
-This script calculates the following 8 diff metrics for a Version Control diff file of a Defects4J bug:
+This script calculates the following diff metrics for a version control diff file of a Defects4J bug.
+The diff file represents of the differences between the source (pre-fix version) and target (post-fix version) files.
     For unclean VC diff:
     1. Total number of files updated (i.e. both code and test files)
     2. Number of test files updated
@@ -22,7 +22,7 @@ This script calculates the following 8 diff metrics for a Version Control diff f
 - Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator
 ('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
 a line value (i.e. the textual content of the source code line).
-- The program treats a diff line as either a Python unidiff Line Object, or as a String representation (e.g. "+         x = 3;").
+- The program treats a diff line as either a Python unidiff Line object, or as a string representation (e.g. "+         x = 3;").
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug Id
@@ -41,8 +41,8 @@ from unidiff.constants import LINE_TYPE_CONTEXT
 
 def get_lines_in_hunk(hunk):
     """
-    Return an ordered List of all Lines Objects in the given hunk.
-    All Lines Objects must be non-empty and must be either an added (+) or removed (-) line.
+    Return an ordered List of all Line objects in the given hunk.
+    All Line objects must be non-empty and must be either an added (+) or removed (-) line.
     """
     changed_lines = []
     for line in hunk:
@@ -55,8 +55,8 @@ def get_lines_in_hunk(hunk):
 def get_hunks_in_patch(patch):
     """
     Return an ordered List of all hunks in the given file.
-    A hunks is represented as a List of Line Objects.
-    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    A hunk is represented as a list of Line objects.
+    All Line objects must be non-empty and must be either an added (+) or removed (-) line.
     We ignore empty hunks.
     """
     hunked_lines = []
@@ -70,8 +70,8 @@ def get_hunks_in_patch(patch):
 
 def flatten_patch_object(patch):
     """
-    As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
-    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    As a PatchSet object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
+    All Line objects must be non-empty and must be either an added (+) or removed (-) line.
     """
     flat_patch = []
     for file in patch:
@@ -82,15 +82,15 @@ def flatten_patch_object(patch):
     return flat_patch
 
 
-def count_tangled_hunks(original_diff, fix_diff):
+def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet) -> Integer:
     """
     Count the number of tangled hunks in a Version Control diff.
     If there is at least 1 tangled hunk, it means the commit contains tangled hunk.
     Args:
-        original_diff <PatchSet Object>: the Version Control diff.
-        fix_diff <PatchSet Object>: the bug-fixing diff.
+        original_diff: the Version Control diff.
+        fix_diff: the bug-fixing diff.
     Returns:
-        tangled_hunks_count <Integer>: The number of tangles hunks.
+        the number of tangles hunks.
     """
     tangled_hunks_count = 0
     hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
