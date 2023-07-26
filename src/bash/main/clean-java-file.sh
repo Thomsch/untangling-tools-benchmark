@@ -4,7 +4,6 @@
 #  * remove comments
 #  * remove blank lines
 #  * remove trailing whitespace
-#  * remove import statements
 
 set -e
 
@@ -15,5 +14,5 @@ fi
 
 file="$1"
 
-cpp "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^import' > "$file.cleaned"
+cpp "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' > "$file.cleaned"
 mv -f "$file.cleaned" "$file"

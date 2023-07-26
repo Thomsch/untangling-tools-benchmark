@@ -27,10 +27,8 @@
 # where "C" stands for "cleaned" or "code only".
 # Each C_i is exactly like V_i, except that C_i contains no comments, blank
 # lines, or import statements.
-# Thus:
-#  * C_i does not compile
-#  * the diffs between C_i and C_j are exactly like the diffs between V_i and
-#    V_j, except that the C* diffs contain no comments, blank line, or whitespace.
+# Thus, the diffs between C_i and C_j are exactly like the diffs between V_i and
+# V_j, except that the C* diffs contain no comments, blank lines, or whitespace.
 
 set -e
 

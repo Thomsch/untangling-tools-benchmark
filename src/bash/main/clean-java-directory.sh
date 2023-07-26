@@ -5,7 +5,6 @@
 #  * remove comments
 #  * remove blank lines
 #  * remove trailing whitespace
-#  * remove import statements
 
 set -e
 
