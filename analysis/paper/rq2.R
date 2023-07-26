@@ -20,6 +20,17 @@ args = commandArgs(trailingOnly=TRUE)
 if (length(args)!=3) {
   stop("Please provide the input files and output path.", call.=FALSE)
 }
+
+# Function to convert character columns to numeric
+convert_to_numeric <- function(dataframe, numeric_variables) {
+  for (col in numeric_variables) {
+    if (is.character(dataframe[[col]])) {
+      dataframe[[col]] <- as.numeric(dataframe[[col]])
+    }
+  }
+  return(dataframe)
+}
+
 decompositionScoresPath = args[1]
 metricsPath = args[2]
 outputPath = args[3]
@@ -29,17 +40,17 @@ metrics <- read.csv(metricsPath, header = FALSE, col.names = c('Project', 'BugID
 # Merge the decomposition scores and metrics files. See Jupyter notebook `analysis.ipynb` for details.
 mergedData <- merge(decompositionScores, metrics, by=c('Project', 'BugID'))
 mergedData <- na.omit(mergedData)
+mergedData <- convert_to_numeric(mergedData, c("FilesUpdated","TestFilesUpdated","Hunks","AverageHunkSize","CodeLines","NoncodeLines","TangledLineCount","TangledHunkCount"))
 
 # Convert to long format
 data_long = pivot_longer(mergedData, cols = c('SmartCommit', 'Flexeme'), names_to = 'Tool', values_to = 'Performance')
-
 model <- lmer(Performance ~ Tool + FilesUpdated + Hunks + AverageHunkSize + CodeLines + NoncodeLines + TangledLineCount + TangledHunkCount + (1|Project) + (1|BugID), data=data_long)
 
 # p-value, R^2
 sink(outputPath)
 summary(model)
-sink()
 
 # Cohen's d for statistically significant metrics
 cohen.d(data_long$TangledHunkCount, data_long$Performance)
 cohen.d(data_long$CodeLines, data_long$Performance)
+sink()
