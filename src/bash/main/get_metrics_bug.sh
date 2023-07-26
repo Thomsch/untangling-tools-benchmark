@@ -18,8 +18,8 @@ set -o allexport
 set +o allexport
 
 if [ $# -ne 4 ] ; then
-    echo 'usage: get_metrics_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
-    echo 'example: get_metrics_bug.sh Lang 1 path/to/Lang_1/ metrics.csv'
+    echo 'usage: get_metrics_bug.sh <D4J Project> <D4J Bug id> <out file> <project repository>'
+    echo 'example: get_metrics_bug.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
 
@@ -32,13 +32,15 @@ repository="$4"
 export metrics_dir="${out_dir}/metrics"
 mkdir -p "$metrics_dir"
 
-# Calculates the metric
-echo ""
-echo "Calculating commit metrics for project $project, bug $vid, repository $repository"
+# Calculates the diff metrics
+echo -ne '\n'
+echo "Calculating diff metrics for project $project, bug $vid, repository $repository"
 
-# Checkout Defects4J bug
-mkdir -p "$repository"
-defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
+if [ ! -d "${repository}" ] ; then
+  mkdir -p "$repository"
+  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+fi
 
 metrics_csv="${metrics_dir}/${project}_${vid}.csv" # Metrics for this bug
 
@@ -46,16 +48,11 @@ metrics_csv="${metrics_dir}/${project}_${vid}.csv" # Metrics for this bug
 if [ -f "$metrics_csv" ]; then
     echo 'Calculating metrics ..................................................... CACHED'
 else
-    . ./src/bash/main/d4j_utils.sh
-    # Parse the returned result into two variables
-    result="$(retrieve_revision_ids "$project" "$vid")"
-    read -r revision_buggy revision_fixed <<< "$result"
-
-    echo "revision_buggy=$result"
-    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/commit_metrics.py "${project}" "${vid}" > "$metrics_csv"
+    if python3 src/python/main/diff_metrics.py "${project}" "${vid}" "${repository}" > "$metrics_csv"
     then
         echo 'Calculating metrics ..................................................... OK'
     else
-        echo 'Calculating metrics ..................................................... FAIL'
+        echo -ne 'Calculating metrics ..................................................... FAIL\r'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
     fi
 fi

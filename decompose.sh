@@ -9,7 +9,7 @@
 # - smartcommit/diffs: JSON files storing SmartCommit hunk-based decomposition results
 # - smartcommit/time.csv: Run time allocated for untangling by SmartCommit
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
@@ -52,8 +52,7 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "Parallelization jobs log will be stored in /tmp/decompose.log"
-echo "Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
 export PYTHONHASHSEED=0
@@ -72,4 +71,4 @@ decompose_bug(){
 }
 
 export -f decompose_bug
-parallel --joblog /tmp/decompose.log --colsep "," decompose_bug {} < "$bugs_file"
+parallel --colsep "," decompose_bug {} < "$bugs_file"

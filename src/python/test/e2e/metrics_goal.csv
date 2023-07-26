@@ -1,5 +1,6 @@
-Closure,103,5,3,8,8.75,70
-Csv,8,3,1,5,4.8,24
-Jsoup,24,3,1,3,6.0,18
-Lang,63,2,1,5,12.8,64
-Lang,8,3,1,8,5.375,43
+project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks
+Closure,103,2,3,4,3.0,12,58,0.0,0
+Csv,8,1,1,3,7.0,21,3,0.0,1
+Jsoup,24,1,1,1,1.0,1,17,0.0,0
+Lang,63,1,1,4,5.75,23,41,1.0,1
+Lang,8,1,1,4,3.5,14,29,2.0,1
