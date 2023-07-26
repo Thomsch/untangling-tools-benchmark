@@ -15,14 +15,6 @@ This script calculates the following 8 diff metrics for a Version Control diff f
     7. Number of tangled lines in a diff file
     8. Number of tangled hunks in a diff file
 
-    f"{project},{vid},{files_updated},{test_files_updated},"
-        f"{hunks},{average_hunk_size},{code_changed_lines},{noncode_changed_lines}"
-        f"{tangle_counts(repository)}"
-
-- Regarding terminology, these metrics are only for diff lines (lines in the diff file). A diff line contains an indicator
-('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
-a line value (i.e. the textual content of the source code line).
-- The program treats a diff line as either a Python unidiff Line Object, or as a String representation (e.g. "+         x = 3;").
 Command Line Args:
     project: D4J Project name
     vid: D4J Bug Id
@@ -41,22 +33,21 @@ from unidiff.constants import LINE_TYPE_CONTEXT
 
 def get_lines_in_hunk(hunk):
     """
-    Return an ordered List of all Lines Objects in the given hunk.
-    All Lines Objects must be non-empty and must be either an added (+) or removed (-) line.
+    Return an ordered list of all unidiff Lines objects in the given hunk.
+    All unidiff Line objects must be non-empty and must be either an added (+) or removed (-) line.
     """
     changed_lines = []
     for line in hunk:
         if line.line_type != LINE_TYPE_CONTEXT and line.value.strip():
-            line.diff_line_no = None
             changed_lines.append(line)
     return changed_lines
 
 
 def get_hunks_in_patch(patch):
     """
-    Return an ordered List of all hunks in the given file.
-    A hunks is represented as a List of Line Objects.
-    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    Return an ordered list of all hunks in the given file.
+    A hunks is represented as a list of unidiff Line objects.
+    All unidiff Line objects must not be blank and must be either an added (+) or removed (-) line.
     We ignore empty hunks.
     """
     hunked_lines = []
@@ -70,8 +61,8 @@ def get_hunks_in_patch(patch):
 
 def flatten_patch_object(patch):
     """
-    As a PatchSet Object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
-    All Line Objects must be non-empty and must be either an added (+) or removed (-) line.
+    As a PatchSet object is nested with 3 layers, this function flattens it such that only line objects are stored sequentially.
+    All unidiff Line Objects must be must not be blank and must be either an added (+) or removed (-) line.
     """
     flat_patch = []
     for file in patch:
@@ -85,7 +76,6 @@ def flatten_patch_object(patch):
 def count_tangled_hunks(original_diff, fix_diff):
     """
     Count the number of tangled hunks in a Version Control diff.
-    If there is at least 1 tangled hunk, it means the commit contains tangled hunk.
     Args:
         original_diff <PatchSet Object>: the Version Control diff.
         fix_diff <PatchSet Object>: the bug-fixing diff.
@@ -113,8 +103,8 @@ def count_tangled_hunks(original_diff, fix_diff):
 
 def count_changed_lines(patch):
     """
-    Return the number of nonempty changed diff lines (+)/(-) in the diff file (i.e. we ignore both blank lines and context lines).
-    A diff line is called "changed" if it is either removed from the source file or added to the target file.
+    Return the number of non-blank changed unidiff diff lines (+)/(-) in the diff file (i.e. we ignore both blank lines and context lines).
+    A unidiff diff line is called "changed" if it is either removed from the source file or added to the target file.
 
     Args:
         patch <PatchSet Object>: cleaned, contain no context lines, comments, or import statements.
@@ -127,27 +117,26 @@ def count_changed_lines(patch):
 
 def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
-    Return the number of tangled diff lines found in original VC diff.
-    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix.
-    Thus, this tangled diff line in original VC diff will be duplicated: once in bug_fix.diff, once in non_bug_fix.diff.
+    Return the number of tangled unidiff lines found in original VC diff.
 
-    For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
     As tangled lines are duplicated, we return the count divided by 2.
     """
     all_lines_count = count_changed_lines(original_diff)
     fix_lines_count = count_changed_lines(bug_fix_diff)
     nonfix_lines_count = count_changed_lines(nonfix_diff)
-    try:
-        tangled_lines_count = fix_lines_count + nonfix_lines_count - all_lines_count
-        assert tangled_lines_count % 2 == 0
-        tangled_lines_count = tangled_lines_count / 2
-    except AssertionError:
+
+    tangled_lines_count = fix_lines_count + nonfix_lines_count - all_lines_count
+    if tangled_lines_count % 2 != 0:
         print(
-            "The number of tangled diff line is not even. There is a bug, please examine Defects4J diffs!",
+            f"The number of tangled diff linew is {tangled_lines_count}. There is a bug, please examine Defects4J diffs!",
             file=sys.stderr,
         )
         sys.exit(1)
-    return max(tangled_lines_count, 0)
+    # For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
+    tangled_lines_count = tangled_lines_count / 2
+    return max(
+        tangled_lines_count, 0
+    )  # Handle D4J bug: excessive unidiff Lines in original diff
 
 
 def tangle_counts(repository):
@@ -205,6 +194,8 @@ def main():
             test_files_updated += 1
         for hunk in file:
             for line in hunk:
+                # A diff line contains an indicator ('+': added to modified program, '-': removed from original program, ' ': unchanged from original to modified program) and
+                # a line value (i.e. the textual content of the source code line).
                 if line.line_type == LINE_TYPE_CONTEXT:
                     continue
                 all_changed_lines += 1

@@ -50,6 +50,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if line.line_type != LINE_TYPE_CONTEXT and line.value.strip():
                     entry = pd.DataFrame.from_dict(
                         {
+                            # Since a line can only be either added or removed, one of the two will always be empty.
                             "file": [file.path],
                             "source": [line.source_line_no],
                             "target": [line.target_line_no],
@@ -63,7 +64,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     """
     Tag the correct truth label to each line in original diff.
 
-    Returns a List of labels, one for each line in the original diff:
+    Returns a list of labels, one for each line in the original diff:
     - 'fix': A bug-fixing line
     - 'other': A non bug-fixing line
     - 'both': A tangled line.
@@ -79,7 +80,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     ]  # Place holder for the truth label
 
     i = 0
-    while i < len(original_lines):             # Align the fix lines and nonfix lines as Queues.
+    while i < len(original_lines):  # Align the fix lines and nonfix lines as Queues.
         line = original_lines[i]
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
             print("This is a bug")
@@ -114,6 +115,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
                 labels[i] = "other"
                 nonfix_lines.remove(line)
             else:
+                # The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
                 i += 1
                 continue
         else:
