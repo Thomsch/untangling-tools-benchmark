@@ -10,7 +10,6 @@ decomposition results.
 Outputs two CSV files for each bug:
 - flexeme_clean.csv: Cleaned results for the Flexeme decomposition
 - smartcommit_clean.csv: Cleaned results for the SmartCommit decomposition
-
 """
 
 import os
