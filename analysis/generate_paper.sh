@@ -63,4 +63,4 @@ Rscript analysis/paper/rq2.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNT
 # Manual Evaluation
 #
 # TODO: Generate "${TMP_DIR}/changed_lines.csv" with `line_count.sh`
-Rscript analysis/paper/manual_evaluation.R "analysis/manual/d4j-manual-bugs.csv" "${TMP_DIR}/changed_lines.csv" "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/manual-evaluation.tex"
+# Rscript analysis/paper/manual_evaluation.R "analysis/manual/d4j-manual-bugs.csv" "${TMP_DIR}/changed_lines.csv" "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/manual-evaluation.tex"
