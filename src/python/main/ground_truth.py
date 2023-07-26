@@ -59,7 +59,7 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     return df
 
 
-def tag_truth_label(original_diff, fix_diff, nonfix_diff):
+def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     """
     Tag the correct truth label to each line in original diff by aligining the fix lines and nonfix lines as Queues.
     Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
@@ -148,7 +148,7 @@ def main():
     )
 
     original_diff_df = convert_to_dataframe(original_diff)
-    truth_labels = tag_truth_label(original_diff, bug_fix_diff, nonfix_diff)
+    truth_labels = classify_diff_lines(original_diff, bug_fix_diff, nonfix_diff)
     original_diff_df["group"] = truth_labels
     ground_truth_df = original_diff_df
 
