@@ -85,12 +85,12 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
             return labels
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
-        if not nonfix or (
+        if (
             line == fix and line != nonfix
         ):  # If line is identical to head of fix_lines, it is bug-fixing
             labels[i] = "fix"
             fix_lines.popleft()
-        elif not fix or (
+        elif (
             line == nonfix and line != fix
         ):  # If line is identical to head of nonfix_lines, it is non bug-fixing
             labels[i] = "other"
@@ -105,14 +105,15 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
                 nonfix_lines.popleft()
                 continue
             # Else, switch truth labelling scheme, always match with first occurrence
-            if line in nonfix_lines:
-                labels[i] = "other"
-                nonfix_lines.remove(line)
-            elif line in fix_lines:
+            if line in fix_lines:
                 labels[i] = "fix"
                 fix_lines.remove(line)
+            elif line in nonfix_lines:
+                labels[i] = "other"
+                nonfix_lines.remove(line)
             else:
-                labels[i] = "both"
+                i += 1
+                continue
         else:
             labels[i] = "both"
             print("There is a line tagged both!", file=sys.stderr)
