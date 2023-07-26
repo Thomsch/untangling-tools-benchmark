@@ -36,7 +36,7 @@ all_commits_file="$1"
 out_file="$2"
 
 if ! [ -f "$all_commits_file" ]; then
-    echo "File ${all_commits_file} not found. Exiting."
+    echo "$0: file ${all_commits_file} not found. Exiting."
     exit 1
 fi
 
@@ -53,10 +53,10 @@ do
     defects4j checkout -p "$project" -v "$vid"b -w "$workdir"
 
     # Get fix commit hash
-    commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)  "
+    commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
 
     if [ -f "$truth_csv" ]; then
-        echo -ne 'Calculating ground truth ................................................ CACHED\n'
+        echo 'Calculating ground truth ................................................ CACHED'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
         if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
@@ -65,7 +65,7 @@ do
         else
             evaluation_status_string="FAIL"
         fi
-        echo -ne "Calculating ground truth .................................................. ${evaluation_status_string}\n"
+        echo "Calculating ground truth .................................................. ${evaluation_status_string}"
     fi
 
     # count number of lines and append

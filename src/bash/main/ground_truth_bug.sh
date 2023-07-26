@@ -37,7 +37,7 @@ export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containi
 mkdir -p "$evaluation_path"
 
 # Calculates the ground truth
-echo -ne '\n'
+echo ""
 echo "Calculating ground truth for project $project, bug $vid, repository $repository"
 
 # If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
@@ -49,7 +49,7 @@ fi
 truth_csv="${evaluation_path}/truth.csv"
 
 if [ -f "$truth_csv" ]; then
-    echo -ne 'Calculating ground truth ................................................ CACHED\r'
+    echo 'Calculating ground truth ................................................ CACHED'
 else
     . ./src/bash/main/d4j_utils.sh
     # Parse the returned result into two variables
@@ -58,10 +58,9 @@ else
 
     if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
     then
-        echo -ne 'Calculating ground truth .................................................. OK\r'
+        echo 'Calculating ground truth .................................................. OK'
     else
         echo -ne 'Calculating ground truth .................................................. FAIL\r'
         exit 1        # Return exit code 1 to mark this run as FAIl when called in generate_ground_truth.sh
     fi
 fi
-echo -ne '\n'

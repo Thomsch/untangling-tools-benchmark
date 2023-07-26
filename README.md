@@ -4,28 +4,54 @@ Experimental infrastructure for comparing untangling tools on real bug-fixing co
 
 ## Requirements
 
-- Python 3.8.15 is installed and on the PATH.  (Flexeme requires exactly this version.)
+- Python 3 is installed and on the PATH.
 - Java 8 is installed and on the PATH.
 - Java 11 is installed, but is not on the PATH.
 
 ## Installation
 
-1. Clone this repository locally `git clone https://github.com/Thomsch/untangling-tools-benchmark`.
-2. Go into the local repository folder `cd untangling-tools-benchmark`.
-3. Create a virtual environment `python3 -m venv .venv`.
-4. Activate the virtual environment `source .venv/bin/activate`.
-5. Install Flexeme for Java
-   1. Clone the Flexeme repository locally `git clone https://github.com/Thomsch/Flexeme ../Flexeme`.
-   2. Install Graphviz https://graphviz.org/.
-   3. Install Flexeme from the clone `pip install -e ../Flexeme`
-      - If the dependency `pygraphviz` fails to install. Visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
-6. Install local dependencies `pip install -U -r requirements.txt`.
-7. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
-8. Run `cp .env-template .env` and fill in the environment variables in `.env`:
+### Part 1: prerequisites
+
+1. Install Graphviz https://graphviz.org/.  On Debian or Ubuntu: `sudo apt install graphviz`
+2. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
+   For Ubuntu:
+
+```
+PARALLEL_DEB=parallel_20230622_all.deb
+wget --no-verbose https://download.opensuse.org/repositories/home:/tange/xUbuntu_22.04/all/${PARALLEL_DEB}
+sudo dpkg -i ${PARALLEL_DEB}
+mkdir ${HOME}/.parallel
+touch ${HOME}/.parallel will-cite
+```
+
+3. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
+
+4. Install GNU coreutils if you are on MacOS or Windows.
+
+### Part 2: The untangling evaluation itself
+
+1.
+
+```
+git clone https://github.com/Thomsch/untangling-tools-benchmark
+cd untangling-tools-benchmark
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -U -r requirements.txt
+```
+
+2. Install Flexeme for Java
+
+```
+git clone https://github.com/Thomsch/Flexeme ../Flexeme
+pip install -e ../Flexeme
+```
+
+If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
+
+3. Run `cp .env-template .env` and fill in the environment variables in `.env`:
     - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
-    - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. Requires Java 11. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
-9. Install GNU coreutils if you are on MacOS or Windows.
-10. Install [GNU Parallel](https://www.gnu.org/software/parallel/).
+    - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
@@ -48,6 +74,15 @@ For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv
 3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
 4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
+
+This command does the following:
+- `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  
+- `time`: Print the time taken to run the script. This is useful to estimate the time taken to run the evaluation.
+- `> d4j-20.log`: Redirect the output of the script to the file `d4j-20.log`.
+- `2>&1`: Redirect the error output to the same file as the standard output.
+- `&`: Run the script in the background immediately.
+
 All results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
 - `$UTB_OUTPUT/decomposition/<toolname>/<project_id>/time.csv  The time for the given tool to process the given bug.
@@ -66,7 +101,7 @@ All results will be stored in `$UTB_OUTPUT`:
 
 The detailed pipeline can be visualized in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
 
-In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are compatible with the experimental infrastructure.
+In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are active and compatible with the experimental infrastructure. Bug projects marked as deprecated by Defects4J's authors are not included in this list of compatible bugs.
 To generate a new bug file, see **Generating the bug file** section.
 
 #### Optional steps
@@ -76,7 +111,7 @@ The folder `analysis/` contains scripts to analyze the results of the evaluation
 
 #### Generating the bug file
 To generate a bug file, run `src/bash/main/sample_bugs.sh data/d4j-compatible-bugs.csv <n>`, with `<n>`indicating the number of bugs to include.
-Do not use `data/d4j-bugs-all.csv` as it contains bugs that are not compatible with the experimental infrastructure (see **Limitations** section).
+Do not use `data/d4j-bugs-all.csv` as it contains bugs that are deprecated or not compatible with the experimental infrastructure (see **Limitations** section).
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can follow the pipeline presented in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
