@@ -63,7 +63,7 @@ def tag_truth_label(original_diff, fix_diff, nonfix_diff):
     """
     Tag the correct truth label to each line in original diff by aligining the fix lines and nonfix lines as Queues.
     Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
-    Returns a List of labels for each line:
+    Returns a List of labels, one for each line in the original diff:
     - 'fix': A bug-fixing line
     - 'other': A non bug-fixing line
     - 'both': A tangled line.
