@@ -147,7 +147,7 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
             file=sys.stderr,
         )
         sys.exit(1)
-    return tangled_lines_count
+    return max(tangled_lines_count, 0)
 
 
 def tangle_counts(repository):
