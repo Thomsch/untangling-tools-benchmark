@@ -127,9 +127,9 @@ def count_changed_lines(patch):
 
 def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
     """
-    Return the number of tangled diff lines found in original VC diff.
-    To explain, a tangled diff line in original VC diff contains both a bug fix and a non bug-fix.
-    Thus, this tangled diff line in original VC diff will be duplicated: once in bug_fix.diff, once in non_bug_fix.diff.
+    Return the number of tangled diff lines found in the original VC diff.
+    A tangled diff line in the original VC diff contains both a bug fix and a non bug-fix.
+    A tangled diff line in the original VC diff appears both in bug_fix.diff and in non_bug_fix.diff.
 
     For unified original diff to have no tangled line, this must hold true: changed_lines_count(VC) = changed_lines_count(BF) + changed_lines_count(BF)
     As tangled lines are duplicated, we return the count divided by 2.
