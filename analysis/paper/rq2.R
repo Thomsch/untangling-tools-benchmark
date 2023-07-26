@@ -21,6 +21,10 @@ if (length(args)!=3) {
   stop("Please provide the input files and output path.", call.=FALSE)
 }
 
+decompositionScoresPath = args[1]
+metricsPath = args[2]
+outputPath = args[3]
+
 # Function to convert character columns to numeric
 convert_to_numeric <- function(dataframe, numeric_variables) {
   for (col in numeric_variables) {
@@ -30,10 +34,6 @@ convert_to_numeric <- function(dataframe, numeric_variables) {
   }
   return(dataframe)
 }
-
-decompositionScoresPath = args[1]
-metricsPath = args[2]
-outputPath = args[3]
 
 decompositionScores <- read.csv(decompositionScoresPath, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
 metrics <- read.csv(metricsPath, header = FALSE, col.names = c('Project', 'BugID',"FilesUpdated","TestFilesUpdated","Hunks","AverageHunkSize","CodeLines","NoncodeLines","TangledLineCount","TangledHunkCount"))
