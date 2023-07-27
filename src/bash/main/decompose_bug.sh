@@ -50,7 +50,7 @@ if [ ! -d "${repository}" ] ; then
 fi
 
 # Commit hash is the revision_fixed_ID
-commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
+commit="$(git rev-parse HEAD~1)"    # Fixed commit
 
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"

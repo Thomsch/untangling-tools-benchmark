@@ -40,7 +40,7 @@ defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Clean Defects4J repository: The rest of the pipeline will work on "$repository"_cleaned
 cd "$repository"
-"${workdir}/src/bash/main/clean-defects4j-repo.sh"
+"${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
 cd "$workdir"
 
 diff_dir="${repository}/diff"
@@ -56,8 +56,8 @@ else
     mkdir -p "$diff_dir"
     
     # Get the 3 cleaned commit hashes
-    revision_fixed=$(git rev-parse HEAD)
-    revision_buggy=$(git rev-parse HEAD~1)
+    revision_buggy=$(git rev-parse HEAD)
+    revision_fixed=$(git rev-parse HEAD~1)
     revision_original=$(git rev-parse HEAD~2)
 
     # D4J bug-inducing minimized patch

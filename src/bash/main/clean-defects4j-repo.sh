@@ -35,6 +35,15 @@ set -e
 # For debugging
 # set -x
 
+if [ $# -ne 2 ] ; then
+    echo 'usage: clean-defects4j-repo.sh <D4J Project> <D4J Bug id>
+    echo 'example: clean-defects4j-repo.sh Lang 1
+    exit 1
+fi
+
+project="$1"
+vid="$2"
+
 if [ ! -d .git ] ; then
   echo "$0: run at the top level of a git repository"
   exit 1
@@ -47,11 +56,11 @@ if [ "$changed_files" -gt 0 ] ; then
 fi
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPTDIR"/d4j_utils.sh
 
-
-v1="$(git rev-parse HEAD~5)"
-v2="$(git rev-parse HEAD)"
-v3="$(git rev-parse HEAD~4)"
+# Parse the returned revision_ids into two variables
+read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+v3="$(git rev-parse HEAD)"      # Buggy version
 
 olddir="$(pwd)"
 newdir="$olddir"_cleaned
@@ -79,8 +88,8 @@ add_cleaned_commit () {
 }
 
 add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION"
-add_cleaned_commit "$v2" "Cleaned BUGGY_VERSION"
-add_cleaned_commit "$v3" "Cleaned FIXED_VERSION"
+add_cleaned_commit "$v2" "Cleaned FIXED_VERSION"
+add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION"
 
 # Delete the unclean directory and change the name of the cleaned directory to old format
 rm -rf "$olddir"
