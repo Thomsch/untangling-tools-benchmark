@@ -78,8 +78,8 @@ add_cleaned_commit () {
   cp -rpf .git "$tmpdir"
 }
 
-add_cleaned_commit "$v1" "Cleaned POST_FIX_REVISION"
-add_cleaned_commit "$v2" "Cleaned FIXED_VERSION"
-add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION"
+add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION"
+add_cleaned_commit "$v2" "Cleaned BUGGY_VERSION"
+add_cleaned_commit "$v3" "Cleaned FIXED_VERSION"
 
 echo "$(basename "$0"): success; result is in ../$(basename "$newdir")"
