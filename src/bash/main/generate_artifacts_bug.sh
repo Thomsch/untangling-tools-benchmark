@@ -43,7 +43,6 @@ cd "$repository"
 "${workdir}/src/bash/main/clean-defects4j-repo.sh"
 cd "$workdir"
 
-repository="$repository"_cleaned
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
 bug_fix_diff_out="${diff_dir}/BF.diff"
