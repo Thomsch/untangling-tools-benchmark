@@ -49,9 +49,9 @@ fi
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 
-v1="$(git rev-parse HEAD~2)"
-v2="$(git rev-parse HEAD~1)"
-v3="$(git rev-parse HEAD)"
+v1="$(git rev-parse HEAD~5)"
+v2="$(git rev-parse HEAD)"
+v3="$(git rev-parse HEAD~4)"
 
 olddir="$(pwd)"
 newdir="$olddir"_cleaned
