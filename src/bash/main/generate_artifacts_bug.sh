@@ -17,6 +17,9 @@ set -o allexport
 . .env
 set +o allexport
 
+# For debugging
+# set -x
+
 if [ $# -ne 3 ] ; then
     echo 'usage: generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
     echo 'example: generate_artifacts.sh Lang 1 path/to/Lang_1/'
@@ -37,11 +40,15 @@ workdir="$(pwd)"
 # Checkout Defects4J bug
 mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+if [ ! -d "$repository" ] ; then
+    echo "$0: directory not found: $repository"
+    exit 1
+fi
 
 # Clean Defects4J repository: The rest of the pipeline will work on "$repository"_cleaned
-cd "$repository"
+cd "$repository" || exit 1
 "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
-cd "$workdir"
+cd "$workdir" || exit 1
 
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
