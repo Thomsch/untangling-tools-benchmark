@@ -82,4 +82,7 @@ add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION"
 add_cleaned_commit "$v2" "Cleaned BUGGY_VERSION"
 add_cleaned_commit "$v3" "Cleaned FIXED_VERSION"
 
-echo "$(basename "$0"): success; result is in ../$(basename "$newdir")"
+# Delete the unclean directory and change the name of the cleaned directory to old format
+rm -rf "$olddir"
+mv "$newdir" "$olddir"
+echo "$(basename "$0"): success; result is in ../$(basename "$olddir")"
