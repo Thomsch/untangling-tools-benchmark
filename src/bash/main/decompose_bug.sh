@@ -50,8 +50,9 @@ if [ ! -d "${repository}" ] ; then
 fi
 
 # Commit hash is the revision_fixed_ID
-commit="$(git rev-parse HEAD~1)"    # Fixed commit
-
+cd "$repository" || exit 1
+export commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+cd - || exit 1
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
 sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}")"
