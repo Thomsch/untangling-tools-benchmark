@@ -8,8 +8,8 @@
 set -o nounset
 set -o pipefail
 
-if [ $# -ne 0 ] ; then
-    echo 'usage: ./evaluate_all.sh'
+if [ $# -ne 2 ] ; then
+    echo 'usage: ./evaluate_all.sh bugs-file out-dir'
     exit 1
 fi
 
@@ -22,8 +22,8 @@ export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
 workdir="$(pwd)"
 export workdir
-export bugs_file="${workdir}/data/d4j-compatible-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
-export out_dir="${workdir}/benchmark-all" # Path to the directory where the results are stored and repositories checked out.
+export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
+export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
 # Run the 5_bug example and write output files to /e2e
 ./generate_artifacts.sh "$bugs_file" "$out_dir"
