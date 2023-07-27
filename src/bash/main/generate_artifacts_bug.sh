@@ -40,15 +40,12 @@ workdir="$(pwd)"
 # Checkout Defects4J bug
 mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
-if [ ! -d "$repository" ] ; then
-    echo "$0: directory not found: $repository"
-    exit 1
-fi
 
-# Clean Defects4J repository: The rest of the pipeline will work on "$repository"_cleaned
+# Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
 cd "$repository" || exit 1
 "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
-cd "$workdir" || exit 1
+
+cd - || exit 1
 
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
@@ -63,9 +60,9 @@ else
     mkdir -p "$diff_dir"
     
     # Get the 3 cleaned commit hashes
-    revision_buggy=$(git rev-parse HEAD)
-    revision_fixed=$(git rev-parse HEAD~1)
-    revision_original=$(git rev-parse HEAD~2)
+    export revision_buggy=$(git rev-parse HEAD)
+    export revision_fixed=$(git rev-parse HEAD~1)
+    export revision_original=$(git rev-parse HEAD~2)
 
     # D4J bug-inducing minimized patch
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
@@ -74,7 +71,7 @@ else
         exit 1
     fi
 
-    cd - || exit 1
+    cd "$workdir"|| exit 1
 
     # Generate the VC diff but not clean yet, to generate commit metrics first
     d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
