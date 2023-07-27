@@ -33,12 +33,18 @@ echo "Generating diff and code artifacts for project $project, bug $vid, reposit
 
 # Initialize related directories for input and output
 workdir="$(pwd)"
-diff_dir="${repository}/diff"
 
 # Checkout Defects4J bug
 mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
+# Clean Defects4J repository: The rest of the pipeline will work on "$repository"_cleaned
+cd "$repository"
+"${workdir}/src/bash/main/clean-defects4j-repo.sh"
+cd "$workdir"
+
+repository="$repository"_cleaned
+diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
 bug_fix_diff_out="${diff_dir}/BF.diff"
 
@@ -47,12 +53,13 @@ if [ -f "$bug_fix_diff_out" ]; then
 else
     . ./src/bash/main/d4j_utils.sh
 
-    # Parse the returned revision_ids into two variables
-    read -r revision_original revision_fixed <<< "$(retrieve_revision_ids "$project" "$vid")"
-
     cd "$repository" || exit 1
     mkdir -p "$diff_dir"
-    revision_buggy=$(git rev-parse HEAD)
+    
+    # Get the 3 cleaned commit hashes
+    revision_fixed=$(git rev-parse HEAD)
+    revision_buggy=$(git rev-parse HEAD~1)
+    revision_original=$(git rev-parse HEAD~2)
 
     # D4J bug-inducing minimized patch
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
