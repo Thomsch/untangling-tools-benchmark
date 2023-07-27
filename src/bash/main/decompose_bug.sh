@@ -1,5 +1,5 @@
 #!/bin/bash
-# Untangle with SmartCommit and Flexeme on one  Defects4J (D4J) bug.
+# Untangle with SmartCommit and Flexeme on one Defects4J (D4J) bug.
 # - $1: D4J Project name
 # - $2: D4J Bug Id
 # - $3: Path where the results are stored.
