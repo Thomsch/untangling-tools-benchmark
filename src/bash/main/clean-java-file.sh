@@ -13,8 +13,7 @@ if [ $# -ne 1 ]; then
 fi
 
 file="$1"
-
-# The `sed` command uses a literal tab character instead of '\t'
-# because MacOSX does not understand the \t character.
-cpp "$file" | grep -v '^#' | sed 's/[   ]*$//' | grep -v '^$' > "$file.cleaned"
+# grep -v '^\s*//' "$file" > "$file.cleaned"       # Remove inline comments
+# mv -f "$file.cleaned" "$file"
+cpp "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove block comments, trailing whitespaces, and blank lines
 mv -f "$file.cleaned" "$file"
