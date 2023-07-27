@@ -14,5 +14,7 @@ fi
 
 file="$1"
 
-cpp "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' > "$file.cleaned"
+# The `sed` command uses a literal tab character instead of '\t'
+# because MacOSX does not understand the \t character.
+cpp "$file" | grep -v '^#' | sed 's/[ 	]+$//' | grep -v '^$' > "$file.cleaned"
 mv -f "$file.cleaned" "$file"
