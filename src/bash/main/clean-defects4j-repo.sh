@@ -50,6 +50,7 @@ if [ ! -d .git ] ; then
 fi
 
 changed_files="$(git status --porcelain | wc -l)"
+
 if [ "$changed_files" -gt 0 ] ; then
   echo "$0: run in a git clone without local changes"
   exit 1
@@ -62,9 +63,9 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
 v3="$(git rev-parse HEAD)"      # Buggy version
 
-olddir="$(pwd)"
-newdir="$olddir"_cleaned
-tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
+export olddir="$(pwd)"
+export newdir="$olddir"_cleaned
+export tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
 
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
@@ -83,7 +84,7 @@ add_cleaned_commit () {
   (cd "$newdir" && find . -path ./.git -prune -o -name "." -prune -o -exec rm -rf {} +)
   cp -af "$tmpdir/." "$newdir"
   cd "$newdir"
-  git commit -q -am "$msg"
+  git commit -q -Am "$msg"
   cp -rpf .git "$tmpdir"
 }
 
@@ -91,7 +92,9 @@ add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION"
 add_cleaned_commit "$v2" "Cleaned FIXED_VERSION"
 add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION"
 
+cd "$olddir"
 # Delete the unclean directory and change the name of the cleaned directory to old format
 rm -rf "$olddir"
 mv "$newdir" "$olddir"
 echo "$(basename "$0"): success; result is in ../$(basename "$olddir")"
+cd "$SCRIPTDIR"
