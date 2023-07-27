@@ -15,7 +15,9 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 set -o allexport
 # shellcheck source=/dev/null
-. .env
+if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+  . .env
+fi
 set +o allexport
 
 export bugs_file="$1" # The file containing the bugs to untangle.

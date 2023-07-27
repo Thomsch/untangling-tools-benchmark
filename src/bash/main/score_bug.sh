@@ -40,7 +40,9 @@ fi
 
 set -o allexport
 # shellcheck source=/dev/null
-. .env
+if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+  . .env
+fi
 set +o allexport
 
 # Untangle with file-based approach
