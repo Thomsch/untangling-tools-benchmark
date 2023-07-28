@@ -49,7 +49,7 @@ def main(evaluation_dir):
         if len(split) != 2:
             print(
                 f"Invalid subdirectory name: {bug_dir}."
-                f" Expected to be of the form <project>_<bug_id>",
+                f" Expected to be of the form <project>_<bug_id>.",
                 file=sys.stderr,
             )
             continue
