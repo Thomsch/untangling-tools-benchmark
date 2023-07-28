@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 
 """
-Clean the decomposition results from Flexeme and SmartCommit for all bugs in the given directory.
-The cleaning will remove decomposition results that are not present in the
-ground truth. For example, SmartCommit will assign a group to all changed files,
-including non-Java files. This script will remove those non-Java files from the
-decomposition results.
+Clean the results of the decompositions to avoid unclassified line changes with
+respect to the ground truth.
 
-Outputs two CSV files for each bug:
-- flexeme_clean.csv: Cleaned results for the Flexeme decomposition
-- smartcommit_clean.csv: Cleaned results for the SmartCommit decomposition
+File untangling is not included since it has no more changes than the ground
+truth.
+
+Input:
+- Path to the untangling evaluation directory (e.g. untangling-results/evaluation)
+
+Output:
+- For each folder <project>_<bug_id> in the evaluation directory, one CSV file is
+    generated for each decomposition result (e.g. smartcommit.csv, flexeme.csv).
+    The CSV files are named <decomposition>_clean.csv.
 """
 
 import os
@@ -20,7 +24,7 @@ import pandas as pd
 
 def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
     """
-    Clean changes
+    Remove unclassified line changes from the tool's decomposition results.
     """
     if tool_df is None:
         tool_df = truth_df.copy()
@@ -44,10 +48,8 @@ def clean_decomposition(truth_df, tool_df) -> pd.DataFrame:
 
 def main(evaluation_root):
     """
-    Clean the results of the decompositions to avoid unclassified line changes with respect to the
-    ground truth.
+    Implement the logic of the script. See the module docstring for more
     """
-    # File untangling is not included since it's made from the ground truth already.
 
     # Iterate through each subdirectory in the parent directory
     for subdir, _, _ in os.walk(evaluation_root):
