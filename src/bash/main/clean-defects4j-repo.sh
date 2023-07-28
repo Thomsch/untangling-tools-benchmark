@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Add "cleaned" commits at the end of a repository cloned from Defects4J.
 # Example use:
