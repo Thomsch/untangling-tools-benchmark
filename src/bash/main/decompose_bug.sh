@@ -51,7 +51,8 @@ fi
 
 # Commit hash is the revision_fixed_ID
 cd "$repository" || exit 1
-export commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+export commit
 cd - || exit 1
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
