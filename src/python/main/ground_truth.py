@@ -80,13 +80,19 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     ]  # Place holder for the truth label
 
     i = 0
+    line_is_tangled = (
+        False  # A global mode that indicates if 2 lines are part of tangled fix
+    )
     while i < len(original_lines):  # Align the fix lines and nonfix lines as Queues.
         line = original_lines[i]
+        print("LINE", line)
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
             print("This is a bug")
             return labels
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
+        print("fix line is: ", fix)
+        print("nonfix line is: ", nonfix)
         # Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
         if (
             line == fix and line != nonfix
@@ -102,10 +108,11 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix,
             fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if fix == nonfix:
+            if fix.split()[-1].strip() == nonfix.split()[-1].strip():
                 print("These are tangled lines: ", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
+                line_is_tangled = True  # Switched tangled line mode on
                 continue
             # Else, switch truth labelling scheme, always match with first occurrence
             if line in fix_lines:
@@ -116,6 +123,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
                 nonfix_lines.remove(line)
             else:
                 # The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
+                # This also handles the bug in Defects4J, when lines belonging to different hunks are duplicated and cancel out
                 i += 1
                 continue
         else:
@@ -123,6 +131,9 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             print("There is a line tagged both!", file=sys.stderr)
             fix_lines.popleft()
             nonfix_lines.popleft()
+        if line_is_tangled and labels[i] == "fix":
+            labels[i] = "both"
+            line_is_tangled = False  # Switch tangled mode off
         i += 1
     return labels
 
