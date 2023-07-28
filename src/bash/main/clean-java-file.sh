@@ -13,7 +13,6 @@ if [ $# -ne 1 ]; then
 fi
 
 file="$1"
-# grep -v '^\s*//' "$file" > "$file.cleaned"       # Remove inline comments
-# mv -f "$file.cleaned" "$file"
-cpp "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove block comments, trailing whitespaces, and blank lines
+
+cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove in-line, block comments, trailing whitespaces, and blank lines
 mv -f "$file.cleaned" "$file"
