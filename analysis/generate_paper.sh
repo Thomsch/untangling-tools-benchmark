@@ -22,10 +22,12 @@ export PAPER_REPOSITORY=$2
 TMP_DIR=$(mktemp -d)
 export TMP_DIR
 
-# In case the paper repository does not exist yet
-mkdir -p "${PAPER_REPOSITORY}" # If the directory does not exist, create it
-mkdir -p "${PAPER_REPOSITORY}/tables"
-mkdir -p "${PAPER_REPOSITORY}/data" # In case the paper repository does not exist yet
+
+# Check if the path exists and is a directory
+if [ ! -d "$PAPER_REPOSITORY" ]; then
+  echo "Error: '$PAPER_REPOSITORY' is not an existing directory."
+  exit 1
+fi
 
 #
 # Data
