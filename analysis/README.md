@@ -9,5 +9,5 @@ This folder contains the scripts used to analyze the results of the decompositio
 - The remaining files are scripts and notebook to explore data and generate results.
 
 ## Paper
-Use `./analysis/generate-paper.sh` to generate the analysis results of the decomposition and update the tables and figures in the paper.
+Use `generate-paper.sh` to generate the analysis results of the decomposition and update the tables and figures in the paper.
 The script takes as input a clone of the paper repository (https://gitlab.cs.washington.edu/tschweiz/code-changes-benchmark).
