@@ -43,8 +43,13 @@ defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
 cd "$repository" || exit 1
-"${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
-
+if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
+then
+    echo -ne 'Cleaning Java directory.................................................. OK\r'
+else
+    echo -ne 'Cleaning Java directory.................................................. FAIL\r'
+    exit 1
+fi
 cd - || exit 1
 
 diff_dir="${repository}/diff"
@@ -60,9 +65,9 @@ else
     mkdir -p "$diff_dir"
     
     # Get the 3 cleaned commit hashes
-    export revision_buggy=$(git rev-parse HEAD)
-    export revision_fixed=$(git rev-parse HEAD~1)
-    export revision_original=$(git rev-parse HEAD~2)
+    revision_buggy=$(git rev-parse HEAD)
+    revision_fixed=$(git rev-parse HEAD~1)
+    revision_original=$(git rev-parse HEAD~2)
 
     # D4J bug-inducing minimized patch
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"

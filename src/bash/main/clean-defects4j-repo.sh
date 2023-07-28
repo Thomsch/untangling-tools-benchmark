@@ -36,8 +36,8 @@ set -e
 # set -x
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: clean-defects4j-repo.sh <D4J Project> <D4J Bug id>
-    echo 'example: clean-defects4j-repo.sh Lang 1
+    echo 'usage: clean-defects4j-repo.sh <D4J Project> <D4J Bug id>'
+    echo 'example: clean-defects4j-repo.sh Lang 1'
     exit 1
 fi
 
@@ -63,9 +63,9 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
 v3="$(git rev-parse HEAD)"      # Buggy version
 
-export olddir="$(pwd)"
-export newdir="$olddir"_cleaned
-export tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
+olddir="$(pwd)"
+newdir="$olddir"_cleaned
+tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
 
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
@@ -84,7 +84,7 @@ add_cleaned_commit () {
   (cd "$newdir" && find . -path ./.git -prune -o -name "." -prune -o -exec rm -rf {} +)
   cp -af "$tmpdir/." "$newdir"
   cd "$newdir"
-  git commit -q -Am "$msg"
+  git commit -q -am "$msg"
   cp -rpf .git "$tmpdir"
 }
 
