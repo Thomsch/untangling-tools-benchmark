@@ -18,7 +18,9 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 set -o allexport
 # shellcheck source=/dev/null
-. .env
+if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+  . .env
+fi
 set +o allexport
 
 if [ $# -ne 4 ] ; then
