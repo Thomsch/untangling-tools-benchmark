@@ -10,7 +10,9 @@ set -o errexit
 set -o nounset
 set -o allexport
 # shellcheck disable=SC1091 # File does not exist in repository.
-source .env
+if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+  . .env
+fi
 set +o allexport
 
 # Check Python is 3.8.15 for Flexeme.

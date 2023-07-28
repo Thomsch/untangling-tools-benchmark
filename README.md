@@ -49,9 +49,9 @@ pip install -e ../Flexeme
 
 If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 
-3. Run `cp .env-template .env` and fill in the environment variables in `.env`:
-    - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
-    - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
+5. Do one of the following two:
+    * Ensure that the `DEFECTS4J_HOME` and `JAVA11_HOME` environment variables are set.
+    * Run `cp .env-template .env` and fill in the environment variables in `.env`.
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
@@ -68,10 +68,20 @@ The evaluation run the untangling tools on a list of Defects4J bugs and compute 
 
 For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv`, run the following scripts in order:
 
-1. `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Run the untangling tools to obtain the decompositions
+1. `./generate_artifacts.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Check out the Defects4J bug repository and generate the 3 diff artifacts for evaluation.
+2. `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Run the untangling tools to obtain the decompositions
    - `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
-2. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
-3. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
+3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
+4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
+
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
+
+This command does the following:
+- `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  
+- `time`: Print the time taken to run the script. This is useful to estimate the time taken to run the evaluation.
+- `> d4j-20.log`: Redirect the output of the script to the file `d4j-20.log`.
+- `2>&1`: Redirect the error output to the same file as the standard output.
+- `&`: Run the script in the background immediately.
 
 All results will be stored in `$UTB_OUTPUT`:
 - `$UTB_OUTPUT/decomposition/`: Folder containing the output of the decomposition tools. Each tool has its own sub-folder
