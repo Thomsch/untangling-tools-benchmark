@@ -57,5 +57,6 @@ summary(model)
 
 # Cohen's d for statistically significant metrics
 cohen.d(data_long$TangledHunkCount, data_long$Performance)
+cohen.d(data_long$TangledLineCount, data_long$Performance)
 cohen.d(data_long$CodeLines, data_long$Performance)
 sink()
