@@ -33,8 +33,8 @@ fi
 # Data
 # Directory for the data that is not importable directly into the paper.
 # e.g., statistics for the number of decompositions per tool.
+# TODO: Replace with suggestion in https://gitlab.cs.washington.edu/tschweiz/code-changes-benchmark/-/merge_requests/4#note_210266
 #
-
 # Counts the total number of D4J bugs that were evaluated and how many decomposition failed per tool
 python analysis/paper/count_missing_results.py "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
 
