@@ -10,7 +10,7 @@ import sys
 import pandas as pd
 
 
-def calculate_performance(decomposition_path):
+def print_performance(decomposition_path):
     df_performance = pd.read_csv(
         decomposition_path,
         names=[
@@ -22,6 +22,7 @@ def calculate_performance(decomposition_path):
         ],
     )
 
+    # Calculate median performance
     agg_results = df_performance.agg(
         {
             "bug_id": "count",
@@ -50,7 +51,7 @@ def main():
         exit(-1)
 
     decomposition_path = args[0]
-    calculate_performance(decomposition_path)
+    print_performance(decomposition_path)
 
 
 if __name__ == "__main__":

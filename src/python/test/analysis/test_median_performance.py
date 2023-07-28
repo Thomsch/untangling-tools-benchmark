@@ -3,7 +3,7 @@ Tests for median_performance.py
 """
 import pytest
 
-from analysis.paper.median_performance import calculate_performance
+from analysis.paper.median_performance import print_performance
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def test_calculate_performance(sample_decompositions_csv, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    calculate_performance(sample_decompositions_csv)
+    print_performance(sample_decompositions_csv)
     captured = capfd.readouterr()
     expected_output = (
         "Number of D4J bugs: 4\n"
