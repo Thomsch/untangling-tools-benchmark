@@ -5,6 +5,8 @@ check: shell-script-style check-python-format check-python-style python-test
 SH_SCRIPTS   = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)sh'   * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
 BASH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)bash' * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
 
+MAKEFILE_DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
+
 shell-script-style:
 	shellcheck -x -P SCRIPTDIR --format=gcc ${SH_SCRIPTS} ${BASH_SCRIPTS}
 	checkbashisms ${SH_SCRIPTS} /dev/null
@@ -25,7 +27,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	PYTHONPATH="${GITHUB_WORKSPACE}/src/python/main" pytest src/python/test
+	PYTHONPATH="${MAKEFILE_DIR}/src/python/main" pytest src/python/test
 
 .PHONY: clean
 clean: 
