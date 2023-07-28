@@ -53,13 +53,13 @@ Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "$
 # RQ1
 #
 Rscript analysis/paper/performance_distribution.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/figures/rq1-performance-distribution.pdf"
-Rscript analysis/paper/rq1.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/data/rq1.txt"
+Rscript analysis/paper/statistical_analysis_untangling_tool.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/data/rq1.txt"
 Rscript analysis/paper/compare_models.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex"
 
 #
 # RQ2
 #
-Rscript analysis/paper/rq2.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNTANGLING_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data/rq2.txt"
+Rscript analysis/paper/statistical_analysis_commit_metrics.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${UNTANGLING_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data/rq2.txt"
 
 #
 # Manual Evaluation
