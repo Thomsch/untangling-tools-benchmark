@@ -22,4 +22,4 @@ groupCount <- data %>% group_by(Project, BugId, Treatment) %>% summarise(GroupCo
 summary <- groupCount %>% group_by(Treatment) %>% summarise("Min."=min(GroupCount), "Max."=max(GroupCount), "Median."=median(GroupCount), "Std. Dev."=sd(GroupCount))
 summary.table <- xtable(summary)
 
-print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = FALSE, include.rownames = FALSE, file=outputFile)
+print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = TRUE, include.rownames = FALSE, file=outputFile)

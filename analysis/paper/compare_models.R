@@ -65,7 +65,7 @@ addtorow$pos <- list(0)
 addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-value"), '}', collapse=''), "", '\\\\')
 
 # Multicolumn table with 2 tools as independent variables
-print(tool_stats, add.to.row=addtorow, include.colnames=F, timestamp	= NULL, comment = FALSE, include.rownames = TRUE, file=outputFile)
+print(tool_stats, add.to.row=addtorow, include.colnames=F, timestamp	= NULL, comment = TRUE, include.rownames = TRUE, file=outputFile)
 
 # Adjusted R-squared for the 2 models
 summary <- data.frame(

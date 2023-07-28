@@ -23,4 +23,4 @@ summary <- groupSize %>% group_by(Treatment) %>% summarise("Min."=min(n), "Max."
 
 summary.table <- xtable(summary)
 
-print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = FALSE, include.rownames = FALSE, file=outputFile)
+print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = TRUE, include.rownames = FALSE, file=outputFile)
