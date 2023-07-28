@@ -1,5 +1,5 @@
 #!/bin/bash
-# Untangle with SmartCommit and Flexeme on one  Defects4J (D4J) bug.
+# Untangle with SmartCommit and Flexeme on one Defects4J (D4J) bug.
 # - $1: D4J Project name
 # - $2: D4J Bug Id
 # - $3: Path where the results are stored.
@@ -11,7 +11,6 @@
 # - smartcommit/diffs: JSON files storing SmartCommit hunk-based decomposition results
 # - smartcommit/time.csv: Run time allocated for untangling by SmartCommit
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
@@ -25,6 +24,9 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
+# Initialize exit code variable
+export decompose_exit_code=0
+# Make Flexeme deterministic
 export PYTHONHASHSEED=0
 # Initialize related directory for input and output
 export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
@@ -44,7 +46,7 @@ echo "Decompositing project $project, bug $vid, repository $repository"
 # If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
-  defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
 fi
 
 # Commit hash is the revision_fixed_ID
@@ -88,15 +90,16 @@ else
   START_DECOMPOSITION="$(date +%s.%N)"
   if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
   then
+    END_DECOMPOSITION="$(date +%s.%N)"
+    DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
+    echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
     echo 'Untangling with Flexeme ................................................... OK'
     regenerate_results=true
   else
     echo 'Untangling with Flexeme ................................................. FAIL'
     regenerate_results=false
+    decompose_exit_code=1
   fi
-  END_DECOMPOSITION="$(date +%s.%N)"
-  DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
-  echo "${project},${vid},flexeme,${DIFF_DECOMPOSITION}" > "${flexeme_untangling_results}/time.csv"
 fi
 
 # Retrieve untangling results from SmartCommit and parse them into a CSV file.
@@ -111,7 +114,8 @@ else
   then
       echo 'Parsing SmartCommit results ............................................... OK'
   else
-      echo 'Parsing SmartCommit results ............................................. FAIL'
+      echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+      decompose_exit_code=1
   fi
 fi
 
@@ -119,16 +123,17 @@ fi
 echo ""
 
 flexeme_result_out="${evaluation_path}/flexeme.csv"
-if [ -f "$flexeme_result_out" ] && [ $regenerate_results = false ];
-then
-  echo 'Parsing Flexeme results ................................................. CACHED'
+if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
+  echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
   echo 'Parsing Flexeme results ...............................................'
   if python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
   then
       echo 'Parsing Flexeme results ................................................... OK'
   else
-      echo 'Parsing Flexeme results ................................................. FAIL'
+      echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
+      decompose_exit_code=1
   fi
 fi
+exit $decompose_exit_code
 echo ""

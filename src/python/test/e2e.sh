@@ -14,8 +14,10 @@ if [ $# -ne 0 ] ; then
 fi
 
 if [ ! -f .env ] ; then
-    echo "$0: no .env file found"
-    exit 1
+    if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+        echo "$0: no .env file found"
+        exit 1
+    fi
 fi
 
 echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"
@@ -27,8 +29,8 @@ export workdir
 export bugs_file="${workdir}/data/d4j-5-bugs.csv" # Path to the file containing the bugs to untangle and evaluate.
 export out_dir="${workdir}/src/python/test/e2e" # Path to the directory where the results are stored and repositories checked out.
 
-metrics_goal="${out_dir}/metrics_goal.csv"
-decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
+export metrics_goal="${out_dir}/metrics_goal.csv"
+export decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
 # Run the 5_bug example and write output files to /e2e

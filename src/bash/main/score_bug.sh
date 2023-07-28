@@ -40,7 +40,9 @@ fi
 
 set -o allexport
 # shellcheck source=/dev/null
-. .env
+if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+  . .env
+fi
 set +o allexport
 
 # Untangle with file-based approach
@@ -56,7 +58,8 @@ else
   then
       echo 'Untangling with file-based approach ....................................... OK'
   else
-      echo 'Untangling with file-based approach ..................................... FAIL'
+      echo -ne 'Untangling with file-based approach ..................................... FAIL\r'
+      return 1                # Return exit code 1 to mark this run as FAIl when called in score.sh
   fi
 fi
 
