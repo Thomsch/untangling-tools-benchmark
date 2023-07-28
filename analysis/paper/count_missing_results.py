@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-This script counts the number of projects with missing results in the evaluation and
-the number of times each tool didn't produce a result is missing.
+This script counts the missing result files in the evaluation.
+i.e the number of times each tool didn't produce a result.
 """
 
 import os
