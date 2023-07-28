@@ -14,8 +14,10 @@ if [ $# -ne 0 ] ; then
 fi
 
 if [ ! -f .env ] ; then
-    echo "$0: no .env file found"
-    exit 1
+    if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
+        echo "$0: no .env file found"
+        exit 1
+    fi
 fi
 
 echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"

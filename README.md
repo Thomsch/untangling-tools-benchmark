@@ -49,9 +49,9 @@ pip install -e ../Flexeme
 
 If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github.io/documentation/stable/install.html and follow the instructions for your OS.
 
-3. Run `cp .env-template .env` and fill in the environment variables in `.env`:
-    - `DEFECTS4J_HOME`: Location of the Defects4J installation (e.g., `~/defects4j`)
-    - `JAVA11_HOME`: Location of the **Java 11** home to run SmartCommit and Flexeme. (e.g., `"$HOME/.sdkman/candidates/java/11.0.18-amzn`")
+5. Do one of the following two:
+    * Ensure that the `DEFECTS4J_HOME` and `JAVA11_HOME` environment variables are set.
+    * Run `cp .env-template .env` and fill in the environment variables in `.env`.
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
