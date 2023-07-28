@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
 """
-This script counts the missing result files in the evaluation.
-
-This script prints the following on the standard output:
-- Total number of projects visited
-- Total number of projects with missing files (i.e., projects that are missing at least one of the required files)
-- Number of times each untangling result file is missing:
+This script counts the missing result files in the evaluation. i.e.:
     - flexeme.csv
     - smartcommit.csv
     - scores.csv
     - truth.csv
     - file_untangling.csv
+
+This script prints the following on the standard output:
+- Total number of projects visited
+- Total number of projects with missing files (i.e., projects that are missing at least one of the required files)
+- Number of times each result file is missing.
 - The following projects are missing the following files:
     - <project_name>: <missing_file_1>, <missing_file_2>, ..
 """
