@@ -85,14 +85,11 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     )
     while i < len(original_lines):  # Align the fix lines and nonfix lines as Queues.
         line = original_lines[i]
-        print("LINE", line)
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
             print("This is a bug")
             return labels
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
-        print("fix line is: ", fix)
-        print("nonfix line is: ", nonfix)
         # Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
         if (
             line == fix and line != nonfix
