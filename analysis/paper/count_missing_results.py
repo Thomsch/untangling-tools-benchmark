@@ -38,16 +38,17 @@ def main(evaluation_dir):
 
     # Walk through the directory tree starting from 'evaluation'
     for root, dirs, files in os.walk(evaluation_dir):
-        # Check if the current directory is a project folder
+        bug_name = os.path.basename(root)
+        # Check if the current directory is a bug_name folder
         if root != "evaluation" and len(files) > 0:
-            # Check if all the required CSV files are present in the project folder
+            # Check if all the required CSV files are present in the bug_name folder
             missing_files_for_project = required_files - set(files)
             project_counter += 1
             if missing_files_for_project:
                 missing_files.append(
-                    (os.path.basename(root), list(missing_files_for_project))
+                    (bug_name, list(missing_files_for_project))
                 )
-                projects_missing_files[os.path.basename(root)] += len(
+                projects_missing_files[bug_name] += len(
                     missing_files_for_project
                 )
 
@@ -63,8 +64,8 @@ def main(evaluation_dir):
         )
         print(f"{required_file}: {count}")
     print("The following projects are missing the following files:")
-    for project, missing in missing_files:
-        print(f'{project}: {", ".join(missing)}')
+    for bug_name, missing in missing_files:
+        print(f'{bug_name}: {", ".join(missing)}')
 
 
 if __name__ == "__main__":
