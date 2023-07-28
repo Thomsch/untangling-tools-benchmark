@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Calculates the median performance for the untangling tools.
-Input: `decomposition_socres.csv` file produced by `score.sh`.
+Calculates the median decomposition performance of the untangling tools across D4J bugs.
+Input: `decomposition_scores.csv` file produced by `score.sh`.
 Output: Print the median performance for each untangling tool.
 """
 import sys
