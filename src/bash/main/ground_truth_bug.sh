@@ -24,8 +24,8 @@ fi
 set +o allexport
 
 if [ $# -ne 4 ] ; then
-    echo 'usage: ground_truth_bug.sh <D4J Project> <D4J Bug id> <project repository> <out file>'
-    echo 'example: ground_truth_bug.sh Lang 1 path/to/Lang_1/ truth.csv'
+    echo 'usage: ground_truth_bug.sh <D4J Project> <D4J Bug id> <out file> <project repository>'
+    echo 'example: ground_truth_bug.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
 
@@ -45,7 +45,7 @@ echo "Calculating ground truth for project $project, bug $vid, repository $repos
 # If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
-  defects4j checkout -p "$project" -v "$vid"b -w "$repository"
+  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
 fi
 
 truth_csv="${evaluation_path}/truth.csv"
@@ -53,15 +53,11 @@ truth_csv="${evaluation_path}/truth.csv"
 if [ -f "$truth_csv" ]; then
     echo 'Calculating ground truth ................................................ CACHED'
 else
-    . ./src/bash/main/d4j_utils.sh
-    # Parse the returned result into two variables
-    result="$(retrieve_revision_ids "$project" "$vid")"
-    read -r revision_buggy revision_fixed <<< "$result"
-
-    if d4j_diff "$project" "$vid" "$revision_buggy" "$revision_fixed" "$repository" | python3 src/python/main/ground_truth.py "$project" "$vid" "$truth_csv"
+    if python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
     then
         echo 'Calculating ground truth .................................................. OK'
     else
-        echo 'Calculating ground truth .................................................. FAIL'
+        echo -ne 'Calculating ground truth .................................................. FAIL\r'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in generate_ground_truth.sh
     fi
 fi

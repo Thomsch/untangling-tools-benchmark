@@ -5,7 +5,7 @@ Counts the number of bug-fixing lines and non-bug-fixing lines from the ground t
 The current implementation does not account for tangled lines.
 
 Command Line Args:
-    - path/to/truth/file:
+    - path/to/truth/file: Path to truth.csv file
     - project: Defects4J project name
     - bug_id: Defects4J bug id
 Returns:

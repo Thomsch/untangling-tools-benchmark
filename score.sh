@@ -23,7 +23,7 @@ set +o allexport
 export bugs_file="$1" # The file containing the bugs to untangle.
 export out_dir="$2" # The directory where the results are stored and repositories checked out.
 
-if [[ $# -ne 2 ]] ; then
+if [ $# -ne 2 ] ; then
     echo 'usage: score.sh <bugs_file> <out_dir>'
     exit 1
 fi
@@ -38,8 +38,7 @@ mkdir -p "$evaluation_dir"
 mkdir -p "$decomposition_dir"
 mkdir -p "$logs_dir"
 
-echo "Parallelization jobs log will be stored in /tmp/score.log"
-echo "Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_score.log"
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
 echo ""
 
 parse_and_score_bug(){
@@ -59,7 +58,7 @@ parse_and_score_bug(){
 }
 
 export -f parse_and_score_bug
-parallel --joblog /tmp/scores.log --colsep "," parse_and_score_bug {} < "$bugs_file"
+parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
 
 if ! cat "${evaluation_dir}"/*/scores.csv > "$out_file" ; then
   find "${evaluation_dir}"

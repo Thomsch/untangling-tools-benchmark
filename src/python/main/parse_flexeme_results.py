@@ -9,8 +9,8 @@ to have multiple groups).
 # TODO: Explain how we come down to only 1 group.
 
 Command Line Args:
-    - result_dir: Path to flexeme.dot results in decomposition/flexeme
-    - output_path: Path to store returned CSV file in evaluation/flexeme.csv
+    - result_dir: Directory to flexeme.dot results in decomposition/flexeme
+    - output_path: Directory to store returned CSV file in evaluation/flexeme.csv
 Returns:
     A flexeme.csv file in the respective /evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group=0,1,2,etc.}
@@ -56,7 +56,7 @@ def main():
         # In this case, we do not create a CSV file. The untangling score will be
         # calculated as if Flexeme grouped all changes in one group in `untangling_score.py`.
         print("PDG not found, skipping creation of CSV file", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1)
 
     result = ""
     for node, data in graph.nodes(data=True):
