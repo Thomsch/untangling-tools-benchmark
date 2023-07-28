@@ -137,5 +137,6 @@ else
       decompose_exit_code=1
   fi
 fi
+exit $decompose_exit_code
 echo ""
 exit $decompose_exit_code
