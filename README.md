@@ -68,10 +68,11 @@ The evaluation run the untangling tools on a list of Defects4J bugs and compute 
 
 For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv`, run the following scripts in order:
 
-1. `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Run the untangling tools to obtain the decompositions
+1. `./generate_artifacts.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Check out the Defects4J bug repository and generate the 3 diff artifacts for evaluation.
+2. `./decompose.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Run the untangling tools to obtain the decompositions
    - `$UTB_OUTPUT` is the output directory where the repositories, decompositions, results, and logs will be stored. You can set it to any directory you want (e.g., `~/untangling-evaluation`). 
-2. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
-3. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
+3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
+4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
 **Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
 

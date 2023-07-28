@@ -25,7 +25,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	pytest src/python/test
+	PYTHONPATH="${GITHUB_WORKSPACE}/src/python/main" pytest src/python/test
 
 .PHONY: clean
 clean: 

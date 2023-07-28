@@ -34,7 +34,9 @@ def from_file(filename):
     result = ""
 
     if os.path.exists(filename):
-        patch = PatchSet.from_filename(filename)
+        patch = PatchSet.from_filename(
+            filename, encoding="latin-1"
+        )  # latin-1 is the best choice for an ASCII-compatible encoding
         for line in to_csv(patch):
             result += line + "\n"
 
