@@ -19,8 +19,8 @@ export UNTANGLING_DIR=$1
 export PAPER_REPOSITORY=$2
 
 # Temporary directory for intermediate results
-export TMP_DIR="${UNTANGLING_DIR}/.tmp"
-mkdir -p "${TMP_DIR}"
+TMP_DIR=$(mktemp -d)
+export TMP_DIR
 
 # In case the paper repository does not exist yet
 mkdir -p "${PAPER_REPOSITORY}" # If the directory does not exist, create it
