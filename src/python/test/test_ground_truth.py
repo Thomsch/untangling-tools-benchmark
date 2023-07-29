@@ -123,7 +123,7 @@ index 8422d40..682191b 100644
     assert labels[9] == "other"  # + D is a nonfix
 
 
-def test_both_label_correctly_tagged():
+def test_tangled_both_label_correctly_tagged():
     """
     Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
     """
@@ -133,22 +133,9 @@ diff --git a/test/before.txt b/test/after.txt
 index 8422d40..e2c9801 100644
 --- a/test/before.txt
 +++ b/test/after.txt
-@@ -1,2 +1,4 @@
- A
-+~
-+E
- B"""
-    )
-    fix_diff = unidiff.PatchSet.from_string(
-        """
-diff --git a/test/before.txt b/test/patch.txt
-index 8422d40..682191b 100644
---- a/test/before.txt
-+++ b/test/patch.txt
-@@ -1,2 +1,3 @@
- A
-
-+E
+@@ -1,2 +1,2 @@
+- a = 3
++ b = 4
  B"""
     )
     nonfix_diff = unidiff.PatchSet.from_string(
@@ -157,11 +144,26 @@ diff --git a/test/before.txt b/test/patch.txt
 index 8422d40..682191b 100644
 --- a/test/before.txt
 +++ b/test/patch.txt
-@@ -2,0 +2,2 @@
-+~
-+E
+@@ -1,2 +1,2 @@
+- a = 3
++ b = 3
+ B"""
+    )
+    fix_diff = unidiff.PatchSet.from_string(
+        """
+diff --git a/test/before.txt b/test/patch.txt
+index 8422d40..682191b 100644
+--- a/test/before.txt
++++ b/test/patch.txt
+@@ -1,1 +1,1 @@
+- b = 3
++ b = 4
 """
     )
     labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "other"  # + ~~ is a nonfix
-    assert labels[1] == "both"  # + E is tangled
+    assert (
+        labels[0] == "other"
+    )  # - a = 3 is a nonfix: it is part of a variable renaming
+    assert (
+        labels[1] == "both"
+    )  # + b = 4 is tangled: contains both a fix and a variable renaming
