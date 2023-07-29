@@ -161,5 +161,9 @@ index 8422d40..682191b 100644
 """
     )
     labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "other"  # - a = 3 is a nonfix: it is part of a variable renaming
-    assert labels[1] == "both"  # + b = 4 is tangled: contains both a fix and a variable renaming
+    assert (
+        labels[0] == "other"
+    )  # - a = 3 is a nonfix: it is part of a variable renaming
+    assert (
+        labels[1] == "both"
+    )  # + b = 4 is tangled: contains both a fix and a variable renaming
