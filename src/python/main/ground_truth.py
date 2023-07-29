@@ -85,14 +85,11 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     )
     while i < len(original_lines):  # Align the fix lines and nonfix lines as Queues.
         line = original_lines[i]
-        print("LINE", line)
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
             print("This is a bug")
             return labels
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
-        print("fix line is: ", fix)
-        print("nonfix line is: ", nonfix)
         # Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
         if (
             line == fix and line != nonfix
@@ -108,7 +105,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix,
             fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if fix.split()[-1].strip() == nonfix.split()[-1].strip():
+            if fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip():
                 print("These are tangled lines: ", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
