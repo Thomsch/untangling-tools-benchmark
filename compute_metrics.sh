@@ -32,8 +32,7 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "Parallelization jobs log will be stored in /tmp/metrics.log"
-echo "$0: Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
+echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of ${logs_dir}:"
   ls -al "${logs_dir}"
@@ -51,15 +50,15 @@ generate_commit_metrics() {
   fi
   ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
   ret_code=$?
-  truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+  metrics_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
+  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}"
 }
 
 export -f generate_commit_metrics
-parallel --joblog /tmp/metrics.log --colsep "," generate_commit_metrics {} < "$bugs_file"
+parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
 
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of logs_dir ${logs_dir}:"
@@ -69,6 +68,8 @@ if [ -n "${DEBUG}" ] ; then
 fi
 
 metrics_results="${out_dir}/metrics.csv"
-cat "${metrics_dir}"/*.csv > "$metrics_results"
+
+echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
+cat "${metrics_dir}"/*.csv >> "$metrics_results"
 echo ""
 echo "Commit metrics are aggregated and saved in ${metrics_results}"

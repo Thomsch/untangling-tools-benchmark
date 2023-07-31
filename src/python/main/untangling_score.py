@@ -4,7 +4,7 @@
 Calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
 
 Command Line Args:
-    - evaluation/project/bug_id: Path to the evaluation subfolder of the D4J bug containing CSV
+    - evaluation/project/bug_id: Directory of evaluation of the D4J bug containing CSV
       files for: ground truth, 3 untangling results
     - project: D4J project name
     - bug_id: D4J bug id
@@ -155,7 +155,6 @@ def main(args):
 
         # Add Rand Index in respective tool order
         tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)
-
     print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
 
 

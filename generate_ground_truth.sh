@@ -10,7 +10,7 @@
 #     - target: The line number of the change if the change is an addition
 #     - group: 'fix' if the change is a fix, 'other' if the change is a non bug-fixing change
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
@@ -45,8 +45,7 @@ mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
 
-echo "Parallelization jobs log will be stored in /tmp/ground_truth.log"
-echo "Individual bug decomposition logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo "Logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
@@ -66,4 +65,4 @@ generate_truth_for_bug() {
 }
 
 export -f generate_truth_for_bug
-parallel --joblog /tmp/ground_truth.log --colsep "," generate_truth_for_bug {} < "$bugs_file"
+parallel --colsep "," generate_truth_for_bug {} < "$bugs_file"

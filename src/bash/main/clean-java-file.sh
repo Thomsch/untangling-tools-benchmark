@@ -14,7 +14,5 @@ fi
 
 file="$1"
 
-# The `sed` command uses a literal tab character instead of '\t'
-# because MacOSX does not understand the \t character.
-cpp "$file" | grep -v '^#' | sed 's/[ 	]+$//' | grep -v '^$' > "$file.cleaned"
+cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove in-line, block comments, trailing whitespaces, and blank lines
 mv -f "$file.cleaned" "$file"
