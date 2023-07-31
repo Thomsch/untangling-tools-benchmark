@@ -17,6 +17,9 @@ set -o allexport
 . .env
 set +o allexport
 
+# For debugging
+# set -x
+
 if [ $# -ne 3 ] ; then
     echo 'usage: generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
     echo 'example: generate_artifacts.sh Lang 1 path/to/Lang_1/'
