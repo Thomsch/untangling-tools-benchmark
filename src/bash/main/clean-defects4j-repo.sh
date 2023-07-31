@@ -93,7 +93,7 @@ add_cleaned_commit () {
   cp -rpf "$newdir/.git" "$tmpdir"
 
   cd "$newdir"
-  rm -rf -- .* *
+  rm -rf -- ..?* .[!.]* *
   cp -af "$tmpdir/." "$newdir"
   git add .
   git commit -q -m "$msg"
