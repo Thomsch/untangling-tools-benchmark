@@ -49,9 +49,14 @@ if [ ! -d .git ] ; then
   exit 1
 fi
 
-changed_files="$(git status --porcelain | wc -l)"
+if [ -z "${DEFECTS4J_HOME}" ]; then
+  echo 'Please set the DEFECTS4J_HOME environment variable.'
+  exit 1
+fi
 
-if [ "$changed_files" -gt 0 ] ; then
+num_changed_files="$(git status --porcelain | wc -l)"
+
+if [ "$num_changed_files" -gt 0 ] ; then
   echo "$0: run in a git clone without local changes"
   exit 1
 fi
@@ -72,9 +77,14 @@ cp -Rp "$olddir" "$newdir"
 rm -rf "$tmpdir"
 cp -Rp "$olddir" "$tmpdir"
 
+# Adds a new commit to the git clone in $newdir.
 add_cleaned_commit () {
   sha="$1"
   msg="$2"
+
+  ## Using these two commands is a bit more paranoid.
+  # rm -rf "$tmpdir"
+  # cp -Rp "$newdir" "$tmpdir"
 
   cd "$tmpdir"
   git checkout -q "$sha"
@@ -84,13 +94,14 @@ add_cleaned_commit () {
   (cd "$newdir" && find . -path ./.git -prune -o -name "." -prune -o -exec rm -rf {} +)
   cp -af "$tmpdir/." "$newdir"
   cd "$newdir"
-  git commit -q -am "$msg"
+  git add .
+  git commit -q -m "$msg"
   cp -rpf .git "$tmpdir"
 }
 
-add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION"
-add_cleaned_commit "$v2" "Cleaned FIXED_VERSION"
-add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION"
+add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION (= cleaned $v1)"
+add_cleaned_commit "$v2" "Cleaned FIXED_VERSION (= cleaned $v2)"
+add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION (= cleaned $v3)"
 
 cd "$olddir"
 # Delete the unclean directory and change the name of the cleaned directory to old format
