@@ -83,19 +83,21 @@ add_cleaned_commit () {
   msg="$2"
 
   ## Using these two commands is a bit more paranoid.
-  # rm -rf "$tmpdir"
-  # cp -Rp "$newdir" "$tmpdir"
+  rm -rf "$tmpdir"
+  cp -Rp "$newdir" "$tmpdir"
 
   cd "$tmpdir"
   git checkout -q "$sha"
   "$SCRIPTDIR"/clean-java-directory.sh
   rm -rf .git
-  # Remove everything but the .git directory in $newdir
-  (cd "$newdir" && find . -path ./.git -prune -o -name "." -prune -o -exec rm -rf {} +)
-  cp -af "$tmpdir/." "$newdir"
+  cp -rpf "$newdir/.git" "$tmpdir"
+
   cd "$newdir"
+  rm -rf -- .* *
+  cp -af "$tmpdir/." "$newdir"
   git add .
   git commit -q -m "$msg"
+  rm -rf "tmpdir/.git"
   cp -rpf .git "$tmpdir"
 }
 
