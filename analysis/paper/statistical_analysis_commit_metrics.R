@@ -8,8 +8,12 @@
 # - 3. The path to file where results will be saved.
 #
 # Output:
-# The results are saved as text data. The output file contains
-# the output of the summary() and cohen.d() functions.
+# 1. Generate `impact_metrics_all.txt`. This file contains the statistical model for all the metrics against the performance.
+# 2. Generate `impact_metrics_smartcommit_all.txt`. This file contains the statistical model for all the metrics against the performance of SmartCommit exclusively.
+# 3. Generate `impact_metrics_flexeme_all.txt`. This file contains the statistical model for all the metrics against the performance of Flexeme exclusively.
+# 4. Generate `smartcommit/` and `flexeme/` folders. Each folder contains
+# - `impact_<metric>_<tool>.txt`. Contains the statistical model for each `<metric>` available against the performance. `<tool>` corresponds to the name of the folder the file is in.
+# - `impact_separate_<tool>.pdf`. Contains a plot of the model for each metric against the performance separately.
 
 
 library(tidyverse)
