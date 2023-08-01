@@ -74,3 +74,7 @@ find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's%anonymous/defects4j%rj
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/washington/anonymous/gi'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/cs.washington/anonymous/gi'
 # The is no occurence of the school acronym anywhere
+
+# Move double-blind/README.MD to $OUT_DIR
+cp double-blind/README.MD "$out_dir"
+
