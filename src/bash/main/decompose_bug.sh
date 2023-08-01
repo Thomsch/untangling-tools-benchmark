@@ -50,8 +50,10 @@ if [ ! -d "${repository}" ] ; then
 fi
 
 # Commit hash is the revision_fixed_ID
-commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
-
+cd "$repository" || exit 1
+commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+export commit
+cd - || exit 1
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
 sourcepath="${sourcepath}:$(defects4j export -p dir.src.tests -w "${repository}")"
@@ -135,5 +137,5 @@ else
       decompose_exit_code=1
   fi
 fi
-exit $decompose_exit_code
 echo ""
+exit $decompose_exit_code

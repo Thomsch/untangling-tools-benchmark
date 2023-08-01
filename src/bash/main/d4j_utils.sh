@@ -45,7 +45,11 @@ retrieve_revision_ids () {
 
   # Check if the DEFECTS4J_HOME environment variable is set
   if [ -z "${DEFECTS4J_HOME}" ]; then
+<<<<<<< HEAD
     echo 'Please set the Defects4J environment variable to a Java 11 installation.'
+=======
+    echo 'Please set the DEFECTS4J_HOME environment variable.'
+>>>>>>> 6e03ea6a7454e7d3793149492f615051372f43fc
     return 1
   fi
 
