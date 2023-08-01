@@ -17,8 +17,8 @@ export out_dir="$1" # The directory where to put cleaned repositories
 mkdir -p "$out_dir"
 
 # Clone repositories
-# git clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark "$out_dir/untangling-tools-benchmark"
-# git clone --depth 1 https://github.com/Thomsch/flexeme "$out_dir/flexeme"
+git clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark "$out_dir/untangling-tools-benchmark"
+git clone --depth 1 https://github.com/Thomsch/flexeme "$out_dir/flexeme"
 
 # Delete .git .github .vscode folders in both repositories
 clean_repo() {
