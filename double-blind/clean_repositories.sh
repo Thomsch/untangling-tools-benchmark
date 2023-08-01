@@ -71,6 +71,8 @@ find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/mernst/anonymous/gi'
 
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's%anonymous/defects4j%rjust/defects4j%gi' # if we anonymize legitimate link to defects4j, it is suspicious.
 
+find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/rrjust/rjust/gi' # fix places where rjust became rrjust because of the defects4j replacements.
+
 # Replace school name with 'anonymous'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/washington/anonymous/gi'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/cs.washington/anonymous/gi'
