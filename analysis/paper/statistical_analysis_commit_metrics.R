@@ -8,17 +8,17 @@
 # - 3. The path to file where results will be saved.
 #
 # Output:
-# The results are saved as text data. The output file contains
-# the output of the summary() and cohen.d() functions.
+# 1. Generate `impact_metrics_all.txt`. This file contains the statistical model for all the metrics against the performance.
+# 2. Generate `impact_metrics_smartcommit_all.txt`. This file contains the statistical model for all the metrics against the performance of SmartCommit exclusively.
+# 3. Generate `impact_metrics_flexeme_all.txt`. This file contains the statistical model for all the metrics against the performance of Flexeme exclusively.
+# 4. Generate `smartcommit/` and `flexeme/` folders. Each folder contains
+# - `impact_<metric>_<tool>.txt`. Contains the statistical model for each `<metric>` available against the performance. `<tool>` corresponds to the name of the folder the file is in.
+# - `impact_separate_<tool>.pdf`. Contains a plot of the model for each metric against the performance separately.
 
 
 library(tidyverse)
-library(car)
-library(rstatix)
-library(ggpubr)
-library(lme4)
-library(effsize)
-library(lmerTest)
+library(flexplot)
+library(effsize) # For cohen.d
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -26,8 +26,8 @@ if (length(args)!=3) {
   stop("Please provide the path to decomposition_scores.csv, metrics.csv, and where to save the results.", call.=FALSE)
 }
 
-decompositionScoresPath = args[1]
-metricsPath = args[2]
+performance.path = args[1]
+metrics.path = args[2]
 outputPath = args[3]
 
 # Function to convert character columns to numeric
@@ -40,22 +40,75 @@ convert_to_numeric <- function(dataframe, numeric_variables) {
   return(dataframe)
 }
 
-decompositionScores <- read.csv(decompositionScoresPath, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
-metrics <- read.csv(metricsPath, header = FALSE, col.names = c('Project', 'BugID',"FilesUpdated","TestFilesUpdated","Hunks","AverageHunkSize","CodeLines","NoncodeLines","TangledLineCount","TangledHunkCount"))
-# Merge the decomposition scores and metrics files. See Jupyter notebook `analysis.ipynb` for details.
-mergedData <- merge(decompositionScores, metrics, by=c('Project', 'BugID'))
-mergedData <- na.omit(mergedData)
-mergedData <- convert_to_numeric(mergedData, c("FilesUpdated","TestFilesUpdated","Hunks","AverageHunkSize","CodeLines","NoncodeLines","TangledLineCount","TangledHunkCount"))
+# Summarizes a linear model for the given data on the performance vs commit metrics.
+# Prints the results to a new file in a path.
+summarise_model_all_variables <- function(data, output.path, output.filename) {
+  # Simple model because we proved in RQ1 that bug_id and project are not significant.
+  
+  if("Tool" %in% colnames(data))
+  {
+    model <- lm(performance ~ Tool + files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=data)
+  } else {
+    model <- lm(performance ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=data)
+  }
+  
+  capture.output(summary(model), file=file.path(output.path, output.filename))
+}
 
-# Convert to long format
-data_long = pivot_longer(mergedData, cols = c('SmartCommit', 'Flexeme'), names_to = 'Tool', values_to = 'Performance')
-model <- lmer(Performance ~ Tool + FilesUpdated + Hunks + AverageHunkSize + CodeLines + NoncodeLines + TangledLineCount + TangledHunkCount + (1|Project) + (1|BugID), data=data_long)
+# Summarizes a linear model for performance against each metrics separately.
+# Print the model summary to a file and generates a plot of the model.
+# Arguments
+# data: the dataframe containing the data
+# metrics.names: a list of metrics to generate the summary and plot for
+# output.tool: name of the tool the data belongs to
+# output.path: where to generate the summary and plot
+generate_pairwise_analysis <- function(data, metrics.names, output.tool, output.path) {
+  output.tool.path <- file.path(output.path, output.tool)
+  dir.create(output.tool.path, showWarnings = FALSE)
+  
+  rplot.path <- file.path(getwd(), "Rplots.pdf")
+  output.file.name <- paste("impact", "separate", output.tool, sep = '_')
+  output.file.pdf <- paste(output.file.name, '.pdf', sep = '')
+  
+  pdf(file.path(output.tool.path, output.file.pdf))
 
-# p-value, R^2
-sink(outputPath)
-summary(model)
+  for (metric.name in metrics.names) {
+    lm_formula <- as.formula(paste("performance", "~", metric.name))
+    model <- lm(lm_formula, data=data)
+    
+    output.file.name <- paste("impact", metric.name, output.tool, sep = '_')
+    output.file.txt <- paste(output.file.name, '.txt', sep = '')
+    capture.output(summary(model), file=file.path(output.tool.path, output.file.txt))
+    capture.output(cohen.d(data$performance, data[[metric.name]]), file=file.path(output.tool.path, output.file.txt), append = TRUE)
+    
+    print(visualize(model, "model", alpha = 0.1, jitter = c(0.3, .1)))
+  }
+  
+  dev.off()
+}
 
-# Cohen's d for statistically significant metrics
-cohen.d(data_long$TangledHunkCount, data_long$Performance)
-cohen.d(data_long$CodeLines, data_long$Performance)
-sink()
+# Decomposition scores
+performance.data <- read.csv(performance.path, header = FALSE, col.names = c('project', 'bug_id', 'smartcommit_rand_index', 'flexeme_rand_index', 'file_untangling'))
+
+# Commit metrics
+metrics.data <- read.csv(metrics.path)
+metrics.names <- colnames(metrics.data %>% select(-c('project', 'vid')))
+
+# Join performance with metrics
+performance.metrics <- left_join(performance.data, metrics.data, by = c('project' = 'project', 'bug_id' = 'vid')) %>% select(-c('file_untangling'))
+
+# Global
+performance.metrics.long = pivot_longer(performance.metrics, cols = c('smartcommit_rand_index', 'flexeme_rand_index'), names_to = 'Tool', values_to = 'performance')
+summarise_model_all_variables(performance.metrics.long, outputPath, "impact_metrics_all.txt")
+
+# SmartCommit All
+performance.metrics.smartcommit <- select(performance.metrics, -c('flexeme_rand_index'))  %>% rename(performance = smartcommit_rand_index)
+summarise_model_all_variables(performance.metrics.smartcommit, outputPath, "impact_metrics_smartcommit_all.txt")
+
+# Flexeme All
+performance.metrics.flexeme <- select(performance.metrics, -c('smartcommit_rand_index'))  %>% rename(performance = flexeme_rand_index)
+summarise_model_all_variables(performance.metrics.flexeme, outputPath, "impact_metrics_flexeme_all.txt")
+
+# For each metric, do model analysis and print graph in pdf
+generate_pairwise_analysis(performance.metrics.smartcommit, metrics.names, "smartcommit", outputPath)
+generate_pairwise_analysis(performance.metrics.flexeme, metrics.names, "flexeme", outputPath)
