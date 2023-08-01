@@ -84,11 +84,9 @@ generate_pairwise_analysis <- function(data, metrics.names, output.tool, output.
 }
 
 # Decomposition scores
-performance.path <- './analysis/data/decomposition_scores.csv'
 performance.data <- read.csv(performance.path, header = FALSE, col.names = c('project', 'bug_id', 'smartcommit_rand_index', 'flexeme_rand_index', 'file_untangling'))
 
 # Commit metrics
-metrics.path <- './analysis/data/metrics.csv'
 metrics.data <- read.csv(metrics.path)
 metrics.names <- colnames(metrics.data %>% select(-c('project', 'vid')))
 
