@@ -45,7 +45,7 @@ retrieve_revision_ids () {
 
   # Check if the DEFECTS4J_HOME environment variable is set
   if [ -z "${DEFECTS4J_HOME}" ]; then
-    echo 'Please set DEFECTS4J_HOME to the Defects4J repository.'
+    echo 'Please set the DEFECTS4J_HOME environment variable.'
     return 1
   fi
 
