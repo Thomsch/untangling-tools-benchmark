@@ -30,3 +30,5 @@ src/python/test/e2e/evaluation/**
 src/python/test/e2e/metrics.csv
 src/python/test/e2e/decomposition_scores.csv
 .Rproj.user
+
+untangling-tools-benchmark.Rproj
