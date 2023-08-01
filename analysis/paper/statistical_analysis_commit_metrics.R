@@ -14,7 +14,7 @@
 
 library(tidyverse)
 library(flexplot)
-library(cowplot)
+library(effsize) # For cohen.d
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -75,6 +75,7 @@ generate_pairwise_analysis <- function(data, metrics.names, output.tool, output.
     output.file.name <- paste("impact", metric.name, output.tool, sep = '_')
     output.file.txt <- paste(output.file.name, '.txt', sep = '')
     capture.output(summary(model), file=file.path(output.tool.path, output.file.txt))
+    capture.output(cohen.d(data$performance, data[[metric.name]]), file=file.path(output.tool.path, output.file.txt), append = TRUE)
     
     print(visualize(model, "model", alpha = 0.1, jitter = c(0.3, .1)))
   }
@@ -109,10 +110,3 @@ summarise_model_all_variables(performance.metrics.flexeme, outputPath, "impact_m
 # For each metric, do model analysis and print graph in pdf
 generate_pairwise_analysis(performance.metrics.smartcommit, metrics.names, "smartcommit", outputPath)
 generate_pairwise_analysis(performance.metrics.flexeme, metrics.names, "flexeme", outputPath)
-
-
-# 
-# # Cohen's d for statistically significant metrics
-# cohen.d(data_long$TangledHunkCount, data_long$Performance)
-# cohen.d(data_long$CodeLines, data_long$Performance)
-# sink()
