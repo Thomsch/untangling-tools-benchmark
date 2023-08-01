@@ -35,6 +35,7 @@ clean_repo "$out_dir/flexeme"
 # Replace Github user ids thomsch, thanhdang2712, rjust, mernst with 'anonymous'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/thomsch/anonymous/gi'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/thanhdang2712/anonymous/gi'
+find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/thdang/anonymous/gi'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/rjust/anonymous/gi'
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/mernst/anonymous/gi'
 
