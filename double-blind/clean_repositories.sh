@@ -18,6 +18,7 @@ mkdir -p "$out_dir"
 # Clone repositories
 git clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark "$out_dir/untangling-tools-benchmark"
 git clone --depth 1 https://github.com/Thomsch/flexeme "$out_dir/flexeme"
+
 echo "Cloned repositories into $out_dir"
 echo "Cleaning all files in $out_dir"
 
