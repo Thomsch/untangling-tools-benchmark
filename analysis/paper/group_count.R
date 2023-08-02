@@ -19,7 +19,7 @@ data <- read.csv(inputFile)
 data$BugId <- as_factor(data$BugId)
 
 groupCount <- data %>% group_by(Project, BugId, Treatment) %>% summarise(GroupCount = n_distinct(Group))
-summary <- groupCount %>% group_by(Treatment) %>% summarise("Min."=min(GroupCount), "Max."=max(GroupCount), "Median."=median(GroupCount), "Std. Dev."=sd(GroupCount))
+summary <- groupCount %>% group_by(Treatment) %>% summarise("Min."=min(GroupCount), "Max."=max(GroupCount), "Median"=median(GroupCount), "Std. dev."=sd(GroupCount))
 summary.table <- xtable(summary)
 
 print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = TRUE, include.rownames = FALSE, file=outputFile)

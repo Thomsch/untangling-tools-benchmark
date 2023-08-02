@@ -37,10 +37,13 @@ def print_performance(decomposition_path):
     flexeme_median = agg_results["flexeme_rand_index"]
     file_rand_index_median = agg_results["file_rand_index.csv"]
 
-    print(f"Number of D4J bugs: {bug_count}")
-    print(f"SmartCommit Median: {smartcommit_median:.2f}")
-    print(f"Flexeme Median: {flexeme_median:.2f}")
-    print(f"File Rand Index Median: {file_rand_index_median:.2f}")
+    print("% All the data used in the text is one file so that it can be easily updated.")
+    print("% Generated automatically")
+
+    print(f"\\newcommand\\numberOfBugs{{{bug_count} }}")
+    print(f"\\newcommand\\smartCommitMedian{{{smartcommit_median:.2f} }}")
+    print(f"\\newcommand\\flexemeMedian{{{flexeme_median:.2f} }}")
+    print(f"\\newcommand\\fileUntanglingMedian{{{file_rand_index_median:.2f} }}")
 
 
 def main():

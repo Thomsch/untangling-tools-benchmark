@@ -19,7 +19,7 @@ data <- read.csv(inputFile)
 data$BugId <- as_factor(data$BugId)
 
 groupSize <- data %>% group_by(Project, BugId, Treatment, Group) %>% summarise(n = n())
-summary <- groupSize %>% group_by(Treatment) %>% summarise("Min."=min(n), "Max."=max(n), "Median"=median(n), "Std. Dev."=sd(n))
+summary <- groupSize %>% group_by(Treatment) %>% summarise("Min."=min(n), "Max."=max(n), "Median"=median(n), "Std. dev."=sd(n))
 
 summary.table <- xtable(summary)
 

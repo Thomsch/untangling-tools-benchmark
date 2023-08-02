@@ -32,3 +32,7 @@ src/python/test/e2e/decomposition_scores.csv
 .Rproj.user
 
 untangling-tools-benchmark.Rproj
+
+.RData
+
+.Rhistory
