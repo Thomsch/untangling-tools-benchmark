@@ -14,12 +14,12 @@ library(xtable)
 
 args = commandArgs(trailingOnly=TRUE)
 
-if (length(args)!=2) {
+if (length(args)!=3) {
   stop("Please provide an input file and output file.", call.=FALSE)
 }
-
-inputFile = args[1]
-outputFile = args[2]
+repository=args[1]
+inputFile = args[2]
+outputFile = args[3]
 
 #
 # We use R to handle the linear mixed models because Python doesn't support lmms with 2 random effects (cross effects).
@@ -37,7 +37,9 @@ model_mixed <- lmer(Performance ~ Tool + (1|Project) + (1|BugID), data=data_long
 # Simplified m
 model_simple <- lm(Performance ~ Tool, data=data_long)
 
+comparisonFile=paste(repository,"/data/model_comparison", '.txt', sep = '')
 # Printing on the console
+sink(comparisonFile)
 print("Model with Random Effects")
 summary(model_mixed) # Coefficients and P-Value
 rsq(model_mixed, adj=TRUE) # Adjusted R^2
@@ -45,6 +47,15 @@ rsq(model_mixed, adj=TRUE) # Adjusted R^2
 print("Model without Random Effects")
 summary(model_simple) # Coefficients and P-Value
 rsq(model_simple, adj=TRUE) # Adjusted R^2
+
+# Adjusted R-squared for the 2 models
+summary <- data.frame(
+  Model = c("With Random Effects", "Without Random Effects"),
+  Adjusted_R = t(cbind(rsq(model_mixed, adj=TRUE)[1], rsq(model_simple, adj=TRUE)[1]))
+)
+colnames(summary) <- c("Model", "Adjusted R^2")
+print(summary)
+sink()
 
 # Print results in tidy format.
 
@@ -66,11 +77,3 @@ addtorow$command <- paste0(paste0('& \\multicolumn{2}{c}{', c("Coefficient","P-v
 
 # Multicolumn table with 2 tools as independent variables
 print(tool_stats, add.to.row=addtorow, include.colnames=F, timestamp	= NULL, comment = TRUE, include.rownames = TRUE, file=outputFile)
-
-# Adjusted R-squared for the 2 models
-summary <- data.frame(
-  Model = c("With Random Effects", "Without Random Effects"),
-  Adjusted_R = t(cbind(rsq(model_mixed, adj=TRUE)[1], rsq(model_simple, adj=TRUE)[1]))
-)
-colnames(summary) <- c("Model", "Adjusted R^2")
-print(summary)
