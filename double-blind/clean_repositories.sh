@@ -84,3 +84,6 @@ cp double-blind/README.MD "$out_dir"
 
 # Remove cleaning script and README.MD from the cleaned repository
 rm -rf "$out_dir/untangling-tools-benchmark/double-blind"
+
+# Delete macOS-specific files
+find "$out_dir" -name '.DS_Store' -type f -delete
