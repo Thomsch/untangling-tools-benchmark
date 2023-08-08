@@ -1,5 +1,4 @@
 project,bug_id,flexeme_exists,smartcommit_exists
-Invalid subdirectory name: /Users/thanhdang/untangling-tools-benchmark/result-0729/evaluation. Expected to be of the form <project>_<bug_id>
 Math,89,True,True
 Math,42,True,True
 Math,102,True,True
@@ -356,7 +355,7 @@ JacksonDatabind,21,False,True
 Closure,66,True,True
 Closure,115,True,True
 Closure,92,True,True
-Time,25,False,True
+Time,25,True,True
 Jsoup,54,True,True
 Csv,11,True,True
 Compress,45,True,True
@@ -724,7 +723,7 @@ Closure,65,False,True
 Closure,116,True,True
 Closure,91,True,True
 Jsoup,57,True,True
-Time,26,False,True
+Time,26,True,True
 Lang,17,True,True
 JacksonDatabind,25,False,True
 Jsoup,50,True,True
