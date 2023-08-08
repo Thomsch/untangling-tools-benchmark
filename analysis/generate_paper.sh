@@ -39,7 +39,9 @@ fi
 python analysis/paper/count_missing_results.py "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
 
 # Generates the performance statistics
-python analysis/paper/median_performance.py "${UNTANGLING_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performances.txt"
+python analysis/paper/median_performance.py "${UNTANGLING_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performances.tex"
+
+python analysis/paper/flexeme_no_changes.sh "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
 
 #
 # Tables
@@ -54,7 +56,7 @@ Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "$
 #
 Rscript analysis/paper/performance_distribution.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/figures/rq1-performance-distribution.pdf"
 Rscript analysis/paper/statistical_analysis_untangling_tool.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/data/rq1.txt"
-Rscript analysis/paper/compare_models.R "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex"
+Rscript analysis/paper/compare_models.R "${PAPER_REPOSITORY}" "${UNTANGLING_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex"
 
 #
 # RQ2
