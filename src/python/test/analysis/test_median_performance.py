@@ -28,9 +28,11 @@ def test_calculate_performance(sample_decompositions_csv, capfd):
     print_performance(sample_decompositions_csv)
     captured = capfd.readouterr()
     expected_output = (
-        "Number of D4J bugs: 4\n"
-        "SmartCommit Median: 0.75\n"
-        "Flexeme Median: 0.65\n"
-        "File Rand Index Median: 0.55\n"
+        "% All the data used in the text is one file so that it can be easily updated.\n"
+        "% Generated automatically\n"
+        "\\newcommand\\numberOfBugs{4 }\n"
+        "\\newcommand\\smartCommitMedian{0.75 }\n"
+        "\\newcommand\\flexemeMedian{0.65 }\n"
+        "\\newcommand\\fileUntanglingMedian{0.55 }\n"
     )
     assert captured.out == expected_output

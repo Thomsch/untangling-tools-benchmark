@@ -43,9 +43,11 @@ index 8422d40..682191b 100644
 +~
 """
     )
-    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "other"  # + ~ is a nonfix
-    assert labels[1] == "fix"  # + E is a fix
+    ground_truth_df = ground_truth.classify_diff_lines(
+        original_diff, fix_diff, nonfix_diff
+    )
+    assert ground_truth_df.iloc[0]["group"] == "other"  # + ~ is a nonfix
+    assert ground_truth_df.iloc[1]["group"] == "fix"  # + E is a fix
 
 
 def test_overlap_lines_correctly_labelled():
@@ -110,17 +112,19 @@ index 8422d40..682191b 100644
 """
     )
 
-    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
-    assert labels[0] == "fix"  # + ~~ is a fix
-    assert labels[1] == "fix"  # + ~ is a fix
-    assert labels[2] == "fix"  # + E is a fix
-    assert labels[3] == "other"  # + // is a nonfix
-    assert labels[4] == "other"  # + ~~ is a nonfix
-    assert labels[5] == "other"  # + F is a fix
-    assert labels[6] == "fix"  # + E is a fix
-    assert labels[7] == "other"  # + F is a nonfix
-    assert labels[8] == "other"  # + G is a nonfix
-    assert labels[9] == "other"  # + D is a nonfix
+    ground_truth_df = ground_truth.classify_diff_lines(
+        original_diff, fix_diff, nonfix_diff
+    )
+    assert ground_truth_df.iloc[0]["group"] == "fix"  # + ~~ is a fix
+    assert ground_truth_df.iloc[1]["group"] == "fix"  # + ~ is a fix
+    assert ground_truth_df.iloc[2]["group"] == "fix"  # + E is a fix
+    assert ground_truth_df.iloc[3]["group"] == "other"  # + // is a nonfix
+    assert ground_truth_df.iloc[4]["group"] == "other"  # + ~~ is a nonfix
+    assert ground_truth_df.iloc[5]["group"] == "other"  # + F is a fix
+    assert ground_truth_df.iloc[6]["group"] == "fix"  # + E is a fix
+    assert ground_truth_df.iloc[7]["group"] == "other"  # + F is a nonfix
+    assert ground_truth_df.iloc[8]["group"] == "other"  # + G is a nonfix
+    assert ground_truth_df.iloc[9]["group"] == "other"  # + D is a nonfix
 
 
 def test_tangled_both_label_correctly_tagged():
@@ -160,10 +164,12 @@ index 8422d40..682191b 100644
 + b = 4
 """
     )
-    labels = ground_truth.classify_diff_lines(original_diff, fix_diff, nonfix_diff)
+    ground_truth_df = ground_truth.classify_diff_lines(
+        original_diff, fix_diff, nonfix_diff
+    )
     assert (
-        labels[0] == "other"
+        ground_truth_df.iloc[0]["group"] == "other"
     )  # - a = 3 is a nonfix: it is part of a variable renaming
-    assert (
-        labels[1] == "both"
-    )  # + b = 4 is tangled: contains both a fix and a variable renaming
+    assert ground_truth_df.iloc[1]["group"] == "fix"
+    assert ground_truth_df.iloc[2]["group"] == "other"
+    # + b = 4 is tangled: contains both a fix and a variable renaming
