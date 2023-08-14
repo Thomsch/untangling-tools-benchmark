@@ -133,7 +133,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix_lines.popleft()
         if line_is_tangled and ground_truth_df.loc[i, "group"] == "fix":
             # Found the case of a tangled line, this line will have 2 labels, 'fix' and 'other' (2 rows) in the ground truth Dataframe
-            tangled_line_duplicate_tag = ground_truth_df.iloc[i : (i + 1)].copy()
+            tangled_line_duplicate_tag = ground_truth_df.iloc[i: (i + 1)].copy()
             tangled_line_duplicate_tag["group"] = "other"
             ground_truth_df = pd.concat(
                 [ground_truth_df, tangled_line_duplicate_tag], ignore_index=True
