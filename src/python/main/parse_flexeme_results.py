@@ -91,9 +91,9 @@ def main():
                 logging.error(f"Update {update_type} unsupported")
                 continue
 
-        # Merge results per line. Might not need to merge results per line
-        #  since the data is calculated using a left join on the truth.
-        export_csv(output_path, result)
+    # Merge results per line. Might not need to merge results per line
+    #  since the data is calculated using a left join on the truth.
+    export_csv(output_path, result)
 
 
 def export_csv(output_path, result):
