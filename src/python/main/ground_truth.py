@@ -106,9 +106,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix,
             fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if (
-                fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip()
-            ):  # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
+            if fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip():    # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
                 print(f"These are tangled lines: \n {fix} \n {nonfix}", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
@@ -133,7 +131,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix_lines.popleft()
         if line_is_tangled and ground_truth_df.loc[i, "group"] == "fix":
             # Found the case of a tangled line, this line will have 2 labels, 'fix' and 'other' (2 rows) in the ground truth Dataframe
-            tangled_line_duplicate_tag = ground_truth_df.iloc[i : (i + 1)].copy()
+            tangled_line_duplicate_tag = ground_truth_df.loc[[i]].copy()
             tangled_line_duplicate_tag["group"] = "other"
             ground_truth_df = pd.concat(
                 [ground_truth_df, tangled_line_duplicate_tag], ignore_index=True
