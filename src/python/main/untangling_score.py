@@ -2,7 +2,7 @@
 
 """
 Calculates the Performance Metric for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
-The Performance Metric is not the Rand Index by its definition per se, but a variant of the Rand Index. To explain, 
+The Performance Metric is not the Rand Index by its definition per se, but a variant of the Rand Index. To explain,
 the Rand Index determines clustering of an element as one single label, but our metic can assign multiple labels for one
 element (i.e. one diff line).
 Command Line Args:
