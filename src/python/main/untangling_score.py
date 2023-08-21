@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
-
+Calculates the Performance Metric for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
+The Performance Metric is not the Rand Index by its definition per se, but a variant of the Rand Index. To explain,
+the Rand Index determines clustering of an element as one single label, but our metic can assign multiple labels for one
+element (i.e. one diff line).
 Command Line Args:
     - evaluation/project/bug_id: Directory of evaluation of the D4J bug containing CSV
       files for: ground truth, 3 untangling results
