@@ -5,10 +5,9 @@ Generates the line-wise ground truth.
 
 The ground truth classifies each diff line as a non-bug-fixing change
 (group='other'), a bug-fixing change (group='fix'), or a tangled change
-(group='both').
+(group='other','fix').
 
 The tests, comments, and imports are ignored from the original changes.
-The current implementation cannot identify tangled lines (i.e. a line that belongs to both groups).
 
 Command Line Args:
     project: D4J Project name
@@ -17,7 +16,7 @@ Command Line Args:
 
 Returns:
     The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
-    CSV header: {file, source, target, group='fix','other','both'}
+    CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
@@ -107,7 +106,9 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix,
             fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip():
+            if (
+                fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip()
+            ):  # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
                 print(f"These are tangled lines: \n {fix} \n {nonfix}", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
@@ -132,7 +133,7 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix_lines.popleft()
         if line_is_tangled and ground_truth_df.loc[i, "group"] == "fix":
             # Found the case of a tangled line, this line will have 2 labels, 'fix' and 'other' (2 rows) in the ground truth Dataframe
-            tangled_line_duplicate_tag = ground_truth_df.iloc[i : (i + 1)].copy()
+            tangled_line_duplicate_tag = ground_truth_df.loc[[i]].copy()
             tangled_line_duplicate_tag["group"] = "other"
             ground_truth_df = pd.concat(
                 [ground_truth_df, tangled_line_duplicate_tag], ignore_index=True
@@ -166,7 +167,6 @@ def main():
     )
 
     ground_truth_df = classify_diff_lines(original_diff, bug_fix_diff, nonfix_diff)
-
     ground_truth_df.to_csv(out_path, index=False)
 
 
