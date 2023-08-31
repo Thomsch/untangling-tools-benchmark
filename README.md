@@ -135,7 +135,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 ## Directory structure
 - `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.
-- `bin/`: Contains binaries of untangling tools (when applicable)
+- `lib/`: Contains binaries of untangling tools (when applicable)
 - `data/`: Contains list of Defects4J bugs to run the evaluation on
 - `src/`: Experimental infrastructure scripts
   - `python/`: Python files
