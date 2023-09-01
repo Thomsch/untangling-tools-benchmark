@@ -8,7 +8,7 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 if [[ $# -ne 1 ]] ; then
     echo 'usage: aggregate_time.sh <out_dir>'
-    echo 'example: changed_lines.sh ~/untangling-evaluation'
+    echo 'example: aggregate_time.sh ~/untangling-evaluation'
     exit 1
 fi
 
