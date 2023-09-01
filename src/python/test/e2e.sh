@@ -1,6 +1,6 @@
 #!/bin/bash
 # Run the evaluation pipeline end-to-end on 5 bug files: Closure_78, Closure_98, CSV_8, Jsoup_24, Lang_63.
-# The decomposition and untangling results are stored in the /e2e folder. 
+# The decomposition and untangling results are stored in the e2e/ folder. 
 # The script calls evaluate.sh on the 5 bugs and writes to 2 output files: `decompositions.csv` and `metrics.csv`.
 # These 2 aggregated files are expected to be identical to the corresponding goal files.
 
@@ -33,7 +33,7 @@ export metrics_goal="${out_dir}/metrics_goal.csv"
 export decomposition_scores_goal="${out_dir}/decomposition_scores_goal.csv"
 
 
-# Run the 5_bug example and write output files to /e2e
+# Run the 5_bug example and write output files to e2e/
 echo "about to run compute_metrics.sh"
 ./compute_metrics.sh "$bugs_file" "$out_dir"
 echo "compute_metrics.sh: done"
