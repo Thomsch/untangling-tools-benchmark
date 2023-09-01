@@ -55,7 +55,7 @@ generate_truth_for_bug() {
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug ground truth generation
   
-  ./src/bash/main/ground_truth_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_ground_truth.log" 2>&1
+  ./src/bash/main/ground_truth_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_ground_truth.log" 2>&1
   ret_code=$?
   truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"

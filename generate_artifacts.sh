@@ -58,7 +58,7 @@ generate_artifacts_for_bug() {
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug ground truth generation
   
-  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository" > "${logs_dir}/${project}_${vid}_artifacts.log" 2>&1
+  ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository" > "${logs_dir}/${project}_${vid}_artifacts.log" 2>&1
   ret_code=$?
   artifacts_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"

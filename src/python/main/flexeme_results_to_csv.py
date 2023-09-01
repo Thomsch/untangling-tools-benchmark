@@ -42,7 +42,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: parse_flexeme_results.py <path/to/root/results> <path/to/out/file>"
+            "usage: flexeme_results_to_csv.py <path/to/root/results> <path/to/out/file>"
         )
         sys.exit(1)
 

@@ -15,7 +15,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 4 ] ; then
-    echo 'usage: decompose_bug.sh <project> <vid> <out_dir> <repository>'
+    echo 'usage: untangle_with_tools.sh <project> <vid> <out_dir> <repository>'
     exit 1
 fi
 
@@ -46,7 +46,7 @@ echo "Decompositing project $project, bug $vid, repository $repository"
 # If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
-  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+  ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository"
 fi
 
 # Commit hash is the revision_fixed_ID
@@ -112,7 +112,7 @@ if [ -f "$smartcommit_result_out" ] && [ $regenerate_results = false ]; then
   echo 'Parsing SmartCommit results ............................................. CACHED'
 else
   echo 'Parsing SmartCommit results ...............................................'
-  if python3 src/python/main/parse_smartcommit_results.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
+  if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_untangling_path}/${project}_${vid}/${commit}" "$smartcommit_result_out"
   then
       echo 'Parsing SmartCommit results ............................................... OK'
   else
@@ -129,7 +129,7 @@ if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
   echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
 else
   echo 'Parsing Flexeme results ...............................................'
-  if python3 src/python/main/parse_flexeme_results.py "$flexeme_untangling_graph" "$flexeme_result_out"
+  if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$flexeme_result_out"
   then
       echo 'Parsing Flexeme results ................................................... OK'
   else

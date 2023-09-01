@@ -26,7 +26,7 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
-from parse_patch import to_csv
+from patch_to_csv import to_csv
 from parse_utils import export_tool_decomposition_as_csv
 
 
@@ -45,7 +45,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>"
+            "usage: smartcommit_results_to_csv.py <path/to/root/results> <path/to/out/file>"
         )
         sys.exit(1)
 
