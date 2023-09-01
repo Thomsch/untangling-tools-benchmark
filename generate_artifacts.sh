@@ -48,7 +48,7 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_artifacts.log"
+echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_artifacts.log"
 echo ""
 
 generate_artifacts_for_bug() {
