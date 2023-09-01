@@ -61,10 +61,10 @@ classpath="$(defects4j export -p cp.compile -w "${repository}")"
 classpath="${classpath}:$(defects4j export -p cp.test -w "${repository}")"
 
 echo ""
-smartcommit_untangling_results="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
+smartcommit_untangling_results_dir="${smartcommit_untangling_path}/${project}_${vid}/${commit}"
 
 # Untangle with SmartCommit
-if [ -d "$smartcommit_untangling_results" ]; then
+if [ -d "$smartcommit_untangling_results_dir" ]; then
   echo 'Untangling with SmartCommit ............................................. CACHED'
   regenerate_results=false
 else
@@ -73,7 +73,7 @@ else
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_path"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
-  echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results}/time.csv"
+  echo "${project},${vid},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results_dir}/time.csv"
   echo 'Untangling with SmartCommit ............................................... OK'
   regenerate_results=true
 fi
