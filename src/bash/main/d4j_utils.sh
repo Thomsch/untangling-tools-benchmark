@@ -43,12 +43,6 @@ retrieve_revision_ids () {
   local project="$1"
   local bug_id="$2"
 
-  # Check if the DEFECTS4J_HOME environment variable is set
-  if [ -z "${DEFECTS4J_HOME}" ]; then
-    echo 'Please set the DEFECTS4J_HOME environment variable.'
-    return 1
-  fi
-
   # Retrieve the path to the active-bugs.csv file
   csv_file="${DEFECTS4J_HOME}/framework/projects/${project}/active-bugs.csv"
 

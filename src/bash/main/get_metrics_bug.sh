@@ -12,11 +12,9 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck source=/dev/null
-if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-  . .env
-fi
+. "$SCRIPTDIR"/../../../env.sh
 set +o allexport
 
 if [ $# -ne 4 ] ; then

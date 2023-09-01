@@ -8,11 +8,12 @@
 
 set -o errexit
 set -o nounset
+
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck disable=SC1091 # File does not exist in repository.
-if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-  . .env
-fi
+. "$SCRIPTDIR"/../../../env.sh
 set +o allexport
 
 # Check Python is 3.8.15 for Flexeme.
@@ -27,12 +28,6 @@ java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-
 if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
     echo "$0: please use Java 8 instead of ${java_version}"
     exit 1
-fi
-
-# Check JAVA 11 is installed and on PATH. Defects4J will use whatever is on JAVA_HOME.
-if [[ -z "${JAVA11_HOME}" ]]; then
-  echo "$0: please set the JAVA11_HOME environment variable to a Java 11 installation."
-  exit 1
 fi
 
 # Check for each program in the system's PATH

@@ -44,13 +44,13 @@ fi
 project="$1"
 vid="$2"
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/../../../env.sh
+set +o allexport
+
 if [ ! -d .git ] ; then
   echo "$0: run at the top level of a git repository"
-  exit 1
-fi
-
-if [ -z "${DEFECTS4J_HOME}" ]; then
-  echo 'Please set the DEFECTS4J_HOME environment variable.'
   exit 1
 fi
 

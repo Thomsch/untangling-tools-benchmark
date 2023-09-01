@@ -51,7 +51,7 @@ If the dependency `pygraphviz` fails to install, visit https://pygraphviz.github
 
 5. Do one of the following two:
     * Ensure that the `DEFECTS4J_HOME` and `JAVA11_HOME` environment variables are set.
-    * Run `cp .env-template .env` and fill in the environment variables in `.env`.
+    * Run `cp .env-template .env.sh` and fill in the environment variables in `.env.sh`.
 
 ## Terminology
 - Program diff: The diff between the buggy and fixed version in the VCS
@@ -143,7 +143,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
     - `test/`: Python tests
   - `bash/`: Bash files
     - `main/`: Bash source code for the evaluation
-- `.env-template`: Template for the `.env` file containing computer-specific environment variables and paths
+- `.env-template`: Template for the `.env.sh` file containing computer-specific environment variables and paths
 - `conftest.py`: Pytest configuration
 - `evaluate.sh`: Script to run the evaluation on one Defects4J bug
 - `evaluate_all.sh`: Script to run the evaluation for a list of Defects4J bugs

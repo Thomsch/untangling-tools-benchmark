@@ -23,7 +23,12 @@ PROJECT=$1
 VID=$2
 REPO="$3"
 
-source ./src/bash/main/d4j_utils.sh
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/env.sh
+set +o allexport
+
+. "$SCRIPTDIR"/d4j_utils.sh
 
 # Parse the returned result into two variables
 result=$(retrieve_revision_ids "$PROJECT" "$VID")

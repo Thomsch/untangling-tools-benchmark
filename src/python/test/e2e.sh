@@ -13,12 +13,10 @@ if [ $# -ne 0 ] ; then
     exit 1
 fi
 
-if [ ! -f .env ] ; then
-    if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-        echo "$0: no .env file found"
-        exit 1
-    fi
-fi
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/../../../env.sh
+set +o allexport
 
 echo "Using untangling-tools-benchmark commit: $(git show --oneline | head -1)"
 

@@ -6,7 +6,7 @@ out/
 tmp/
 .tmp/
 data/corpora_clean
-.env
+.env.sh
 
 # Python
 __pycache__

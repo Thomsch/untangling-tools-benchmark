@@ -12,9 +12,9 @@
 # - buggy.java: The buggy source code after all non-bug fixes are applied
 # - fixed.java: The fixed source code in version control
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck source=/dev/null
-. .env
+. "$SCRIPTDIR"/../../../env.sh
 set +o allexport
 
 # For debugging
@@ -57,44 +57,44 @@ diff_dir="${repository}/diff"
 bug_fix_diff_out="${diff_dir}/BF.diff"
 
 if [ -f "$bug_fix_diff_out" ]; then
-    echo -ne 'Generating diff and code artifacts ................................................ CACHED\r'
-else
-    . ./src/bash/main/d4j_utils.sh
-
-    cd "$repository" || exit 1
-    mkdir -p "$diff_dir"
-    
-    # Get the 3 cleaned commit hashes
-    revision_buggy=$(git rev-parse HEAD)
-    revision_fixed=$(git rev-parse HEAD~1)
-    revision_original=$(git rev-parse HEAD~2)
-
-    # D4J bug-inducing minimized patch
-    inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
-    if [ ! -f "${inverted_patch}" ] ; then
-        echo "Bad project or bug id; file does not exist: ${inverted_patch}"
-        exit 1
-    fi
-
-    cd "$workdir"|| exit 1
-
-    # Generate the VC diff but not clean yet, to generate commit metrics first
-    d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
-    # Generate the 3 diff files with no context lines, then clean the diffs.
-    d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC_clean.diff"
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/VC_clean.diff"
-    d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" >> "${diff_dir}/NBF.diff"
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
-    d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" >> "${diff_dir}/BF.diff"
-    python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
-
-    code=$?
-    if [ $code -eq 0 ]
-    then
-        echo -ne 'Generating diff and code artifacts .................................................. OK\r'
-    else
-        echo -ne 'Generating diff and code artifacts .................................................. FAIL\r'
-        exit 1                  # Return exit code 1 to mark this run as FAIl when called in generate_artifacts.sh
-    fi
+    echo 'Generating diff and code artifacts ................................................ CACHED'
+    exit 0
 fi
-echo -ne '\n'
+
+. "$SCRIPTDIR"/d4j_utils.sh
+
+cd "$repository" || exit 1
+mkdir -p "$diff_dir"
+
+# Get the 3 cleaned commit hashes
+revision_buggy=$(git rev-parse HEAD)
+revision_fixed=$(git rev-parse HEAD~1)
+revision_original=$(git rev-parse HEAD~2)
+
+# D4J bug-inducing minimized patch
+inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
+if [ ! -f "${inverted_patch}" ] ; then
+    echo "Bad project or bug id; file does not exist: ${inverted_patch}"
+    exit 1
+fi
+
+cd "$workdir"|| exit 1
+
+# Generate the VC diff but not clean yet, to generate commit metrics first
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
+# Generate the 3 diff files with no context lines, then clean the diffs.
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC_clean.diff"
+python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/VC_clean.diff"
+d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" >> "${diff_dir}/NBF.diff"
+python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
+d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" >> "${diff_dir}/BF.diff"
+python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
+
+code=$?
+if [ $code -eq 0 ]
+then
+    echo 'Generating diff and code artifacts .................................................. OK'
+else
+    echo 'Generating diff and code artifacts .................................................. FAIL'
+    exit 1                  # Return exit code 1 to mark this run as FAIl when called in generate_artifacts.sh
+fi

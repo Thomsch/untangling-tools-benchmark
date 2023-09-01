@@ -28,17 +28,10 @@ fi
 
 mkdir -p "$out_dir"
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck source=/dev/null
-if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-  . .env
-fi
+. "$SCRIPTDIR"/env.sh
 set +o allexport
-
-if [ -z "${JAVA11_HOME}" ]; then
-  echo "$0: Please set the JAVA11_HOME environment variable to a Java 11 installation."
-  exit 1
-fi
 
 # Check that Java is 1.8 for Defects4J.
 # Defects4J will use whatever is on JAVA_HOME.
