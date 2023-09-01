@@ -3,7 +3,7 @@
 # - $1: Path to the file containing the bugs to untangle and evaluate.
 # - $2: Path to the directory where the results are stored and repositories checked out.
 
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the D4J project repository
+# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the D4J clone.
 # - VC.diff: Version Control diff
 # - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff

@@ -65,7 +65,7 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPTDIR"/d4j_utils.sh
 
 # Parse the returned revision_ids into two variables
-read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+read -r v1 v2 <<< "$(print_revision_ids "$project" "$vid")"
 v3="$(git rev-parse HEAD)"      # Buggy version
 
 olddir="$(pwd)"
@@ -93,6 +93,7 @@ add_cleaned_commit () {
   cp -rpf "$newdir/.git" "$tmpdir"
 
   cd "$newdir"
+  # Delete all files.
   rm -rf -- ..?* .[!.]* *
   cp -af "$tmpdir/." "$newdir"
   git add .
