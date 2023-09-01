@@ -1,28 +1,29 @@
-s/thomsch/anonymous/
-s/thanhdang2712/anonymous/
-s/thdang/anonymous/
-s/rjust/anonymous/
-s/mernst/anonymous/
-s/tschweiz/anonymous/
-s/thanh/anonymous/
-s/rjust/anonymous/
-s/mernst/anonymous/
-s/Thomas Schweizer/anonymous/
-s/Thomas/anonymous/
-s/Schweizer/anonymous/
-s/Thanh Dang/anonymous/
-s/Thanh/anonymous/
-s/Dang/anonymous/
-s/Rene Just/anonymous/
-s/Just/anonymous/
-s/Rene/anonymous/
-s/Michael Ernst/anonymous/
-s/Mike Ernst/anonymous/
-s/Michael/anonymous/
-s/Mike/anonymous/
-s/Ernst/anonymous/
-s/cs.washington.edu/anonymous/
-s/washington.edu/anonymous/
-s/washington/anonymous/
+s/thomsch/anonymous/g
+s/Thomsch/anonymous/g
+s/thanhdang2712/anonymous/g
+s/thdang/anonymous/g
+s/rjust/anonymous/g
+s/mernst/anonymous/g
+s/mdernst/anonymous/g
+s/tschweiz/anonymous/g
+s/thanh/anonymous/g
+s/Thomas Schweizer/anonymous/g
+s/Thomas/anonymous/g
+s/Schweizer/anonymous/g
+s/Thanh Dang/anonymous/g
+s/Thanh/anonymous/g
+s/Dang/anonymous/g
+s/Rene Just/anonymous/g
+s/Just/anonymous/g
+s/Rene/anonymous/g
+s/Michael Ernst/anonymous/g
+s/Mike Ernst/anonymous/g
+s/Michael/anonymous/g
+s/Mike/anonymous/g
+s/Ernst/anonymous/g
+s/gitlab.cs.washington.edu/anonymous/g
+s/cs.washington.edu/anonymous/g
+s/washington.edu/anonymous/g
+s/washington/anonymous/g
 s%anonymous/defects4j%rjust/defects4j%
-s/rrjust/rjust/
+s/rrjust/rjust/g
