@@ -12,12 +12,14 @@ if [ $# -ne 1 ] ; then
 fi
 
 export out_dir="$1" # The directory where to put cleaned repositories (e.g., 'artifacts')
-
 mkdir -p "$out_dir"
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+
 # Clone repositories
-git clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark "$out_dir/untangling-tools-benchmark"
-git clone --depth 1 https://github.com/Thomsch/flexeme "$out_dir/flexeme"
+export GIT_TERMINAL_PROMPT=0
+git clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark "$out_dir/untangling-tools-benchmark" || git clone --depth 1 git@github.com:Thomsch/untangling-tools-benchmark.git "$out_dir/untangling-tools-benchmark" || exit 1
+git clone --depth 1 https://github.com/Thomsch/flexeme "$out_dir/flexeme" || git clone --depth 1 git@github.com:Thomsch/Flexeme.git "$out_dir/flexeme" || exit 1
 
 echo "Cloned repositories into $out_dir"
 echo "Cleaning all files in $out_dir"
@@ -79,8 +81,8 @@ find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/washington/anonymous/g
 find "$out_dir" -type f -print0 | xargs -0 perl -pi -e 's/cs.washington/anonymous/gi'
 # The is no occurence of the school acronym anywhere
 
-# Move double-blind/README.MD to $OUT_DIR
-cp double-blind/README.MD "$out_dir"
+# Move double-blind/README.md to $OUT_DIR
+cp "$SCRIPTDIR"/README.md "$out_dir"
 
 # Remove cleaning script and README.MD from the cleaned repository
 rm -rf "$out_dir/untangling-tools-benchmark/double-blind"
