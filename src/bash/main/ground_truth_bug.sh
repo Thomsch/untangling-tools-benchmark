@@ -34,11 +34,10 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
-# Initialize related directory for input and output
-export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground truth
+# Path containing the evaluation results. i.e., ground truth
+export evaluation_path="${out_dir}/evaluation/${project}_${vid}"
 mkdir -p "$evaluation_path"
 
-# Calculates the ground truth
 echo ""
 echo "Calculating ground truth for project $project, bug $vid, repository $repository"
 
@@ -58,6 +57,6 @@ else
         echo 'Calculating ground truth .................................................. OK'
     else
         echo -ne 'Calculating ground truth .................................................. FAIL\r'
-        exit 1        # Return exit code 1 to mark this run as FAIl when called in generate_ground_truth.sh
+        exit 1        # Exit with status code 1 to mark this run as FAIl when called in generate_ground_truth.sh
     fi
 fi
