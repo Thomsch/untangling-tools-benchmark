@@ -1,5 +1,6 @@
 s/thomsch/anonymous/g
 s/Thomsch/anonymous/g
+s:users/thomas:anonymous:g
 s/thanhdang2712/anonymous/g
 s/thdang/anonymous/g
 s/rjust/anonymous/g
