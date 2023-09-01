@@ -61,6 +61,7 @@ export -f parse_and_score_bug
 parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
 
 if ! cat "${evaluation_dir}"/*/scores.csv > "$out_file" ; then
+  echo "No \"scores.csv\" files found under ${evaluation_dir}."
   find "${evaluation_dir}"
   exit 1
 fi
