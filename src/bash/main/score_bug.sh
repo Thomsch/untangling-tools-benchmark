@@ -35,6 +35,7 @@ echo "Calculating Rand Index score for project $project, bug $vid, repository $r
 # If the D4J bug does not exist, this means the tools have yet been ran on the bug file's VC commit
 if [ ! -d "${repository}" ] ; then
   echo "Directory does not exist: ${repository}"
+  echo "Exiting."
   exit 1
 fi
 

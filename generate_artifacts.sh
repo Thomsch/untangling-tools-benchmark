@@ -32,7 +32,7 @@ export out_dir="$2" # Path to the directory where the results are stored and rep
 # Defects4J will use whatever is on JAVA_HOME.
 version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
 if [ "$version" != "1.8" ] ; then
-    echo "Unsupported Java Version: ${version}. Please use Java 8."
+    echo "Unsupported Java Version: ${version}. Please use Java 8.  Exiting."
     exit 1
 fi
 
