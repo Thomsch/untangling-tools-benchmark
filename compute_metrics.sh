@@ -1,8 +1,9 @@
 #!/bin/bash
 # Computes 7 commit metrics for a list of Defects4J (D4J) bugs.
 # Aggregates commit across all bug files into 1 metrics.csv file.
-# - $1: Path to the file containing the bugs to untangle.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle.
+# - $2: The directory where the results are stored and repositories checked out.
 # Writes aggregated results to untangling-eval/metrics.csv.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status

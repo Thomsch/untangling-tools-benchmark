@@ -15,7 +15,7 @@ Command Line Args:
     path/to/root/results: Specified file to store CSV file returned
 
 Returns:
-    The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+    The ground truth for the respective D4J bug file in evaluation/<project>_<id>/truth.csv
     CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version

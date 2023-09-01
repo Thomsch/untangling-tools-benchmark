@@ -174,7 +174,7 @@ This section explains how to manually analyse the decomposition results to quali
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
 2. The diff for the bug is `git diff -U0 <buggy-commit> <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
-3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`
-4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/flexeme.csv`.
-5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`.
+3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`
+4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/flexeme.csv`.
+5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`.
 6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.

@@ -1,9 +1,11 @@
 #!/bin/bash
 # Generates 3 diffs and 3 source code versions for a a list of Defects4J bugs.
-# - $1: Path to the file containing the bugs to untangle and evaluate.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle and evaluate.
+# - $2: The directory where the results are stored and repositories checked out.
 
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the D4J project repository
+# Writes 3 unified diffs to the checked out bug to <project>_<id>/diffs
+# and 3 source code artifacts to the D4J project repository.
 # - VC.diff: Version Control diff
 # - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff
