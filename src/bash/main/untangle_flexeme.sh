@@ -6,7 +6,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 5 ] ; then
-    echo 'usage: untangle_flexeme.sh <project repository> <commit id> <sourcepath> <classpath> <out file> '
+    echo 'usage: untangle_flexeme.sh <project clone> <commit id> <sourcepath> <classpath> <out file> '
     echo 'example: untangle_flexeme.sh path/to/Lang_1/ e3a4b0c src:test lib/* flexeme.csv'
     exit 1
 fi

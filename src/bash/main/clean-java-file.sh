@@ -14,5 +14,6 @@ fi
 
 file="$1"
 
-cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove in-line, block comments, trailing whitespaces, and blank lines
+# Remove comments, line number directives left by cpp, trailing whitespace, and blank lines
+cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' > "$file.cleaned"
 mv -f "$file.cleaned" "$file"
