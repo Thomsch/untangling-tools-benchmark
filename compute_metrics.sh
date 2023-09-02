@@ -64,7 +64,6 @@ parallel --colsep "," generate_commit_metrics {} < "$bugs_file"
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of logs_dir ${logs_dir}:"
   ls -al "${logs_dir}"
-  cat "${logs_dir}"/Closure_103_metrics.log
   echo "Contents of metrics_dir ${metrics_dir}:"
   ls -al "${metrics_dir}"
 fi
