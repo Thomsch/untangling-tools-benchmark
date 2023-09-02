@@ -74,7 +74,7 @@ For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv
 3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
 4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
-**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv $UTB_OUTPUT > d4j-20.log 2>&1 &`.
 
 This command does the following:
 - `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  

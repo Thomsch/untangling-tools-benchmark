@@ -26,7 +26,7 @@ export TMP_DIR
 
 # Check if the path exists and is a directory
 if [ ! -d "$PAPER_REPOSITORY" ]; then
-  echo "Error: '$PAPER_REPOSITORY' is not an existing directory."
+  echo "Error: '$PAPER_REPOSITORY' is not an existing directory.  Exiting."
   exit 1
 fi
 

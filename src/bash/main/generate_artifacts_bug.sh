@@ -75,6 +75,7 @@ else
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
     if [ ! -f "${inverted_patch}" ] ; then
         echo "Bad project or bug id; file does not exist: ${inverted_patch}"
+        echo "Exiting."
         exit 1
     fi
 
