@@ -93,22 +93,10 @@ def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
         original_diff
     ):
         for hunk in hunks_VC:
-<<<<<<< HEAD
-            # Find all fix lines in the hunk by matching diff line strings
+            # Find all fix lines in the hunk by matching diff line strings.
             # TODO: Ideal to use object identity here, but for now opt for identity
             # by string representation instead; possible for this to be error prone.
             fix_lines_VC = [line for line in hunk if str(line) in fix_diff_lines_str]
-||||||| e6fd546
-            fix_lines_VC = [
-                line for line in hunk if str(line) in fix_lines_str
-            ]  # Find all fix lines in the hunk by matching diff line strings
-=======
-            # TODO: Ideal to use object identity here, but now opt for identity
-            # by string representation instead; possible for this to be error prone.
-            fix_lines_VC = [
-                line for line in hunk if str(line) in fix_lines_str
-            ]  # Find all fix lines in the hunk by matching diff line strings
->>>>>>> a9860be9ec4bcff2e68608d4c7428e4c9863b86f
             if len(fix_lines_VC) == 0 or len(fix_lines_VC) == len(hunk):
                 continue  # The hunk is purely bug-fixing or non bug-fixing
             tangled_hunks_count += 1
