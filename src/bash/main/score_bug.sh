@@ -1,11 +1,15 @@
 #!/bin/bash
-# Translates SmartCommit results (JSON files) and Flexeme graphs (.dot files) in decomposition/D4J_bug for one D4J bug
-# file to the line level. Each line is labelled with the group it belongs to and this is reported in
-# a readable CSV file. Then, calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
-# - $1: D4J Project name
-# - $2: D4J Bug Id
-# - $3: Path where the results are stored.
-# - $4: Path where the repo is checked out
+# Translates SmartCommit results (JSON files) and Flexeme graphs
+# (.dot files) in decomposition/D4J_bug for one D4J bug file to the
+# line level. Each line is labelled with the group it belongs to and
+# this is reported in a readable CSV file. Then, calculates the Rand
+# Index for untangling results of 3 methods: SmartCommit, Flexeme, and
+# File-based.
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug Id.
+# - $3: Directory where the results are stored.
+# - $4: Directory where the repo is checked out.
 
 # Results are outputted to evaluation/<D4J_bug> respective subfolder.
 # Writes parsed decomposition results to smartcommit.csv and flexeme.csv for each bug in /evaluation/<D4J_bug>

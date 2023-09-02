@@ -1,10 +1,12 @@
 #!/bin/bash
 # Computes 7 commit metrics for a Defects4J (D4J) bug.
-# - $1: D4J Project name
-# - $2: D4J Bug id
-# - $3: Path where the results are stored.
-# - $4: Path where the repo is checked out
-# Writes the results to a <project>_<id>.csv file (with 1 row) in <out_dir>/metrics folder.
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
+# - $3: Directory where the results are stored.
+# - $4: Directory where the repo is checked out.
+# Writes the results to a {<project>_<id>}.csv file (with 1 row) in <out_dir>/metrics folder.
+
 #    CSV header:
 #    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated,tangled_lines_count,tangled_hunks_count}
 
@@ -37,7 +39,8 @@ mkdir -p "$metrics_dir"
 echo -ne '\n'
 echo "Calculating diff metrics for project $project, bug $vid, repository $repository"
 
-# If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
+# If D4J bug repository does not exist, checkout the D4J bug to repository and
+# generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
   ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"

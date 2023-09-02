@@ -1,9 +1,10 @@
 #!/bin/bash
 # Generates the ground truth using the original fix and the minimized version for a list of Defects4J (D4J) bugs.
-# - $1: Path to the file containing the bugs to untangle.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle.
+# - $2: The directory where the results are stored and repositories checked out.
 
-# Writes the ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+# Writes the ground truth for the respective D4J bug file in evaluation/<project>_<id>/truth.csv
 # - CSV header: {file, source, target, group}
 #     - file: The relative file path from the project root for a change
 #     - source: The line number of the change if the change is a deletion

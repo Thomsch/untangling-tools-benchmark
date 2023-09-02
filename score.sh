@@ -1,13 +1,17 @@
 #!/bin/bash
-# Given a list of Defects4J (D4J) bugs, the script translates SmartCommit results (JSON files) and Flexeme graphs ().dot files) in decomposition/D4J_bug for each D4J bug
-# file to the line level. Each line is labelled with the group it belongs to and this is reported in
-# a readable CSV file. Then, calculates the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and File-based.
-# - $1: Path to the file containing the bugs to untangle.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Given a list of Defects4J (D4J) bugs, the script translates SmartCommit
+# results (JSON files) and Flexeme graphs ().dot files) in decomposition/D4J_bug
+# for each D4J bug file to the line level. Each line is labelled with the group
+# it belongs to and this is reported in a readable CSV file. Then, calculates
+# the Rand Index for untangling results of 3 methods: SmartCommit, Flexeme, and
+# File-based.
+# Arguments:
+# - $1: The file containing the bugs to untangle.
+# - $2: The directory where the results are stored and repositories checked out.
 
 # Results are outputted to evaluation/<D4J_bug> respective subfolder.
-# Writes parsed decomposition results to smartcommit.csv and flexeme.csv for each bug in /evaluation/<D4J_bug>
-# Writes Rand Index scores computed to evaluation/<D4J_bug>/decomposition_scores.csv
+# Writes parsed decomposition results to smartcommit.csv and flexeme.csv for each bug in evaluation/<D4J_bug>.
+# Writes Rand Index scores computed to evaluation/<D4J_bug>/decomposition_scores.csv.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
