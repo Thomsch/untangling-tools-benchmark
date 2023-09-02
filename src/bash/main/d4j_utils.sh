@@ -1,10 +1,10 @@
 #!/bin/bash
-# Collection of utilities that interface with Defects4J.
+# Collection of shell functions that interface with Defects4J.
 
 # Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
 d4j_diff () {
     if [ $# -ne 5 ] ; then
-      echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Repository>'
+      echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Clone>'
       echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
       return 1
     fi
@@ -29,14 +29,14 @@ d4j_diff () {
 
 # Retrieves the buggy and fixed revision IDs in the underlying version control
 # system for a given Defects4J project and bug ID.
-# - $1: D4J Project name
-# - $2: D4J Bug id
-# Returns the buggy and fixed revision IDs in the format:
-#   <revision_id_buggy> <revision_id_fixed>
-retrieve_revision_ids () {
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
+# Prints the buggy and fixed revision IDs separated by a space.
+print_revision_ids () {
   if [ $# -ne 2 ] ; then
-      echo 'usage: retrieve_revision_ids <D4J Project> <D4J Bug id>'
-      echo 'example: retrieve_revision_ids Lang 1'
+      echo 'usage: print_revision_ids <D4J Project> <D4J Bug id>'
+      echo 'example: print_revision_ids Lang 1'
       return 1
     fi
 
@@ -66,6 +66,6 @@ retrieve_revision_ids () {
   local revision_id_buggy="${fields[1]}"
   local revision_id_fixed="${fields[2]}"
 
-  # Return the results
+  # Print the results.
   echo "$revision_id_buggy $revision_id_fixed"
 }
