@@ -1,10 +1,12 @@
 #!/bin/bash
 # Generates 3 diffs and 3 source code versions, for a Defects4J bug.
-# - $1: D4J Project name
-# - $2: D4J Bug id
-# - $3: Path to the checked out project repository
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
+# - $3: Path to the clone (the checked out project repository).
 
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the project repository
+# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and
+# 3 source code artifacts to the project clone.
 # - VC.diff: Version Control diff
 # - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff
@@ -12,16 +14,20 @@
 # - buggy.java: The buggy source code after all non-bug fixes are applied
 # - fixed.java: The fixed source code in version control
 
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
+
+# For debugging
+# set -x
+
 set -o allexport
 # shellcheck source=/dev/null
 . .env
 set +o allexport
 
-# For debugging
-# set -x
-
 if [ $# -ne 3 ] ; then
-    echo 'usage: generate_artifacts.sh <D4J Project> <D4J Bug id> <project repository>'
+    echo 'usage: generate_artifacts.sh <D4J Project> <D4J Bug id> <project clone>'
     echo 'example: generate_artifacts.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
@@ -73,6 +79,7 @@ else
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
     if [ ! -f "${inverted_patch}" ] ; then
         echo "Bad project or bug id; file does not exist: ${inverted_patch}"
+        echo "Exiting."
         exit 1
     fi
 
