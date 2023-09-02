@@ -1,9 +1,10 @@
 #!/bin/bash
 # Generates the ground truth using the original fix and the minimized version for a list of Defects4J (D4J) bugs.
-# - $1: Path to the file containing the bugs to untangle.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle.
+# - $2: The directory where the results are stored and repositories checked out.
 
-# Writes the ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+# Writes the ground truth for the respective D4J bug file in evaluation/<project>_<id>/truth.csv
 # - CSV header: {file, source, target, group}
 #     - file: The relative file path from the project root for a change
 #     - source: The line number of the change if the change is a deletion
@@ -50,7 +51,7 @@ mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
@@ -60,13 +61,13 @@ generate_truth_for_bug() {
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug ground truth generation
   
-  ./src/bash/main/ground_truth_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_ground_truth.log" 2>&1
+  ./src/bash/main/ground_truth_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_ground_truth.log" 2>&1
   ret_code=$?
   truth_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
 }
 
 export -f generate_truth_for_bug

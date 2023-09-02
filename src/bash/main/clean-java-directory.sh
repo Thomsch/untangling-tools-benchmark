@@ -6,7 +6,8 @@
 #  * remove blank lines
 #  * remove trailing whitespace
 
-set -e
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
 
 if [ $# -ne 0 ]; then
   echo "Do not pass arguments to $0"

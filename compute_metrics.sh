@@ -1,8 +1,9 @@
 #!/bin/bash
 # Computes 7 commit metrics for a list of Defects4J (D4J) bugs.
 # Aggregates commit across all bug files into 1 metrics.csv file.
-# - $1: Path to the file containing the bugs to untangle.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle.
+# - $2: The directory where the results are stored and repositories checked out.
 # Writes aggregated results to untangling-eval/metrics.csv.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
@@ -46,15 +47,15 @@ generate_commit_metrics() {
   START="$(date +%s.%N)"  # Record start time for bug commit metrics generation
   
   if [ -n "${DEBUG}" ] ; then
-    echo "about  to call: ./src/bash/main/get_metrics_bug.sh $project $vid $out_dir $repository > ${logs_dir}/${project}_${vid}_metrics.log"
+    echo "about  to call: ./src/bash/main/get_metrics_for_d4j_bug.sh $project $vid $out_dir $repository > ${logs_dir}/${project}_${vid}_metrics.log"
   fi
-  ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
+  ./src/bash/main/get_metrics_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
   ret_code=$?
   metrics_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}"
 }
 
 export -f generate_commit_metrics
@@ -72,4 +73,4 @@ metrics_results="${out_dir}/metrics.csv"
 echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
 cat "${metrics_dir}"/*.csv >> "$metrics_results"
 echo ""
-echo "Commit metrics are aggregated and saved in ${metrics_results}"
+echo "Commit metrics were aggregated and saved in ${metrics_results}"

@@ -12,7 +12,7 @@ Command Line Args:
     - result_dir: Directory to flexeme.dot results in decomposition/flexeme
     - output_path: Directory to store returned CSV file in evaluation/flexeme.csv
 Returns:
-    A flexeme.csv file in the respective /evaluation/<D4J bug> subfolder.
+    A flexeme.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group=0,1,2,etc.}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion
@@ -42,7 +42,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: parse_flexeme_results.py <path/to/root/results> <path/to/out/file>"
+            "usage: flexeme_results_to_csv.py <path/to/root/results> <path/to/out/file>"
         )
         sys.exit(1)
 

@@ -32,9 +32,7 @@ def main():
         print("usage: count_lines.py <path/to/truth/file> <project> <bug_id>")
         sys.exit(1)
 
-    truth_file = args[
-        0
-    ]  # Path to the generated ground truth: <project-id>/truth.csv file
+    truth_file = args[0]  # Path to the ground truth: <project-id>/truth.csv
     project = args[1]  # D4J project name
     vid = args[2]  # D4J bug id
 

@@ -2,7 +2,7 @@
 
 """
 This is the naive file-based untangling approach: commits to multiple files are considered tangled,
-i.e. each file is considered a group. The results are stored in /evaluation folder.
+i.e. each file is considered a group. The results are stored in evaluation/ folder.
 
 Command Line Args:
     file_path: Path to ground truth file

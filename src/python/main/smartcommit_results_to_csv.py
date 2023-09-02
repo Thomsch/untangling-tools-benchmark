@@ -9,7 +9,7 @@ Command Line Args:
     - result_dir: Path to JSON results in decomposition/smartcommit
     - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
 Returns:
-    A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.
+    A smartcommit.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion
@@ -26,7 +26,7 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
-from parse_patch import to_csv
+from patch_to_csv import to_csv
 from parse_utils import export_tool_decomposition_as_csv
 
 
@@ -45,7 +45,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>"
+            "usage: smartcommit_results_to_csv.py <path/to/root/results> <path/to/out/file>"
         )
         sys.exit(1)
 

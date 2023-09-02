@@ -1,9 +1,11 @@
 #!/bin/bash
 # Generates 3 diffs and 3 source code versions for a a list of Defects4J bugs.
-# - $1: Path to the file containing the bugs to untangle and evaluate.
-# - $2: Path to the directory where the results are stored and repositories checked out.
+# Arguments:
+# - $1: The file containing the bugs to untangle and evaluate.
+# - $2: The directory where the results are stored and repositories checked out.
 
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the D4J project repository
+# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs
+# and 3 source code artifacts to the D4J clone.
 # - VC.diff: Version Control diff
 # - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff
@@ -32,7 +34,7 @@ set +o allexport
 # Defects4J will use whatever is on JAVA_HOME.
 version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
 if [ "$version" != "1.8" ] ; then
-    echo "Unsupported Java Version: ${version}. Please use Java 8."
+    echo "Unsupported Java Version: ${version}. Please use Java 8.  Exiting."
     exit 1
 fi
 
@@ -42,7 +44,7 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_artifacts.log"
+echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_artifacts.log"
 echo ""
 
 generate_artifacts_for_bug() {
@@ -52,13 +54,13 @@ generate_artifacts_for_bug() {
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug ground truth generation
   
-  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository" > "${logs_dir}/${project}_${vid}_artifacts.log" 2>&1
+  ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository" > "${logs_dir}/${project}_${vid}_artifacts.log" 2>&1
   ret_code=$?
   artifacts_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${artifacts_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${artifacts_status_string}" "${ELAPSED}"
 }
 
 export -f generate_artifacts_for_bug
