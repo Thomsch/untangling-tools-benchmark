@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-The script removes comments, import statements, and empty lines from a unified diff file or Java source code.
-A file is considered "clean" if it satisfies the criteria listed in ground truth construction in README.
+The script removes comments, import statements, and empty lines from a
+unified diff file or Java source code.  A file is considered "clean"
+if it satisfies the criteria listed in ground truth construction in
+README.
 
 Command Line Args:
     filename: the dsired filename for the unidifed diff (.diff) or Java source code (.java) input
 Returns:
     Creates and writes to the desired file the cleaned input.
+
 """
 import fileinput
 import sys
@@ -20,8 +23,12 @@ from unidiff import (
 
 def remove_noncode_lines(patch):
     """
-    This implementation is not optimal, as the unidiff Python package does not have built-in remove method to manupulate the list-like Objects using list comprehensions. etc. The best solution is to use del to completely remove the object from memory space.
-    Yet, I have not found a way to do it using indexing or object references.
+    This implementation is not optimal, as the unidiff Python
+    package does not have built-in remove method to manupulate the
+    list-like Objects using list comprehensions. etc. The best
+    solution is to use del to completely remove the object from memory
+    space.  Yet, I have not found a way to do it using indexing or
+    object references.
 
     Remove comments, import statements, and empty lines from a diff by marking them as context lines.
 
@@ -29,6 +36,7 @@ def remove_noncode_lines(patch):
         patch: a PatchSet object to be remove the Java comments, import statements, and whitespaces from.
     Returns:
         The PatchSet Object modified in-place.
+
     """
     ignore_comments = True
     ignore_imports = True
@@ -44,8 +52,9 @@ def remove_noncode_lines(patch):
         #      'dev/null' (i.e. 'foo.java' was deleted)
         # 3. source_file is 'foo.java' and the target_file is
         #      'foo.java' (i.e. 'foo.java' was modified)
-        # Skip test files. We need at least one version of the file to be a test file to cover addition, deletion,
-        # and modification cases.
+
+        # Skip test files. We need at least one version of the file to be a test
+        # file to cover addition, deletion, and modification cases.
         if (
             not (
                 file.source_file.lower().endswith(".java")
@@ -126,9 +135,10 @@ def cancel_out_diff(patch):
 
 def fix_hunk_info(patch):
     """
-    Repair the hunk metadata on cleaned diff file. The line metadata might be incorrect due to changed lines converted to context lines.
-    The hunk metadata is a header for each hunk, containing the info in order: source_start, source_length,
-                    target_start, target_length, and section_header
+    Repair the hunk metadata on cleaned diff file.
+    The line metadata might be incorrect due to changed lines converted to context lines.
+    The hunk metadata is a header for each hunk, containing the info in order:
+            source_start, source_length, target_start, target_length, and section_header
     Args:
         patch: a PatchSet object with possible erroneous hunk info.
     Returns:
@@ -151,7 +161,8 @@ def fix_hunk_info(patch):
 def filter(patch):
     """
     Remove comments, import statements, and empty lines from a diff.
-    Completely clean the diff files to adhere to the criteria listed in ground truth construction in README.
+    Completely clean the diff files to adhere to the criteria listed in ground
+    truth construction in README.
     """
     uncommented_patch = remove_noncode_lines(patch)
     non_redundant_patch = cancel_out_diff(uncommented_patch)
@@ -240,7 +251,8 @@ def clean_diff(diff_file):
 def clean_source_code(java_file):
     """
     Remove comments, import statements, and empty lines from the Java source code.
-    Completely clean the source code files to adhere to the criteria listed in ground truth construction in README.
+    Completely clean the source code files to adhere to the criteria listed in
+    ground truth construction in README.
     """
     with fileinput.FileInput(java_file, inplace=True) as file:
         for line in file:

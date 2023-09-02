@@ -12,7 +12,7 @@ Command Line Args:
     - result_dir: Directory to flexeme.dot results in decomposition/flexeme
     - output_path: Directory to store returned CSV file in evaluation/flexeme.csv
 Returns:
-    A flexeme.csv file in the respective /evaluation/<D4J bug> subfolder.
+    A flexeme.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group=0,1,2,etc.}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion

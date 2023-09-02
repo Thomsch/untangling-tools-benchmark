@@ -47,7 +47,7 @@ project="$1"
 vid="$2"
 
 if [ ! -d .git ] ; then
-  echo "$0: run at the top level of a git repository"
+  echo "$0: run at the top level of a git repository.  Exiting."
   exit 1
 fi
 
@@ -59,7 +59,7 @@ fi
 num_changed_files="$(git status --porcelain | wc -l)"
 
 if [ "$num_changed_files" -gt 0 ] ; then
-  echo "$0: run in a git clone without local changes"
+  echo "$0: run in a git clone without local changes.  Exiting."
   exit 1
 fi
 
@@ -68,6 +68,7 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 # Set two variables.
 read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+
 v3="$(git rev-parse HEAD)"      # Buggy version
 
 olddir="$(pwd)"
@@ -95,6 +96,7 @@ add_cleaned_commit () {
   cp -rpf "$newdir/.git" "$tmpdir"
 
   cd "$newdir"
+  # Delete all files.
   rm -rf -- ..?* .[!.]* *
   cp -af "$tmpdir/." "$newdir"
   git add .

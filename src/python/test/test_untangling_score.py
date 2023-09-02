@@ -24,7 +24,8 @@ def test_main():
         project = "test_project"
         vid = "test_vid"
         args = [tmpdir, project, vid]
-        expected_output = f"{project},{vid},1.0,1.0,1.0\n"  # Expected output based on sample dataframes
+        # Expected output based on sample dataframes
+        expected_output = f"{project},{vid},1.0,1.0,1.0\n"
         with tempfile.TemporaryFile(mode="w+") as tmpfile:
             # Redirect stdout to temporary file
             old_stdout = sys.stdout

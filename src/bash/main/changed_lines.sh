@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script takes a Defects4J project id, a bug id, and a project repository
+# This script takes a Defects4J project id, a bug id, and a project clone
 # as input and outputs all the changed lines for the D4J bug. The changed lines
 # are not filtered unlike in ground_truth.sh.
 #
@@ -14,7 +14,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [[ $# -ne 3 ]] ; then
-    echo 'usage: changed_lines.sh <D4J Project> <D4J Bug id> <project repository>'
+    echo 'usage: changed_lines.sh <D4J Project> <D4J Bug id> <project clone>'
     echo 'example: changed_lines.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi

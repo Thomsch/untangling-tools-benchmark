@@ -52,7 +52,8 @@ index 8422d40..682191b 100644
 
 def test_overlap_lines_correctly_labelled():
     """
-    Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
+    Test that the truth group of each line in VC diff is correctly
+    labelled, even when they overlap in content.
     """
     original_diff = unidiff.PatchSet.from_string(
         """
@@ -129,7 +130,8 @@ index 8422d40..682191b 100644
 
 def test_tangled_both_label_correctly_tagged():
     """
-    Test that the truth group of each line in VC diff is correctly labelled, even when they overlap in content.
+    Test that the truth group of each line in VC diff is correctly
+    labelled, even when they overlap in content.
     """
     original_diff = unidiff.PatchSet.from_string(
         """
