@@ -28,9 +28,8 @@ repository="$4"
 export decompose_exit_code=0
 # Make Flexeme deterministic
 export PYTHONHASHSEED=0
-# Initialize related directory for input and output
-export evaluation_path="${out_dir}/evaluation/${project}_${vid}" # Path containing the evaluation results. i.e., ground
-# truth, decompositions in CSV format.
+# Path containing the evaluation results. i.e., ground truth, decompositions in CSV format.
+export evaluation_path="${out_dir}/evaluation/${project}_${vid}"
 export decomposition_path="${out_dir}/decomposition"
 export smartcommit_untangling_path="${out_dir}/decomposition/smartcommit"
 export flexeme_untangling_path="${decomposition_path}/flexeme"
@@ -41,7 +40,7 @@ mkdir -p "$smartcommit_untangling_path"
 mkdir -p "$flexeme_untangling_path"
 
 echo ""
-echo "Decompositing project $project, bug $vid, repository $repository"
+echo "Untangling project $project, bug $vid, repository $repository"
 
 # If D4J bug repository does not exist, checkout the D4J bug to repository and generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then

@@ -4,9 +4,9 @@
 # - $2: D4J Bug id
 # - $3: Path where the results are stored.
 # - $4: Path where the repo is checked out
-# Writes the results to a {<project> <id>}.csv file (with 1 row) in <out_dir>/metrics folder.
+# Writes the results to a <project>_<id>.csv file (with 1 row) in <out_dir>/metrics folder.
 #    CSV header:
-#    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated, tangled_lines_count, tangled_hunks_count}
+#    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated,tangled_lines_count,tangled_hunks_count}
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -30,7 +30,6 @@ vid="$2"
 out_dir="$3"
 repository="$4"
 
-# Initialize related directory for input and output
 export metrics_dir="${out_dir}/metrics"
 mkdir -p "$metrics_dir"
 
@@ -44,7 +43,8 @@ if [ ! -d "${repository}" ] ; then
   ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
 fi
 
-metrics_csv="${metrics_dir}/${project}_${vid}.csv" # Metrics for this bug
+# Metrics for this bug.  This file is the output of this script.
+metrics_csv="${metrics_dir}/${project}_${vid}.csv"
 
 # Compute commit metrics
 if [ -f "$metrics_csv" ]; then

@@ -49,7 +49,8 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if line.line_type != LINE_TYPE_CONTEXT and line.value.strip():
                     entry = pd.DataFrame.from_dict(
                         {
-                            # Since a line can only be either added or removed, one of the two will always be empty.
+                            # Since a line can only be either added or removed,
+                            # one of the two will always be empty.
                             "file": [file.path],
                             "source": [line.source_line_no],
                             "target": [line.target_line_no],
@@ -66,9 +67,11 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     Returns a Dataframe, where each row is a diff line with one truth group label
     - 'fix': A bug-fixing line
     - 'other': A non bug-fixing line
-    Tangled lines will have two corresponding row entries, as they belong to both groups: one row tagged with 'fix', one tagged with 'other'
+    Tangled lines will have two corresponding row entries, as they belong to
+    both groups: one row tagged with 'fix', one tagged with 'other'.
     """
-    # Convert the Original Diff to a Dataframe, since row entries (the diff lines) can be duplicated in the ground truth dataframe
+    # Convert the Original Diff to a Dataframe, since row entries (the diff
+    # lines) can be duplicated in the ground truth dataframe.
     ground_truth_df = convert_to_dataframe(original_diff)
 
     # Generate 3 queues for classification
@@ -106,9 +109,8 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             nonfix,
             fix,
         ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if (
-                fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip()
-            ):  # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
+            # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
+            if fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip():
                 print(f"These are tangled lines: \n {fix} \n {nonfix}", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
@@ -122,8 +124,10 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
                 ground_truth_df.loc[i, "group"] = "other"
                 nonfix_lines.remove(line)
             else:
-                # The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
-                # This also handles the bug in Defects4J, when lines belonging to different hunks are duplicated and cancel out
+                # The tangled line may be changes that cancel out in the BF and
+                # NBF diffs and thus does not exist in VC.diff.  This also
+                # handles the bug in Defects4J, when lines belonging to
+                # different hunks are duplicated and cancel out.
                 i += 1
                 continue
         else:
@@ -132,7 +136,8 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             fix_lines.popleft()
             nonfix_lines.popleft()
         if line_is_tangled and ground_truth_df.loc[i, "group"] == "fix":
-            # Found the case of a tangled line, this line will have 2 labels, 'fix' and 'other' (2 rows) in the ground truth Dataframe
+            # Found the case of a tangled line, this line will have 2 labels,
+            # 'fix' and 'other' (2 rows) in the ground truth Dataframe.
             tangled_line_duplicate_tag = ground_truth_df.loc[[i]].copy()
             tangled_line_duplicate_tag["group"] = "other"
             ground_truth_df = pd.concat(
