@@ -7,7 +7,7 @@
 
 # Results are outputted to evaluation/<D4J_bug> respective subfolder.
 # Writes parsed decomposition results to smartcommit.csv and flexeme.csv for each bug in /evaluation/<D4J_bug>
-# Writes Rand Index scores computed to /evaluation/<D4J_bug>/decomposition_scores.csv
+# Writes Rand Index scores computed to evaluation/<D4J_bug>/decomposition_scores.csv
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable

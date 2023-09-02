@@ -14,7 +14,7 @@ Command Line Args:
     - project: D4J project name
     - bug_id: D4J bug id
 Returns:
-    A scores.csv file in the /evaluation/<D4J bug id> subfolder.
+    A scores.csv file in the evaluation/<D4J bug id> subfolder.
     CSV header: {project,vid,smartcommit_score,flexeme_score,file_untangling_score}
         - project: D4J project name
         - vid: D4J bug id
