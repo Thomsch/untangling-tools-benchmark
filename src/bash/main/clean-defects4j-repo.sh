@@ -45,7 +45,7 @@ project="$1"
 vid="$2"
 
 if [ ! -d .git ] ; then
-  echo "$0: run at the top level of a git repository"
+  echo "$0: run at the top level of a git repository.  Exiting."
   exit 1
 fi
 
@@ -57,7 +57,7 @@ fi
 num_changed_files="$(git status --porcelain | wc -l)"
 
 if [ "$num_changed_files" -gt 0 ] ; then
-  echo "$0: run in a git clone without local changes"
+  echo "$0: run in a git clone without local changes.  Exiting."
   exit 1
 fi
 

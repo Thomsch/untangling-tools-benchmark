@@ -38,7 +38,7 @@ mkdir -p "$evaluation_dir"
 mkdir -p "$decomposition_dir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_score.log"
+echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_score.log"
 echo ""
 
 parse_and_score_bug(){
@@ -54,15 +54,16 @@ parse_and_score_bug(){
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}"
 }
 
 export -f parse_and_score_bug
 parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
 
 if ! cat "${evaluation_dir}"/*/scores.csv > "$out_file" ; then
+  echo "No \"scores.csv\" files found under ${evaluation_dir}."
   find "${evaluation_dir}"
   exit 1
 fi
 echo ""
-echo "Decomposition scores aggregated and saved in ${out_file}"
+echo "Decomposition scores were aggregated and saved in ${out_file}"

@@ -45,7 +45,7 @@ mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
 
-echo "Logs stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
@@ -61,7 +61,7 @@ generate_truth_for_bug() {
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (%.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${truth_status_string}" "${ELAPSED}"
 }
 
 export -f generate_truth_for_bug
