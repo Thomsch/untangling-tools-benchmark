@@ -18,14 +18,14 @@ set +o allexport
 # Check Python is 3.8.15 for Flexeme.
 python_version=$(python --version 2>&1 | awk '{print $2}')
 if [[ "$python_version" != "3.8.15" ]]; then
-    echo "$0: error: Required Python version is 3.8.15 but found $python_version"
+    echo "$0: error: Required Python version is 3.8.15 but found $python_version. Exiting."
     exit 1
 fi
 
 # Check Java is 1.8 for Defects4J.
 java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)
 if [[ $(echo "$java_version != 1.8" | bc) == 1 ]] ; then
-    echo "$0: please use Java 8 instead of ${java_version}"
+    echo "$0: please use Java 8 instead of ${java_version}. Exiting."
     exit 1
 fi
 
@@ -38,7 +38,7 @@ fi
 # Check for each program in the system's PATH
 for package in defects4j flexeme date cpanm ; do
     if ! command -v "$package" >/dev/null 2>&1; then
-        echo "$0: error: Required package '$package' is not installed."
+        echo "$0: error: Required package '$package' is not installed. Exiting."
         exit 1
     fi
 done
