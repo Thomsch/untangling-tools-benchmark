@@ -9,7 +9,7 @@ Command Line Args:
     - result_dir: Path to JSON results in decomposition/smartcommit
     - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
 Returns:
-    A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.
+    A smartcommit.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion

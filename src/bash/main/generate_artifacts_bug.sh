@@ -1,10 +1,12 @@
 #!/bin/bash
 # Generates 3 diffs and 3 source code versions, for a Defects4J bug.
-# - $1: D4J Project name
-# - $2: D4J Bug id
-# - $3: Path to the clone (the checked out project repository)
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
+# - $3: Path to the clone (the checked out project repository).
 
-# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and 3 source code artifacts to the project clone.
+# Writes 3 unified diffs to the checked out bug to repo /<project><id>/diffs and
+# 3 source code artifacts to the project clone.
 # - VC.diff: Version Control diff
 # - BF.diff: Bug-fixing diff
 # - NBF.diff: Non bug-fixing diff
@@ -73,6 +75,7 @@ else
     inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"
     if [ ! -f "${inverted_patch}" ] ; then
         echo "Bad project or bug id; file does not exist: ${inverted_patch}"
+        echo "Exiting."
         exit 1
     fi
 

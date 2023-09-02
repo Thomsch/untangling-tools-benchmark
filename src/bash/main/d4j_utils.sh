@@ -29,8 +29,9 @@ d4j_diff () {
 
 # Retrieves the buggy and fixed revision IDs in the underlying version control
 # system for a given Defects4J project and bug ID.
-# - $1: D4J Project name
-# - $2: D4J Bug id
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
 # Prints the buggy and fixed revision IDs separated by a space.
 print_revision_ids () {
   if [ $# -ne 2 ] ; then
