@@ -47,9 +47,9 @@ generate_commit_metrics() {
   START="$(date +%s.%N)"  # Record start time for bug commit metrics generation
   
   if [ -n "${DEBUG}" ] ; then
-    echo "about  to call: ./src/bash/main/get_metrics_bug.sh $project $vid $out_dir $repository > ${logs_dir}/${project}_${vid}_metrics.log"
+    echo "about  to call: ./src/bash/main/get_metrics_for_d4j_bug.sh $project $vid $out_dir $repository > ${logs_dir}/${project}_${vid}_metrics.log"
   fi
-  ./src/bash/main/get_metrics_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
+  ./src/bash/main/get_metrics_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
   ret_code=$?
   metrics_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
