@@ -22,8 +22,8 @@ fi
 set +o allexport
 
 if [ $# -ne 4 ] ; then
-    echo 'usage: get_metrics_bug.sh <D4J Project> <D4J Bug id> <out file> <project clone>'
-    echo 'example: get_metrics_bug.sh Lang 1 path/to/Lang_1/'
+    echo 'usage: get_metrics_for_d4j_bug.sh <D4J Project> <D4J Bug id> <out file> <project clone>'
+    echo 'example: get_metrics_for_d4j_bug.sh Lang 1 path/to/Lang_1/'
     exit 1
 fi
 
@@ -43,7 +43,7 @@ echo "Calculating diff metrics for project $project, bug $vid, repository $repos
 # generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
   mkdir -p "$repository"
-  ./src/bash/main/generate_artifacts_bug.sh "$project" "$vid" "$repository"
+  ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository"
 fi
 
 # Metrics for this bug.  This file is the output of this script.

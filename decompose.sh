@@ -59,12 +59,12 @@ echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
 echo ""
 
 export PYTHONHASHSEED=0
-decompose_bug(){
+untangle_with_tools(){
   local project="$1"
   local vid="$2"
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"   # Record start time for bug decomposition
-  ./src/bash/main/decompose_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_decompose.log" 2>&1
+  ./src/bash/main/untangle_with_tools.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_decompose.log" 2>&1
   ret_code=$?
   decomposition_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
@@ -73,5 +73,5 @@ decompose_bug(){
   printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}"
 }
 
-export -f decompose_bug
-parallel --colsep "," decompose_bug {} < "$bugs_file"
+export -f untangle_with_tools
+parallel --colsep "," untangle_with_tools {} < "$bugs_file"
