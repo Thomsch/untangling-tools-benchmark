@@ -67,7 +67,7 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPTDIR"/d4j_utils.sh
 
 # Set two variables.
-read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+read -r v1 v2 <<< "$(print_revision_ids "$project" "$vid")"
 
 v3="$(git rev-parse HEAD)"      # Buggy version
 
