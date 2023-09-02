@@ -30,7 +30,9 @@
 # Thus, the diffs between C_i and C_j are exactly like the diffs between V_i and
 # V_j, except that the C* diffs contain no comments, blank lines, or whitespace.
 
-set -e
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 # For debugging
 # set -x
@@ -64,8 +66,9 @@ fi
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPTDIR"/d4j_utils.sh
 
-# Parse the returned revision_ids into two variables
-read -r v1 v2 <<< "$(print_revision_ids "$project" "$vid")"
+# Set two variables.
+read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+
 v3="$(git rev-parse HEAD)"      # Buggy version
 
 olddir="$(pwd)"

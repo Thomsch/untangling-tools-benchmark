@@ -5,7 +5,8 @@
 #  * remove blank lines
 #  * remove trailing whitespace
 
-set -e
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 MyJavaFile.java"
@@ -14,6 +15,5 @@ fi
 
 file="$1"
 
-# Remove comments, line number directives left by cpp, trailing whitespace, and blank lines
-cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' > "$file.cleaned"
+cpp -fpreprocessed -dD -E "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"  # Remove in-line, block comments, trailing whitespaces, and blank lines
 mv -f "$file.cleaned" "$file"
