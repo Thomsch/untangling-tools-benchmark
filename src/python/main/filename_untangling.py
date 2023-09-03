@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 """
-This is the naive file-based untangling approach: commits to multiple files are considered tangled,
-i.e. each file is considered a group. The results are stored in evaluation/ folder.
+This is the naive file-based untangling approach: each file is considered a group.
 
 Command Line Args:
-    file_path: Path to ground truth file
-    output_file: Path to output file
-Returns:
+    ground_truth_file: The ground truth file
+    output_file: The output file
+Writes:
     A <project-id>/file_untangling.csv file containing the file-based classification group
     in each D4J bug file subfolder.
     header line: {file, source, target, group}
@@ -21,13 +20,12 @@ import csv
 import sys
 
 
-def main(file_path, output_file):
+def main(ground_truth_file, output_file):
     """
     Implement the logic of the script. See the module docstring.
     """
 
-    # Print project name
-    with open(file_path, "r") as csv_file:
+    with open(ground_truth_file, "r") as csv_file:
         csv_reader = csv.reader(csv_file)
 
         # Skip header row
