@@ -74,7 +74,7 @@ For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv
 3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
 4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
-**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv $UTB_OUTPUT > d4j-20.log 2>&1 &`.
 
 This command does the following:
 - `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  
@@ -174,7 +174,7 @@ This section explains how to manually analyse the decomposition results to quali
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
 2. The diff for the bug is `git diff -U0 <buggy-commit> <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
-3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`
-4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/flexeme.csv`.
-5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`.
+3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`
+4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/flexeme.csv`.
+5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`.
 6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.
