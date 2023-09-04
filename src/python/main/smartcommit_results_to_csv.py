@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug
-file to the line level. Each line is labelled with the group it belongs to and this is reported in
-a readable CSV file.
+Translates SmartCommit grouping results (JSON files) to the line level. Each line is
+labelled with the group it belongs to and this is reported in a CSV file.
 
 Command Line Args:
-    - result_dir: Path to JSON results in decomposition/smartcommit
-    - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
+    - result_dir: Directory containing JSON results in decomposition/smartcommit
+    - output_path: The CSV file to write
 Returns:
     A smartcommit.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group}
