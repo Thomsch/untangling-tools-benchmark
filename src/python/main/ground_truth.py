@@ -75,13 +75,13 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     # This variable holds the output value of the function.
     ground_truth_df = convert_diff_to_dataframe(original_diff)
 
-    # Placeholder for the truth label
-    ground_truth_df["group"] = ["other" for i in range(len(original_lines))]
-
     # Generate 3 queues for classification
     original_lines = deque([str(line) for line in flatten_patch_object(original_diff)])
     fix_lines = deque([str(line) for line in flatten_patch_object(fix_diff)])
     nonfix_lines = deque([str(line) for line in flatten_patch_object(nonfix_diff)])
+
+    # Placeholder for the truth label
+    ground_truth_df["group"] = ["other" for i in range(len(original_lines))]
 
     i = 0
     # A global mode that indicates if 2 lines are part of tangled fix

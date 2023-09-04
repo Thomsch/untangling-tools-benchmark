@@ -129,10 +129,9 @@ def get_update_type(data):
     color_attribute = data["color"]
     if color_attribute == "green":
         return UPDATE_ADD
-    elif color_attribute == "red":
+    if color_attribute == "red":
         return UPDATE_REMOVE
-    else:
-        raise ValueError(f"Color {color_attribute} not supported")
+    raise ValueError(f"Color {color_attribute} not supported")
 
 
 def get_span(data):
