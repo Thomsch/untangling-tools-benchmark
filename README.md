@@ -132,6 +132,7 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 - SmartCommit doesn't support SVN projects. All commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `data/d4j-bugs-all`.
 - If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labeling mistake in Defects4J, an issue is opened in the Defects4J repository.
+- Uses latin-1 encoding to read files, because it is ASCII-compatible.
 
 ## Directory structure
 - `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.

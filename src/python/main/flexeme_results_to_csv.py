@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Translates Flexeme grouping results ((dot files) in decomposition/flexeme for each D4J bug file
-to the line level.
+Translates Flexeme grouping results (dot files) to the line level.
 
 Each line is labelled by collecting all of its nodes' groups (it is possible for one line
 to have multiple groups).
@@ -11,8 +10,8 @@ to have multiple groups).
 Command Line Args:
     - result_dir: Directory to flexeme.dot results in decomposition/flexeme
     - output_path: Directory to store returned CSV file in evaluation/flexeme.csv
-Returns:
-    A flexeme.csv file in the respective evaluation/<D4J bug> subfolder.
+Writes:
+    A flexeme.csv file in the evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group=0,1,2,etc.}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion
@@ -55,7 +54,10 @@ def main():
         # Flexeme doesn't generate a PDG if it doesn't detect multiple groups.
         # In this case, we do not create a CSV file. The untangling score will be
         # calculated as if Flexeme grouped all changes in one group in `untangling_score.py`.
-        print("PDG not found, skipping creation of CSV file", file=sys.stderr)
+        print(
+            "PDG file " + result_file + "not found, skipping creation of CSV file",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     result = ""
@@ -116,22 +118,21 @@ def export_csv(output_path, result):
 
 def get_update_type(data):
     """
-    Get the update type for this node.
+    Get the update type for a graph node.
 
     Args:
-        data: The data attribute of the node.
+        data: The data attribute of the graph node.
 
     Returns:
-        The update type of the node as a string. Can be either UPDATE_ADD or UPDATE_REMOVE.
+        The update type of the graph node as a string. Can be either UPDATE_ADD or UPDATE_REMOVE.
     """
     color_attribute = data["color"]
     if color_attribute == "green":
-        update = UPDATE_ADD
+        return UPDATE_ADD
     elif color_attribute == "red":
-        update = UPDATE_REMOVE
+        return UPDATE_REMOVE
     else:
         raise ValueError(f"Color {color_attribute} not supported")
-    return update
 
 
 def get_span(data):
