@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Retrieves the changed lines for a diff. Args: The diff is passed to the script via stdin.
+Retrieves the changed lines for a diff that is passed to the script via stdin.
 Output: Writes out added (+) or removed(-) diff lines in the CSV format:
   - file (string)
   - source (int)
@@ -27,16 +27,14 @@ def to_csv(patch: PatchSet):
                 # ,\"{line.value.strip()}\"'
 
 
-def from_file(filename):
+def from_file(diff_file):
     """
-    Takes in a filename and returns a CSV string of added/removed lines.
+    Takes in a diff filename and returns a CSV string of added/removed lines.
     """
     result = ""
 
-    if os.path.exists(filename):
-        patch = PatchSet.from_filename(
-            filename, encoding="latin-1"
-        )  # latin-1 is the best choice for an ASCII-compatible encoding
+    if os.path.exists(diff_file):
+        patch = PatchSet.from_filename(diff_file, encoding="latin-1")
         for line in to_csv(patch):
             result += line + "\n"
 
