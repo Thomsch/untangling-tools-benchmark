@@ -9,7 +9,7 @@ element as one single label, but our metic can assign multiple labels
 for one element (i.e. one diff line).
 
 Command Line Args:
-    - evaluation/project/bug_id: Directory of evaluation of the D4J bug containing CSV
+    - evaluation/project/bug_id: Directory containing CSV
       files for: ground truth, 3 untangling results
     - project: D4J project name
     - bug_id: D4J bug id
@@ -36,10 +36,10 @@ def merge_nonbugfixing_changes(df: pd.DataFrame) -> pd.DataFrame:
     Merge clusters of purely non-bug-fixing changes into one group named 'o'.
     Args:
         df: a DataFrame with columns = ['file','source','target','group_truth','group_tool']
-                group_truth: 'fix' or 'other'
-                group_tool: depends on the tool.
-                    For Flexeme, group labels are non-negative integers casted as string, e.g. '0','1','2',etc.
-                    For SmartCommit, group labels are strings in the format: 'group0','group1', etc.
+            group_truth: 'fix' or 'other'  (a line might appear with both labels)
+            group_tool: depends on the tool.
+                For Flexeme, group labels are non-negative integers casted as string, e.g. '0','1','2',etc.
+                For SmartCommit, group labels are strings in the format: 'group0','group1', etc.
     Returns:
         A DataFrame modified in-place, with a less fine-grained classification
         as purely non-bug-fixing groups is considered 'other'.
@@ -82,7 +82,7 @@ def calculate_score_for_tool(truth_df, tool_df):
 
     Args:
         truth_df: The ground truth returned by ground_truth.py. CSV header: {file, source, target, group='fix','other'}
-        tool_df: The clustering results returne by the respective tool. CSV header: {file, source, target, group'}
+        tool_df: The clustering results returned by the respective tool. CSV header: {file, source, target, group'}
             group': String representing group assigned by tool.
                     Flexeme: non-negative integers casted as string e.g., '0','1','2',etc.
                     SmartCommit: strings in the format: e.g., 'group0','group1', etc.
@@ -117,8 +117,7 @@ def calculate_score_for_tool(truth_df, tool_df):
     labels_true = df_adjusted["group_truth"]
 
     # The adjusted rand score (not the same as the adjusted clusters above!)
-    # give a score of 0 when the fix is divided in multiple groups, which is unfair.
-    # smartcommit_score = metrics.adjusted_rand_score(labels_truth, labels_pred)
+    # gives a score of 0 when the fix is divided in multiple groups, which is unfair.
     return metrics.rand_score(labels_true, labels_pred)
 
 
@@ -149,7 +148,7 @@ def main(args):
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
 
-    # Generate array of RandIndex scores (type='float') for each tool, initialized to 0.0
+    # Generate array of one RandIndex score (type='float') for each tool, initialized to 0.0.
     tool_scores = [0.0] * len(tool_csv)
 
     # Cast each tool's group labels into String format and pair with ground
