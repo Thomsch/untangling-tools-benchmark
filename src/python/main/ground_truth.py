@@ -27,7 +27,7 @@ import os
 import sys
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
-from diff_metrics import flatten_patch_object
+from diff_metrics import lines_in_patch
 
 COL_NAMES = ["file", "source", "target"]
 
@@ -75,9 +75,9 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     ground_truth_df = convert_to_dataframe(original_diff)
 
     # Generate 3 queues for classification
-    original_lines = deque([str(line) for line in flatten_patch_object(original_diff)])
-    fix_lines = deque([str(line) for line in flatten_patch_object(fix_diff)])
-    nonfix_lines = deque([str(line) for line in flatten_patch_object(nonfix_diff)])
+    original_lines = deque([str(line) for line in lines_in_patch(original_diff)])
+    fix_lines = deque([str(line) for line in lines_in_patch(fix_diff)])
+    nonfix_lines = deque([str(line) for line in lines_in_patch(nonfix_diff)])
 
     ground_truth_df["group"] = [
         "other" for i in range(len(original_lines))
