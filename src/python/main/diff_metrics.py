@@ -51,29 +51,29 @@ def get_hunks_in_patch(patch):
     All unidiff Line objects must not be blank and must be either an added (+) or removed (-) line.
     We ignore empty hunks.
     """
-    hunked_lines = []
+    hunks = []
     for file in patch:
         for hunk in file:
             lines_in_hunk = get_lines_in_hunk(hunk)
             if len(lines_in_hunk) > 0:
-                hunked_lines.append(lines_in_hunk)
-    return hunked_lines
+                hunks.append(lines_in_hunk)
+    return hunks
 
 
-def flatten_patch_object(patch):
+def lines_in_patch(patch):
     """
     As a PatchSet object is nested with 3 layers, this function
     flattens it such that only line objects are stored sequentially.
     All unidiff Line Objects must be must not be blank and must be
     either an added (+) or removed (-) line.
     """
-    flat_patch = []
+    result = []
     for file in patch:
         for hunk in file:
             lines_in_hunk = get_lines_in_hunk(hunk)
             for line in lines_in_hunk:
-                flat_patch.append(line)
-    return flat_patch
+                result.append(line)
+    return result
 
 
 def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
@@ -87,18 +87,16 @@ def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
     """
     tangled_hunks_count = 0
     hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
-    fix_lines_str = [
-        str(line) for line in flatten_patch_object(fix_diff)
-    ]  # Obtain string representations of all Line Objects
-    if len(fix_lines_str) > 0 or len(fix_lines_str) != count_changed_lines(
+    # Obtain string representations of all Line Objects
+    fix_diff_lines_str = [str(line) for line in lines_in_patch(fix_diff)]
+    if len(fix_diff_lines_str) > 0 or len(fix_diff_lines_str) != count_changed_lines(
         original_diff
     ):
         for hunk in hunks_VC:
-            # TODO: Ideal to use object identity here, but now opt for identity
+            # Find all fix lines in the hunk by matching diff line strings.
+            # TODO: Ideal to use object identity here, but for now opt for identity
             # by string representation instead; possible for this to be error prone.
-            fix_lines_VC = [
-                line for line in hunk if str(line) in fix_lines_str
-            ]  # Find all fix lines in the hunk by matching diff line strings
+            fix_lines_VC = [line for line in hunk if str(line) in fix_diff_lines_str]
             if len(fix_lines_VC) == 0 or len(fix_lines_VC) == len(hunk):
                 continue  # The hunk is purely bug-fixing or non bug-fixing
             tangled_hunks_count += 1
@@ -118,7 +116,7 @@ def count_changed_lines(patch):
         count <Integer>: The number of changed diff lines in the diff file
 
     """
-    flat_patch = flatten_patch_object(patch)
+    flat_patch = lines_in_patch(patch)
     return len(flat_patch)
 
 
@@ -153,7 +151,7 @@ def tangle_counts(repository):
 
     original_diff = PatchSet.from_filename(
         path.join(repository, "diff", "VC_clean.diff"),
-        encoding="latin-1",  # latin-1 is the best choice for an ASCII-compatible encoding
+        encoding="latin-1",
     )
     fix_diff = PatchSet.from_filename(
         path.join(repository, "diff", "BF.diff"), encoding="latin-1"
@@ -184,7 +182,7 @@ def main():
 
     unclean_original_diff = PatchSet.from_filename(
         filename=path.join(repository, "diff", "VC.diff"),
-        encoding="latin-1",  # latin-1 is the best choice for an ASCII-compatible encoding
+        encoding="latin-1",
     )
     clean_original_diff = PatchSet.from_filename(
         path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
@@ -216,7 +214,7 @@ def main():
     # The number of files updated, not including tests.
     files_updated = len(clean_original_diff)
     hunks_count = len(get_hunks_in_patch(clean_original_diff))
-    code_changed_lines = len(flatten_patch_object(clean_original_diff))
+    code_changed_lines = len(lines_in_patch(clean_original_diff))
     average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else ""
 
     print(

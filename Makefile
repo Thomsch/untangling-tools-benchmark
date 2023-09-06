@@ -32,3 +32,7 @@ python-test:
 .PHONY: clean
 clean: 
 	rm -rf ./tmp/
+
+TAGS: tags
+tags:
+	etags $(shell find . -name '*.py') $(shell find . -name '*.sh')

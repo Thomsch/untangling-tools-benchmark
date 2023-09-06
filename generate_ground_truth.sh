@@ -51,7 +51,7 @@ mkdir -p "$workdir"
 mkdir -p "$evaluation_dir"
 mkdir -p "$logs_dir"
 
-echo "Logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
+echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_ground_truth.log"
 echo ""
 
 generate_truth_for_bug() {
