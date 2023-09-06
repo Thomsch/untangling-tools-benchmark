@@ -30,7 +30,7 @@ fi
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. "$SCRIPTDIR"/env.sh
+. "$SCRIPTDIR"/check-environment.sh
 set +o allexport
 
 . "$SCRIPTDIR"/src/bash/main/d4j_utils.sh

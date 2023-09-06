@@ -27,7 +27,7 @@ export out_dir="$2" # Path to the directory where the results are stored and rep
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. "$SCRIPTDIR"/env.sh
+. "$SCRIPTDIR"/check-environment.sh
 set +o allexport
 
 # Check that Java is 1.8 for Defects4j.

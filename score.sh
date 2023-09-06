@@ -19,7 +19,7 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. "$SCRIPTDIR"/env.sh
+. "$SCRIPTDIR"/check-environment.sh
 set +o allexport
 
 export bugs_file="$1" # The file containing the bugs to untangle.

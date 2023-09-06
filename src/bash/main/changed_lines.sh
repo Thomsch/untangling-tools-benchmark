@@ -25,7 +25,7 @@ REPO="$3"
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. "$SCRIPTDIR"/env.sh
+. "$SCRIPTDIR"/check-environment.sh
 set +o allexport
 
 . "$SCRIPTDIR"/d4j_utils.sh
