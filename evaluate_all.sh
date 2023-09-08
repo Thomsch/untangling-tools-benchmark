@@ -13,11 +13,6 @@ if [ $# -ne 2 ] ; then
     exit 1
 fi
 
-if [ ! -f .env ] ; then
-    echo "No .env file found"
-    exit 1
-fi
-
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
 workdir="$(pwd)"

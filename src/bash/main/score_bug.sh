@@ -43,11 +43,9 @@ if [ ! -d "${repository}" ] ; then
   exit 1
 fi
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck source=/dev/null
-if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-  . .env
-fi
+. "$SCRIPTDIR"/../../../check-environment.sh
 set +o allexport
 
 # Untangle with file-based approach

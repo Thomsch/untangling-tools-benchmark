@@ -23,7 +23,12 @@ PROJECT=$1
 VID=$2
 REPO="$3"
 
-source ./src/bash/main/d4j_utils.sh
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/check-environment.sh
+set +o allexport
+
+. "$SCRIPTDIR"/d4j_utils.sh
 
 # Set two variables.
 read -r revision_buggy revision_fixed <<< "$(retrieve_revision_ids "$PROJECT" "$VID")"

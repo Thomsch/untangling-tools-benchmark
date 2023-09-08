@@ -28,7 +28,12 @@ if [ "$java_version" != "1.8" ] ; then
     exit 1
 fi
 
-. ./src/bash/main/d4j_utils.sh
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/check-environment.sh
+set +o allexport
+
+. "$SCRIPTDIR"/src/bash/main/d4j_utils.sh
 
 export bugs_file="$1" # The file containing the bugs to untangle.
 export out_dir="$2" # The directory where the results are stored and repositories checked out.
