@@ -1,0 +1,6 @@
+project_name,vcs_url,commit_hash,parent_hash
+wss4j,https://github.com/apache/giraph.git,4f9c6c24a8b4b03e2836c77fe2e53e38b6519420,c9621e30ba79b20322f449e24a2f438918ce33fa
+wss4j,https://github.com/apache/commons-math,252a0137b147469b18625eb4e7622a85f44ecfe8,50c5eae1a6dd3d0b36ae862db2c3c8e2f564b098
+wss4j,https://github.com/apache/wss4j.git,030895cdb75d7b24a84613949ab8b22effd0c872,ba0b875ec4ed61ea206d53c3c83fe18f0f8c9dd7
+wss4j,https://github.com/apache/commons-codec.git,a5dfe5cbc95d7f3ce0b4829756690c2cb8439f4c,d7b01850ef418b1d261cdb2029f8f85ab4031553
+wss4j,https://github.com/apache/deltaspike.git,6d1278201aab8fae40b1423a5204fc989003a89a,db37a83a2cdd44cde147e6f9926c63e80422c5c6
