@@ -1,4 +1,3 @@
-Connected to database
 project_name,vcs_url,commit_hash,parent_hash
 wss4j,https://github.com/apache/commons-math,79ae77fda8b987b01b2e49dd0ae84819778634dc,7200c43dea3dbfbd9d38b937c44b6e71744b05c5
 wss4j,https://github.com/apache/commons-math,792839b464bc3df40f773147b7694b761cf23b5a,d385c90c2e74fdfc0070f7d92d6d0c260251fc16
