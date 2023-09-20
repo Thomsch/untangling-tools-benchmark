@@ -12,7 +12,7 @@
 # - $4: Directory where the repo is checked out.
 
 # Results are outputted to evaluation/<D4J_bug> respective subfolder.
-# Writes parsed decomposition results to smartcommit.csv and flexeme.csv for each bug in /evaluation/<D4J_bug>
+# Writes parsed untangling results to smartcommit.csv and flexeme.csv for each bug in /evaluation/<D4J_bug>
 # Writes Rand Index scores computed to evaluation/<D4J_bug>/decomposition_scores.csv
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
@@ -30,8 +30,8 @@ out_dir="$3"
 repository="$4"
 
 # Path containing the evaluation results
-evaluation_path="${out_dir}/evaluation/${project}_${vid}"
-truth_csv="${evaluation_path}/truth.csv"
+evaluation_dir="${out_dir}/evaluation/${project}_${vid}"
+truth_csv="${evaluation_dir}/truth.csv"
 
 echo ""
 echo "Calculating Rand Index score for project $project, bug $vid, repository $repository"
@@ -50,7 +50,7 @@ set +o allexport
 
 # Untangle with file-based approach
 echo ""
-file_untangling_out="${evaluation_path}/file_untangling.csv"
+file_untangling_out="${evaluation_dir}/file_untangling.csv"
 if [ -f "$file_untangling_out" ]; then
   echo 'Untangling with file-based approach ..................................... CACHED'
 else
@@ -66,5 +66,5 @@ fi
 
 # Compute untangling score
 echo -ne 'Computing untangling scores ...............................................\r'
-python3 src/python/main/untangling_score.py "$evaluation_path" "${project}" "${vid}" > "${evaluation_path}/scores.csv"
+python3 src/python/main/untangling_score.py "$evaluation_dir" "${project}" "${vid}" > "${evaluation_dir}/scores.csv"
 echo 'Computing untangling scores ............................................... OK'

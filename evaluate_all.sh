@@ -15,8 +15,6 @@ fi
 
 export PYTHONHASHSEED=0         # Make Flexeme deterministic
 
-workdir="$(pwd)"
-export workdir
 export bugs_file="$1" # Path to the file containing the bugs to untangle and evaluate.
 export out_dir="$2" # Path to the directory where the results are stored and repositories checked out.
 
