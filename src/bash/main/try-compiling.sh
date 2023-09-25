@@ -7,7 +7,7 @@
 # The results are written to stdout in CSV format with the following columns:
 # - Name of the project
 # - Commit hash (abbreviated to 6 characters)
-# - Compilation status. Can be either "FAIL", "JAVA8", or "COMMIT_NOT_FOUND".
+# - Compilation status. Shows the java version, or the status tag "FAIL" or "COMMIT_NOT_FOUND".
 # - Time elapsed. In seconds, rounded to the nearest integer.
 #
 # Each version of the project is cloned in a directory named after the project
@@ -36,6 +36,24 @@ if ! [ -d "$out_dir" ]; then
     exit 1
 fi
 
+get_java_version() {
+  # Get the Java version and store it in a variable
+  java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+
+  # Extract the major version number
+  if [[ "$java_version" == 1.* ]]; then
+    major_version=$(echo "$java_version" | cut -d. -f2)
+  else
+    major_version=$(echo "$java_version" | cut -d. -f1)
+  fi
+
+  # Format the result as "JAVAX"
+  java_format="JAVA$major_version"
+
+  # Return the formatted result
+  echo "$java_format"
+}
+
 untangle_with_tools(){
   local project_name="$1"
   local vcs_url="$2"
@@ -57,8 +75,6 @@ untangle_with_tools(){
   fi
 
   if [ -z "$untangling_status_string" ]; then
-    # TODO: Try running on multiple versions of Java.
-    java_version="JAVA8"
     src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1
     ret_code=$?
     untangling_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "$java_version")"
@@ -69,6 +85,12 @@ untangle_with_tools(){
   printf "%s,%s,%s,%.0fs\n" "${project_name}" "${short_commit_fix}" "${untangling_status_string}" "${ELAPSED}"
 }
 
+export -f get_java_version
 export -f untangle_with_tools
+
+# TODO: Try running on multiple versions of Java.
+java_version=$(get_java_version)
+export java_version
+
 printf "%s,%s,%s,%s\n" "project_name" "commit_hash" "compilation_status" "elapsed_time"
 tail -n+2 "$commits" | parallel --colsep "," untangle_with_tools {}
