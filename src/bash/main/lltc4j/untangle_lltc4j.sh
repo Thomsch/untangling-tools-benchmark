@@ -12,9 +12,6 @@
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-. .env
-
-
 if [ $# -ne 3 ] ; then
     echo 'usage: untangle_lltc4j.sh <project_vcs_url> <commit_hash> <out_dir>'
     exit 1
