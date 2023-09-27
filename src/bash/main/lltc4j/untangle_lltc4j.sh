@@ -46,7 +46,7 @@ echo "Untangling project_name $vcs_url, revision ${short_commit_fix}"
 
 # Clone the repo if it doesn't exist
 if [ ! -d "${project_clone_dir}" ] ; then
-  mkdir -p $project_clone_dir
+  mkdir -p "$project_clone_dir"
   git clone "$vcs_url" "$project_clone_dir"
 fi
 
