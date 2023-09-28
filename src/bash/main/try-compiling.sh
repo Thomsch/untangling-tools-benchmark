@@ -36,6 +36,13 @@ if ! [ -d "$clone_dir" ]; then
     exit 1
 fi
 
+get_project_name_from_url() {
+  local url="$1"
+  local filename="${url##*/}"
+  local basename="${filename%%.*}"
+  echo "$basename"
+}
+
 # Retrieves the default Java version in the format "JAVA<VERSION>". For example,
 # "JAVA8", "JAVA11".
 get_java_version() {
@@ -62,12 +69,15 @@ get_java_version() {
 # 2) Project VCS URL
 # 3) Commit hash
 compile(){
-  local project_name="$1"
-  local vcs_url="$2"
-  local commit_hash="$3"
+  local vcs_url="$1"
+  local commit_hash="$2"
 
+  local project_name
+  project_name=$(get_project_name_from_url "$vcs_url")
   local short_commit_fix="${commit_hash:0:6}"
+
   local repository="${clone_dir}/${project_name}_${short_commit_fix}"
+  echo "$repository"
 
   # TODO: Find a way to speed this up.
   # IDEA: Use a local clone of the repository and copy clone.
@@ -92,6 +102,7 @@ compile(){
   printf "%s,%s,%s,%.0fs\n" "${project_name}" "${short_commit_fix}" "${untangling_status_string}" "${ELAPSED}"
 }
 
+export -f get_project_name_from_url
 export -f get_java_version
 export -f compile
 
