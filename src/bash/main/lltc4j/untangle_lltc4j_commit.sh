@@ -64,3 +64,22 @@ else
   echo "${project_name},${short_commit_fix},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results_dir}/time.csv"
   echo 'Untangling with SmartCommit ............................................... OK'
 fi
+
+
+# Retrieve untangling results from SmartCommit and parse them into a CSV file.
+echo ""
+smartcommit_result_out="${smartcommit_untangling_results_dir}/smartcommit.csv"
+if [ -f "$smartcommit_result_out" ] ; then
+  echo 'Parsing SmartCommit results ............................................. CACHED'
+else
+  echo 'Parsing SmartCommit results ...............................................'
+  if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_untangling_results_dir}/${project_name}/${commit_hash}" "$smartcommit_result_out"
+  then
+      echo 'Parsing SmartCommit results ............................................... OK'
+  else
+      echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+      decompose_exit_code=1
+  fi
+fi
+
+exit $decompose_exit_code
