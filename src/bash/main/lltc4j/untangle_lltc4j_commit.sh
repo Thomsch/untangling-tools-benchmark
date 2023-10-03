@@ -72,11 +72,13 @@ echo ""
 smartcommit_result_out="${smartcommit_untangling_results_dir}/smartcommit.csv"
 if [ -f "$smartcommit_result_out" ] ; then
   echo 'Parsing SmartCommit results ............................................. CACHED'
+  decompose_exit_code=0
 else
   echo 'Parsing SmartCommit results ...............................................'
   if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_untangling_results_dir}/${project_name}/${commit_hash}" "$smartcommit_result_out"
   then
       echo 'Parsing SmartCommit results ............................................... OK'
+      decompose_exit_code=0
   else
       echo -ne 'Parsing SmartCommit results ............................................. FAIL'
       decompose_exit_code=1
