@@ -61,6 +61,7 @@ else
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$project_clone_dir" -c "$commit_hash" -o "$smartcommit_untangling_results_dir"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
+  mkdir -p smartcommit_untangling_results_dir
   echo "${project_name},${short_commit_fix},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results_dir}/time.csv"
   echo 'Untangling with SmartCommit ............................................... OK'
 fi
