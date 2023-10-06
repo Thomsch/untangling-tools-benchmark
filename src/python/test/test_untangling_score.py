@@ -8,6 +8,7 @@ import sys
 import tempfile
 
 import pandas as pd
+import pytest
 
 from src.python.main.untangling_score import main
 
@@ -37,6 +38,39 @@ def test_main():
 
         # Check if output is as expected
         assert output == expected_output
+
+
+def test_no_fix_label():
+    """
+    Test that untangling_score.py exits with error code 1 when there is no fix label.
+    """
+    # Create temporary directory and CSV files
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Create sample dataframes
+        truth_df = pd.DataFrame(
+            {
+                "file": ["file1", "file2", "file3"],
+                "source": [1, None, 3],
+                "target": [None, 2, None],
+                "group": ["other", "other", "other"],
+            }
+        )
+        truth_file = os.path.join(tmpdir, "truth.csv")
+        truth_df.to_csv(truth_file, index=False)
+
+        # Run main function with sample command line arguments
+        project = "test_project"
+        vid = "test_vid"
+        args = [tmpdir, project, vid]
+        with tempfile.TemporaryFile(mode="w+") as tmpfile:
+            # Redirect stdout to temporary file
+            old_stdout = sys.stdout
+            sys.stdout = tmpfile
+            with pytest.raises(SystemExit):
+                main(args)
+            sys.stdout.seek(0)
+            output = tmpfile.read()
+            sys.stdout = old_stdout
 
 
 def create_temporary_results(tmpdir):

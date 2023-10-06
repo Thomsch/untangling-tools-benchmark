@@ -5,7 +5,7 @@ Calculates the Performance Metric for untangling results of 3
 methods: SmartCommit, Flexeme, and File-based.  The Performance Metric
 is not the Rand Index by its definition per se, but a variant of the
 Rand Index. To explain, the Rand Index determines clustering of an
-element as one single label, but our metic can assign multiple labels
+element as one single label, but our metric can assign multiple labels
 for one element (i.e. one diff line).
 
 Command Line Args:
@@ -143,7 +143,13 @@ def main(args):
         truth_file = path.join(root, "truth.csv")
         truth_df = pd.read_csv(truth_file).convert_dtypes()
     except FileNotFoundError as e:
-        print(f"File not found: {e.filename}", file=sys.stderr)
+        print(f"Ground truth file not found: {e.filename}", file=sys.stderr)
+        sys.exit(1)
+
+    # The script expects that bug-fixing changes are labelled as 'fix' in the <group> column.
+    if not (truth_df["group"] == "fix").any():
+        print(f"Ground truth file contains no bug-fixing changes. Bug fix changes should be labelled as 'fix' in the "
+              f"<group> column", file=sys.stderr)
         sys.exit(1)
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]
@@ -160,7 +166,6 @@ def main(args):
             tool_df["group"] = tool_df["group"].astype("string")
         except FileNotFoundError:
             tool_df = None
-
         # Add Rand Index in respective tool order
         tool_scores[i] = calculate_score_for_tool(truth_df, tool_df)
     print(f"{project},{vid},{tool_scores[0]},{tool_scores[1]},{tool_scores[2]}")
