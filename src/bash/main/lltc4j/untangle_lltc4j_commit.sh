@@ -34,8 +34,10 @@ short_commit_fix="${commit_hash:0:6}"
 
 export smartcommit_untangling_results_dir="${out_dir}/decomposition/smartcommit/${project_name}_${short_commit_fix}"
 export project_clone_dir="${out_dir}/projects/${project_name}"
+export time_dir="${out_dir}/time"
 
 mkdir -p "$out_dir"
+mkdir -p "$time_dir"
 
 echo ""
 echo "Untangling project_name $vcs_url, revision ${short_commit_fix}"
@@ -62,7 +64,7 @@ else
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
   mkdir -p smartcommit_untangling_results_dir
-  echo "${project_name},${short_commit_fix},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results_dir}/time.csv"
+  echo "${project_name},${short_commit_fix},smartcommit,${DIFF_DECOMPOSITION}" > "${time_dir}/time.csv"
   echo 'Untangling with SmartCommit ............................................... OK'
 fi
 
