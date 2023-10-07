@@ -52,29 +52,24 @@ echo ""
 
 export PYTHONHASHSEED=0
 
-# Returns the project_name name from an URL.
-get_project_name_from_url() {
-  local url="$1"
-  local filename="${url##*/}"
-  local basename="${filename%%.*}"
-  echo "$basename"
-}
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPTDIR/lltc4j_util.sh"
 
 untangle_with_tools(){
   local vcs_url="$1"
   local commit_hash="$2"
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_fix="${commit_hash:0:6}"
+  short_commit_hash="${commit_hash:0:6}"
 
   START="$(date +%s.%N)"   # Record start time for bug decomposition
-  ./src/bash/main/lltc4j/untangle_lltc4j_commit.sh "$vcs_url" "$commit_hash" "$out_dir" > "${logs_dir}/${project_name}_${short_commit_fix}_untangle.log" 2>&1
+  ./src/bash/main/lltc4j/untangle_lltc4j_commit.sh "$vcs_url" "$commit_hash" "$out_dir" > "${logs_dir}/${project_name}_${short_commit_hash}_untangle.log" 2>&1
   ret_code=$?
   untangling_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (time: %.0fs)\n" "${project_name}_${short_commit_fix}" "${untangling_status_string}" "${ELAPSED}"
+  printf "%-20s %s (time: %.0fs)\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}"
 }
 
 export -f get_project_name_from_url

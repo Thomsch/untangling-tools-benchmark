@@ -17,20 +17,15 @@ if [ $# -ne 3 ] ; then
     exit 1
 fi
 
-# Returns the project_name name from an URL.
-get_project_name_from_url() {
-  local url="$1"
-  local filename="${url##*/}"
-  local basename="${filename%%.*}"
-  echo "$basename"
-}
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPTDIR/lltc4j_util.sh"
 
 vcs_url="$1"
 commit_hash="$2"
 out_dir="$3"
 
 project_name=$(get_project_name_from_url "$vcs_url")
-short_commit_fix="${commit_hash:0:6}"
+short_commit_hash="${commit_hash:0:6}"
 
 mkdir -p "$out_dir" # Create the root directory if it doesn't exists yet.
 
@@ -39,13 +34,13 @@ mkdir -p "$out_dir" # Create the root directory if it doesn't exists yet.
 export smartcommit_untangling_root_dir="${out_dir}/decomposition/smartcommit"
 export smartcommit_result_dir="${smartcommit_untangling_root_dir}/${project_name}/${commit_hash}"
 export respository_dir="${out_dir}/repositories/${project_name}" # repository is named after the project.
-export result_dir="${out_dir}/evaluation/${project_name}_${short_commit_fix}" # Directory where the parsed untangling results are stored.
+export result_dir="${out_dir}/evaluation/${project_name}_${short_commit_hash}" # Directory where the parsed untangling results are stored.
 
 export smartcommit_parse_out="${result_dir}/smartcommit.csv"
 export untangling_time_out="${result_dir}/untangling_time.csv"
 
 echo ""
-echo "Untangling project_name $vcs_url, revision ${short_commit_fix}"
+echo "Untangling project_name $vcs_url, revision ${short_commit_hash}"
 
 # Clone the repo if it doesn't exist
 if [ ! -d "${respository_dir}" ] ; then
@@ -70,7 +65,7 @@ else
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$respository_dir" -c "$commit_hash" -o "${smartcommit_untangling_root_dir}"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
-  echo "${project_name},${short_commit_fix},smartcommit,${DIFF_DECOMPOSITION}" > "${untangling_time_out}"
+  echo "${project_name},${short_commit_hash},smartcommit,${DIFF_DECOMPOSITION}" > "${untangling_time_out}"
   echo 'Untangling with SmartCommit ............................................... OK'
 fi
 
