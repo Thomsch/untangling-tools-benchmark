@@ -66,16 +66,16 @@ smartcommit_untangling_results_dir="${smartcommit_untangling_dir}/${project}_${v
 
 # Untangle with SmartCommit
 if [ -d "$smartcommit_untangling_results_dir" ]; then
-  echo 'Untangling with SmartCommit ............................................. CACHED'
+  echo 'Untangling with SmartCommit .......................................... CACHED'
   regenerate_results=false
 else
-  echo 'Untangling with SmartCommit ...............................................'
+  echo 'Untangling with SmartCommit ..........................................'
   START_UNTANGLING="$(date +%s.%N)"
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$repository" -c "$commit" -o "$smartcommit_untangling_dir"
   END_UNTANGLING="$(date +%s.%N)"
   ELAPSED="$(echo "$END_UNTANGLING - $START_UNTANGLING" | bc)"
   echo "${project},${vid},smartcommit,${ELAPSED}" > "${smartcommit_untangling_results_dir}/time.csv"
-  echo 'Untangling with SmartCommit ............................................... OK'
+  echo 'Untangling with SmartCommit .......................................... OK'
   regenerate_results=true
 fi
 
@@ -85,10 +85,10 @@ flexeme_untangling_results="${flexeme_untangling_dir}/${project}_${vid}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
 if [ -f "$flexeme_untangling_graph" ]; then
-  echo 'Untangling with Flexeme ................................................. CACHED'
+  echo 'Untangling with Flexeme .............................................. CACHED'
   regenerate_results=false
 else
-  echo 'Untangling with Flexeme ...............................................'
+  echo 'Untangling with Flexeme ..............................................'
   mkdir -p "$flexeme_untangling_results"
   START_UNTANGLING="$(date +%s.%N)"
   if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
@@ -96,10 +96,10 @@ else
     END_UNTANGLING="$(date +%s.%N)"
     ELAPSED="$(echo "$END_UNTANGLING - $START_UNTANGLING" | bc)"
     echo "${project},${vid},flexeme,${ELAPSED}" > "${flexeme_untangling_results}/time.csv"
-    echo 'Untangling with Flexeme ................................................... OK'
+    echo 'Untangling with Flexeme .............................................. OK'
     regenerate_results=true
   else
-    echo 'Untangling with Flexeme ................................................. FAIL'
+    echo 'Untangling with Flexeme .............................................. FAIL'
     regenerate_results=false
     untangle_exit_code=1
   fi
@@ -110,14 +110,14 @@ echo ""
 
 smartcommit_result_out="${evaluation_dir}/smartcommit.csv"
 if [ -f "$smartcommit_result_out" ] && [ $regenerate_results = false ]; then
-  echo 'Parsing SmartCommit results ............................................. CACHED'
+  echo 'Parsing SmartCommit results .......................................... CACHED'
 else
-  echo 'Parsing SmartCommit results ...............................................'
+  echo 'Parsing SmartCommit results ..........................................'
   if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_untangling_dir}/${project}_${vid}/${commit}" "$smartcommit_result_out"
   then
-      echo 'Parsing SmartCommit results ............................................... OK'
+      echo 'Parsing SmartCommit results .......................................... OK'
   else
-      echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+      echo -ne 'Parsing SmartCommit results .......................................... FAIL'
       untangle_exit_code=1
   fi
 fi
@@ -127,14 +127,14 @@ echo ""
 
 flexeme_result_out="${evaluation_dir}/flexeme.csv"
 if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
-  echo -ne 'Parsing Flexeme results ................................................. CACHED\r'
+  echo -ne 'Parsing Flexeme results .............................................. CACHED\r'
 else
-  echo 'Parsing Flexeme results ...............................................'
+  echo 'Parsing Flexeme results ..............................................'
   if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$flexeme_result_out"
   then
-      echo 'Parsing Flexeme results ................................................... OK'
+      echo 'Parsing Flexeme results .............................................. OK'
   else
-      echo -ne 'Parsing Flexeme results ................................................. FAIL\r'
+      echo 'Parsing Flexeme results .............................................. FAIL'
       untangle_exit_code=1
   fi
 fi

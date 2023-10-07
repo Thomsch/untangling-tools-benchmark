@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Add "cleaned" commits at the end of a repository cloned from Defects4J.
+# Run from within a clone of a Defects4J repository.
+# Adds "cleaned" commits at the end of the repository.
 # Example use:
 #   defects4j checkout -p Lang -v 1b -w /tmp/lang_1_buggy
 #   cd /tmp/lang_1_buggy
@@ -77,8 +78,6 @@ tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
 
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
-rm -rf "$tmpdir"
-cp -Rp "$olddir" "$tmpdir"
 
 # Adds a new commit to the git clone in $newdir.
 add_cleaned_commit () {
@@ -109,9 +108,8 @@ add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION (= cleaned $v1)"
 add_cleaned_commit "$v2" "Cleaned FIXED_VERSION (= cleaned $v2)"
 add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION (= cleaned $v3)"
 
-cd "$olddir"
-# Delete the unclean directory and change the name of the cleaned directory to old format
+# Replace the unclean directory by the cleaned directory.
 rm -rf "$olddir"
 mv "$newdir" "$olddir"
 echo "$(basename "$0"): success; result is in ../$(basename "$olddir")"
-cd "$SCRIPTDIR"
+cd "$olddir"

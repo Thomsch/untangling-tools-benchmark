@@ -50,13 +50,13 @@ fi
 truth_csv="${evaluation_dir}/truth.csv"
 
 if [ -f "$truth_csv" ]; then
-    echo 'Calculating ground truth ................................................ CACHED'
+    echo 'Calculating ground truth ............................................. CACHED'
 else
     if python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
     then
-        echo 'Calculating ground truth .................................................. OK'
+        echo 'Calculating ground truth ............................................. OK'
     else
-        echo -ne 'Calculating ground truth .................................................. FAIL\r'
-        exit 1        # Exit with status code 1 to mark this run as FAIl when called in generate_ground_truth.sh
+        echo 'Calculating ground truth ............................................. FAIL'
+        exit 1        # Exit with status code 1 to mark this run as FAIL when called in generate_ground_truth.sh
     fi
 fi
