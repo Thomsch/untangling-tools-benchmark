@@ -66,16 +66,15 @@ do
     commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
 
     if [ -f "$truth_csv" ]; then
-        echo 'Calculating ground truth ................................................ CACHED'
+        echo 'Calculating ground truth ............................................. CACHED'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
         if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
         then
-            evaluation_status_string="OK"
+            echo "Calculating ground truth ............................................. OK"
         else
-            evaluation_status_string="FAIL"
+            echo "Calculating ground truth ............................................. FAIL"
         fi
-        echo "Calculating ground truth .................................................. ${evaluation_status_string}"
     fi
 
     # count number of lines and append

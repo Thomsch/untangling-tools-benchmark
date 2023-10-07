@@ -52,19 +52,19 @@ set +o allexport
 echo ""
 file_untangling_out="${evaluation_dir}/file_untangling.csv"
 if [ -f "$file_untangling_out" ]; then
-  echo 'Untangling with file-based approach ..................................... CACHED'
+  echo 'Untangling with file-based approach .................................. CACHED'
 else
-  echo -ne 'Untangling with file-based approach .......................................\r'
+  echo -ne 'Untangling with file-based approach ..................................\r'
   if python3 src/python/main/filename_untangling.py "${truth_csv}" "${file_untangling_out}"
   then
-      echo 'Untangling with file-based approach ....................................... OK'
+      echo 'Untangling with file-based approach .................................. OK'
   else
-      echo -ne 'Untangling with file-based approach ..................................... FAIL\r'
+      echo -ne 'Untangling with file-based approach .................................. FAIL\r'
       return 1                # Return exit code 1 to mark this run as FAIl when called in score.sh
   fi
 fi
 
 # Compute untangling score
-echo -ne 'Computing untangling scores ...............................................\r'
+echo -ne 'Computing untangling scores ..........................................\r'
 python3 src/python/main/untangling_score.py "$evaluation_dir" "${project}" "${vid}" > "${evaluation_dir}/scores.csv"
-echo 'Computing untangling scores ............................................... OK'
+echo 'Computing untangling scores .......................................... OK'
