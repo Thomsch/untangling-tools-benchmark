@@ -19,7 +19,7 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: decompose.sh <commits_file> <clone_dir>'
+    echo "usage: $0 <commits_file> <clone_dir>"
     exit 1
 fi
 
@@ -57,26 +57,25 @@ get_java_version() {
   fi
 
   # Format the result as "JAVAX"
-  java_format="JAVA$major_version"
+  java_version="JAVA$major_version"
 
   # Return the formatted result
-  echo "$java_format"
+  echo "$java_version"
 }
 
 # Try to compile a commit and write the compilation result to stdout.
 # Arguments:
-# 1) Project name
-# 2) Project VCS URL
-# 3) Commit hash
-compile(){
+# 1) Project VCS URL
+# 2) Commit hash
+compile() {
   local vcs_url="$1"
   local commit_hash="$2"
 
   local project_name
   project_name=$(get_project_name_from_url "$vcs_url")
-  local short_commit_fix="${commit_hash:0:6}"
+  local short_commit_hash="${commit_hash:0:6}"
 
-  local repository="${clone_dir}/${project_name}_${short_commit_fix}"
+  local repository="${clone_dir}/${project_name}_${short_commit_hash}"
   echo "$repository"
 
   # TODO: Find a way to speed this up.
@@ -85,21 +84,23 @@ compile(){
   git clone -q "$vcs_url" "$repository" || exit 1
   cd "$repository" || exit 1
   git checkout -q "$commit_hash"
-  ret_code=$?
+  checkout_ret_code=$?
   cd - >/dev/null || exit 1
-  if [ $ret_code -ne 0 ]; then
+  if [ $checkout_ret_code -ne 0 ]; then
     untangling_status_string="COMMIT_NOT_FOUND"
   fi
 
   if [ -z "$untangling_status_string" ]; then
-    src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1
-    ret_code=$?
-    untangling_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "$java_version")"
+    if src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1 ; then
+      untangling_status_string="$java_version"
+    else
+      untangling_status_string="FAIL for $java_version"
+    fi
   fi
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.
-  printf "%s,%s,%s,%.0fs\n" "${project_name}" "${short_commit_fix}" "${untangling_status_string}" "${ELAPSED}"
+  printf "%s,%s,%s,%.0fs\n" "${project_name}" "${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}"
 }
 
 export -f get_project_name_from_url
