@@ -148,8 +148,11 @@ def main(args):
 
     # The script expects that bug-fixing changes are labelled as 'fix' in the <group> column.
     if not (truth_df["group"] == "fix").any():
-        print(f"Ground truth file contains no bug-fixing changes. Bug fix changes should be labelled as 'fix' in the "
-              f"<group> column", file=sys.stderr)
+        print(
+            "Ground truth file contains no bug-fixing changes. Bug fix changes should be labelled as 'fix' in the "
+            "<group> column",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     tool_csv = ["smartcommit.csv", "flexeme.csv", "file_untangling.csv"]

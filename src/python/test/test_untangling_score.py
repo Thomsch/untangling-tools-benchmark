@@ -69,7 +69,6 @@ def test_no_fix_label():
             with pytest.raises(SystemExit):
                 main(args)
             sys.stdout.seek(0)
-            output = tmpfile.read()
             sys.stdout = old_stdout
 
 
