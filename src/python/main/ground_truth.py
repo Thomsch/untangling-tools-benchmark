@@ -22,11 +22,13 @@ Returns:
         - target = the line added (+) to fixed version
 """
 
-from collections import deque
 import os
 import sys
+from collections import deque
+
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
+
 from diff_metrics import lines_in_patch
 
 COL_NAMES = ["file", "source", "target"]
@@ -155,7 +157,7 @@ def main():
         sys.exit(1)
 
     repository = args[0]
-    out_path = args[1]
+    out_dir = args[1]
     original_diff = PatchSet.from_filename(
         os.path.join(repository, "diff", "VC_clean.diff"),
         encoding="latin-1",
@@ -168,7 +170,7 @@ def main():
     )
 
     ground_truth_df = classify_diff_lines(original_diff, bug_fix_diff, nonfix_diff)
-    ground_truth_df.to_csv(out_path, index=False)
+    ground_truth_df.to_csv(out_dir, index=False)
 
 
 if __name__ == "__main__":

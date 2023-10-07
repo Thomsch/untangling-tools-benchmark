@@ -6,7 +6,7 @@ d4j_diff () {
     if [ $# -ne 5 ] ; then
       echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Clone>'
       echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
-      return 1
+      exit 1
     fi
 
     local PROJECT="$1"
@@ -23,7 +23,7 @@ d4j_diff () {
         svn diff -c --old"${REVISION_BUGGY}" --new="${REVISION_FIXED}" "${REPO_DIR}"  --diff-cmd diff -x -w "-U 0"
     else
         echo "Error: VCS ${vcs} not supported."
-        return 1
+        exit 1
     fi
 }
 
@@ -37,7 +37,7 @@ print_revision_ids () {
   if [ $# -ne 2 ] ; then
       echo 'usage: print_revision_ids <D4J Project> <D4J Bug id>'
       echo 'example: print_revision_ids Lang 1'
-      return 1
+      exit 1
     fi
 
   local project="$1"
@@ -52,7 +52,7 @@ print_revision_ids () {
 
   if [ -z "$line" ]; then
     echo "Bug ID $bug_id not found." 1>&2
-    return 1
+    exit 1
   fi
 
   # Parse the line to retrieve revision.id.buggy and revision.id.fixed

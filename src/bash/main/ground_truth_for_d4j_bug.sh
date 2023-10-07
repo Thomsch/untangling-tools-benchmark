@@ -34,8 +34,8 @@ out_dir="$3"
 repository="$4"
 
 # Path containing the evaluation results. i.e., ground truth
-export evaluation_path="${out_dir}/evaluation/${project}_${vid}"
-mkdir -p "$evaluation_path"
+export evaluation_dir="${out_dir}/evaluation/${project}_${vid}"
+mkdir -p "$evaluation_dir"
 
 echo ""
 echo "Calculating ground truth for project $project, bug $vid, repository $repository"
@@ -47,7 +47,7 @@ if [ ! -d "${repository}" ] ; then
   ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository"
 fi
 
-truth_csv="${evaluation_path}/truth.csv"
+truth_csv="${evaluation_dir}/truth.csv"
 
 if [ -f "$truth_csv" ]; then
     echo 'Calculating ground truth ................................................ CACHED'

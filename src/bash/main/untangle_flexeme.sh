@@ -16,6 +16,6 @@ repository="$1" # The repository to run on
 commit="$2" # Commit to untangle
 sourcepath="$3" # Java source path for compilation
 classpath="$4" # Java class path for compilation
-output_file="$5" # Location of the file containing the decomposition
+output_file="$5" # Location of the file containing the untangling results
 
 flexeme "$repository" "$commit" "$sourcepath" "$classpath" "$output_file"
