@@ -49,13 +49,13 @@ metrics_csv="${metrics_dir}/${project}_${vid}.csv"
 
 # Compute commit metrics
 if [ -f "$metrics_csv" ]; then
-    echo 'Calculating metrics ..................................................... CACHED'
+    echo 'Calculating metrics .................................................. CACHED'
 else
     if python3 src/python/main/diff_metrics.py "${project}" "${vid}" "${repository}" > "$metrics_csv"
     then
-        echo 'Calculating metrics ..................................................... OK'
+        echo 'Calculating metrics .................................................. OK'
     else
-        echo -ne 'Calculating metrics ..................................................... FAIL\r'
+        echo 'Calculating metrics .................................................. FAIL'
         exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
     fi
 fi

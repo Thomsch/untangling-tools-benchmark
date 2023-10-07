@@ -51,9 +51,9 @@ defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 cd "$repository" || exit 1
 if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
 then
-    echo -ne 'Cleaning Java directory.................................................. OK\r'
+    echo 'Cleaning Java directory............................................... OK'
 else
-    echo -ne 'Cleaning Java directory.................................................. FAIL\r'
+    echo 'Cleaning Java directory............................................... FAIL'
     exit 1
 fi
 cd - || exit 1
@@ -63,7 +63,7 @@ diff_dir="${repository}/diff"
 bug_fix_diff_out="${diff_dir}/BF.diff"
 
 if [ -f "$bug_fix_diff_out" ]; then
-    echo 'Generating diff and code artifacts ................................................ CACHED'
+    echo 'Generating diff and code artifacts ................................... CACHED'
     exit 0
 fi
 
@@ -100,8 +100,8 @@ python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
 code=$?
 if [ $code -eq 0 ]
 then
-    echo 'Generating diff and code artifacts .................................................. OK'
+    echo 'Generating diff and code artifacts ................................... OK'
 else
-    echo 'Generating diff and code artifacts .................................................. FAIL'
+    echo 'Generating diff and code artifacts ................................... FAIL'
     exit 1                  # Return exit code 1 to mark this run as FAIl when called in generate_artifacts.sh
 fi
