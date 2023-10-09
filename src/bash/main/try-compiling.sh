@@ -81,11 +81,11 @@ compile() {
   # TODO: Find a way to speed this up.
   # IDEA: Use a local clone of the repository and copy clone.
   START="$(date +%s.%N)"
-  git clone -q "$vcs_url" "$repository" || exit 1
-  cd "$repository" || exit 1
+  git clone -q "$vcs_url" "$repository"
+  cd "$repository"
   git checkout -q "$commit_hash"
   checkout_ret_code=$?
-  cd - >/dev/null || exit 1
+  cd - >/dev/null
   if [ $checkout_ret_code -ne 0 ]; then
     untangling_status_string="COMMIT_NOT_FOUND"
   fi
