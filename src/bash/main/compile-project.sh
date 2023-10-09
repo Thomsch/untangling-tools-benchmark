@@ -1,9 +1,9 @@
 #!/bin/sh
 
 ## This script comes from
-## https://github.com/plume-lib/manage-git-branches/blob/main/compile-project .
+## https://github.com/plume-lib/manage-git-branches/blob/main/compile-project.
 
-# Compile the project that contains the current directory.
+# Compile the project that contains the current or given directory.
 #
 # Supports Gradle, Maven, and Make projects.  If no buildfile is found
 # at the top level, searches at (only) the next level down.
@@ -13,7 +13,7 @@
 # exit status is failure.
 #
 # Usage:
-#   compile-project
+#   compile-project [<directory>]
 #
 # If variable GRADLE_ASSEMBLE_FLAGS is defined, it is passed to `gradle assemble`.
 # If variable MVN_COMPILE_FLAGS is defined, it is passed to `mvn compile`.
@@ -26,13 +26,15 @@
 # TODO: Handle other build systems too, such as Ant.
 # TODO: Have a list of per-directory or per-repository commands, to override the default.
 
-if [ "$#" -ne 0 ]; then
-  echo "Usage: $(basename "$0")" >&2
+if [ "$#" -eq 0 ]; then
+  # $toplevel does not have a trailing "/" character
+  toplevel="$(git rev-parse --show-toplevel 2>&1)"
+elif [ "$#" -eq 1 ]; then
+  toplevel="$1"
+elif [ "$#" -ne 1 ]; then
+  echo "Usage: $(basename "$0") [<directory>]" >&2
   exit 1
 fi
-
-# $toplevel does not have a trailing "/" character
-toplevel="$(git rev-parse --show-toplevel 2>&1)"
 
 echo "Running compile-project in $toplevel from $(pwd)"
 
