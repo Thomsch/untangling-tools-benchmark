@@ -60,9 +60,13 @@ get_project_name_from_url() {
   echo "$basename"
 }
 
+# Untangles a commit from the LLTC4J dataset using SmartCommit and Flexeme.
+# Arguments:
+# - $1: The URL of the git repository for the project.
+# - $2: The commit hash to untangle.
 untangle_with_tools(){
-  local vcs_url="$1"
-  local commit_hash="$2"
+  local vcs_url="$1" # The URL of the git repository for the project.
+  local commit_hash="$2" # The commit hash to untangle.
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
   short_commit_hash="${commit_hash:0:6}"
