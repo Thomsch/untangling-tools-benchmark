@@ -36,7 +36,7 @@ elif [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-echo "Running compile-project in $toplevel from $(pwd)"
+echo "Running compile-project in $toplevel from $(pwd)" >&2
 
 case $toplevel in
     "fatal: not a git repository"*) toplevel=$(pwd) ;;
