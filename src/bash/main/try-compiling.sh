@@ -104,7 +104,6 @@ compile() {
 }
 
 export -f get_project_name_from_url
-export -f get_java_version
 export -f compile
 
 java_version=$(get_java_version)
