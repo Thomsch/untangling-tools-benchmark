@@ -48,7 +48,7 @@ mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
-cd "$repository" || exit 1
+cd "$repository"
 if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
 then
     echo 'Cleaning Java directory............................................... OK'
@@ -56,7 +56,7 @@ else
     echo 'Cleaning Java directory............................................... FAIL'
     exit 1
 fi
-cd - || exit 1
+cd -
 
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
@@ -69,7 +69,7 @@ fi
 
 . "$SCRIPTDIR"/d4j_utils.sh
 
-cd "$repository" || exit 1
+cd "$repository"
 mkdir -p "$diff_dir"
 
 # Get the 3 cleaned commit hashes
@@ -85,7 +85,7 @@ if [ ! -f "${inverted_patch}" ] ; then
     exit 1
 fi
 
-cd "$workdir"|| exit 1
+cd "$workdir"
 
 # Generate the VC diff but not clean yet, to generate commit metrics first
 d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
