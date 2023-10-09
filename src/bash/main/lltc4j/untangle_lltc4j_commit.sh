@@ -1,7 +1,7 @@
 #!/bin/bash
 # Untangle with SmartCommit on a bug-fixing commit from the Line-Labelled Tangled Commits for Java (LLTC4J) dataset.
 # Arguments:
-# - $1: The path to the project_name clone.
+# - $1: URL of the project's git repository. e.g., https://github.com/Thomsch/untangling-tools-benchmark.
 # - $2: The commit hash of the bug-fix.
 # - $3: Directory where the results will be stored.
 
