@@ -48,28 +48,28 @@ mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
 # Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
-cd "$repository" || exit 1
+cd "$repository"
 if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
 then
-    echo -ne 'Cleaning Java directory.................................................. OK\r'
+    echo 'Cleaning Java directory............................................... OK'
 else
-    echo -ne 'Cleaning Java directory.................................................. FAIL\r'
+    echo 'Cleaning Java directory............................................... FAIL'
     exit 1
 fi
-cd - || exit 1
+cd -
 
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
 bug_fix_diff_out="${diff_dir}/BF.diff"
 
 if [ -f "$bug_fix_diff_out" ]; then
-    echo 'Generating diff and code artifacts ................................................ CACHED'
+    echo 'Generating diff and code artifacts ................................... CACHED'
     exit 0
 fi
 
 . "$SCRIPTDIR"/d4j_utils.sh
 
-cd "$repository" || exit 1
+cd "$repository"
 mkdir -p "$diff_dir"
 
 # Get the 3 cleaned commit hashes
@@ -85,7 +85,7 @@ if [ ! -f "${inverted_patch}" ] ; then
     exit 1
 fi
 
-cd "$workdir"|| exit 1
+cd "$workdir"
 
 # Generate the VC diff but not clean yet, to generate commit metrics first
 d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
@@ -100,8 +100,8 @@ python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/BF.diff"
 code=$?
 if [ $code -eq 0 ]
 then
-    echo 'Generating diff and code artifacts .................................................. OK'
+    echo 'Generating diff and code artifacts ................................... OK'
 else
-    echo 'Generating diff and code artifacts .................................................. FAIL'
+    echo 'Generating diff and code artifacts ................................... FAIL'
     exit 1                  # Return exit code 1 to mark this run as FAIl when called in generate_artifacts.sh
 fi

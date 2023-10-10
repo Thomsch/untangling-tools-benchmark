@@ -1,13 +1,13 @@
 #!/bin/bash
 # Untangle with SmartCommit on a bug-fixing commit from the Line-Labelled Tangled Commits for Java (LLTC4J) dataset.
 # Arguments:
-# - $1: The path to the project_name clone.
+# - $1: URL of the project's git repository. e.g., https://github.com/Thomsch/untangling-tools-benchmark.
 # - $2: The commit hash of the bug-fix.
 # - $3: Directory where the results will be stored.
 
 # The decomposition results are written to decomposition/smartcommit/<D4J bug>/ and ~/decomposition/<D4J bug>/flexeme/<D4J bug>/ subfolder.
 # - smartcommit/diffs: JSON files storing SmartCommit hunk-based decomposition results
-# - smartcommit/time.csv: Run time allocated for untangling by SmartCommit
+# - smartcommit/time.csv: Run time spent by SmartCommit
 
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
@@ -51,8 +51,8 @@ fi
 cd "$respository_dir" || exit 1
 git checkout "$commit_hash"
 cd - || exit 1
-
 echo ""
+
 
 mkdir -p "$result_dir" # Create the directory where the time statistics will be stored.
 
@@ -81,8 +81,8 @@ else
   then
       echo 'Parsing SmartCommit results ............................................... OK'
       decompose_exit_code=0
-  else
       echo -ne 'Parsing SmartCommit results ............................................. FAIL'
+  else
       decompose_exit_code=1
   fi
 fi

@@ -9,7 +9,7 @@ to have multiple groups).
 
 Command Line Args:
     - result_dir: Directory to flexeme.dot results in decomposition/flexeme
-    - output_path: Directory to store returned CSV file in evaluation/flexeme.csv
+    - output_file: Directory to store returned CSV file in evaluation/flexeme.csv
 Writes:
     A flexeme.csv file in the evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group=0,1,2,etc.}
@@ -46,7 +46,7 @@ def main():
         sys.exit(1)
 
     result_file = args[0]
-    output_path = args[1]
+    output_file = args[1]
 
     try:
         graph = nx.nx_pydot.read_dot(result_file)
@@ -95,15 +95,15 @@ def main():
 
         # Merge results per line. Might not need to merge results per line
         #  since the data is calculated using a left join on the truth.
-        export_csv(output_path, result)
+        export_csv(output_file, result)
 
 
-def export_csv(output_path, result):
+def export_csv(output_file, result):
     """
     Export the results to a CSV file.
 
     Args:
-        output_path: The path to the CSV file to be created.
+        output_file: The path to the CSV file to be created.
         result: The string containing the results to be written to the CSV file.
     """
     df = pd.read_csv(
@@ -113,7 +113,7 @@ def export_csv(output_path, result):
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
     df = df.drop_duplicates()
-    export_tool_decomposition_as_csv(df, output_path)
+    export_tool_decomposition_as_csv(df, output_file)
 
 
 def get_update_type(data):

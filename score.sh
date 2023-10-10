@@ -39,7 +39,7 @@ mkdir -p "$logs_dir"
 echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_score.log"
 echo ""
 
-parse_and_score_bug(){
+score_bug(){
   local project="$1"
   local vid="$2"
 
@@ -55,8 +55,8 @@ parse_and_score_bug(){
   printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}"
 }
 
-export -f parse_and_score_bug
-parallel --colsep "," parse_and_score_bug {} < "$bugs_file"
+export -f score_bug
+parallel --colsep "," score_bug {} < "$bugs_file"
 
 if ! cat "${evaluation_dir}"/*/scores.csv > "$out_file" ; then
   echo "No \"scores.csv\" files found under ${evaluation_dir}."

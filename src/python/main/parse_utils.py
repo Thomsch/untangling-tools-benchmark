@@ -4,13 +4,13 @@ This module contains utility functions for parsing and exporting decomposition r
 import sys
 
 
-def export_tool_decomposition_as_csv(df, output_path):
+def export_tool_decomposition_as_csv(df, output_file):
     """
     Export the dataframe to a CSV file. Print an error message if the dataframe is empty.
 
     Args:
         df: The dataframe to be exported. The dataframe represents the decomposition results for a tool.
-        output_path: The path to the CSV file to be created.
+        output_file: The path to the CSV file to be created.
     """
     if len(df) == 0:
         print(
@@ -18,4 +18,4 @@ def export_tool_decomposition_as_csv(df, output_path):
             file=sys.stderr,
         )
         sys.exit(1)
-    df.to_csv(output_path, index=False)
+    df.to_csv(output_file, index=False)
