@@ -91,8 +91,13 @@ compile() {
   fi
 
   if [ -z "$untangling_status_string" ]; then
-    if src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1 ; then
+    src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1
+    compile_exit_code=$?
+
+    if [ "$compile_exit_code" -eq 0 ]; then
       untangling_status_string="$java_version"
+    elif [ "$compile_exit_code" -eq 222 ]; then
+      untangling_status_string="BUILD_FILE_NOT_FOUND"
     else
       untangling_status_string="FAIL for $java_version"
     fi
