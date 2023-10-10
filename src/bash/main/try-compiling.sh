@@ -91,6 +91,7 @@ compile() {
   fi
 
   if [ -z "$untangling_status_string" ]; then
+    export ERR_IF_NO_BUILDFILE=1 # Exit with an error if no buildfile is found.
     src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1
     compile_exit_code=$?
 
