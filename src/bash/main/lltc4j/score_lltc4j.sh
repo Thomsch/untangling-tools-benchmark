@@ -14,18 +14,18 @@ set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
-    echo 'usage: score_lltc4j.sh <commits_file> <root_dir>'
+    echo 'usage: score_lltc4j.sh <commits_file> <results_dir>'
     exit 1
 fi
 
 export commits_file="$1" # The file containing the commits to score.
-export root_dir="$2" # The directory where the results are stored and repositories checked out.
+export results_dir="$2" # The directory where the results are stored and repositories checked out.
 
-export out_file="${root_dir}/decomposition_scores.csv" # Aggregated results.
-export workdir="${root_dir}/repositories"
-export evaluation_root_dir="${root_dir}/evaluation"
-export decomposition_dir="${root_dir}/decomposition"
-export logs_dir="${root_dir}/logs"
+export aggregate_scores_file="${results_dir}/decomposition_scores.csv" # Aggregated results.
+export workdir="${results_dir}/repositories"
+export evaluation_root_dir="${results_dir}/evaluation"
+export decomposition_dir="${results_dir}/decomposition"
+export logs_dir="${results_dir}/logs"
 
 mkdir -p "$evaluation_root_dir"
 mkdir -p "$decomposition_dir"
@@ -62,10 +62,10 @@ score_bug(){
 export -f score_bug
 tail -n+2 "$commits_file" | parallel --colsep "," score_bug {}
 
-if ! cat "${evaluation_root_dir}"/*/scores.csv > "$out_file" ; then
+if ! cat "${evaluation_root_dir}"/*/scores.csv > "$aggregate_scores_file" ; then
   echo "No \"scores.csv\" files found under ${evaluation_root_dir}."
   find "${evaluation_root_dir}"
   exit 1
 fi
 echo ""
-echo "Decomposition scores are aggregated in ${out_file}"
+echo "Decomposition scores are aggregated in ${aggregate_scores_file}"
