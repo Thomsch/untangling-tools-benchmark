@@ -64,7 +64,8 @@ compile_in_directory() {
     return $?
   elif [ -f "$dir/pom.xml" ]; then
     # shellcheck disable=SC2086 # Word splitting is desirable here.
-    (cd "$dir" && mvn -q compile ${MVN_COMPILE_FLAGS})
+    (cd "$dir" &&
+    dljc -t print -o ~/Workplace/untangling-tools-benchmark/logs -- mvn -q compile ${MVN_COMPILE_FLAGS})
     return $?
   elif [ -f "$dir/Makefile" ]; then
     # shellcheck disable=SC2086 # Word splitting is desirable here.
