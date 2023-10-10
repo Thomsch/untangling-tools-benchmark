@@ -56,7 +56,7 @@ compile_in_directory() {
     return $?
   elif [ -f "$dir/build.gradle" ]; then
     # shellcheck disable=SC2086 # Word splitting is desirable here.
-    gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
+    dljc -t print -o ~/Workplace/untangling-tools-benchmark/logs -- gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
     return $?
   elif [ -f "$dir/mvnw" ]; then
     # shellcheck disable=SC2086 # Word splitting is desirable here.
