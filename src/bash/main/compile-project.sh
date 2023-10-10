@@ -43,6 +43,7 @@ case $toplevel in
 esac
 
 # Returns a status code indicating success or failure, or 222 if no buildfile was found.
+# Saves the results of dljc in a folder called dljc-logs in the cloned repository.
 compile_in_directory() {
   if [ "$#" -ne 1 ] ; then
     echo "compile_in_directory got $# arguments: $*"
@@ -51,23 +52,28 @@ compile_in_directory() {
   dir="$1"
 
   if [ -f "$dir/gradlew" ]; then
+    echo "Build system detected: Gradle Wrapper" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
     "$dir/gradlew" --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
     return $?
   elif [ -f "$dir/build.gradle" ]; then
+    echo "Build system detected: Gradle" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
-    dljc -t print -o ~/Workplace/untangling-tools-benchmark/logs -- gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
+    dljc -t print -o "$dir/dljc-logs" -- gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
     return $?
   elif [ -f "$dir/mvnw" ]; then
+    echo "Build system detected: Maven Wrapper" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
     (cd "$dir" && ./mvnw -q compile ${MVN_COMPILE_FLAGS})
     return $?
   elif [ -f "$dir/pom.xml" ]; then
+    echo "Build system detected: Maven" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
     (cd "$dir" &&
-    dljc -t print -o ~/Workplace/untangling-tools-benchmark/logs -- mvn -q compile ${MVN_COMPILE_FLAGS})
+    dljc -t print -o "$dir/dljc-logs" -- mvn -q compile ${MVN_COMPILE_FLAGS})
     return $?
   elif [ -f "$dir/Makefile" ]; then
+    echo "Build system detected: Make" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
     (cd "$dir" && make ${MAKE_FLAGS})
     return $?
