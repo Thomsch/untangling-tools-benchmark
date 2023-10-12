@@ -62,7 +62,7 @@ def main():
     Implement the logic of the script. See the module docstring.
     """
     main_parser = argparse.ArgumentParser(
-        prog="extract-mixed-commits.py",
+        prog="select_mixed_changes_scores.py",
         description="Recursively looks at the 'truth.csv' files in the given directory and outputs which commits have "
                     "bug-fixing changes and non bug-fixing changes.",
     )
