@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-This script filters the untangling scores to only include commits with mixed changes.
-The new untangling results are written to stdout.
+This script filters the untangling scores, keeping only scores belonging to commits with bug-fixing and non bug-fixing changes.
+The filtered scores are written to stdout in the same format as the original file.
 
 Arguments:
     --scores-file. Required argument to specify the file where the decomposition scores are stored.
@@ -15,7 +15,9 @@ from typing import List
 
 import pandas as pd
 
-MIXED_CHANGE_LABEL='mixed'
+MIXED_CHANGE_LABEL = 'mixed'
+FIX_LABEL_CSV = 'fix'
+OTHER_LABEL_CSV = 'other'
 
 
 def get_change_type(df: pd.DataFrame) -> str:
@@ -24,24 +26,24 @@ def get_change_type(df: pd.DataFrame) -> str:
     """
     if df.empty:
         return "empty"
-    if all(df["group"] == "fix"):
-        return "fix"
+    if all(df["group"] == FIX_LABEL_CSV):
+        return FIX_LABEL_CSV
     if all(df["group"] == "other"):
-        return "other"
-    if df["group"].isin(["fix", "other"]).sum() == len(df["group"]):
+        return OTHER_LABEL_CSV
+    if df["group"].isin([FIX_LABEL_CSV, OTHER_LABEL_CSV]).sum() == len(df["group"]):
         return MIXED_CHANGE_LABEL
 
     raise ValueError(
-        f"{df['group']} contains an unexpected value in the `group` column. Should be `bugfix` or `nonbugfix`."
+        f"{df['group']} contains an unexpected value in the `group` column. Should be `{FIX_LABEL_CSV}` or `{OTHER_LABEL_CSV}`."
     )
 
 
 def find_mixed_commits(root_dir: str) -> List[str]:
     """
-    Returns a list of commit identifier that have mixed changes in format <project_name>_<commit_hash>.
+    Returns a list of commit identifiers that have mixed changes in format <project_name>_<commit_hash>.
 
     Arguments:
-    - dir: Root directory where the CSV ground truth is.
+    - dir: Root directory where the CSV ground truth files are stored.
     """
     mixed_changes = []
     for root, _, files in os.walk(root_dir):
@@ -54,14 +56,15 @@ def find_mixed_commits(root_dir: str) -> List[str]:
                     mixed_changes.append(os.path.basename(root))
     return mixed_changes
 
+
 def main():
     """
     Implement the logic of the script. See the module docstring.
     """
     main_parser = argparse.ArgumentParser(
         prog="extract-mixed-commits.py",
-        description="Looks at all the 'truth.csv' files in the given directory and outputs which commits have bug-fixing "
-             "changes and non bug-fixing changes.",
+        description="Recursively looks at the 'truth.csv' files in the given directory and outputs which commits have "
+                    "bug-fixing changes and non bug-fixing changes.",
     )
 
     main_parser.add_argument(
@@ -74,7 +77,7 @@ def main():
 
     main_parser.add_argument(
         "-s",
-        "--score-file",
+        "--scores-file",
         help="File containing the aggregated decomposition scores.",
         metavar="PATH",
         required=True,
@@ -86,23 +89,28 @@ def main():
     if not os.path.exists(args.directory):
         raise ValueError(f"Directory {directory} does not exist.")
 
+    # Find the commits with mixed changes and create columns for project name and short commit hash from the commit identifier column
     mixed_changes = find_mixed_commits(directory)
     df_mixed_changes = pd.DataFrame({"commit_identifier": mixed_changes})
-    df_mixed_changes[['project_name', 'short_commit']] = df_mixed_changes['commit_identifier'].str.split('_', expand=True)
-
-    df_scores = pd.read_csv(args.score_file, names=["project_name", "commit", "smartcommit", "flexeme", "filebased"])
+    df_mixed_changes[['project_name', 'short_commit']] = df_mixed_changes['commit_identifier'].str.split('_',
+                                                                                                         expand=True)
+    # Put the scores in a dataframe and create a new column with the short commit hash.
+    df_scores = pd.read_csv(args.scores_file, names=["project_name", "commit", "smartcommit", "flexeme", "filebased"])
     df_scores["short_commit"] = df_scores["commit"].apply(lambda x: x[:6])
 
+    # Filter the scores to keep only the scores for commits with mixed changes
     keys = list(df_mixed_changes[['project_name', 'short_commit']].columns.values)
     i1 = df_scores.set_index(keys).index
     i2 = df_mixed_changes.set_index(keys).index
     df_mixed_changes = df_scores[i1.isin(i2)]
 
-    # Write the filtered file to the original file
+    # Output the scores to stdout
     from io import StringIO
     output = StringIO()
-    df_mixed_changes.to_csv(output, columns=['project_name', 'commit', 'smartcommit', 'flexeme', 'filebased'], index=False, header=False)
+    df_mixed_changes.to_csv(output, columns=['project_name', 'commit', 'smartcommit', 'flexeme', 'filebased'],
+                            index=False, header=False)
     print(output.getvalue())
+
 
 if __name__ == "__main__":
     main()
