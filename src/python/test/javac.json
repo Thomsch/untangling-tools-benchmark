@@ -1,0 +1,36 @@
+[
+    {
+        "java_files": [
+            "/absolute/path/to/fileA.java",
+            "/absolute/path/to/fileB.java"
+        ],
+        "javac_switches": {
+            "classpath": "/absolute/path/to/compiled/classes:/absolute/path/to/maven/libA:/absolute/path/to/maven/libB:",
+            "d": "/absolute/path/to/compiled/classes",
+            "encoding": "UTF-8",
+            "g": true,
+            "nowarn": true,
+            "s": "/absolute/path/to/source/annotations",
+            "source": "1.7",
+            "sourcepath": "/absolute/path/to/moved/source/filesA:",
+            "target": "1.7"
+        }
+    },
+    {
+        "java_files": [
+            "/absolute/path/to/fileC.java",
+            "/absolute/path/to/fileD.java"
+        ],
+        "javac_switches": {
+            "classpath": "/absolute/path/to/compiled/classes:/absolute/path/to/maven/libC:/absolute/path/to/maven/libD:",
+            "d": "/absolute/path/to/compiled/classes",
+            "encoding": "UTF-8",
+            "g": true,
+            "nowarn": true,
+            "s": "/absolute/path/to/source/annotations",
+            "source": "1.7",
+            "sourcepath": "/absolute/path/to/moved/source/filesB:",
+            "target": "1.7"
+        }
+    }
+]

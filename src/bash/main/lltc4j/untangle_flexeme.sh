@@ -57,18 +57,9 @@ mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
 export PYTHONHASHSEED=0
-
-SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
-. "$SCRIPTDIR/lltc4j_util.sh"
-
-
-get_sourcepath() {
-  echo "."
-}
-
-get_classpath() {
-  echo "."
-}
+export SCRIPT_DIR
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPT_DIR/lltc4j_util.sh"
 
 # Untangles a commit from the LLTC4J dataset using Flexeme.
 # Arguments:
@@ -81,6 +72,9 @@ untangle_with_tools(){
   project_name="$(get_project_name_from_url "$vcs_url")"
   short_commit_hash="${commit_hash:0:6}"
 
+  local log_file
+  log_file="${logs_dir}/${project_name}_${short_commit_hash}_flexeme.log"
+
   START="$(date +%s.%N)"
 
   # If the ground truth is missing, skip this commit.
@@ -88,16 +82,17 @@ untangle_with_tools(){
     untangling_status_string="MISSING_GROUND_TRUTH"
   fi
 
-  # Retrieve the sourcepath and classpath from the javac traces.
-  sourcepath=$(get_sourcepath "$project_name" "$short_commit_hash" "$javac_traces_dir")
-  classpath=$(get_classpath "$project_name" "$short_commit_hash" "$javac_traces_dir")
+  javac_traces_file="${javac_traces_dir}/${project_name}_${short_commit_hash}/dljc-logs/javac.json"
 
-  if [ -z "$sourcepath" ] || [ -z "$classpath" ]; then
+  if ! [ -f "$javac_traces_file" ]; then
     untangling_status_string="MISSING_JAVAC_TRACES"
+    sourcepath=""
+    classpath=""
+  else
+    # Retrieve the sourcepath and classpath from the javac traces.
+    sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameters.py" -p sourcepath -s "$javac_traces_file")
+    classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameters.py" -p classpath -s "$javac_traces_file")
   fi
-
-  local log_file
-  log_file="${logs_dir}/${project_name}_${short_commit_hash}_untangle.log"
 
   # If the untangling status is still empty, untangle the commit.
   if [ -z "$untangling_status_string" ]; then
@@ -112,6 +107,4 @@ untangle_with_tools(){
 
 export -f get_project_name_from_url
 export -f untangle_with_tools
-export -f get_sourcepath
-export -f get_classpath
 tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}
