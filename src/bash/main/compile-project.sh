@@ -59,7 +59,7 @@ compile_in_directory() {
   elif [ -f "$dir/build.gradle" ]; then
     echo "Build system detected: Gradle" >&2
     # shellcheck disable=SC2086 # Word splitting is desirable here.
-    dljc -t print -o "$dir/dljc-logs" -- gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
+    gradle --project-dir "$dir" assemble -q ${GRADLE_ASSEMBLE_FLAGS} < /dev/null
     return $?
   elif [ -f "$dir/mvnw" ]; then
     echo "Build system detected: Maven Wrapper" >&2
