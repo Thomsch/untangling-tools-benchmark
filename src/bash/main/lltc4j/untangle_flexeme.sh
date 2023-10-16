@@ -98,13 +98,22 @@ untangle_with_tools(){
   if [ -z "$untangling_status_string" ]; then
     ./src/bash/main/lltc4j/untangle_flexeme_commit.sh "$vcs_url" "$commit_hash" "$results_dir" "$sourcepath" "$classpath" > "${log_file}" 2>&1
     ret_code=$?
-    untangling_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
+    if [ $ret_code -eq 0 ]; then
+      untangling_status_string="OK"
+    elif [ $ret_code -eq 5 ]; then
+      untangling_status_string="UNTANGLING_FAIL"
+    elif [ $ret_code -eq 6 ]; then
+      untangling_status_string="PARSING_FAIL"
+    else
+      untangling_status_string="FAIL"
+    fi
   fi
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.
-  printf "%-20s %s (time: %.0fs) [%s]\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}" "${log_file}"
+  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}" "${log_file}"
 }
 
 export -f get_project_name_from_url
 export -f untangle_with_tools
+
 tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}

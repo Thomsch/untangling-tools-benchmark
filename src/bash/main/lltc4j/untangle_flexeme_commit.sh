@@ -41,8 +41,6 @@ export smartcommit_result_dir="${smartcommit_untangling_root_dir}/${project_name
 export respository_dir="${out_dir}/repositories/${project_name}" # repository is named after the project.
 export result_dir="${out_dir}/evaluation/${project_name}_${short_commit_hash}" # Directory where the parsed untangling results are stored.
 
-
-
 flexeme_untangling_results="${flexeme_untangling_dir}/${project_name}_${short_commit_hash}"
 flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
 
@@ -50,8 +48,8 @@ export flexeme_parse_out="${result_dir}/flexeme.csv"
 export smartcommit_parse_out="${result_dir}/smartcommit.csv"
 export untangling_time_out="${result_dir}/untangling_time.csv"
 
-
 mkdir -p "$flexeme_untangling_dir"
+mkdir -p "$flexeme_untangling_results"
 
 echo ""
 echo "Untangling project_name $vcs_url, revision ${short_commit_hash}"  >&2
@@ -67,9 +65,7 @@ git checkout "$commit_hash"
 cd - || exit 1
 echo ""
 
-
 mkdir -p "$result_dir" # Create the directory where the time statistics will be stored.
-
 
 if [ -f "$flexeme_untangling_graph" ]; then
   echo 'Untangling with Flexeme .............................................. CACHED'
@@ -86,7 +82,7 @@ else
     untangling_exit_code=0
   else
     echo 'Untangling with Flexeme .............................................. FAIL'
-    untangling_exit_code=1
+    untangling_exit_code=5
   fi
 fi
 
@@ -103,7 +99,7 @@ if [ $untangling_exit_code -eq 0 ]; then
       untangling_exit_code=0
   else
       echo 'Parsing Flexeme results .............................................. FAIL'
-      untangling_exit_code=1
+      untangling_exit_code=6
   fi
 fi
 
