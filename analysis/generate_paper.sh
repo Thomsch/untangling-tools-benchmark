@@ -43,7 +43,7 @@ python analysis/paper/count_missing_results.py "${UNTANGLING_DIR}" > "${PAPER_RE
 # Generates the performance statistics
 python analysis/paper/median_performance.py "${UNTANGLING_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performances.tex"
 
-python analysis/paper/flexeme_no_changes.sh "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
+analysis/paper/flexeme_no_changes.sh "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
 
 #
 # Tables
