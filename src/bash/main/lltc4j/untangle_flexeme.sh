@@ -117,3 +117,5 @@ export -f get_project_name_from_url
 export -f untangle_with_tools
 
 tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}
+
+echo "Untangling completed."
