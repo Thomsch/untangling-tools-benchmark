@@ -154,10 +154,10 @@ def tangle_counts(repository):
         encoding="latin-1",
     )
     fix_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "BF.diff"), encoding="latin-1"
+        path.join(repository, "diff", "BF_clean.diff"), encoding="latin-1"
     )
     nonfix_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "NBF.diff"), encoding="latin-1"
+        path.join(repository, "diff", "NBF_clean.diff"), encoding="latin-1"
     )
 
     tangled_lines_count = count_tangled_lines(original_diff, fix_diff, nonfix_diff)
