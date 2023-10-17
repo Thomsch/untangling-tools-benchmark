@@ -48,8 +48,16 @@ analysis/paper/flexeme_no_changes.sh "${UNTANGLING_DIR}" > "${PAPER_REPOSITORY}/
 #
 # Tables
 #
-python analysis/paper/clean_decompositions.py "${UNTANGLING_DIR}/evaluation"
-python analysis/paper/combine_decompositions.py "${UNTANGLING_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"
+if ! python analysis/paper/clean_decompositions.py "${UNTANGLING_DIR}/evaluation"; then
+  echo "Error: Failed to clean decompositions"
+  exit 1
+fi
+
+if ! python analysis/paper/combine_decompositions.py "${UNTANGLING_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"; then
+  echo "Error: Failed to combine decompositions"
+  exit 1
+fi
+
 Rscript analysis/paper/group_size.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-size.tex"
 Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-count.tex"
 
