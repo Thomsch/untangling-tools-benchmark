@@ -32,7 +32,7 @@ def main(evaluation_dir):
         "flexeme_clean.csv": "Flexeme",
         "smartcommit_clean.csv": "SmartCommit",
         "file_untangling.csv": "File Untangling",
-        "truth_all.csv": "Ground Truth",
+        "truth.csv": "Ground Truth",
     }
 
     print('Project,BugId,Treatment,File,Source,Target,Group')

@@ -63,7 +63,7 @@ def main(evaluation_root):
             truth_df = pd.read_csv(truth_file).convert_dtypes()
         except FileNotFoundError as e:
             print(f"File not found: {e.filename}", file=sys.stderr)
-            sys.exit(1)
+            continue
 
         decomposition_files = ["smartcommit.csv", "flexeme.csv"]
 
