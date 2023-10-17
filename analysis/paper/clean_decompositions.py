@@ -56,8 +56,6 @@ def main(evaluation_root):
         if subdir == evaluation_root:
             continue
 
-        print(f"Cleaning decompositions in {subdir}")
-
         try:
             truth_file = os.path.join(subdir, "truth.csv")
             truth_df = pd.read_csv(truth_file).convert_dtypes()
