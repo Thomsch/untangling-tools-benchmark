@@ -16,12 +16,11 @@ inputFile = args[1]
 outputFile = args[2]
 
 
-data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
-data <- subset(data, select = -c(FileUntangling))
-data$BugID <- as_factor(data$BugID)
+data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'Commit', 'SmartCommit', 'Flexeme', 'File_Untangling'))
+data$Commit <- as_factor(data$Commit)
 
 # Convert to long format
-data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Performance')
+data_long = pivot_longer(data, cols = c("SmartCommit", "Flexeme", "File_Untangling"), names_to = 'Tool', values_to = 'Performance')
 
 pdf(outputFile)
 flexplot(Performance ~ Tool, data = data_long)
