@@ -38,17 +38,17 @@ def main(evaluation_dir):
     print('Project,BugId,Treatment,File,Source,Target,Group')
 
     # Iterate through each bug directory in the `evaluation` directory of the untangling directory.
-    for bug_dir in os.listdir(evaluation_dir):
-        subdir_path = os.path.join(evaluation_dir, bug_dir)
-        if not os.path.isdir(subdir_path):
+    for bug_tag in os.listdir(evaluation_dir):
+        bug_dir = os.path.join(evaluation_dir, bug_tag)
+        if not os.path.isdir(bug_dir):
             continue
 
         # Extract project and id from the subdirectory name
-        split = bug_dir.split("_")
+        split = bug_tag.split("_")
 
         if len(split) != 2:
             print(
-                f"Invalid subdirectory name: {bug_dir}."
+                f"Invalid subdirectory name: {bug_tag}."
                 f" Expected to be of the form <project>_<bug_id>.",
                 file=sys.stderr,
             )
@@ -57,12 +57,12 @@ def main(evaluation_dir):
         project, bug_id = split
 
         # Iterate through each CSV file in the subdirectory
-        for csv_filename in os.listdir(subdir_path):
+        for csv_filename in os.listdir(bug_dir):
             if csv_filename not in treatment_names.keys():
                 continue
 
             # Open the CSV file and iterate through its rows
-            filepath = os.path.join(subdir_path, csv_filename)
+            filepath = os.path.join(bug_dir, csv_filename)
             treatment_name = treatment_names.get(csv_filename, csv_filename)
             with open(filepath, "r") as csvfile:
                 reader = csv.DictReader(csvfile)

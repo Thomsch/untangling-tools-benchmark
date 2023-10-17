@@ -10,9 +10,9 @@ import sys
 import pandas as pd
 
 
-def print_performance(decomposition_path):
+def print_performance(decomposition_file):
     df_performance = pd.read_csv(
-        decomposition_path,
+        decomposition_file,
         names=[
             "project",
             "bug_id",
@@ -53,8 +53,8 @@ def main():
         print("Expected 1 argument: <decomposition_scores.csv>")
         exit(-1)
 
-    decomposition_path = args[0]
-    print_performance(decomposition_path)
+    decomposition_file = args[0]
+    print_performance(decomposition_file)
 
 
 if __name__ == "__main__":

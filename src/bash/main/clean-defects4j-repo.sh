@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Add "cleaned" commits at the end of a repository cloned from Defects4J.
+# Run from within a clone of a Defects4J repository.
+# Adds "cleaned" commits at the end of the repository.
 # Example use:
 #   defects4j checkout -p Lang -v 1b -w /tmp/lang_1_buggy
 #   cd /tmp/lang_1_buggy
@@ -30,7 +31,9 @@
 # Thus, the diffs between C_i and C_j are exactly like the diffs between V_i and
 # V_j, except that the C* diffs contain no comments, blank lines, or whitespace.
 
-set -e
+set -o errexit    # Exit immediately if a command exits with a non-zero status
+set -o nounset    # Exit if script tries to use an uninitialized variable
+set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 # For debugging
 # set -x
@@ -44,28 +47,29 @@ fi
 project="$1"
 vid="$2"
 
-if [ ! -d .git ] ; then
-  echo "$0: run at the top level of a git repository"
-  exit 1
-fi
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+set -o allexport
+. "$SCRIPTDIR"/../../../check-environment.sh
+set +o allexport
 
-if [ -z "${DEFECTS4J_HOME}" ]; then
-  echo 'Please set the DEFECTS4J_HOME environment variable.'
+if [ ! -d .git ] ; then
+  echo "$0: run at the top level of a git repository.  Exiting."
   exit 1
 fi
 
 num_changed_files="$(git status --porcelain | wc -l)"
 
 if [ "$num_changed_files" -gt 0 ] ; then
-  echo "$0: run in a git clone without local changes"
+  echo "$0: run in a git clone without local changes.  Exiting."
   exit 1
 fi
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPTDIR"/d4j_utils.sh
 
-# Parse the returned revision_ids into two variables
-read -r v1 v2 <<< "$(retrieve_revision_ids "$project" "$vid")"
+# Set two variables.
+read -r v1 v2 <<< "$(print_revision_ids "$project" "$vid")"
+
 v3="$(git rev-parse HEAD)"      # Buggy version
 
 olddir="$(pwd)"
@@ -74,8 +78,6 @@ tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
 
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
-rm -rf "$tmpdir"
-cp -Rp "$olddir" "$tmpdir"
 
 # Adds a new commit to the git clone in $newdir.
 add_cleaned_commit () {
@@ -93,6 +95,7 @@ add_cleaned_commit () {
   cp -rpf "$newdir/.git" "$tmpdir"
 
   cd "$newdir"
+  # Delete all files.
   rm -rf -- ..?* .[!.]* *
   cp -af "$tmpdir/." "$newdir"
   git add .
@@ -105,9 +108,8 @@ add_cleaned_commit "$v1" "Cleaned ORIGINAL_REVISION (= cleaned $v1)"
 add_cleaned_commit "$v2" "Cleaned FIXED_VERSION (= cleaned $v2)"
 add_cleaned_commit "$v3" "Cleaned BUGGY_VERSION (= cleaned $v3)"
 
-cd "$olddir"
-# Delete the unclean directory and change the name of the cleaned directory to old format
+# Replace the unclean directory by the cleaned directory.
 rm -rf "$olddir"
 mv "$newdir" "$olddir"
 echo "$(basename "$0"): success; result is in ../$(basename "$olddir")"
-cd "$SCRIPTDIR"
+cd "$olddir"

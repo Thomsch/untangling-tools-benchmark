@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
 """
-Translates SmartCommit grouping results (JSON files) in decomposition/smartcommit for each D4J bug
-file to the line level. Each line is labelled with the group it belongs to and this is reported in
-a readable CSV file.
+Translates SmartCommit grouping results (JSON files) to the line level. Each line is
+labelled with the group it belongs to and this is reported in a CSV file.
 
 Command Line Args:
-    - result_dir: Path to JSON results in decomposition/smartcommit
-    - output_path: Path to store returned CSV file in evaluation/smartcommit.csv
+    - result_dir: Directory containing JSON results in decomposition/smartcommit
+    - output_file: The CSV file to write
 Returns:
-    A smartcommit.csv file in the respective /evaluation/<D4J bug> subfolder.
+    A smartcommit.csv file in the respective evaluation/<D4J bug> subfolder.
     CSV header: {file, source, target, group}
         - file: The relative file path from the project root for a change
         - source: The line number of the change if the change is a deletion
@@ -26,8 +25,8 @@ from io import StringIO
 import pandas as pd
 from unidiff import PatchSet
 
-from parse_patch import to_csv
 from parse_utils import export_tool_decomposition_as_csv
+from patch_to_csv import to_csv
 
 
 def list_json_files(dir):
@@ -45,12 +44,12 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: parse_smartcommit_results.py <path/to/root/results> <path/to/out/file>"
+            "usage: smartcommit_results_to_csv.py <path/to/root/results> <path/to/out/file>"
         )
         sys.exit(1)
 
     result_dir = args[0]
-    output_path = args[1]
+    output_file = args[1]
 
     diff_dir = os.path.join(result_dir, "diffs")
     groups_dir = os.path.join(result_dir, "generated_groups")
@@ -58,7 +57,7 @@ def main():
     diff_data = read_results(diff_dir)
     result = generate_csv(diff_data, groups_dir)
 
-    export_csv(output_path, result)
+    export_csv(output_file, result)
 
 
 def read_results(diff_dir):
@@ -76,10 +75,10 @@ def read_results(diff_dir):
     """
     diff_data = {}
     # Load diffs
-    for diff_path in list_json_files(diff_dir):
-        with open(diff_path, "r") as diff_file:
-            data = json.load(diff_file)
-            class_path = data["currentRelativePath"]
+    for diff_file in list_json_files(diff_dir):
+        with open(diff_file, "r") as diff_file_io:
+            data = json.load(diff_file_io)
+            classpath = data["currentRelativePath"]
             file_id = data["fileID"]
 
             hunks = {}
@@ -94,7 +93,7 @@ def read_results(diff_dir):
                 end_line = hunk_data["currentHunk"]["endLine"]
 
                 hunks[hunk_id] = (
-                    class_path,
+                    classpath,
                     start_line,
                     end_line,
                     hunk_data["rawDiffs"],
@@ -116,9 +115,9 @@ def generate_csv(diff_data, groups_dir):
     result = ""
 
     # Print CSV for each group
-    for group_path in list_json_files(groups_dir):
-        with open(group_path, "r") as group_file:
-            data = json.load(group_file)
+    for group_file in list_json_files(groups_dir):
+        with open(group_file, "r") as group_file_io:
+            data = json.load(group_file_io)
 
             hunks = data["diffHunkIDs"]
             group_id = data["groupID"]
@@ -144,26 +143,26 @@ def make_patch(diff_data, hunk) -> PatchSet:
         A PatchSet object containing the patch for the hunk.
     """
     file_id, hunk_id = hunk.split(":")
-    class_path, start_line, end_line, raw_diff = diff_data[file_id][hunk_id]
+    classpath, start_line, end_line, raw_diff = diff_data[file_id][hunk_id]
     header_str = "\n".join(diff_data[file_id]["rawHeaders"])
     diff_str = "\n".join(raw_diff)
 
     return PatchSet.from_string(header_str + "\n" + diff_str)
 
 
-def export_csv(output_path, result):
+def export_csv(output_file, result):
     """
     Export the results to a CSV file.
 
     Args:
-        output_path: The path to the CSV file to be created.
+        output_file: The path to the CSV file to be created.
         result: The string containing the results to be written to the CSV file.
     """
     df = pd.read_csv(
         StringIO(result), names=["file", "source", "target", "group"], na_values="None"
     )
     df = df.convert_dtypes()  # Forces pandas to use ints in source and target columns.
-    export_tool_decomposition_as_csv(df, output_path)
+    export_tool_decomposition_as_csv(df, output_file)
 
 
 if __name__ == "__main__":

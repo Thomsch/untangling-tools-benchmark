@@ -74,7 +74,7 @@ For example, to run the evaluation on the Defects4J bugs in `data/d4j-5-bugs.csv
 3. `./generate_ground_truth.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Generate the ground truth from the Defects4J manual patches
 4. `./score.sh data/d4j-5-bugs.csv $UTB_OUTPUT`. Compute the untangling performance of the tools. (Depends on the previous steps).
 
-**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv ~/untangling-evaluation > d4j-20.log 2>&1 &`.
+**Note**. When running on a remote server, you might want to use this command to run the scripts: `nohup time ./decompose.sh data/d4j-20-bugs.csv $UTB_OUTPUT > d4j-20.log 2>&1 &`.
 
 This command does the following:
 - `nohup`: Ignore the hangup signal (SIGHUP). This prevents the script from being killed when the SSH session is closed.  
@@ -131,7 +131,8 @@ Add a call to your untangling tool executable in `evaluate.sh` and update `untan
 
 - SmartCommit doesn't support SVN projects. All commits in a SVN project are ignored by manually removing lines
   containing `Chart` in `data/d4j-bugs-all`.
-- If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labelling mistake in Defects4J, an issue is opened in the Defects4J repository.
+- If the minimized Defects4J patch contains lines that are not in the original bug-fixing diff, these lines won't be counted as part of the bug-fix with respect to the original bug-fixing diff because they don't exist in that file. This could indicate either a mistake in Defects4J or a tangled line. If the line is a labeling mistake in Defects4J, an issue is opened in the Defects4J repository.
+- Uses latin-1 encoding to read files, because it is ASCII-compatible.
 
 ## Directory structure
 - `analysis/`: Scripts to analyse the results. The .ipynb files are all for one-off experiments and are not part of any pipeline.
@@ -174,7 +175,7 @@ This section explains how to manually analyse the decomposition results to quali
 1. Checkout D4J bug to analyse `defects4j checkout -p <project> -v <bug_id>b -w <repo_dir>`.
 2. The diff for the bug is `git diff -U0 <buggy-commit> <fixed-commit>`. (obtained from Defects4J's `active-bugs.csv`
    file)
-3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`
-4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/flexeme.csv`.
-5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project><bug_id>/truth.csv`.
+3. In another tab, open the ground truth `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`
+4. In another tab, open the Flexeme decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/flexeme.csv`.
+5. In another tab, open the SmartCommit decomposition `less $UTB_OUTPUT/evaluation/<project>_<bug_id>/truth.csv`.
 6. Compare the decompositions with the ground truth, using the diff as reference for the changed content.

@@ -1,12 +1,12 @@
 #!/bin/bash
-# Collection of utilities that interface with Defects4J.
+# Collection of shell functions that interface with Defects4J.
 
 # Generates the unified diff in the same format for Git and Svn repositories for a defects4j commit.
 d4j_diff () {
     if [ $# -ne 5 ] ; then
-      echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Repository>'
+      echo 'usage: d4j_diff <D4J Project> <D4J Bug id> <Revision Before> <Revision After> <Project Clone>'
       echo 'example: d4j_diff Lang 1 abc def path/to/Lang_1/'
-      return 1
+      exit 1
     fi
 
     local PROJECT="$1"
@@ -23,31 +23,25 @@ d4j_diff () {
         svn diff -c --old"${REVISION_BUGGY}" --new="${REVISION_FIXED}" "${REPO_DIR}"  --diff-cmd diff -x -w "-U 0"
     else
         echo "Error: VCS ${vcs} not supported."
-        return 1
+        exit 1
     fi
 }
 
 # Retrieves the buggy and fixed revision IDs in the underlying version control
 # system for a given Defects4J project and bug ID.
-# - $1: D4J Project name
-# - $2: D4J Bug id
-# Returns the buggy and fixed revision IDs in the format:
-#   <revision_id_buggy> <revision_id_fixed>
-retrieve_revision_ids () {
+# Arguments:
+# - $1: D4J Project name.
+# - $2: D4J Bug id.
+# Prints the buggy and fixed revision IDs separated by a space.
+print_revision_ids () {
   if [ $# -ne 2 ] ; then
-      echo 'usage: retrieve_revision_ids <D4J Project> <D4J Bug id>'
-      echo 'example: retrieve_revision_ids Lang 1'
-      return 1
+      echo 'usage: print_revision_ids <D4J Project> <D4J Bug id>'
+      echo 'example: print_revision_ids Lang 1'
+      exit 1
     fi
 
   local project="$1"
   local bug_id="$2"
-
-  # Check if the DEFECTS4J_HOME environment variable is set
-  if [ -z "${DEFECTS4J_HOME}" ]; then
-    echo 'Please set the DEFECTS4J_HOME environment variable.'
-    return 1
-  fi
 
   # Retrieve the path to the active-bugs.csv file
   csv_file="${DEFECTS4J_HOME}/framework/projects/${project}/active-bugs.csv"
@@ -58,7 +52,7 @@ retrieve_revision_ids () {
 
   if [ -z "$line" ]; then
     echo "Bug ID $bug_id not found." 1>&2
-    return 1
+    exit 1
   fi
 
   # Parse the line to retrieve revision.id.buggy and revision.id.fixed
@@ -66,6 +60,6 @@ retrieve_revision_ids () {
   local revision_id_buggy="${fields[1]}"
   local revision_id_fixed="${fields[2]}"
 
-  # Return the results
+  # Print the results.
   echo "$revision_id_buggy $revision_id_fixed"
 }

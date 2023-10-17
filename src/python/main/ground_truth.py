@@ -15,24 +15,26 @@ Command Line Args:
     path/to/root/results: Specified file to store CSV file returned
 
 Returns:
-    The ground truth for the respective D4J bug file in evaluation/<project><id>/truth.csv
+    The ground truth for the respective D4J bug file in evaluation/<project>_<id>/truth.csv
     CSV header: {file, source, target, group='fix','other'}
         - file = each Diff Line Object from the original dif generated
         - source = the line removed (-) from buggy version
         - target = the line added (+) to fixed version
 """
 
-from collections import deque
 import os
 import sys
+from collections import deque
+
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
-from diff_metrics import flatten_patch_object
+
+from diff_metrics import lines_in_patch
 
 COL_NAMES = ["file", "source", "target"]
 
 
-def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
+def convert_diff_to_dataframe(patch: PatchSet) -> pd.DataFrame:
     """
     Converts a PatchSet into a DataFrame and filters out tests, comments, imports, non-Java files.
     The filtering is done during the conversion to avoid iterating over the patch twice.
@@ -49,7 +51,8 @@ def convert_to_dataframe(patch: PatchSet) -> pd.DataFrame:
                 if line.line_type != LINE_TYPE_CONTEXT and line.value.strip():
                     entry = pd.DataFrame.from_dict(
                         {
-                            # Since a line can only be either added or removed, one of the two will always be empty.
+                            # Since a line can only be either added or removed,
+                            # one of the two will always be empty.
                             "file": [file.path],
                             "source": [line.source_line_no],
                             "target": [line.target_line_no],
@@ -66,24 +69,25 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
     Returns a Dataframe, where each row is a diff line with one truth group label
     - 'fix': A bug-fixing line
     - 'other': A non bug-fixing line
-    Tangled lines will have two corresponding row entries, as they belong to both groups: one row tagged with 'fix', one tagged with 'other'
+    Tangled lines will have two corresponding row entries, as they belong to
+    both groups: one row tagged with 'fix', one tagged with 'other'.
     """
-    # Convert the Original Diff to a Dataframe, since row entries (the diff lines) can be duplicated in the ground truth dataframe
-    ground_truth_df = convert_to_dataframe(original_diff)
+    # Convert the Original Diff to a Dataframe, since row entries (the diff
+    # lines) can be duplicated in the ground truth dataframe.
+    # This variable holds the output value of the function.
+    ground_truth_df = convert_diff_to_dataframe(original_diff)
 
     # Generate 3 queues for classification
-    original_lines = deque([str(line) for line in flatten_patch_object(original_diff)])
-    fix_lines = deque([str(line) for line in flatten_patch_object(fix_diff)])
-    nonfix_lines = deque([str(line) for line in flatten_patch_object(nonfix_diff)])
+    original_lines = deque([str(line) for line in lines_in_patch(original_diff)])
+    fix_lines = deque([str(line) for line in lines_in_patch(fix_diff)])
+    nonfix_lines = deque([str(line) for line in lines_in_patch(nonfix_diff)])
 
-    ground_truth_df["group"] = [
-        "other" for i in range(len(original_lines))
-    ]  # Place holder for the truth label
+    # Placeholder for the truth label
+    ground_truth_df["group"] = ["other" for i in range(len(original_lines))]
 
     i = 0
-    line_is_tangled = (
-        False  # A global mode that indicates if 2 lines are part of tangled fix
-    )
+    # A global mode that indicates if 2 lines are part of tangled fix
+    line_is_tangled = False
     while i < len(original_lines):  # Align the fix lines and nonfix lines as Queues.
         line = original_lines[i]
         if len(fix_lines) == 0 and len(nonfix_lines) == 0:
@@ -92,29 +96,25 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
         fix = fix_lines[0] if fix_lines else None
         nonfix = nonfix_lines[0] if nonfix_lines else None
         # Pop each line out of original diff and compare to the 2 heads of fix_lines and nonfix_queues.
-        if (
-            line == fix and line != nonfix
-        ):  # If line is identical to head of fix_lines, it is bug-fixing
+        if line == fix and line != nonfix:
+            # Line is identical to head of fix_lines, so it is bug-fixing.
             ground_truth_df.loc[i, "group"] = "fix"
             fix_lines.popleft()
-        elif (
-            line == nonfix and line != fix
-        ):  # If line is identical to head of nonfix_lines, it is non bug-fixing
+        elif line == nonfix and line != fix:
+            # Line is identical to head of nonfix_lines, so it is non bug-fixing.
             ground_truth_df.loc[i, "group"] = "other"
             nonfix_lines.popleft()
-        elif line not in (
-            nonfix,
-            fix,
-        ):  # If line is different from both: the 2 heads of fix and nonfix are tangled changes
-            if (
-                fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip()
-            ):  # Check if the contents of the tangled changes (both bug-fixing and non-bug-fixing) are identical
+        elif line not in (nonfix, fix):
+            # Line is different from both, so the 2 heads of fix and nonfix are tangled changes.
+            if fix and nonfix and fix.split()[-1].strip() == nonfix.split()[-1].strip():
+                # The contents of the tangled changes (both bug-fixing and
+                # non-bug-fixing) are identical up to indentation.
                 print(f"These are tangled lines: \n {fix} \n {nonfix}", file=sys.stderr)
                 fix_lines.popleft()
                 nonfix_lines.popleft()
                 line_is_tangled = True  # Switched tangled line mode on
                 continue
-            # Else, switch truth labelling scheme, always match with first occurrence
+            # Else, switch truth labeling scheme, always match with first occurrence
             if line in fix_lines:
                 ground_truth_df.loc[i, "group"] = "fix"
                 fix_lines.remove(line)
@@ -122,8 +122,10 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
                 ground_truth_df.loc[i, "group"] = "other"
                 nonfix_lines.remove(line)
             else:
-                # The tangled line may be changes that cancel out in the BF and NBF diffs and thus does not exist in VC.diff.
-                # This also handles the bug in Defects4J, when lines belonging to different hunks are duplicated and cancel out
+                # The tangled line may be changes that cancel out in the BF and
+                # NBF diffs and thus does not exist in VC.diff.  This also
+                # handles the bug in Defects4J, when lines belonging to
+                # different hunks are duplicated and cancel out.
                 i += 1
                 continue
         else:
@@ -132,7 +134,8 @@ def classify_diff_lines(original_diff, fix_diff, nonfix_diff):
             fix_lines.popleft()
             nonfix_lines.popleft()
         if line_is_tangled and ground_truth_df.loc[i, "group"] == "fix":
-            # Found the case of a tangled line, this line will have 2 labels, 'fix' and 'other' (2 rows) in the ground truth Dataframe
+            # Found the case of a tangled line, this line will have 2 labels,
+            # 'fix' and 'other' (2 rows) in the ground truth Dataframe.
             tangled_line_duplicate_tag = ground_truth_df.loc[[i]].copy()
             tangled_line_duplicate_tag["group"] = "other"
             ground_truth_df = pd.concat(
@@ -154,10 +157,10 @@ def main():
         sys.exit(1)
 
     repository = args[0]
-    out_path = args[1]
+    out_dir = args[1]
     original_diff = PatchSet.from_filename(
         os.path.join(repository, "diff", "VC_clean.diff"),
-        encoding="latin-1",  # latin-1 is the best choice for an ASCII-compatible encoding
+        encoding="latin-1",
     )
     bug_fix_diff = PatchSet.from_filename(
         os.path.join(repository, "diff", "BF.diff"), encoding="latin-1"
@@ -167,7 +170,7 @@ def main():
     )
 
     ground_truth_df = classify_diff_lines(original_diff, bug_fix_diff, nonfix_diff)
-    ground_truth_df.to_csv(out_path, index=False)
+    ground_truth_df.to_csv(out_dir, index=False)
 
 
 if __name__ == "__main__":

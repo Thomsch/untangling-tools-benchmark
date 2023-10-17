@@ -1,31 +1,39 @@
 #!/bin/bash
 #
-# Counts the number of bug-fixing lines and non-bug-fixing lines from the ground truth.
-# This implementation does not account for tangled lines. A tangled line is counted as a non-bug-fixing line.
-# The script calls ground_truth.sh to generate a truth.csv file, then calls count_lines.py to count 'fix' versus 'other' commits.
-# - $1: Path where the D4J bug file is stored.
-# - $2: Path where the line counting result is checked out
+
+# Counts the number of bug-fixing lines and non-bug-fixing lines from
+# the ground truth.
+# This implementation does not account for tangled lines. A tangled
+# line is counted as a non-bug-fixing line.
+# The script calls ground_truth.sh to generate a truth.csv file, then
+# calls count_lines.py to count 'fix' versus 'other' commits.
+# Arguments:
+# - $1: The D4J bug file.
+# - $2: File where the line counting result is written.
 #
 # Writes a lines.csv file (with 1 row) to the specified path.
 # - CSV header: project,bug_id,fix_lines=number of bug-fixing lines,nonfix_line=number of non bug-fixing lines
 #
-# If the ground truth cannot be calculated for a commit, the script will tag the commit as 'FAIL' in the output file.
-# When the ground truth cannot be calculated for a commit, the script will tag the commit as 'FAIL' in the output file
-# and proceed to the next commit. This avoid having to restart the script everytime there is an issue with a commit and
-# allows users to fix problematic commits while the rest of the ground truth is being calculated.
+# If the ground truth cannot be calculated for a commit, the script
+# will tag the commit as 'FAIL' in the output file.  When the ground
+# truth cannot be calculated for a commit, the script will tag the
+# commit as 'FAIL' in the output file and proceed to the next
+# commit. This avoid having to restart the script everytime there is
+# an issue with a commit and allows users to fix problematic commits
+# while the rest of the ground truth is being calculated.
 #
-# When the problematic commits are fixed, the script can be re-run to calculate the ground truth for the commits that
-# failed. The script will not re-calculate the ground truth for a commit if the ground truth has already been calculated.
+# When the problematic commits are fixed, the script can be re-run to
+# calculate the ground truth for the commits that failed. The script
+# will not re-calculate the ground truth for a commit if the ground
+# truth has already been calculated.
 #
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-# shellcheck source=/dev/null
-if [ -z "$DEFECTS4J_HOME" ] || [ -z "$JAVA11_HOME" ] ; then
-  . .env
-fi
+. "$SCRIPTDIR"/../../../check-environment.sh
 set +o allexport
 
 if [ $# -ne 2 ] ; then
@@ -58,16 +66,15 @@ do
     commit="$(defects4j info -p "$project" -b "$vid" | grep -A1 "Revision ID" | tail -n 1)"
 
     if [ -f "$truth_csv" ]; then
-        echo 'Calculating ground truth ................................................ CACHED'
+        echo 'Calculating ground truth ............................................. CACHED'
     else
         mkdir -p "./out/evaluation/${project}/${vid}"
         if ./src/bash/main/ground_truth.sh "$project" "$vid" "$workdir" "$truth_csv" "$commit"
         then
-            evaluation_status_string="OK"
+            echo "Calculating ground truth ............................................. OK"
         else
-            evaluation_status_string="FAIL"
+            echo "Calculating ground truth ............................................. FAIL"
         fi
-        echo "Calculating ground truth .................................................. ${evaluation_status_string}"
     fi
 
     # count number of lines and append
