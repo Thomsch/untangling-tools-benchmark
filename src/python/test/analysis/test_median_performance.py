@@ -29,10 +29,10 @@ def test_calculate_performance(sample_decompositions_csv, capfd):
     captured = capfd.readouterr()
     expected_output = (
         "% All the data used in the text is one file so that it can be easily updated.\n"
-        "% Generated automatically\n"
-        "\\newcommand\\numberOfBugs{4 }\n"
-        "\\newcommand\\smartCommitMedian{0.75 }\n"
-        "\\newcommand\\flexemeMedian{0.65 }\n"
-        "\\newcommand\\fileUntanglingMedian{0.55 }\n"
+        "% Generated automatically by median_performance.py in https://github.com/Thomsch/untangling-tools-benchmark\n"
+        "\\newcommand\\numberOfBugs{4\\xspace}\n"
+        "\\newcommand\\smartCommitMedian{0.75\\xspace}\n"
+        "\\newcommand\\flexemeMedian{0.65\\xspace}\n"
+        "\\newcommand\\fileUntanglingMedian{0.55\\xspace}\n"
     )
     assert captured.out == expected_output

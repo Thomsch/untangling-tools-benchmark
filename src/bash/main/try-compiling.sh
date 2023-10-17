@@ -91,10 +91,16 @@ compile() {
   fi
 
   if [ -z "$untangling_status_string" ]; then
-    if src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1 ; then
+    export ERR_IF_NO_BUILDFILE=1 # Exit with an error if no buildfile is found.
+    src/bash/main/compile-project.sh "${repository}" > "${repository}/compile.log" 2>&1
+    compile_exit_code=$?
+
+    if [ "$compile_exit_code" -eq 0 ]; then
       untangling_status_string="$java_version"
+    elif [ "$compile_exit_code" -eq 222 ]; then
+      untangling_status_string="BUILD_FILE_NOT_FOUND"
     else
-      untangling_status_string="FAIL for $java_version"
+      untangling_status_string="FAIL"
     fi
   fi
 
@@ -108,6 +114,8 @@ export -f compile
 
 java_version=$(get_java_version)
 export java_version
+
+echo "java_version: $java_version" >&2
 
 printf "%s,%s,%s,%s\n" "project_name" "commit_hash" "compilation_status" "elapsed_time"
 tail -n+2 "$commits_file" | parallel --colsep "," compile {}
