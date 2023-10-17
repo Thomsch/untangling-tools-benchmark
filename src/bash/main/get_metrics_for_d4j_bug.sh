@@ -59,3 +59,31 @@ else
         exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
     fi
 fi
+
+# Compute version-specific metrics
+whitespace_statistics_csv="${metrics_dir}/${project}_${vid}_whitespace.csv"
+clean_statistics_csv="${metrics_dir}/${project}_${vid}_clean.csv"
+
+if [ -f "$whitespace_statistics_csv" ]; then
+    echo 'Calculating whitespace statistics .................................................. CACHED'
+else
+    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "whitespace" > "$whitespace_statistics_csv"
+    then
+        echo 'Calculating whitespace statistics .................................................. OK'
+    else
+        echo 'Calculating whitespace statistics .................................................. FAIL'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
+    fi
+fi
+
+if [ -f "$clean_statistics_csv" ]; then
+    echo 'Calculating clean statistics .................................................. CACHED'
+else
+    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "clean" > "$clean_statistics_csv"
+    then
+        echo 'Calculating clean statistics .................................................. OK'
+    else
+        echo 'Calculating clean statistics .................................................. FAIL'
+        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
+    fi
+fi
