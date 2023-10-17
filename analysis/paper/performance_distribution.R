@@ -21,6 +21,7 @@ data$Commit <- as_factor(data$Commit)
 
 # Convert to long format
 data_long = pivot_longer(data, cols = c("SmartCommit", "Flexeme", "File_Untangling"), names_to = 'Tool', values_to = 'Performance')
+data_long$Tool <- factor(data_long$Tool, levels = c("Flexeme", "SmartCommit", "File_Untangling"))
 
 pdf(outputFile)
 flexplot(Performance ~ Tool, data = data_long)
