@@ -44,6 +44,7 @@ export TMP_DIR
 mkdir -p "${TMP_DIR}/evaluation"
 cp -r "${UNTANGLING_DIR}/logs" "${TMP_DIR}/logs"
 
+# Copy commits that are in the given list.
 copy_results(){
   local vcs_url="$1" # The URL of the git repository for the project.
   local commit_hash="$2" # The commit hash to untangle.
@@ -64,12 +65,11 @@ copy_results(){
 export -f copy_results
 tail -n+2 "$COMMITS_FILE" | parallel --colsep "," copy_results {}
 
+# Generate the aggregated scores for the given commits.
 if ! cat "${TMP_DIR}/evaluation"/*/scores.csv > "${TMP_DIR}/decomposition_scores.csv" ; then
   echo "No \"scores.csv\" files found under ${TMP_DIR}."
   exit 1
 fi
-
-wc -l "${TMP_DIR}/decomposition_scores.csv"
 
 #
 # Data
