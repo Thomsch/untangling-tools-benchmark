@@ -38,12 +38,12 @@ def print_performance(decomposition_file):
     file_rand_index_median = agg_results["file_rand_index.csv"]
 
     print("% All the data used in the text is one file so that it can be easily updated.")
-    print("% Generated automatically")
+    print("% Generated automatically by median_performance.py in https://github.com/Thomsch/untangling-tools-benchmark")
 
-    print(f"\\newcommand\\numberOfBugs{{{bug_count} }}")
-    print(f"\\newcommand\\smartCommitMedian{{{smartcommit_median:.2f} }}")
-    print(f"\\newcommand\\flexemeMedian{{{flexeme_median:.2f} }}")
-    print(f"\\newcommand\\fileUntanglingMedian{{{file_rand_index_median:.2f} }}")
+    print(f"\\newcommand\\numberOfBugs{{{bug_count}\\xspace}}")
+    print(f"\\newcommand\\smartCommitMedian{{{smartcommit_median:.2f}\\xspace}}")
+    print(f"\\newcommand\\flexemeMedian{{{flexeme_median:.2f}\\xspace}}")
+    print(f"\\newcommand\\fileUntanglingMedian{{{file_rand_index_median:.2f}\\xspace}}")
 
 
 def main():
