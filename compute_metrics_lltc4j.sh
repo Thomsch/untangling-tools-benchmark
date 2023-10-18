@@ -69,10 +69,11 @@ generate_commit_metrics() {
       git --git-dir "${repository}/.git" diff -U0 "$parent_hash".."$commit_hash" > "${diff_file}" 2> "$log_file"
       ret_code=$?
       if [ $ret_code -eq 0 ]; then
-         if python3 src/python/main/diff_metrics_lltc4j.py "${project}" "${commit_hash}" "${repository}" > "$metrics_csv"; then
+         if python3 src/python/main/diff_metrics_lltc4j.py "${diff_file}" "${project_name}" "${commit_hash}" > "$metrics_csv"; then
              status_string="OK"
          else
              status_string="METRIC_FAIL"
+             rm -f $metrics_csv
          fi
       else
           status_string="DIFF_FAIL"
@@ -96,7 +97,7 @@ fi
 
 metrics_results="${results_dir}/metrics.csv"
 
-echo "project,commit_hash,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
+echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
 cat "${metrics_dir}"/*.csv >> "$metrics_results"
 echo ""
 echo "Commit metrics were aggregated and saved in ${metrics_results}"
