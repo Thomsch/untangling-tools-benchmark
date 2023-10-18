@@ -69,7 +69,7 @@ generate_commit_metrics() {
       git --git-dir "${repository}/.git" diff -U0 "$parent_hash".."$commit_hash" > "${diff_file}" 2> "$log_file"
       ret_code=$?
       if [ $ret_code -eq 0 ]; then
-         if python3 src/python/main/diff_metrics_lltc4j.py "${diff_file}" "${project_name}" "${commit_hash}" > "$metrics_csv"; then
+         if python3 src/python/main/diff_metrics_lltc4j.py "${diff_file}" "${project_name}" "${short_commit_hash}" > "$metrics_csv"; then
              status_string="OK"
          else
              status_string="METRIC_FAIL"
