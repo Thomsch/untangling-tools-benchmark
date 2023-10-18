@@ -10,6 +10,7 @@
 # - smartcommit_time.csv.csv: Time spent to untangle the commit.
 
 set -o nounset    # Exit if script tries to use an uninitialized variable
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
