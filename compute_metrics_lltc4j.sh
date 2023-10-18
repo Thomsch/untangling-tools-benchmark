@@ -73,7 +73,7 @@ generate_commit_metrics() {
              status_string="OK"
          else
              status_string="METRIC_FAIL"
-             rm -f $metrics_csv
+             rm -f "$metrics_csv"
          fi
       else
           status_string="DIFF_FAIL"
