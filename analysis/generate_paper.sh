@@ -22,7 +22,7 @@ export UNTANGLING_DIR=$2
 export PAPER_REPOSITORY=$3
 
 if ! [ -f "$COMMITS_FILE" ]; then
-    echo "Error: File '${COMMITS_FILE}' not found. Exiting."
+    echo "Error: commit file '${COMMITS_FILE}' not found. Exiting."
     exit 1
 fi
 

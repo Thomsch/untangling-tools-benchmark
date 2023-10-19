@@ -19,7 +19,7 @@ export commits_file="$1" # The file containing the commits to untangle.
 export results_dir="$2" # The directory where the results are stored and repositories checked out.
 
 if ! [ -f "$commits_file" ]; then
-    echo "$0: file ${commits_file} not found. Exiting."
+    echo "$0: commit file ${commits_file} not found. Exiting."
     exit 1
 fi
 
