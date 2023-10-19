@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Retrieves the compilation parameters, such as the classpath and sourcepath used
+Retrieves a compilation parameter, such as the classpath or sourcepath used
 by the Java compiler for a commit.
 This script assumes that `try-compile.sh` has been run for the commit and that
 the JSON file containing call results has been generated.
 
-If the compilation parameter exists, the script will write it in stdout.
+If the specified compilation parameter exists, the script will write it to stdout.
 Otherwise, it will exit with a non-zero exit.
 
 Command Line Args:
