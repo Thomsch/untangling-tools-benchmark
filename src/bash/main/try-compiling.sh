@@ -27,7 +27,7 @@ export commits_file="$1"
 export clone_dir="$2"
 
 if ! [ -f "$commits_file" ]; then
-    echo "$0: file ${commits_file} not found. Exiting."
+    echo "$0: commit file ${commits_file} not found. Exiting."
     exit 1
 fi
 
