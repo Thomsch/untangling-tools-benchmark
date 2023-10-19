@@ -89,9 +89,9 @@ def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
     hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
     # Obtain string representations of all Line Objects
     fix_diff_lines_str = [str(line) for line in lines_in_patch(fix_diff)]
-    if len(fix_diff_lines_str) > 0 or len(fix_diff_lines_str) != count_changed_source_code_lines(
-        original_diff
-    ):
+    if len(fix_diff_lines_str) > 0 or len(
+        fix_diff_lines_str
+    ) != count_changed_source_code_lines(original_diff):
         for hunk in hunks_VC:
             # Find all fix lines in the hunk by matching diff line strings.
             # TODO: Ideal to use object identity here, but for now opt for identity
@@ -150,8 +150,7 @@ def tangle_counts(repository):
     """
 
     original_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "VC_clean.diff"),
-        encoding="latin-1",
+        path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1",
     )
     fix_diff = PatchSet.from_filename(
         path.join(repository, "diff", "BF_clean.diff"), encoding="latin-1"
@@ -181,8 +180,7 @@ def main():
     repository = args[2]
 
     unclean_original_diff = PatchSet.from_filename(
-        filename=path.join(repository, "diff", "VC.diff"),
-        encoding="latin-1",
+        filename=path.join(repository, "diff", "VC.diff"), encoding="latin-1",
     )
     clean_original_diff = PatchSet.from_filename(
         path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
