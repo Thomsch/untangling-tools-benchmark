@@ -17,13 +17,8 @@ if [ $# -ne 3 ] ; then
     exit 1
 fi
 
-# Returns the project name from a URL.
-get_project_name_from_url() {
-  local url="$1"
-  local filename="${url##*/}"
-  local basename="${filename%%.*}"
-  echo "$basename"
-}
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPTDIR/lltc4j_util.sh"
 
 vcs_url="$1"
 commit_hash="$2"
@@ -32,55 +27,62 @@ out_dir="$3"
 project_name=$(get_project_name_from_url "$vcs_url")
 short_commit_hash="${commit_hash:0:6}"
 
-export smartcommit_untangling_results_dir="${out_dir}/decomposition/smartcommit/${project_name}_${short_commit_hash}"
-export project_clone_dir="${out_dir}/projects/${project_name}"
+mkdir -p "$out_dir" # Create the root directory if it doesn't exists yet.
 
-mkdir -p "$out_dir"
+# SmartCommit outputs the untangling results in a subfolder named after the repository name and commit hash.
+# so the results will be stored in out_dir/decomposition/smartcommit/<project_name>/<commit_hash>.
+export smartcommit_untangling_root_dir="${out_dir}/decomposition/smartcommit"
+export smartcommit_result_dir="${smartcommit_untangling_root_dir}/${project_name}/${commit_hash}"
+export respository_dir="${out_dir}/repositories/${project_name}" # repository is named after the project.
+export result_dir="${out_dir}/evaluation/${project_name}_${short_commit_hash}" # Directory where the parsed untangling results are stored.
+
+export smartcommit_parse_out="${result_dir}/smartcommit.csv"
+export untangling_time_out="${result_dir}/untangling_time.csv"
 
 echo ""
 echo "Untangling project_name $vcs_url, revision ${short_commit_hash}"
 
 # Clone the repo if it doesn't exist
-if [ ! -d "${project_clone_dir}" ] ; then
-  mkdir -p "$project_clone_dir"
-  git clone "$vcs_url" "$project_clone_dir"
+if [ ! -d "${respository_dir}" ] ; then
+  mkdir -p "$respository_dir"
+  git clone "$vcs_url" "$respository_dir"
 fi
 
-cd "$project_clone_dir" || exit 1
+cd "$respository_dir" || exit 1
 git checkout "$commit_hash"
 cd - || exit 1
-
 echo ""
 
+
+mkdir -p "$result_dir" # Create the directory where the time statistics will be stored.
+
 # Untangle with SmartCommit
-if [ -d "$smartcommit_untangling_results_dir" ]; then
-  echo 'Untangling with SmartCommit .......................................... CACHED'
+if [ -d "$smartcommit_result_dir" ]; then
+  echo 'Untangling with SmartCommit ............................................. CACHED'
 else
-  echo 'Untangling with SmartCommit ..........................................'
+  echo 'Untangling with SmartCommit ...............................................'
   START_DECOMPOSITION="$(date +%s.%N)"
-  "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$project_clone_dir" -c "$commit_hash" -o "$smartcommit_untangling_results_dir"
+  "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$respository_dir" -c "$commit_hash" -o "${smartcommit_untangling_root_dir}"
   END_DECOMPOSITION="$(date +%s.%N)"
   DIFF_DECOMPOSITION="$(echo "$END_DECOMPOSITION - $START_DECOMPOSITION" | bc)"
-  mkdir -p smartcommit_untangling_results_dir
-  echo "${project_name},${short_commit_hash},smartcommit,${DIFF_DECOMPOSITION}" > "${smartcommit_untangling_results_dir}/time.csv"
-  echo 'Untangling with SmartCommit .......................................... DONE'
+  echo "${project_name},${short_commit_hash},smartcommit,${DIFF_DECOMPOSITION}" > "${untangling_time_out}"
+  echo 'Untangling with SmartCommit ............................................... OK'
 fi
 
 
 # Retrieve untangling results from SmartCommit and parse them into a CSV file.
 echo ""
-smartcommit_result_out="${smartcommit_untangling_results_dir}/smartcommit.csv"
-if [ -f "$smartcommit_result_out" ] ; then
-  echo 'Parsing SmartCommit results .......................................... CACHED'
+if [ -f "$smartcommit_parse_out" ] ; then
+  echo 'Parsing SmartCommit results ............................................. CACHED'
   decompose_exit_code=0
 else
-  echo 'Parsing SmartCommit results ..........................................'
-  if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_untangling_results_dir}/${project_name}/${commit_hash}" "$smartcommit_result_out"
+  echo 'Parsing SmartCommit results ...............................................'
+  if python3 src/python/main/smartcommit_results_to_csv.py "${smartcommit_result_dir}" "$smartcommit_parse_out"
   then
-      echo 'Parsing SmartCommit results .......................................... OK'
+      echo 'Parsing SmartCommit results ............................................... OK'
       decompose_exit_code=0
+      echo -ne 'Parsing SmartCommit results ............................................. FAIL'
   else
-      echo 'Parsing SmartCommit results .......................................... FAIL'
       decompose_exit_code=1
   fi
 fi

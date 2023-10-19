@@ -7,7 +7,6 @@
 # The script prints the number of times a flexeme didn't find a decomposition
 # to stdout.
 
-set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
@@ -20,4 +19,5 @@ UNTANGLING_DIR=$1
 
 echo "Generated automatically"
 echo "Number of times a flexeme didn't find a decomposition"
-grep -rni "No communities detected for" "$UNTANGLING_DIR" | wc -l
+grep -rni --include "*.log" "No communities detected for" "$UNTANGLING_DIR/logs" | wc -l
+exit 0

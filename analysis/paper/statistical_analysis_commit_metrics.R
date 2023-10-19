@@ -95,20 +95,26 @@ metrics.data <- read.csv(metrics.path)
 metrics.names <- colnames(metrics.data %>% select(-c('project', 'vid')))
 
 # Join performance with metrics
-performance.metrics <- left_join(performance.data, metrics.data, by = c('project' = 'project', 'bug_id' = 'vid')) %>% select(-c('file_untangling'))
+performance.metrics <- left_join(performance.data, metrics.data, by = c('project' = 'project', 'bug_id' = 'vid'))
 
 # Global
-performance.metrics.long = pivot_longer(performance.metrics, cols = c('smartcommit_rand_index', 'flexeme_rand_index'), names_to = 'Tool', values_to = 'performance')
+performance.metrics.long = pivot_longer(performance.metrics, cols = c('smartcommit_rand_index', 'flexeme_rand_index', 'file_untangling'), names_to = 'Tool', values_to = 'performance')
 summarise_model_all_variables(performance.metrics.long, outputPath, "impact_metrics_all.txt")
 
 # SmartCommit All
-performance.metrics.smartcommit <- select(performance.metrics, -c('flexeme_rand_index'))  %>% rename(performance = smartcommit_rand_index)
+performance.metrics.smartcommit <- select(performance.metrics, -c('flexeme_rand_index', 'file_untangling'))  %>% rename(performance = smartcommit_rand_index)
 summarise_model_all_variables(performance.metrics.smartcommit, outputPath, "impact_metrics_smartcommit_all.txt")
 
 # Flexeme All
-performance.metrics.flexeme <- select(performance.metrics, -c('smartcommit_rand_index'))  %>% rename(performance = flexeme_rand_index)
+performance.metrics.flexeme <- select(performance.metrics, -c('smartcommit_rand_index', 'file_untangling'))  %>% rename(performance = flexeme_rand_index)
 summarise_model_all_variables(performance.metrics.flexeme, outputPath, "impact_metrics_flexeme_all.txt")
+
+# File Untangling ALL
+performance.metrics.file <- select(performance.metrics, -c('smartcommit_rand_index', 'flexeme_rand_index'))  %>% rename(performance = file_untangling)
+summarise_model_all_variables(performance.metrics.file, outputPath, "impact_metrics_file_all.txt")
 
 # For each metric, do model analysis and print graph in pdf
 generate_pairwise_analysis(performance.metrics.smartcommit, metrics.names, "smartcommit", outputPath)
 generate_pairwise_analysis(performance.metrics.flexeme, metrics.names, "flexeme", outputPath)
+generate_pairwise_analysis(performance.metrics.file.smartcommit, metrics.names, "file-smartcommit", outputPath)
+generate_pairwise_analysis(performance.metrics.file.flexeme, metrics.names, "file-flexeme", outputPath)

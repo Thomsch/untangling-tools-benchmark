@@ -10,8 +10,8 @@
 # - smartcommit/diffs: JSON files storing SmartCommit hunk-based decomposition results
 # - smartcommit/time.csv: Run time spent by SmartCommit
 
-# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
+# set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 2 ] ; then
@@ -33,8 +33,8 @@ set -o allexport
 . ./check-environment-lltc4j.sh
 set +o allexport
 
-# Check that Java is 1.8 for Defects4J.
 # Defects4J will use whatever is on JAVA_HOME.
+# Check that Java is 1.8 for Defects4J.
 java_version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
 if [ "$java_version" != "1.8" ] ; then
     echo "$0: please use Java 8 instead of ${java_version}"
@@ -52,13 +52,8 @@ echo ""
 
 export PYTHONHASHSEED=0
 
-# Returns the project name from an URL.
-get_project_name_from_url() {
-  local url="$1"
-  local filename="${url##*/}"
-  local basename="${filename%%.*}"
-  echo "$basename"
-}
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+. "$SCRIPTDIR/lltc4j_util.sh"
 
 # Untangles a commit from the LLTC4J dataset using SmartCommit and Flexeme.
 # Arguments:

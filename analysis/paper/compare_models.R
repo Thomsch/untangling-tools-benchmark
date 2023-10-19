@@ -25,11 +25,10 @@ outputFile = args[3]
 # We use R to handle the linear mixed models because Python doesn't support lmms with 2 random effects (cross effects).
 #
 data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'BugID', 'SmartCommit', 'Flexeme', 'FileUntangling'))
-data <- subset(data, select = -c(FileUntangling))
 data$BugID <- as_factor(data$BugID)
 
 # Convert to long format
-data_long = pivot_longer(data, cols = 3:4, names_to = 'Tool', values_to = 'Performance')
+data_long = pivot_longer(data, cols = all_of(c("SmartCommit", "Flexeme", "FileUntangling")), names_to = 'Tool', values_to = 'Performance')
 
 # Random model
 model_mixed <- lmer(Performance ~ Tool + (1|Project) + (1|BugID), data=data_long)
@@ -61,10 +60,10 @@ sink()
 
 # Create Coefficients dataframe
 coeffs = rbind(summary(model_mixed)$coefficients[, "Estimate"], summary(model_simple)$coefficients[, "Estimate"])
-colnames(coeffs) <- c('Flexeme', 'SmartCommit')
+colnames(coeffs) <- c('Flexeme', 'SmartCommit', 'FileUntangling')
 # Create p-values dataframe
 p_vals = rbind(summary(model_mixed)$coefficients[, "Pr(>|t|)"], summary(model_simple)$coefficients[, "Pr(>|t|)"])
-colnames(p_vals) <- c('Flexeme', 'SmartCommit')
+colnames(p_vals) <- c('Flexeme', 'SmartCommit', 'FileUntangling')
 
 tool_stats <- cbind(coeffs, p_vals)
 tool_stats <- rbind(colnames(tool_stats),tool_stats)
