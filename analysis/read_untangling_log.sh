@@ -21,7 +21,7 @@ fi
 file_path=$1
 
 if [ ! -f "$file_path" ]; then
-  echo "Error: '$file_path' does not exists.  Exiting."
+  echo "Error: '$file_path' does not exist.  Exiting."
   exit 1
 fi
 
