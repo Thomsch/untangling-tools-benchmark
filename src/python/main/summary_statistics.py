@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+This script calculates the size, measured by number of lines changed, of three artifacts stored
+obtained from the Version Control of a Defects4J bug project.
+
+Command Line Args:
+    project: D4J Project name
+    vid: D4J Bug Id
+    repository: Directory where the repo is checked out
+    version: The postfix of the diff file name, "clean" or "unclean"
+Returns:
+    The results are stored in a <project>_<id>_version.csv file (with 1 row) in <out_dir>/metrics folder.
+    CSV header:
+    {d4j_project,d4j_bug_id,original_patch_size, bug_fix_patch_size, non_bug_fixing_patch_size}
+"""
 import sys
 from os import path
 from unidiff import PatchSet
@@ -6,7 +21,11 @@ from unidiff.constants import LINE_TYPE_CONTEXT
 import diff_metrics
 
 
-def count_all_changed_lines(patch):
+def count_lines_with_whitespace(patch):
+    """
+    Returns number of lines changed (added, removed from the original file) in the patch.
+    Including empty lines.
+    """
     all_changed_lines = 0
     for file in patch:
         # if file.path.endswith("Test.java"):
@@ -41,24 +60,18 @@ def main():
 
     if version == "whitespace":
         diff_sets = whitespace_free_diffs
-        sizes = [0] * len(diff_sets)
-        for i in range(len(diff_sets)):
-            diff_file = diff_sets[i]
-            patch = PatchSet.from_filename(
-                path.join(repository, "diff", diff_file), encoding="latin-1"
-            )
-            sizes[i] = count_all_changed_lines(patch)
-        print(f"{project},{vid},{sizes[0]},{sizes[1]},{sizes[2]}")
     else:  # Clean version
         diff_sets = clean_diffs
-        sizes = [0] * len(diff_sets)
-        for i in range(len(diff_sets)):
-            diff_file = diff_sets[i]
-            patch = PatchSet.from_filename(
-                path.join(repository, "diff", diff_file), encoding="latin-1"
-            )
-            sizes[i] = diff_metrics.count_changed_lines(patch)
-        print(f"{project},{vid},{sizes[0]},{sizes[1]},{sizes[2]}")
+    sizes = [0] * len(diff_sets)
+    for i, diff_file in enumerate(diff_sets):
+        patch = PatchSet.from_filename(
+            path.join(repository, "diff", diff_file), encoding="latin-1"
+        )
+        if version == "whitespace":
+            sizes[i] = count_lines_with_whitespace(patch)
+        else:
+            sizes[i] = diff_metrics.count_changed_source_code_lines(patch)
+    print(f"{project},{vid},{sizes[0]},{sizes[1]},{sizes[2]}")
 
 
 if __name__ == "__main__":
