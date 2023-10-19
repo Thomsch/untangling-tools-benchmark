@@ -89,7 +89,7 @@ def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
     hunks_VC = get_hunks_in_patch(original_diff)  # List of hunks
     # Obtain string representations of all Line Objects
     fix_diff_lines_str = [str(line) for line in lines_in_patch(fix_diff)]
-    if len(fix_diff_lines_str) > 0 or len(fix_diff_lines_str) != count_changed_lines(
+    if len(fix_diff_lines_str) > 0 or len(fix_diff_lines_str) != count_changed_source_code_lines(
         original_diff
     ):
         for hunk in hunks_VC:
@@ -103,7 +103,7 @@ def count_tangled_hunks(original_diff: PatchSet, fix_diff: PatchSet):
     return tangled_hunks_count
 
 
-def count_changed_lines(patch):
+def count_changed_source_code_lines(patch):
     """
     Return the number of non-blank changed unidiff diff lines (+)/(-) in the
     diff file (i.e. we ignore both blank lines and context lines).  A unidiff
@@ -126,9 +126,9 @@ def count_tangled_lines(original_diff, bug_fix_diff, nonfix_diff):
 
     As tangled lines are duplicated, we return the count divided by 2.
     """
-    all_lines_count = count_changed_lines(original_diff)
-    fix_lines_count = count_changed_lines(bug_fix_diff)
-    nonfix_lines_count = count_changed_lines(nonfix_diff)
+    all_lines_count = count_changed_source_code_lines(original_diff)
+    fix_lines_count = count_changed_source_code_lines(bug_fix_diff)
+    nonfix_lines_count = count_changed_source_code_lines(nonfix_diff)
 
     tangled_lines_count = fix_lines_count + nonfix_lines_count - all_lines_count
     if tangled_lines_count % 2 != 0:
