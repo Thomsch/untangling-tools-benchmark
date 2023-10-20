@@ -5,16 +5,13 @@ This script calculates the following diff metrics for a version control diff fil
 The diff file represents of the differences between the source (pre-fix version)
 and target (post-fix version) files.
     For unclean VC diff:
-    1. Total number of files updated (i.e. both code and test files)
-    2. Number of test files updated
-    For clean VC diff:
-    3. Number of hunks
-    4. Average hunk size
-    5. Number of code diff lines changed (i.e. all lines with +/- indicators in the original diff)
+    1. Total number of files updated
+    2. Number of hunks
+    3. Average hunk size
+    4. Number of diff lines changed (i.e. all lines with +/- indicators in the original diff)
        If a source code line is modified (not removed or added), this corresponds to 2 diff lines changed.
-    6. Number of noncode diff lines changed
-    7. Number of tangled lines in a diff file
-    8. Number of tangled hunks in a diff file
+    5. Number of tangled lines in a diff file
+    6. Number of tangled hunks in a diff file
 
 Command Line Args:
     project: D4J Project name
