@@ -28,8 +28,9 @@ fi
 
 mkdir -p "$results_dir"
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. ./check-environment-lltc4j.sh
+. "$SCRIPT_DIR/../../../../check-environment-lltc4j.sh"
 set +o allexport
 
 # Defects4J will use whatever is on JAVA_HOME.

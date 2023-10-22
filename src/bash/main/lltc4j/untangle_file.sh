@@ -30,8 +30,10 @@ if ! [ -d "$results_dir" ]; then
     exit 1
 fi
 
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 set -o allexport
-. ./check-environment-lltc4j.sh
+. "$SCRIPT_DIR/../../../../check-environment-lltc4j.sh"
 set +o allexport
 
 java_version="$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -c1-3)"
