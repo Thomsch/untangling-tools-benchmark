@@ -3,7 +3,7 @@ Tests for the retrieve_javac_compilation_parameters module.
 """
 import json
 
-from src.python.main.retrieve_javac_compilation_parameters import (
+from src.python.main.retrieve_javac_compilation_parameter import (
     retrieve_compilation_parameter,
 )
 

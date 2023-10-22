@@ -4,6 +4,8 @@
 # - $1: URL of the project's git repository. e.g., https://github.com/Thomsch/untangling-tools-benchmark.
 # - $2: The commit hash of the bug-fix.
 # - $3: Root directory containing all the results of the evaluation.
+# - $4: Java sourcepath to use for the compilation.
+# - $5: Java classpath to use for the compilation.
 
 # The output of Flexeme is stored in $results_dir/decomposition/flexeme/<commit>/.
 # The untangling results are stored in $results_dir/evaluation/<commit>/

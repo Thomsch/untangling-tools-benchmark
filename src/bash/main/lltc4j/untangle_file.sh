@@ -3,7 +3,7 @@
 # Arguments:
 # - $1: The file containing the commits to untangle in CSV format with header:
 #       vcs_url, commit_hash, parent_hash
-# - $3: The root directory where the ground truth results are stored.
+# - $3: The root directory where the results are stored.
 
 # The untangling results are stored in $results_dir/evaluation/<commit>/
 # - file_untangling.csv: The untangling results in CSV format.
@@ -57,16 +57,17 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 # Arguments:
 # - $1: The URL of the git repository for the project.
 # - $2: The commit hash to untangle.
-untangle_with_tools(){
+untangle_file_baseline(){
   local vcs_url="$1" # The URL of the git repository for the project.
   local commit_hash="$2" # The commit hash to untangle.
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
   short_commit_hash="${commit_hash:0:6}"
+  commit_identifier="${project_name}_${short_commit_hash}"
 
-  local log_file="${logs_dir}/${project_name}_${short_commit_hash}_file_untangling.log"
-  local ground_truth_file="${results_dir}/evaluation/${project_name}_${short_commit_hash}/truth.csv"
-  local result_dir="${results_dir}/evaluation/${project_name}_${short_commit_hash}" # Directory where the parsed untangling results are stored.
+  local log_file="${logs_dir}/${commit_identifier}_file_untangling.log"
+  local result_dir="${results_dir}/evaluation/${commit_identifier}" # Directory where the parsed untangling results are stored.
+  local ground_truth_file="${result_dir}/truth.csv"
   local file_untangling_out="${result_dir}/file_untangling.csv"
 
   mkdir -p "$result_dir"
@@ -81,25 +82,24 @@ untangle_with_tools(){
     echo 'Untangling with file-based approach .................................. CACHED' >> "$log_file"
     untangling_status_string="CACHED"
   else
-    echo -ne 'Untangling with file-based approach ..................................\r' >> "$log_file"
+    echo 'Untangling with file-based approach ..................................' >> "$log_file"
     if python3 src/python/main/filename_untangling.py "${ground_truth_file}" "${file_untangling_out}" >> "$log_file" 2>&1 ;
     then
-        echo 'Untangling with file-based approach .................................. OK' >> "$log_file"
         untangling_status_string="OK"
     else
-        echo -ne 'Untangling with file-based approach .................................. FAIL\r' >> "$log_file"
         untangling_status_string="FAIL"
     fi
+    echo "Untangling with file-based approach .................................. ${untangling_status_string}" >> "$log_file"
   fi
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.
-  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}" "${log_file}"
+  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${commit_identifier}" "${untangling_status_string}" "${ELAPSED}" "${log_file}"
 }
 
 export -f get_project_name_from_url
-export -f untangle_with_tools
+export -f untangle_file_baseline
 
-tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}
+tail -n+2 "$commits_file" | parallel --colsep "," untangle_file_baseline {}
 
 echo "Untangling completed."

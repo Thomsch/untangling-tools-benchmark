@@ -11,7 +11,7 @@ Otherwise, it will exit with a non-zero exit.
 
 Command Line Args:
     - --parameter: Name of the parameter to retrieve. Either 'sourcepath' or 'classpath'.
-    - --json-file: Path to the JSON file containing the call results.
+    - --javac-file: Path to the JSON file containing the call results.
 
 Only one parameter can be retrieved at a time. If both are specified, the script
 will exit with a non-zero exit code.
@@ -56,7 +56,7 @@ def main():
     Implement the logic of the script. See the module docstring.
     """
     main_parser = argparse.ArgumentParser(
-        prog="retrieve_javac_compilation_parameters.py",
+        prog="retrieve_javac_compilation_parameter.py",
         description=f"{__doc__}",
     )
 
@@ -69,8 +69,8 @@ def main():
     )
 
     main_parser.add_argument(
-        "-s",
-        "--scores-file",
+        "-j",
+        "--javac-file",
         help="JSON file containing the compilation calls results",
         metavar="PATH",
         required=True,
@@ -79,11 +79,11 @@ def main():
     args = main_parser.parse_args()
 
     # Load the JSON file
-    with open(args.scores_file) as f:
-        scores = json.load(f)
+    with open(args.javac_file) as f:
+        javac_file = json.load(f)
 
     # Retrieve the parameter
-    parameter_value = retrieve_compilation_parameter(args.parameter, scores)
+    parameter_value = retrieve_compilation_parameter(args.parameter, javac_file)
 
     if parameter_value is None:
         sys.exit(1)

@@ -2,8 +2,8 @@
 # Untangle with Flexeme on a list of LLTC4J commits.
 # Arguments:
 # - $1: The file containing the commits to untangle.
-# - $2: The root directory where the sourcepath and classpath results from '/try-compiling.sh' are stored.
-# - $3: The root directory where the ground truth results are stored.
+# - $2: The directory where the sourcepath and classpath results from 'try-compiling.sh' are stored.
+# - $3: The results directory where the ground truth results are stored.
 
 # The decomposition results are written to $results_dir/evaluation/<commit>/.
 # - flexeme.csv: The untangling results in CSV format.
@@ -18,9 +18,9 @@ if [ $# -ne 3 ] ; then
     exit 1
 fi
 
-export commits_file="$1" # The file containing the commits to untangle.
-export javac_traces_dir="$2" # The directory where the javac traces are stored.
-export results_dir="$3" # The directory where the results are stored and repositories checked out.
+export commits_file="$1"
+export javac_traces_dir="$2"
+export results_dir="$3"
 
 if ! [ -f "$commits_file" ]; then
     echo "$0: commit file ${commits_file} not found. Exiting."
@@ -89,8 +89,8 @@ untangle_with_tools(){
     classpath=""
   else
     # Retrieve the sourcepath and classpath from the javac traces.
-    sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameters.py" -p sourcepath -s "$javac_traces_file")
-    classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameters.py" -p classpath -s "$javac_traces_file")
+    sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p sourcepath -j "$javac_traces_file")
+    classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p classpath -j "$javac_traces_file")
   fi
 
   # If the untangling status is still empty, untangle the commit.

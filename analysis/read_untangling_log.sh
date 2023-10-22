@@ -4,6 +4,11 @@
 # count of the outcomes. e.g., how many decompositions were successful,
 # how many failed, etc.
 #
+# The script assumes that the log file is in the following format:
+# <commit1> <label1> <time> <log-file1>
+# <commit2> <label2> <time> <log-file2>
+# ...
+#
 # Arguments:
 # - $1: The path to the untangling log file.
 #
