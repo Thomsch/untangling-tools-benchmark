@@ -87,11 +87,9 @@ fi
 
 cd "$workdir"
 
-# Generate the VC diff but not clean yet, to generate commit metrics first
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff" 
-# Generate the 3 diff files with no context lines, then clean the diffs.
-d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC_clean.diff"
-python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/VC_clean.diff"
+# Generate the whitespace-change-free version, then clean the diffs.
+d4j_diff "$project" "$vid" "$revision_original" "$revision_fixed" "$repository" >> "${diff_dir}/VC.diff"
+python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/VC.diff"
 d4j_diff "$project" "$vid" "$revision_original"  "$revision_buggy" "$repository" >> "${diff_dir}/NBF.diff"
 python3 "${workdir}/src/python/main/clean_artifacts.py" "${diff_dir}/NBF.diff"
 d4j_diff "$project" "$vid" "$revision_buggy"  "$revision_fixed" "$repository" >> "${diff_dir}/BF.diff"

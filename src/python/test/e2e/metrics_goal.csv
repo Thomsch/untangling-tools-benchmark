@@ -1,6 +1,16 @@
 project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks
 Closure,103,2,3,4,3.0,12,47,0.0,0
+Closure,103,12,8,4
+Closure,103,59,884,927
 Csv,8,1,1,2,9.5,19,3,0.0,1
+Csv,8,19,13,6
+Csv,8,22,2024,2020
 Jsoup,24,1,1,1,1.0,1,16,0.0,0
+Jsoup,24,1,1,0
+Jsoup,24,17,312,327
 Lang,63,1,1,4,5.75,23,20,0.0,0
+Lang,63,23,23,0
+Lang,63,43,5455,5446
 Lang,8,1,1,4,3.5,14,21,2.0,1
+Lang,8,14,3,15
+Lang,8,35,2148,2181
