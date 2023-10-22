@@ -1,7 +1,8 @@
 #!/bin/bash
 # Untangle commits from LLTC4J using the file-based approach.
 # Arguments:
-# - $1: The file containing the commits to untangle.
+# - $1: The file containing the commits to untangle in CSV format with header:
+#       vcs_url, commit_hash, parent_hash
 # - $3: The root directory where the ground truth results are stored.
 
 # The untangling results are stored in $results_dir/evaluation/<commit>/
