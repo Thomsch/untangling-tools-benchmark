@@ -147,7 +147,8 @@ def tangle_counts(repository):
     """
 
     original_diff = PatchSet.from_filename(
-        path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1",
+        path.join(repository, "diff", "VC_clean.diff"),
+        encoding="latin-1",
     )
     fix_diff = PatchSet.from_filename(
         path.join(repository, "diff", "BF_clean.diff"), encoding="latin-1"
@@ -177,7 +178,8 @@ def main():
     repository = args[2]
 
     unclean_original_diff = PatchSet.from_filename(
-        filename=path.join(repository, "diff", "VC.diff"), encoding="latin-1",
+        filename=path.join(repository, "diff", "VC.diff"),
+        encoding="latin-1",
     )
     clean_original_diff = PatchSet.from_filename(
         path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
