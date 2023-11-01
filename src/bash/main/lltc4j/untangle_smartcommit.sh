@@ -50,32 +50,7 @@ mkdir -p "$logs_dir"
 echo "$0: logs will be stored in ${logs_dir}/<project>_<commit_hash>_untangle.log"
 echo ""
 
-export PYTHONHASHSEED=0
-
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPTDIR/lltc4j_util.sh"
 
-# Untangles a commit from the LLTC4J dataset using SmartCommit and Flexeme.
-# Arguments:
-# - $1: The URL of the git repository for the project.
-# - $2: The commit hash to untangle.
-untangle_with_tools(){
-  local vcs_url="$1" # The URL of the git repository for the project.
-  local commit_hash="$2" # The commit hash to untangle.
-  local project_name
-  project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
-
-  START="$(date +%s.%N)"   # Record start time for bug decomposition
-  ./src/bash/main/lltc4j/untangle_lltc4j_commit.sh "$vcs_url" "$commit_hash" "$results_dir" > "${logs_dir}/${project_name}_${short_commit_hash}_untangle.log" 2>&1
-  ret_code=$?
-  untangling_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
-  END="$(date +%s.%N)"
-  # Must use `bc` because the computation is on floating-point numbers.
-  ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (time: %.0fs)\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}"
-}
-
-export -f get_project_name_from_url
-export -f untangle_with_tools
-tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}
+tail -n+2 "$commits_file" | parallel --colsep "," untangle_smartcommit {}

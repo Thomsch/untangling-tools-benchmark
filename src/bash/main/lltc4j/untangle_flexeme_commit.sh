@@ -16,7 +16,6 @@ set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-
 if [ $# -ne 5 ] ; then
     echo "usage: $0 <project_vcs_url> <commit_hash> <results_dir> <sourcepath> <classpath>"
     exit 1

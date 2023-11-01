@@ -60,61 +60,6 @@ export SCRIPT_DIR
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPT_DIR/lltc4j_util.sh"
 
-# Untangles a commit from the LLTC4J dataset using Flexeme.
-# Arguments:
-# - $1: The URL of the git repository for the project.
-# - $2: The commit hash to untangle.
-untangle_with_tools(){
-  local vcs_url="$1" # The URL of the git repository for the project.
-  local commit_hash="$2" # The commit hash to untangle.
-  local project_name
-  project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
-
-  local log_file
-  log_file="${logs_dir}/${project_name}_${short_commit_hash}_flexeme.log"
-
-  START="$(date +%s.%N)"
-
-  # If the ground truth is missing, skip this commit.
-  if ! [ -f "${results_dir}/evaluation/${project_name}_${short_commit_hash}/truth.csv" ]; then
-    untangling_status_string="MISSING_GROUND_TRUTH"
-  fi
-
-  javac_traces_file="${javac_traces_dir}/${project_name}_${short_commit_hash}/dljc-logs/javac.json"
-
-  if ! [ -f "$javac_traces_file" ]; then
-    untangling_status_string="MISSING_JAVAC_TRACES"
-    sourcepath=""
-    classpath=""
-  else
-    # Retrieve the sourcepath and classpath from the javac traces.
-    sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p sourcepath -j "$javac_traces_file")
-    classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p classpath -j "$javac_traces_file")
-  fi
-
-  # If the untangling status is still empty, untangle the commit.
-  if [ -z "$untangling_status_string" ]; then
-    ./src/bash/main/lltc4j/untangle_flexeme_commit.sh "$vcs_url" "$commit_hash" "$results_dir" "$sourcepath" "$classpath" > "${log_file}" 2>&1
-    ret_code=$?
-    if [ $ret_code -eq 0 ]; then
-      untangling_status_string="OK"
-    elif [ $ret_code -eq 5 ]; then
-      untangling_status_string="UNTANGLING_FAIL"
-    elif [ $ret_code -eq 6 ]; then
-      untangling_status_string="PARSING_FAIL"
-    else
-      untangling_status_string="FAIL"
-    fi
-  fi
-  END="$(date +%s.%N)"
-  ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.
-  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${project_name}_${short_commit_hash}" "${untangling_status_string}" "${ELAPSED}" "${log_file}"
-}
-
-export -f get_project_name_from_url
-export -f untangle_with_tools
-
-tail -n+2 "$commits_file" | parallel --colsep "," untangle_with_tools {}
+tail -n+2 "$commits_file" | parallel --colsep "," untangle_flexeme {}
 
 echo "Untangling completed."
