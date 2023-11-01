@@ -3,13 +3,13 @@
 # This script optionally sets, then checks, environment variables.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
-
 env_file="${SCRIPT_DIR}/../../../../.env"
 
-if [ -f $env_file ] ; then
+if [ -f "$env_file" ] ; then
   set -o allexport
-  # shellcheck disable=SC1091 # File might not exist.
-  . $env_file
+
+  # shellcheck source=.env
+  . "$env_file"
   set +o allexport
 fi
 
