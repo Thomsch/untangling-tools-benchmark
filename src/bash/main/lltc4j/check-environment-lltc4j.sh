@@ -2,21 +2,15 @@
 
 # This script optionally sets, then checks, environment variables.
 
-if [ -f .env ] ; then
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+
+env_file="${SCRIPT_DIR}/../../../../.env"
+
+if [ -f $env_file ] ; then
   set -o allexport
   # shellcheck disable=SC1091 # File might not exist.
-  . .env
+  . $env_file
   set +o allexport
-fi
-
-if [ -z "${DEFECTS4J_HOME}" ]; then
-  echo 'Set DEFECTS4J_HOME environment variable to the Defects4J repository.'
-  exit 1
-fi
-
-if [ ! -d "${DEFECTS4J_HOME}" ]; then
-  echo "DEFECTS4J_HOME environment variable is not set to an existing directory: $DEFECTS4J_HOME"
-  exit 1
 fi
 
 if [ -z "${JAVA11_HOME}" ]; then
