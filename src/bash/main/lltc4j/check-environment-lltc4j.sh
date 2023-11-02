@@ -8,7 +8,7 @@ env_file="${SCRIPT_DIR}/../../../../.env"
 if [ -f "$env_file" ] ; then
   set -o allexport
 
-  # shellcheck source=.env
+  # shellcheck source=/dev/null
   . "$env_file"
   set +o allexport
 fi
