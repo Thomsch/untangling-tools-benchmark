@@ -89,6 +89,7 @@ if ! [[ $(type -t check_environment) == function ]]; then
   echo "Function 'check_environment' not found in '$script_for_tool'." >&2
   exit 1
 fi
+
 check_environment
 
 if ! [[ $(type -t has_untangling_output) == function ]]; then
@@ -157,39 +158,55 @@ untangle_and_parse_lltc4j() {
   local project_repository_dir="${results_dir}/repositories/${project_name}"
   local untangling_output_dir="$untangling_tool_output_dir/$commit_identifier"
 
-  mkdir -p "$untangling_output_dir"
-
   local untangling_export_file="${commit_result_dir}/${tool_name}.csv"
   local log_file="${logs_dir}/${commit_identifier}_${tool_name}.log"
   local ground_truth_file="${commit_result_dir}/truth.csv"
+
+  rm -f "$log_file" # Remove previous log file.
+
+  mkdir -p "$untangling_output_dir"
 
   # TODO: Only do that if we need to untangle.
   # Copy the repository to a temporary directory to enable parallelization.
   local tmp_repository_dir
   tmp_repository_dir="$(mktemp -d)"
-  cp -r "$project_repository_dir" "$tmp_repository_dir"
+  cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+
+  # Checkout the commit to untangle.
+  cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
+  if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
+    status_string="CHECKOUT_FAIL"
+  fi
+  cd - >> "$log_file" 2>&1 || exit 1
 
   START="$(date +%s.%N)"
 
-  # Check if the untangling results alreay exist for this commit.
-  # If it does, then the untangling result exists and we can skip the untangling process.
-  # Otherwise, we need to untangle the commit.
-  if [ -f "$untangling_export_file" ]; then
-    status_string="CACHED"
-  elif has_untangling_output "$untangling_output_dir" || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$untangling_output_dir" > "$log_file" 2>&1; then
-    status_string="UNTANGLING_SUCCESS"
-  else
-    status_string="UNTANGLING_FAIL"
-  fi
+  # TODO: Refactoring into a function so it can return early. The status code can be
+  #       determined by the function's return value.
+  if [ "$status_string" != "CHECKOUT_FAIL" ]; then
 
-  # If the untangling tool produced an output, then export it to the CSV format.
-  if [ "$status_string" == "UNTANGLING_SUCCESS" ]; then
-    if export_untangling_output "$untangling_output_dir" "$untangling_export_file" > "$log_file" 2>&1; then
-      status_string="OK"
+    # Check if the untangling results alreay exist for this commit.
+    # If it does, then the untangling result exists and we can skip the untangling process.
+    # Otherwise, we need to untangle the commit.
+    if [ -f "$untangling_export_file" ]; then
+      status_string="CACHED"
+    elif has_untangling_output "$untangling_output_dir" "$project_name" "$commit_hash" || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$commit_hash" "$untangling_output_dir" >> "$log_file" 2>&1; then
+      status_string="UNTANGLING_SUCCESS"
     else
-      status_string="EXPORT_FAIL"
+      status_string="UNTANGLING_FAIL"
+    fi
+
+    # If the untangling tool produced an output, then export it to the CSV format.
+    if [ "$status_string" == "UNTANGLING_SUCCESS" ]; then
+      if export_untangling_output "$untangling_output_dir" "$untangling_export_file" "$(basename "$tmp_repository_dir")" "$commit_hash" >> "$log_file" 2>&1; then
+        status_string="OK"
+      else
+        status_string="EXPORT_FAIL"
+      fi
     fi
   fi
+
+  rm -rf "$tmp_repository_dir"
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This script optionally sets, then checks, environment variables.
+# This script optionally sets, then checks, the environment variables.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 env_file="${SCRIPT_DIR}/../../../../.env"

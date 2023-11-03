@@ -20,12 +20,13 @@ has_untangling_output() {
 # Untangles a commit from the LLTC4J dataset using $tool_name.
 #
 # Arguments:
-# - $1: The directory containing the repository for the project (ignored by this implementation).
-# - $2: The ground truth file for the commit.
-# - $3: Output directory where the untangling results will be stored.
+# - $1: The directory containing the repository for the project.
+# - $2: The ground truth file for the commit (ignored by this implementation).
+# - $3: The commit hash to untangle (ignored by this implementation).
+# - $4: The output directory where the untangling results will be stored.
 untangle_commit() {
   local ground_truth_file="$2"
-  local untangling_output_dir="$3"
+  local untangling_output_dir="$4"
 
   local untangling_result_file="${untangling_output_dir}/untangling.csv"
 
