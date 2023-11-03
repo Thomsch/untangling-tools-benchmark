@@ -1,3 +1,5 @@
+
+# Check that the environment variables are set for SmartCommit.
 check_environment() {
   # TODO: Refactor these into functions that can be reused in check-environment-lltc4j.sh. Both places need to check the environment.
   if [ -z "${JAVA11_HOME}" ]; then
@@ -33,13 +35,14 @@ has_untangling_output() {
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit (ignored by this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The output directory where the untangling results will be stored.
+# - $4: The commit identifier.
+# - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
   local ground_truth_file="$2"
   local commit_hash="$3"
-  local untangling_output_dir="$4"
-
+  local commit_identifier="$4"
+  local untangling_output_dir="$5"
 
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$repository_dir" -c "$commit_hash" -o "${untangling_output_dir}"
 }

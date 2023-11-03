@@ -190,7 +190,7 @@ untangle_and_parse_lltc4j() {
     # Otherwise, we need to untangle the commit.
     if [ -f "$untangling_export_file" ]; then
       status_string="CACHED"
-    elif has_untangling_output "$untangling_output_dir" "$project_name" "$commit_hash" || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$commit_hash" "$untangling_output_dir" >> "$log_file" 2>&1; then
+    elif has_untangling_output "$untangling_output_dir" "$project_name" "$commit_hash" || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$commit_hash" "$commit_identifier" "$untangling_output_dir" >> "$log_file" 2>&1; then
       status_string="UNTANGLING_SUCCESS"
     else
       status_string="UNTANGLING_FAIL"
@@ -209,7 +209,7 @@ untangle_and_parse_lltc4j() {
   rm -rf "$tmp_repository_dir"
 
   END="$(date +%s.%N)"
-  ELAPSED="$(echo "$END - $START" | bc)" # Must use `bc` because the computation is on floating-point numbers.
+  ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %-20s (time: %.0fs) [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
 }
 

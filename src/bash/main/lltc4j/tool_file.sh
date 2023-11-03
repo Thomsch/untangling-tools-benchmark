@@ -1,6 +1,6 @@
 # Bash script that implements the tool_file interface for the LLTC4J dataset.
 
-# Check that the environment variables are set for this tool.
+# Check that the environment variables are set for file-based untangling.
 check_environment() {
   # File-based approach doesn't require any environment variables.
   return 0
@@ -22,11 +22,12 @@ has_untangling_output() {
 # Arguments:
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit (ignored by this implementation).
-# - $3: The commit hash to untangle (ignored by this implementation).
-# - $4: The output directory where the untangling results will be stored.
+# - $3: The commit hash to untangle.
+# - $4: The commit identifier.
+# - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local ground_truth_file="$2"
-  local untangling_output_dir="$4"
+  local untangling_output_dir="$5"
 
   local untangling_result_file="${untangling_output_dir}/untangling.csv"
 
