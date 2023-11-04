@@ -181,6 +181,21 @@ untangle_and_parse_lltc4j() {
   fi
   cd - >> "$log_file" 2>&1 || exit 1
 
+  # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
+  if [ "$REMOVE_NON_CODE_CHANGES" = true ] ; then
+    echo "Remove non-code changes $tmp_repository_dir" >> "$log_file" 2>&1
+
+    # Invert the fix commit to get the bugfix commit.
+
+    # Clean the repo using the code in `clean-defects4j-repo.sh` and commit the changes to buggy (clean) commit.
+
+    # Checkout the fixed commit. Create new branch (or maybe detached head if that works). Clean the repo. Commit the changes.
+
+    # Checkout buggy (clean) commit. Cherry pick the changes from the fixed clean commit created in the previous step.
+
+    # Feed the untangling tools the new commit hash BUT use the same original commit identifier for directory names and output files containing the results.
+  fi
+
   START="$(date +%s.%N)"
 
   # TODO: Refactoring into a function so it can return early. The status code can be
