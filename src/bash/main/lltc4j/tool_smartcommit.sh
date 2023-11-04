@@ -3,12 +3,12 @@
 check_environment() {
   # TODO: Refactor these into functions that can be reused in check-environment-lltc4j.sh. Both places need to check the environment.
   if [ -z "${JAVA11_HOME}" ]; then
-    echo 'Set JAVA11_HOME environment variable to the Java 11 installation.'
+    echo 'Set the JAVA11_HOME environment variable to the Java 11 installation.'
     return 1
   fi
 
   if [ ! -d "${JAVA11_HOME}" ]; then
-    echo "JAVA11_HOME environment variable is not set to an existing directory: $JAVA11_HOME"
+    echo "The JAVA11_HOME environment variable is not an existing directory: $JAVA11_HOME"
     return 1
   fi
 }

@@ -1,8 +1,7 @@
 # Check that the environment variables are set for Flexeme.
 check_environment() {
-  # Check for JAVAC Traces environment variable.
   if [ -z "${JAVAC_TRACES_DIR:-}" ]; then
-    echo "Please set the JAVAC_TRACES_DIR environment variable to the directory containing the Javac traces."
+    echo "Please set the JAVAC_TRACES_DIR environment variable to the directory containing the javac traces."
     echo "See the script try-compiling.sh for more information."
     exit 1
   fi

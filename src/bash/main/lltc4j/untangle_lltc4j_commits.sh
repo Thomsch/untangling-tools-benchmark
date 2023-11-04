@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Untangle LLTC4J commits with a given untangling tool. The results are stored
-# the results directory under 'evaluation/<commit>/'. The untangling results
+# in the results directory under 'evaluation/<commit>/'. The untangling results
 # are stored in CSV format in 'evaluation/<commit>/<tool_name>.csv'.
 #
 # Arguments:
