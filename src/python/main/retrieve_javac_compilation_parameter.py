@@ -7,7 +7,7 @@ This script assumes that `try-compile.sh` has been run for the commit and that
 the JSON file containing call results has been generated.
 
 If the specified compilation parameter exists, the script will write it to stdout.
-Otherwise, it will exit with a non-zero exit.
+Otherwise, it will exit with a non-zero exit status.
 
 Command Line Args:
     - --parameter: Name of the parameter to retrieve. Either 'sourcepath' or 'classpath'.
