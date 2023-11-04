@@ -17,6 +17,7 @@ check_environment() {
 has_untangling_output() {
   local untangling_output_dir="$1"
 
+  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
   local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
   [ -f "$flexeme_untangling_graph" ]
 }
@@ -36,6 +37,7 @@ untangle_commit() {
   local commit_identifier="$4"
   local untangling_output_dir="$5"
 
+  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
   local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
 
   # If the ground truth is missing, skip this commit.
@@ -76,6 +78,7 @@ export_untangling_output() {
   local untangling_output_dir="$1"
   local untangling_export_file="$2"
 
+  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
   local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
   python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$untangling_export_file"
 }

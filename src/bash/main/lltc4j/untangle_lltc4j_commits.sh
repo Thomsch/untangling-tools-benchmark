@@ -166,6 +166,8 @@ untangle_and_parse_lltc4j() {
 
   mkdir -p "$untangling_output_dir"
 
+  # TODO: Check that the ground truth exists for all tools. We can't get results without it even if the untangling succeeds.
+
   # TODO: Only do that if we need to untangle.
   # Copy the repository to a temporary directory to enable parallelization.
   local tmp_repository_dir
