@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Untangle LLTC4J commits with a given untangling tool. The results are stored
-# in the results directory under 'evaluation/<commit>/'. The untangling results
-# are stored in CSV format in 'evaluation/<commit>/<tool_name>.csv'.
+# in the given results directory under 'evaluation/<commit>/'. In particular,
+# the untangling results are stored in 'evaluation/<commit>/<tool_name>.csv'.
 #
 # Arguments:
 # - $1: The file containing the commits to untangle with header:
@@ -11,13 +11,13 @@
 # - $3: The tool's name to use for untangling.
 #       - 'smartcommit' to use SmartCommit.
 #       - 'flexeme' to use Flexeme.
-#       - 'file' to use a naive file-based approach.
+#       - 'file' to use a file-based approach.
 #
-# Tool specific arguments are provided via environment variables. Run
+# Tool-specific arguments are provided via environment variables. Run
 # this script with the tool's name to see the required arguments.
 #
-# The result of each untangling process is output to stdout in the following
-# format: <commit_identifier> <status> (time: <time>) [<log_file>].
+# The result of each untangling process is output to stdout as a single line
+# in the format: <commit_identifier> <status> (time: <time>) [<log_file>].
 # - <commit_identifier>: The identifier of the commit being untangled.
 # - <status>: The status of the untangling process. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
