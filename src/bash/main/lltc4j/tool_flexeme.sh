@@ -39,12 +39,6 @@ untangle_commit() {
   # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
   local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
 
-  # If the ground truth is missing, skip this commit.
-  if ! [ -f "$ground_truth_file" ]; then
-    echo "Ground truth file not found: ${ground_truth_file}"
-    return 1
-  fi
-
   local javac_traces_file="${JAVAC_TRACES_DIR}/${commit_identifier}/dljc-logs/javac.json"
   if ! [ -f "$javac_traces_file" ]; then
     echo "Missing javac traces for ${commit_identifier}"

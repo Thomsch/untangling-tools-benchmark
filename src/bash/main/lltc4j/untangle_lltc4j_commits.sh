@@ -166,26 +166,32 @@ untangle_and_parse_lltc4j() {
 
   mkdir -p "$untangling_output_dir"
 
-  # TODO: Check that the ground truth exists for all tools. We can't get results without it even if the untangling succeeds.
-
-  # TODO: Only do that if we need to untangle.
-  # Copy the repository to a temporary directory to enable parallelization.
-  local tmp_repository_dir
-  tmp_repository_dir="$(mktemp -d)"
-  cp -r "$project_repository_dir"/. "$tmp_repository_dir"
-
-  # Checkout the commit to untangle.
-  cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
-  if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
-    status_string="CHECKOUT_FAIL"
-  fi
-  cd - >> "$log_file" 2>&1 || exit 1
-
+  status_string="OK"
   START="$(date +%s.%N)"
+
+  # If the ground truth is missing, skip this commit.
+  if ! [ -f "$ground_truth_file" ]; then
+    echo "Ground truth file not found: ${ground_truth_file}" >> "$log_file" 2>&1
+    status_string="GROUND_TRUTH_MISSING"
+  else
+
+    # TODO: Only do that if we need to untangle.
+    # Copy the repository to a temporary directory to enable parallelization.
+    local tmp_repository_dir
+    tmp_repository_dir="$(mktemp -d)"
+    cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+
+    # Checkout the commit to untangle.
+    cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
+    if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
+      status_string="CHECKOUT_FAIL"
+    fi
+    cd - >> "$log_file" 2>&1 || exit 1
+  fi
 
   # TODO: Refactoring into a function so it can return early. The status code can be
   #       determined by the function's return value.
-  if [ "$status_string" != "CHECKOUT_FAIL" ]; then
+  if [ "$status_string" == "OK" ]; then
 
     # Check if the untangling results alreay exist for this commit.
     # If it does, then the untangling result exists and we can skip the untangling process.

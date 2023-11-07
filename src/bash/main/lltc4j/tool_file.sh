@@ -31,13 +31,7 @@ untangle_commit() {
 
   local untangling_result_file="${untangling_output_dir}/untangling.csv"
 
-  if ! [ -f "$ground_truth_file" ]; then
-    echo "Ground truth file not found: ${ground_truth_file}"
-    return 1
-  fi
-
   python3 src/python/main/filename_untangling.py "${ground_truth_file}" "${untangling_result_file}"
-  return $?
 }
 
 # Exports the untangling results to a CSV file.
