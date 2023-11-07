@@ -1,6 +1,8 @@
-# Bash script that implements the tool_file interface for the LLTC4J dataset.
+#!/bin/bash
 
-# Check that the environment variables are set for file-based untangling.
+# Implementation of the untangling tool functions used in untangle_lltc4j_commits.sh for the file name based untangling approach.
+
+# Check that the environment variables are set for the file name based untangling approach.
 check_environment() {
   # File-based approach doesn't require any environment variables.
   return 0
@@ -17,13 +19,13 @@ has_untangling_output() {
   [ -f "$untangling_result_file" ]
 }
 
-# Untangles a commit from the LLTC4J dataset using $tool_name.
+# Untangles a commit from the LLTC4J dataset using a file-based approach.
 #
 # Arguments:
 # - $1: The directory containing the repository for the project.
-# - $2: The ground truth file for the commit (ignored by this implementation).
+# - $2: The ground truth file for the commit.
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier.
+# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local ground_truth_file="$2"
@@ -34,12 +36,14 @@ untangle_commit() {
   python3 src/python/main/filename_untangling.py "${ground_truth_file}" "${untangling_result_file}"
 }
 
-# Exports the untangling results to a CSV file.
+# Converts the untangling output to a CSV file.
 #
 # Arguments:
-# - $1: The directory where the untangling results are stored.
+# - $1: The directory where the output of the untangling tool is stored.
 # - $2: The CSV file where the untangling results will be exported.
-export_untangling_output() {
+# - $3: The project name (unused in this implementation).
+# - $4: The commit hash (unused in this implementation).
+convert_untangling_output_to_csv() {
   local untangling_output_dir="$1"
   local untangling_export_file="$2"
 

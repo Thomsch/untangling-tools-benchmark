@@ -82,16 +82,16 @@ fi
 # Untangle with Flexeme
 
 flexeme_untangling_results="${flexeme_untangling_dir}/${project}_${vid}"
-flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
+flexeme_graph_file="${flexeme_untangling_results}/flexeme.dot"
 
-if [ -f "$flexeme_untangling_graph" ]; then
+if [ -f "$flexeme_graph_file" ]; then
   echo 'Untangling with Flexeme .............................................. CACHED'
   regenerate_results=false
 else
   echo 'Untangling with Flexeme ..............................................'
   mkdir -p "$flexeme_untangling_results"
   START_UNTANGLING="$(date +%s.%N)"
-  if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+  if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_graph_file}"
   then
     END_UNTANGLING="$(date +%s.%N)"
     ELAPSED="$(echo "$END_UNTANGLING - $START_UNTANGLING" | bc)"
@@ -130,7 +130,7 @@ if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
   echo -ne 'Parsing Flexeme results .............................................. CACHED\r'
 else
   echo 'Parsing Flexeme results ..............................................'
-  if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$flexeme_result_out"
+  if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_graph_file" "$flexeme_result_out"
   then
       echo 'Parsing Flexeme results .............................................. OK'
   else

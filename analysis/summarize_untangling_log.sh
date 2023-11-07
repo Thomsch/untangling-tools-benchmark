@@ -1,13 +1,9 @@
 #!/bin/bash
 
-# Read a file containing the untangling log for a dataset and print the
-# count of the outcomes. e.g., how many decompositions were successful,
-# how many failed, etc.
+# Summarizes the given untangling log by printing how many times each untangling status appears.
 #
 # The script assumes that the log file is in the following format:
-# <commit1> <label1> <time> <log-file1>
-# <commit2> <label2> <time> <log-file2>
-# ...
+# <commit_identifier> <status> <elapsed_time> <path/to/log/file/for/commit>
 #
 # Arguments:
 # - $1: The path to the untangling log file.
@@ -30,4 +26,4 @@ if [ ! -f "$file_path" ]; then
   exit 1
 fi
 
-awk '{split($2, labels, " "); for (i in labels) count[labels[i]]++} END {for (label in count) print label ": " count[label] " times"}' "$file_path"
+awk '{print $2}' "$file_path" | uniq -c

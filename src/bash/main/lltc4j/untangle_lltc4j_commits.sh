@@ -7,17 +7,20 @@
 # Arguments:
 # - $1: The file containing the commits to untangle with header:
 #       vcs_url,commit_hash,parent_hash
-# - $2: The results directory where the ground truth results are stored.
+# - $2: The results directory where the untangling results will be stored.
+#       The directory is expected to already contain the ground truth files for the commits.
+#       The expected structure is:
+#       <$2>/evaluation/<commit_identifier>/truth.csv
 # - $3: The tool's name to use for untangling.
 #       - 'smartcommit' to use SmartCommit.
 #       - 'flexeme' to use Flexeme.
-#       - 'file' to use a file-based approach.
+#       - 'filename' to use a file-based approach.
 #
 # Tool-specific arguments are provided via environment variables. Run
 # this script with the tool's name to see the required arguments.
 #
 # The result of each untangling process is output to stdout as a single line
-# in the format: <commit_identifier> <status> (time: <time>) [<log_file>].
+# in the format: <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
 # - <commit_identifier>: The identifier of the commit being untangled.
 # - <status>: The status of the untangling process. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
@@ -53,7 +56,7 @@ fi
 
 export FLEXEME_TOOL="flexeme"
 export SMARTCOMMIT_TOOL="smartcommit"
-export FILE_TOOL="file"
+export FILE_TOOL="filename"
 ALLOWED_TOOLS=("$FLEXEME_TOOL" "$SMARTCOMMIT_TOOL" "$FILE_TOOL")
 
 if [[ ! " ${ALLOWED_TOOLS[*]} " == *" ${tool_name} "* ]]; then
@@ -104,11 +107,11 @@ if ! [[ $(type -t untangle_commit) == function ]]; then
 fi
 export -f untangle_commit
 
-if ! [[ $(type -t export_untangling_output) == function ]]; then
+if ! [[ $(type -t convert_untangling_output_to_csv) == function ]]; then
   echo "Function 'untangle_commit' not found in '$script_for_tool'." >&2
   exit 1
 fi
-export -f export_untangling_output
+export -f convert_untangling_output_to_csv
 
 export untangling_tool_output_dir="${results_dir}/decomposition/$tool_name"
 mkdir -p "$untangling_tool_output_dir"
@@ -206,7 +209,7 @@ untangle_and_parse_lltc4j() {
 
     # If the untangling tool produced an output, then export it to the CSV format.
     if [ "$status_string" == "UNTANGLING_SUCCESS" ]; then
-      if export_untangling_output "$untangling_output_dir" "$untangling_export_file" "$(basename "$tmp_repository_dir")" "$commit_hash" >> "$log_file" 2>&1; then
+      if convert_untangling_output_to_csv "$untangling_output_dir" "$untangling_export_file" "$(basename "$tmp_repository_dir")" "$commit_hash" >> "$log_file" 2>&1; then
         status_string="OK"
       else
         status_string="EXPORT_FAIL"
@@ -218,7 +221,7 @@ untangle_and_parse_lltc4j() {
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
+  printf "%-20s %-20s %.0fs [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
 }
 
 export -f untangle_and_parse_lltc4j

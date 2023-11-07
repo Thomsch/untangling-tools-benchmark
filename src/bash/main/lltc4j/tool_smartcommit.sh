@@ -1,3 +1,6 @@
+#!/bin/bash
+
+# Implementation of the untangling tool functions used in untangle_lltc4j_commits.sh for SmartCommit.
 
 # Check that the environment variables are set for SmartCommit.
 check_environment() {
@@ -35,7 +38,7 @@ has_untangling_output() {
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit (ignored by this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier.
+# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
@@ -47,14 +50,14 @@ untangle_commit() {
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$repository_dir" -c "$commit_hash" -o "${untangling_output_dir}"
 }
 
-# Exports the untangling results to a CSV file.
+# Converts the untangling output to a CSV file.
 #
 # Arguments:
-# - $1: The directory where the untangling results are stored.
+# - $1: The directory where the output of the untangling tool is stored.
 # - $2: The CSV file where the untangling results will be exported.
 # - $3: The project name.
 # - $4: The commit hash.
-export_untangling_output() {
+convert_untangling_output_to_csv() {
   local untangling_output_dir="$1"
   local untangling_export_file="$2"
   local project_name="$3"

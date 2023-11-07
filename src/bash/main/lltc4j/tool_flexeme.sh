@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# Implementation of the untangling tool functions used in untangle_lltc4j_commits.sh for Flexeme.
+
 # Check that the environment variables are set for Flexeme.
 check_environment() {
   if [ -z "${JAVAC_TRACES_DIR:-}" ]; then
@@ -17,8 +21,8 @@ has_untangling_output() {
   local untangling_output_dir="$1"
 
   # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
-  local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
-  [ -f "$flexeme_untangling_graph" ]
+  local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
+  [ -f "$flexeme_graph_file" ]
 }
 
 # Untangles a commit from the LLTC4J dataset using Flexeme.
@@ -27,7 +31,7 @@ has_untangling_output() {
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit (ignored by this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier.
+# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
@@ -37,7 +41,7 @@ untangle_commit() {
   local untangling_output_dir="$5"
 
   # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
-  local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
+  local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
 
   local javac_traces_file="${JAVAC_TRACES_DIR}/${commit_identifier}/dljc-logs/javac.json"
   if ! [ -f "$javac_traces_file" ]; then
@@ -46,8 +50,7 @@ untangle_commit() {
   fi
 
   # Retrieve the sourcepath and classpath from the javac traces.
-  # TODO: $SCRIPT_DIR is defined in untangle_lltc4j_commits.sh. It assumes this
-  #       file is in the same repository.
+  # TODO: Check that $SCRIPT_DIR is defined. This script file assumes that it is in the same directory as untangle_lltc4j_commits.sh.
   sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p sourcepath -j "$javac_traces_file")
   classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p classpath -j "$javac_traces_file")
 
@@ -57,21 +60,21 @@ untangle_commit() {
   export PYTHONHASHSEED=0 # Set a seed to ensure reproducibility.
 
   # TODO: Don't assume that the script is called from the root directory.
-  ./src/bash/main/untangle_flexeme.sh "$repository_dir" "$commit_hash" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+  ./src/bash/main/untangle_flexeme.sh "$repository_dir" "$commit_hash" "$sourcepath" "$classpath" "${flexeme_graph_file}"
 }
 
-# Exports the untangling results to a CSV file.
+# Converts the untangling output to a CSV file.
 #
 # Arguments:
-# - $1: The directory where the untangling results are stored.
+# - $1: The directory where the output of the untangling tool is stored.
 # - $2: The CSV file where the untangling results will be exported.
 # - $3: The project name (unused in this implementation).
 # - $4: The commit hash (unused in this implementation).
-export_untangling_output() {
+convert_untangling_output_to_csv() {
   local untangling_output_dir="$1"
   local untangling_export_file="$2"
 
   # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
-  local flexeme_untangling_graph="${untangling_output_dir}/flexeme.dot"
-  python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$untangling_export_file"
+  local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
+  python3 src/python/main/flexeme_results_to_csv.py "$flexeme_graph_file" "$untangling_export_file"
 }
