@@ -185,15 +185,22 @@ untangle_and_parse_lltc4j() {
   if [ "$REMOVE_NON_CODE_CHANGES" = true ] ; then
     echo "Remove non-code changes $tmp_repository_dir" >> "$log_file" 2>&1
 
-    # Invert the fix commit to get the bugfix commit.
+    base_dir=$(pwd)
 
-    # Clean the repo using the code in `clean-defects4j-repo.sh` and commit the changes to buggy (clean) commit.
+    cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
 
-    # Checkout the fixed commit. Create new branch (or maybe detached head if that works). Clean the repo. Commit the changes.
+    # Resets the current branch up to this commit.
+    git reset -q --hard "$commit_hash" >> "$log_file" 2>&1
 
-    # Checkout buggy (clean) commit. Cherry pick the changes from the fixed clean commit created in the previous step.
+    # Remove the non-code changes.
+    "$SCRIPT_DIR/clean_lltc4j_repo.sh" >> "$log_file" 2>&1
 
-    # Feed the untangling tools the new commit hash BUT use the same original commit identifier for directory names and output files containing the results.
+    # Update the commit hash to the cleaned commit to pass to untangling tools.
+    # $tmp_repository_dir is now the cleaned repository.
+    revision_clean_fixed=$(git rev-parse HEAD)
+    commit_hash="$revision_clean_fixed"
+
+    cd "$base_dir"
   fi
 
   START="$(date +%s.%N)"
@@ -223,7 +230,7 @@ untangle_and_parse_lltc4j() {
     fi
   fi
 
-  rm -rf "$tmp_repository_dir"
+#  rm -rf "$tmp_repository_dir"
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)"
