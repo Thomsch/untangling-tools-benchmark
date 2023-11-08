@@ -183,7 +183,7 @@ untangle_and_parse_lltc4j() {
 
   # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
   if [ "$REMOVE_NON_CODE_CHANGES" = true ] ; then
-    echo "Remove non-code changes $tmp_repository_dir" >> "$log_file" 2>&1
+    echo "Untangling on code changes only" >> "$log_file" 2>&1
 
     base_dir=$(pwd)
 
@@ -201,6 +201,8 @@ untangle_and_parse_lltc4j() {
     commit_hash="$revision_clean_fixed"
 
     cd "$base_dir"
+  else
+    echo "Untangling on the original changes" >> "$log_file" 2>&1
   fi
 
   START="$(date +%s.%N)"
