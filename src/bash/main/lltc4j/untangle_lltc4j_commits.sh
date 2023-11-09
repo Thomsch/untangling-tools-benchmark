@@ -214,6 +214,7 @@ untangle_lltc4j_commit() {
     git reset -q --hard "$commit_hash" >> "$log_file" 2>&1
 
     # Remove the non-code changes.
+    "$SCRIPT_DIR/clean_lltc4j_repo.sh" >> "$log_file" 2>&1
 
     # Update the commit hash to the cleaned commit to pass to untangling tools.
     # $tmp_repository_dir is now the cleaned repository.
