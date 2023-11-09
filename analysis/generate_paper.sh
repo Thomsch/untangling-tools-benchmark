@@ -50,7 +50,7 @@ copy_results(){
   local commit_hash="$2" # The commit hash to untangle.
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
+  short_commit_hash="${commit_hash:0:7}"
 
   source_dir="${UNTANGLING_DIR}/evaluation/${project_name}_${short_commit_hash}/"
 

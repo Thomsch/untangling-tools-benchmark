@@ -36,15 +36,13 @@ has_untangling_output() {
 #
 # Arguments:
 # - $1: The directory containing the repository for the project.
-# - $2: The ground truth file for the commit (ignored by this implementation).
+# - $2: The ground truth file for the commit (unused in this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
+# - $4: The commit identifier (unused in this implementation).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
-  local ground_truth_file="$2"
   local commit_hash="$3"
-  local commit_identifier="$4"
   local untangling_output_dir="$5"
 
   "${JAVA11_HOME}/bin/java" -jar lib/smartcommitcore-1.0-all.jar -r "$repository_dir" -c "$commit_hash" -o "${untangling_output_dir}"

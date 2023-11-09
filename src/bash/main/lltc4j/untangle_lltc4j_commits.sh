@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Untangle LLTC4J commits with a given untangling tool. The results are stored
-# in the given results directory under 'evaluation/<commit>/'. In particular,
-# the untangling results are stored in 'evaluation/<commit>/<tool_name>.csv'.
+# in the given results directory under 'evaluation/<commit_identifier>/'. In particular,
+# the untangling results are stored in 'evaluation/<commit_identifier>/<tool_name>.csv'.
 #
 # Arguments:
 # - $1: The file containing the commits to untangle with header:
@@ -18,14 +18,15 @@
 #
 # Tool-specific arguments are provided via environment variables. Run
 # this script with the tool's name to see the required arguments.
+# Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
-# The result of each untangling process is output to stdout as a single line
-# in the format: <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
-# - <commit_identifier>: The identifier of the commit being untangled.
-# - <status>: The status of the untangling process. Possible values are:
+# This scripts outputs to stdout one line per LLTC4J commit with the following format:
+# <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
+# - <commit_identifier>: Identify a commit. e.g.,'<project name>_<commit hash>'.
+# - <status>: The result of the untangling. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
-#   - OK: The untangling process succeeded.
-#   - UNTANGLING_FAIL: The untangling process failed.
+#   - OK: The untangling tool succeeded.
+#   - UNTANGLING_FAIL: The untangling tool failed.
 #   - EXPORT_FAIL: The export of the untangling results failed.
 #
 # Logging and errors messages are written to stderr.
@@ -50,7 +51,6 @@ fi
 
 if ! [ -d "$results_dir" ]; then
     echo "$0: directory ${results_dir} not found. Exiting." >&2
-    echo "Please generate the ground truth first." >&2
     exit 1
 fi
 
@@ -75,7 +75,7 @@ set -o allexport
 set +o allexport
 
 # Verify that the script for the tool exists.
-script_for_tool="$SCRIPT_DIR/tool_$tool_name.sh"
+script_for_tool="$SCRIPT_DIR/tool_${tool_name}.sh"
 if ! [ -f "$script_for_tool" ]; then
     echo "Script for tool '$tool_name' not found: '$script_for_tool'." >&2
     exit 1
@@ -119,43 +119,44 @@ mkdir -p "$untangling_tool_output_dir"
 export logs_dir="${results_dir}/logs"
 mkdir -p "$logs_dir"
 
-# Clone missing directories. Needs to be done before running the untangling process otherwise
-# some processes will think the repository has been cloned when it hasn't finished cloning yet.
+export repositories_dir="${results_dir}/repositories"
+mkdir -p "$repositories_dir"
+
+# Clone a repository for a project if it isn't already present in $repositories_dir.
 clone_repository() {
   local vcs_url="$1"
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
 
-  local project_repository_dir="${results_dir}/repositories/${project_name}"
+  local project_repository_dir="${repositories_dir}/${project_name}"
 
   # Check if the repo for this project is already cloned.
   if git clone -q "$vcs_url" "$project_repository_dir" > /dev/null 2>&1; then
-    echo "Cloned $vcs_url in $project_repository_dir because it didn't exist yet." >&2
+    echo "Cloned $vcs_url in $project_repository_dir." >&2
   fi
 }
 export -f clone_repository
-export repositories_directory="${results_dir}/repositories"
-mkdir -p "$repositories_directory"
+
+# Clone all the repositories for the commits. This must be done before running
+# the untangling tools in parallel because otherwise, it creates race conditions
+# where untangling tools try to untangle commits for which their repository
+# hasn't yet finished cloning.
 tail -n+2 "$commits_file" | parallel --colsep "," clone_repository {}
 
-
-#mkdir -p "$results_dir" # Create the root directory if it doesn't exists yet.
-
-#export smartcommit_untangling_root_dir="${results_dir}/decomposition/smartcommit"
-#export flexeme_untangling_dir="${results_dir}/decomposition/flexeme"
-#export smartcommit_result_dir="${smartcommit_untangling_root_dir}/${project_name}/${commit_hash}"
-
-# Untangles a commit from the LLTC4J dataset using $tool_name.
+# Untangle a commit from the LLTC4J dataset using the given untangling tool
+# and save the untangling result in a CSV file in the given results directory.
+#
 # Arguments:
 # - $1: The URL of the git repository for the project.
 # - $2: The commit hash to untangle.
-untangle_and_parse_lltc4j() {
+untangle_lltc4j_commit() {
   local vcs_url="$1"
   local commit_hash="$2"
+
   local project_name
+  local commit_identifier
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
-  commit_identifier="${project_name}_${short_commit_hash}"
+  commit_identifier="$(get_commit_identifier "$project_name" "$commit_hash")"
 
   local commit_result_dir="${results_dir}/evaluation/${commit_identifier}"
   local project_repository_dir="${results_dir}/repositories/${project_name}"
@@ -180,8 +181,10 @@ untangle_and_parse_lltc4j() {
 
     # TODO: Only do that if we need to untangle.
     # Copy the repository to a temporary directory to enable parallelization.
+    # The temporary directory contains the commit identifier to facilitate
+    # debugging.
     local tmp_repository_dir
-    tmp_repository_dir="$(mktemp -d)"
+    tmp_repository_dir="$(mktemp -d -t "${commit_identifier}.XXXXXX")"
     cp -r "$project_repository_dir"/. "$tmp_repository_dir"
 
     # Checkout the commit to untangle.
@@ -224,10 +227,11 @@ untangle_and_parse_lltc4j() {
   printf "%-20s %-20s %.0fs [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
 }
 
-export -f untangle_and_parse_lltc4j
+export -f untangle_lltc4j_commit
 
 START_TIME=$(date +%s)
-tail -n+2 "$commits_file" | parallel --colsep "," untangle_and_parse_lltc4j {}
+# Reads the commits file, ignoring the CSV header, and untangles each commit in parallel.
+tail -n+2 "$commits_file" | parallel --colsep "," untangle_lltc4j_commit {}
 END_TIME=$(date +%s)
 ELAPSED_TIME=$((END_TIME - START_TIME))
 ELAPSED_TIME_FORMATTED=$(date -u -d @"${ELAPSED_TIME}" +"%H:%M:%S")

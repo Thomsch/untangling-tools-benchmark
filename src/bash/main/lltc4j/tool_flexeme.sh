@@ -6,7 +6,13 @@
 check_environment() {
   if [ -z "${JAVAC_TRACES_DIR:-}" ]; then
     echo "Please set the JAVAC_TRACES_DIR environment variable to the directory containing the javac traces."
-    echo "See the script try-compiling.sh for more information."
+    echo "See the script generate-javac-traces.sh for more information."
+    exit 1
+  fi
+
+  if ! jq --version > /dev/null 2>&1; then
+    echo "jq is not installed. Please install it."
+    echo "See https://jqlang.github.io/jq/ for more information."
     exit 1
   fi
 }
@@ -29,13 +35,12 @@ has_untangling_output() {
 #
 # Arguments:
 # - $1: The directory containing the repository for the project.
-# - $2: The ground truth file for the commit (ignored by this implementation).
+# - $2: The ground truth file for the commit (unused in this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
+# - $4: The commit identifier (unused in this implementation).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
-  local ground_truth_file="$2"
   local commit_hash="$3"
   local commit_identifier="$4"
   local untangling_output_dir="$5"
@@ -51,8 +56,8 @@ untangle_commit() {
 
   # Retrieve the sourcepath and classpath from the javac traces.
   # TODO: Check that $SCRIPT_DIR is defined. This script file assumes that it is in the same directory as untangle_lltc4j_commits.sh.
-  sourcepath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p sourcepath -j "$javac_traces_file")
-  classpath=$(python3 "$SCRIPT_DIR/../../../python/main/retrieve_javac_compilation_parameter.py" -p classpath -j "$javac_traces_file")
+  sourcepath=$(jq --raw-output '[.[] | .javac_switches.sourcepath] | add' "$javac_traces_file")
+  classpath=$(jq --raw-output '[.[] | .javac_switches.classpath] | add' "$javac_traces_file")
 
   echo "Sourcepath: $sourcepath"
   echo "Classpath: $classpath"

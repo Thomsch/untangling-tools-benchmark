@@ -4,8 +4,8 @@
 # A commit is considered uncompilable if there is no javac trace associated with it.
 #
 # Arguments:
-# - $1: File containing a list of commits that were compiled using try-compile.sh.
-# - $2: The top-level directory where the javac traces from '/try-compiling.sh' are stored.
+# - $1: File containing a list of commits that were compiled using `generate-javac-traces.sh`.
+# - $2: The top-level directory where the javac traces from `generate-javac-traces.sh` are stored.
 #
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
@@ -42,7 +42,7 @@ find_trace(){
   local parent_hash="$3" # The parent commit hash.
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
+  short_commit_hash="${commit_hash:0:7}"
 
   javac_traces_file="${javac_traces_dir}/${project_name}_${short_commit_hash}/dljc-logs/javac.json"
 

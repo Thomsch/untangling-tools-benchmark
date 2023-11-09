@@ -43,7 +43,7 @@ score_bug(){
   project_name="$(get_project_name_from_url "$vcs_url")"
 
   local short_commit_hash
-  short_commit_hash="${commit_hash:0:6}"
+  short_commit_hash="${commit_hash:0:7}"
 
   local evaluation_dir
   evaluation_dir="${evaluation_root_dir}/${project_name}_${short_commit_hash}"
@@ -60,6 +60,7 @@ score_bug(){
 }
 
 export -f score_bug
+# Reads the commits file, ignoring the CSV header, and score each commit in parallel.
 tail -n+2 "$commits_file" | parallel --colsep "," score_bug {}
 
 if ! cat "${evaluation_root_dir}"/*/scores.csv > "$aggregate_scores_file" ; then

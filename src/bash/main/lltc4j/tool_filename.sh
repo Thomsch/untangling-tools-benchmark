@@ -20,12 +20,18 @@ has_untangling_output() {
 }
 
 # Untangles a commit from the LLTC4J dataset using a file-based approach.
+# The file-based approach uses the ground truth file to generate the untangling
+# groups because the ground truth file contains the list of filenames and
+# line numbers that were changed in the commit.
+#
+# TODO: Update the implementation to use the diff rather than the ground truth
+# file to generate the untangling groups.
 #
 # Arguments:
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit.
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier (e.g., commitSHA_projectName. Varies per project).
+# - $4: The commit identifier (e.g., <project name>_<commit hash>).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local ground_truth_file="$2"
