@@ -16,9 +16,15 @@
 #       - 'flexeme' to use Flexeme.
 #       - 'filename' to use a file-based approach.
 #
-# Tool-specific arguments are provided via environment variables. Run
-# this script with the tool's name to see the required arguments.
-# Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
+# Environment variables:
+# - REMOVE_NON_CODE_CHANGES: If set to 'true', then the untangling tool will only
+#   consider the code changes in the commit. Otherwise, it will consider all the
+#   changes (e.g., documentation, whitespaces).
+#
+# Tool parameters:
+# Tool-specific parameters are provided via environment variables. Run
+# this script with the tool's name to see the required parameters.
+# Example for flexeme: untangle_lltc4j_commits.sh <commits_file> <results_dir> flexeme
 #
 # This scripts outputs to stdout one line per LLTC4J commit with the following format:
 # <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
