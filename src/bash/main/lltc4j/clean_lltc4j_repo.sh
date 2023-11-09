@@ -41,9 +41,6 @@ olddir="$(pwd)"
 newdir="$olddir"_cleaned
 tmpdir="/tmp/clean-lltc4j-repo-$(basename "$olddir")"
 
-echo "olddir: $olddir"
-echo "newdir: $newdir"
-
 # Reset $newdir if it already exists to the current state of the repository.
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
@@ -78,10 +75,7 @@ add_cleaned_commit () {
 add_cleaned_commit "$revision_buggy" "Cleaned Buggy REVISION (= cleaned $revision_buggy)"
 add_cleaned_commit "$revision_fixed" "Cleaned Fixed REVISION (= cleaned $revision_fixed)"
 
-cd ..
-
 rm -rf "$olddir"
 mv "$newdir" "$olddir"
 echo "$(basename "$0"): success; result is in $olddir)"
-
 cd "$olddir"

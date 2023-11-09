@@ -194,6 +194,7 @@ untangle_lltc4j_commit() {
     cp -r "$project_repository_dir"/. "$tmp_repository_dir"
     echo "Untangling in temporary directory: $tmp_repository_dir" >> "$log_file" 2>&1
 
+    base_dir="$(pwd)"
     # Checkout the commit to untangle.
     cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
     if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
@@ -203,21 +204,21 @@ untangle_lltc4j_commit() {
   fi
 
   # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
-  if [ "$REMOVE_NON_CODE_CHANGES" = true ]; then
+  if [ "$REMOVE_NON_CODE_CHANGES" = true ] && [ "$status_string" = "OK" ]; then
     echo "Untangling on code changes only" >> "$log_file" 2>&1
 
-    base_dir=$(pwd)
-
-    cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
-
+    cd "$tmp_repository_dir" > /dev/null 2>&1
     # Resets the current branch up to this commit.
     git reset -q --hard "$commit_hash" >> "$log_file" 2>&1
-
     # Remove the non-code changes.
     "$SCRIPT_DIR/clean_lltc4j_repo.sh" >> "$log_file" 2>&1
+    cd - > /dev/null 2>&1
 
-    # Update the commit hash to the cleaned commit to pass to untangling tools.
-    # $tmp_repository_dir is now the cleaned repository.
+    # Running cd again is necessary to refresh the directory content otherwise
+    # git throws an error. See https://stackoverflow.com/a/70612805
+    cd "$tmp_repository_dir" > /dev/null 2>&1
+
+    # Update the commit to untangle to the version without non-code changes.
     revision_clean_fixed=$(git rev-parse HEAD)
     commit_hash="$revision_clean_fixed"
 
