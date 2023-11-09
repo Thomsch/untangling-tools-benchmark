@@ -1,5 +1,7 @@
 #!/bin/bash
-# Try to compile the projects at a given commit hash from a given file.
+# Compile a list of commits from different projects with the default system Java version.
+# The compilation generates javac traces containing the sourcepath and classpath used to compile the project.
+#
 # Arguments:
 # - $1: Path to the file containing a list of commits to compile.
 # - $2: Directory to store project clones.
@@ -73,7 +75,7 @@ compile() {
 
   local project_name
   project_name=$(get_project_name_from_url "$vcs_url")
-  local short_commit_hash="${commit_hash:0:6}"
+  local short_commit_hash="${commit_hash:0:7}"
 
   local repository="${clone_dir}/${project_name}_${short_commit_hash}"
   echo "$repository"
@@ -118,4 +120,5 @@ export java_version
 echo "java_version: $java_version" >&2
 
 printf "%s,%s,%s,%s\n" "project_name" "commit_hash" "compilation_status" "elapsed_time"
+# Reads the commits file, ignoring the CSV header, and compiles each commit in parallel.
 tail -n+2 "$commits_file" | parallel --colsep "," compile {}

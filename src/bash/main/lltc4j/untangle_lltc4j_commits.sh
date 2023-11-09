@@ -1,28 +1,32 @@
 #!/bin/bash
 
 # Untangle LLTC4J commits with a given untangling tool. The results are stored
-# the results directory under 'evaluation/<commit>/'. The untangling results
-# are stored in CSV format in 'evaluation/<commit>/<tool_name>.csv'.
+# in the given results directory under 'evaluation/<commit_identifier>/'. In particular,
+# the untangling results are stored in 'evaluation/<commit_identifier>/<tool_name>.csv'.
 #
 # Arguments:
 # - $1: The file containing the commits to untangle with header:
 #       vcs_url,commit_hash,parent_hash
-# - $2: The results directory where the ground truth results are stored.
+# - $2: The results directory where the untangling results will be stored.
+#       The directory is expected to already contain the ground truth files for the commits.
+#       The expected structure is:
+#       <$2>/evaluation/<commit_identifier>/truth.csv
 # - $3: The tool's name to use for untangling.
 #       - 'smartcommit' to use SmartCommit.
 #       - 'flexeme' to use Flexeme.
-#       - 'file' to use a naive file-based approach.
+#       - 'filename' to use a file-based approach.
 #
-# Tool specific arguments are provided via environment variables. Run
+# Tool-specific arguments are provided via environment variables. Run
 # this script with the tool's name to see the required arguments.
+# Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
-# The result of each untangling process is output to stdout in the following
-# format: <commit_identifier> <status> (time: <time>) [<log_file>].
-# - <commit_identifier>: The identifier of the commit being untangled.
-# - <status>: The status of the untangling process. Possible values are:
+# This scripts outputs to stdout one line per LLTC4J commit with the following format:
+# <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
+# - <commit_identifier>: Identify a commit. e.g.,'<project name>_<commit hash>'.
+# - <status>: The result of the untangling. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
-#   - OK: The untangling process succeeded.
-#   - UNTANGLING_FAIL: The untangling process failed.
+#   - OK: The untangling tool succeeded.
+#   - UNTANGLING_FAIL: The untangling tool failed.
 #   - EXPORT_FAIL: The export of the untangling results failed.
 #
 # Logging and errors messages are written to stderr.
@@ -47,13 +51,12 @@ fi
 
 if ! [ -d "$results_dir" ]; then
     echo "$0: directory ${results_dir} not found. Exiting." >&2
-    echo "Please generate the ground truth first." >&2
     exit 1
 fi
 
 export FLEXEME_TOOL="flexeme"
 export SMARTCOMMIT_TOOL="smartcommit"
-export FILE_TOOL="file"
+export FILE_TOOL="filename"
 ALLOWED_TOOLS=("$FLEXEME_TOOL" "$SMARTCOMMIT_TOOL" "$FILE_TOOL")
 
 if [[ ! " ${ALLOWED_TOOLS[*]} " == *" ${tool_name} "* ]]; then
@@ -72,7 +75,7 @@ set -o allexport
 set +o allexport
 
 # Verify that the script for the tool exists.
-script_for_tool="$SCRIPT_DIR/tool_$tool_name.sh"
+script_for_tool="$SCRIPT_DIR/tool_${tool_name}.sh"
 if ! [ -f "$script_for_tool" ]; then
     echo "Script for tool '$tool_name' not found: '$script_for_tool'." >&2
     exit 1
@@ -104,11 +107,11 @@ if ! [[ $(type -t untangle_commit) == function ]]; then
 fi
 export -f untangle_commit
 
-if ! [[ $(type -t export_untangling_output) == function ]]; then
+if ! [[ $(type -t convert_untangling_output_to_csv) == function ]]; then
   echo "Function 'untangle_commit' not found in '$script_for_tool'." >&2
   exit 1
 fi
-export -f export_untangling_output
+export -f convert_untangling_output_to_csv
 
 export untangling_tool_output_dir="${results_dir}/decomposition/$tool_name"
 mkdir -p "$untangling_tool_output_dir"
@@ -116,43 +119,44 @@ mkdir -p "$untangling_tool_output_dir"
 export logs_dir="${results_dir}/logs"
 mkdir -p "$logs_dir"
 
-# Clone missing directories. Needs to be done before running the untangling process otherwise
-# some processes will think the repository has been cloned when it hasn't finished cloning yet.
+export repositories_dir="${results_dir}/repositories"
+mkdir -p "$repositories_dir"
+
+# Clone a repository for a project if it isn't already present in $repositories_dir.
 clone_repository() {
   local vcs_url="$1"
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
 
-  local project_repository_dir="${results_dir}/repositories/${project_name}"
+  local project_repository_dir="${repositories_dir}/${project_name}"
 
   # Check if the repo for this project is already cloned.
   if git clone -q "$vcs_url" "$project_repository_dir" > /dev/null 2>&1; then
-    echo "Cloned $vcs_url in $project_repository_dir because it didn't exist yet." >&2
+    echo "Cloned $vcs_url in $project_repository_dir." >&2
   fi
 }
 export -f clone_repository
-export repositories_directory="${results_dir}/repositories"
-mkdir -p "$repositories_directory"
+
+# Clone all the repositories for the commits. This must be done before running
+# the untangling tools in parallel because otherwise, it creates race conditions
+# where untangling tools try to untangle commits for which their repository
+# hasn't yet finished cloning.
 tail -n+2 "$commits_file" | parallel --colsep "," clone_repository {}
 
-
-#mkdir -p "$results_dir" # Create the root directory if it doesn't exists yet.
-
-#export smartcommit_untangling_root_dir="${results_dir}/decomposition/smartcommit"
-#export flexeme_untangling_dir="${results_dir}/decomposition/flexeme"
-#export smartcommit_result_dir="${smartcommit_untangling_root_dir}/${project_name}/${commit_hash}"
-
-# Untangles a commit from the LLTC4J dataset using $tool_name.
+# Untangle a commit from the LLTC4J dataset using the given untangling tool
+# and save the untangling result in a CSV file in the given results directory.
+#
 # Arguments:
 # - $1: The URL of the git repository for the project.
 # - $2: The commit hash to untangle.
-untangle_and_parse_lltc4j() {
+untangle_lltc4j_commit() {
   local vcs_url="$1"
   local commit_hash="$2"
+
   local project_name
+  local commit_identifier
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:6}"
-  commit_identifier="${project_name}_${short_commit_hash}"
+  commit_identifier="$(get_commit_identifier "$project_name" "$commit_hash")"
 
   local commit_result_dir="${results_dir}/evaluation/${commit_identifier}"
   local project_repository_dir="${results_dir}/repositories/${project_name}"
@@ -166,23 +170,33 @@ untangle_and_parse_lltc4j() {
 
   mkdir -p "$untangling_output_dir"
 
-  # TODO: Check that the ground truth exists for all tools. We can't get results without it even if the untangling succeeds.
+  status_string="OK"
 
-  # TODO: Only do that if we need to untangle.
-  # Copy the repository to a temporary directory to enable parallelization.
-  local tmp_repository_dir
-  tmp_repository_dir="$(mktemp -d)"
-  cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+  START="$(date +%s.%N)"
 
-  # Checkout the commit to untangle.
-  cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
-  if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
-    status_string="CHECKOUT_FAIL"
+  # If the ground truth is missing, skip this commit.
+  if ! [ -f "$ground_truth_file" ]; then
+    echo "Ground truth file not found: ${ground_truth_file}" >> "$log_file" 2>&1
+    status_string="GROUND_TRUTH_MISSING"
+  else
+    # TODO: Only do that if we need to untangle.
+    # Copy the repository to a temporary directory to enable parallelization.
+    # The temporary directory contains the commit identifier to facilitate
+    # debugging.
+    local tmp_repository_dir
+    tmp_repository_dir="$(mktemp -d -t "${commit_identifier}.XXXXXX")"
+    cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+
+    # Checkout the commit to untangle.
+    cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
+    if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
+      status_string="CHECKOUT_FAIL"
+    fi
+    cd - >> "$log_file" 2>&1 || exit 1
   fi
-  cd - >> "$log_file" 2>&1 || exit 1
 
   # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
-  if [ "$REMOVE_NON_CODE_CHANGES" = true ] ; then
+  if [ "$REMOVE_NON_CODE_CHANGES" = true ]; then
     echo "Untangling on code changes only" >> "$log_file" 2>&1
 
     base_dir=$(pwd)
@@ -193,7 +207,6 @@ untangle_and_parse_lltc4j() {
     git reset -q --hard "$commit_hash" >> "$log_file" 2>&1
 
     # Remove the non-code changes.
-    "$SCRIPT_DIR/clean_lltc4j_repo.sh" >> "$log_file" 2>&1
 
     # Update the commit hash to the cleaned commit to pass to untangling tools.
     # $tmp_repository_dir is now the cleaned repository.
@@ -205,11 +218,9 @@ untangle_and_parse_lltc4j() {
     echo "Untangling on the original changes" >> "$log_file" 2>&1
   fi
 
-  START="$(date +%s.%N)"
-
   # TODO: Refactoring into a function so it can return early. The status code can be
   #       determined by the function's return value.
-  if [ "$status_string" != "CHECKOUT_FAIL" ]; then
+  if [ "$status_string" == "OK" ]; then
 
     # Check if the untangling results alreay exist for this commit.
     # If it does, then the untangling result exists and we can skip the untangling process.
@@ -224,7 +235,7 @@ untangle_and_parse_lltc4j() {
 
     # If the untangling tool produced an output, then export it to the CSV format.
     if [ "$status_string" == "UNTANGLING_SUCCESS" ]; then
-      if export_untangling_output "$untangling_output_dir" "$untangling_export_file" "$(basename "$tmp_repository_dir")" "$commit_hash" >> "$log_file" 2>&1; then
+      if convert_untangling_output_to_csv "$untangling_output_dir" "$untangling_export_file" "$(basename "$tmp_repository_dir")" "$commit_hash" >> "$log_file" 2>&1; then
         status_string="OK"
       else
         status_string="EXPORT_FAIL"
@@ -236,13 +247,14 @@ untangle_and_parse_lltc4j() {
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %-20s (time: %.0fs) [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
+  printf "%-20s %-20s %.0fs [%s]\n" "${commit_identifier}" "${status_string}" "${ELAPSED}" "${log_file}"
 }
 
-export -f untangle_and_parse_lltc4j
+export -f untangle_lltc4j_commit
 
 START_TIME=$(date +%s)
-tail -n+2 "$commits_file" | parallel --colsep "," untangle_and_parse_lltc4j {}
+# Reads the commits file, ignoring the CSV header, and untangles each commit in parallel.
+tail -n+2 "$commits_file" | parallel --colsep "," untangle_lltc4j_commit {}
 END_TIME=$(date +%s)
 ELAPSED_TIME=$((END_TIME - START_TIME))
 ELAPSED_TIME_FORMATTED=$(date -u -d @"${ELAPSED_TIME}" +"%H:%M:%S")
