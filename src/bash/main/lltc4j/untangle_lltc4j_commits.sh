@@ -192,6 +192,7 @@ untangle_lltc4j_commit() {
     local tmp_repository_dir
     tmp_repository_dir="$(mktemp -d -t "${commit_identifier}.XXXXXX")"
     cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+    echo "Untangling in temporary directory: $tmp_repository_dir" >> "$log_file" 2>&1
 
     # Checkout the commit to untangle.
     cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
