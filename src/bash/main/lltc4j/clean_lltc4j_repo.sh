@@ -2,29 +2,32 @@
 
 # Run from within a clone of a LLTC4J repository.
 # Adds "cleaned" commits at the end of the repository.
-
+# The "cleaned" commit contain only code-changes compared to the regular commit.
+#
 # The clone's HEAD should be on the last checkout in the repository (this is the
 # case if you haven't run `git checkout` in that directory), and there should be
 # no local modifications (this is the case if you have not edited or added any
 # files).
-
-# Currently, a Git repository checked out from Defects4J contains the following
+#
+# The clone's HEAD should be on the commit to untangle with no other commits
+# afterwards. The repository should contain the following
 # linear structure:
 #
-#   real commits from VCS ---> V_{n-1} ---> V_b ---> V_n
+#   previous versions ---> V_{n-1} ---> V_n
 #
-# where the last 3 commits are created by Defects4J.
+# where V_{n-1} is the buggy version of the repository and V_n the fixed version.
 # (This diagram shows the code states; the commits are arrows in the diagram.)
 #
-# This script adds three new synthetic commits to the end of the history:
+# This script adds two new synthetic commits to the end of the history:
 #
-#    ... ---> V_n ---> C_{n-1} ---> C_b ---> C_n
+#    ... ---> V_n ---> C_{n-1} ---> C_n
 #
 # where "C" stands for "cleaned" or "code only".
-# Each C_i is exactly like V_i, except that C_i contains no comments, blank
-# lines, or import statements.
-# Thus, the diffs between C_i and C_j are exactly like the diffs between V_i and
-# V_j, except that the C* diffs contain no comments, blank lines, or whitespace.
+#
+# Each C_i is identical to V_i, with the exception that C_i doesn’t include any
+# comments or blank lines. As a result, the differences between C_i and C_j are
+# equivalent to the differences between V_i and V_j, except that the differences
+# found in C* exclude any comments, blank lines, or whitespace.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
