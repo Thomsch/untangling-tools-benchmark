@@ -29,7 +29,7 @@ has_untangling_output() {
 
   # SmartCommit outputs the untangling results in a subfolder named after the repository name and commit hash.
   # so the results will be stored in untangling_output_dir/<project_name>/<commit_hash>.
-  [ -f "$untangling_output_dir/$project_name/$commit_hash" ]
+  [ -d "$untangling_output_dir/$project_name/$commit_hash" ]
 }
 
 # Untangles a commit from the LLTC4J dataset using SmartCommit.
