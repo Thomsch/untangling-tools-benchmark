@@ -43,7 +43,7 @@ score_bug(){
   project_name="$(get_project_name_from_url "$vcs_url")"
 
   local short_commit_hash
-  short_commit_hash="${commit_hash:0:7}"
+  short_commit_hash="${commit_hash:0:6}"
 
   local evaluation_dir
   evaluation_dir="${evaluation_root_dir}/${project_name}_${short_commit_hash}"
