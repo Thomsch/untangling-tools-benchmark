@@ -42,7 +42,7 @@ find_trace(){
   local parent_hash="$3" # The parent commit hash.
   local project_name
   project_name="$(get_project_name_from_url "$vcs_url")"
-  short_commit_hash="${commit_hash:0:7}"
+  short_commit_hash="${commit_hash:0:6}"
 
   javac_traces_file="${javac_traces_dir}/${project_name}_${short_commit_hash}/dljc-logs/javac.json"
 

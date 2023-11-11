@@ -75,7 +75,7 @@ compile() {
 
   local project_name
   project_name=$(get_project_name_from_url "$vcs_url")
-  local short_commit_hash="${commit_hash:0:7}"
+  local short_commit_hash="${commit_hash:0:6}"
 
   local repository="${clone_dir}/${project_name}_${short_commit_hash}"
   echo "$repository"

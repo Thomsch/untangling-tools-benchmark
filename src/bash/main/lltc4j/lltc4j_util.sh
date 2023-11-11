@@ -18,7 +18,7 @@ get_project_name_from_url() {
 # - $1: The commit hash.
 get_short_commit_hash() {
   local commit_hash="$1"
-  echo "${commit_hash:0:7}"
+  echo "${commit_hash:0:6}"
 }
 
 # Returns a unique identifier for a commit. The identifier is composed
