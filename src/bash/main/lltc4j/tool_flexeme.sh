@@ -28,7 +28,13 @@ has_untangling_output() {
 
   # TODO: This path is used several times in this file. Create a function to dynamically retrieve it.
   local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
-  [ -f "$flexeme_graph_file" ]
+  if [ -f "$flexeme_graph_file" ]; then
+    echo "$flexeme_graph_file already exists."
+    return 0
+  else
+    echo "$flexeme_graph_file doesn't exist."
+    return 1
+  fi
 }
 
 # Untangles a commit from the LLTC4J dataset using Flexeme.
