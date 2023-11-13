@@ -1,5 +1,5 @@
 #!/bin/bash
-# Compile a list of commits from different projects with the default system Java version.
+# Run javac on a list of commits from different projects with the default system Java version.
 # The compilation generates javac traces containing the sourcepath and classpath used to compile the project.
 #
 # Arguments:
@@ -9,7 +9,7 @@
 # The results are written to stdout in CSV format with the following columns:
 # - Name of the project
 # - Commit hash (abbreviated to 6 characters)
-# - Compilation status. Shows the java version, or the status tag "FAIL" or "COMMIT_NOT_FOUND".
+# - Compilation status. Shows the Java version, or the status tag "FAIL" or "COMMIT_NOT_FOUND".
 # - Time elapsed. In seconds, rounded to the nearest integer.
 #
 # Each version of the project is cloned in a directory named after the project
@@ -58,14 +58,10 @@ get_java_version() {
     major_version=$(echo "$java_version" | cut -d. -f1)
   fi
 
-  # Format the result as "JAVAX"
-  java_version="JAVA$major_version"
-
-  # Return the formatted result
-  echo "$java_version"
+  echo "JAVA$major_version"
 }
 
-# Try to compile a commit and write the compilation result to stdout.
+# Try to compile a commit and write the compilation result to stdout as a 4-column CSV row.
 # Arguments:
 # 1) Project VCS URL
 # 2) Commit hash
