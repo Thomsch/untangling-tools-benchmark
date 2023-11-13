@@ -5,7 +5,7 @@
 # the untangling results are stored in 'evaluation/<commit_identifier>/<tool_name>.csv'.
 #
 # Arguments:
-# - $1: The file containing the commits to untangle with header:
+# - $1: The CSV file containing the commits to untangle with header:
 #       vcs_url,commit_hash,parent_hash
 # - $2: The results directory where the untangling results will be stored.
 #       The directory is expected to already contain the ground truth files for the commits.
@@ -15,13 +15,14 @@
 #       - 'smartcommit' to use SmartCommit.
 #       - 'flexeme' to use Flexeme.
 #       - 'filename' to use a file-based approach.
-#
 # Tool-specific arguments are provided via environment variables. Run
 # this script with the tool's name to see the required arguments.
+#
 # Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
-# This scripts outputs to stdout one line per LLTC4J commit with the following format:
-# <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
+# This script outputs to stdout one line per LLTC4J commit with the following format:
+#   <commit_identifier> <status> <time> [<log_file>]
+# The <> denote a metavariable, and the [] are literal.
 # - <commit_identifier>: Identify a commit. e.g.,'<project name>_<commit hash>'.
 # - <status>: The result of the untangling. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
@@ -29,14 +30,14 @@
 #   - UNTANGLING_FAIL: The untangling tool failed.
 #   - EXPORT_FAIL: The export of the untangling results failed.
 #
-# Logging and errors messages are written to stderr.
+# Logging and error messages are written to stderr.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 3 ] ; then
-    echo "usage: $0 <commits_file> <results_dir> <tool_name>" >&2
+    echo "usage: $0 <commits_csv_file> <results_dir> <tool_name>" >&2
     exit 1
 fi
 
@@ -77,7 +78,7 @@ set +o allexport
 # Verify that the script for the tool exists.
 script_for_tool="$SCRIPT_DIR/tool_${tool_name}.sh"
 if ! [ -f "$script_for_tool" ]; then
-    echo "Script for tool '$tool_name' not found: '$script_for_tool'." >&2
+    echo "Script '$script_for_tool' for tool '$tool_name' not found." >&2
     exit 1
 fi
 
@@ -195,11 +196,11 @@ untangle_lltc4j_commit() {
     cd - >> "$log_file" 2>&1 || exit 1
   fi
 
-  # TODO: Refactoring into a function so it can return early. The status code can be
+  # TODO: Refactor into a function so it can return early. The status code can be
   #       determined by the function's return value.
   if [ "$status_string" == "OK" ]; then
 
-    # Check if the untangling results alreay exist for this commit.
+    # Check if the untangling results already exist for this commit.
     # If it does, then the untangling result exists and we can skip the untangling process.
     # Otherwise, we need to untangle the commit.
     if [ -f "$untangling_export_file" ]; then
