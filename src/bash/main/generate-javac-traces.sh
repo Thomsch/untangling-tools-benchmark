@@ -3,7 +3,8 @@
 # The compilation generates javac traces containing the sourcepath and classpath used to compile the project.
 #
 # Arguments:
-# - $1: Path to the file containing a list of commits to compile.
+# - $1: The CSV file containing the commits to untangle with header:
+#       vcs_url,commit_hash,parent_hash
 # - $2: Directory to store project clones.
 #
 # The results are written to stdout in CSV format with the following columns:
@@ -76,9 +77,10 @@ compile() {
   local repository="${clone_dir}/${project_name}_${short_commit_hash}"
   echo "$repository"
 
-  # TODO: Find a way to speed this up.
-  # IDEA: Use a local clone of the repository and copy clone.
   START="$(date +%s.%N)"
+
+  # TODO: Do not clone the repository for each commit. Clone it once per project and then copy the directory for each commit.
+  # Cloning the repository for each commit is slow and might cause issues with GitHub rate limits or the internet provider.
   git clone -q "$vcs_url" "$repository"
   cd "$repository"
   git checkout -q "$commit_hash"
