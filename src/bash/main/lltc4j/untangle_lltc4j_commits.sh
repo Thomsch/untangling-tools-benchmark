@@ -238,5 +238,5 @@ ELAPSED_TIME=$((END_TIME - START_TIME))
 ELAPSED_TIME_FORMATTED=$(date -u -d @"${ELAPSED_TIME}" +"%H:%M:%S")
 
 echo "" >&2
-echo "Untangling completed with tool '${tool_name}'." >&2
+echo "Untangling ${commit_identifier} completed with tool '${tool_name}'." >&2
 echo "Total elapsed time: ${ELAPSED_TIME_FORMATTED}." >&2

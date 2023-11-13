@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Implementation of the untangling tool functions used in untangle_lltc4j_commits.sh for the file name based untangling approach.
+# Implementation of the untangling tool functions used in untangle_lltc4j_commits.sh for the filename-based untangling approach.
 
-# Check that the environment variables are set for the file name based untangling approach.
+# Check that the environment variables are set for the filename-based untangling approach.
 check_environment() {
   # File-based approach doesn't require any environment variables.
   return 0
@@ -31,7 +31,7 @@ has_untangling_output() {
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit.
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier (e.g., <project name>_<commit hash>).
+# - $4: The commit identifier: <project name>_<commit hash>.
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local ground_truth_file="$2"

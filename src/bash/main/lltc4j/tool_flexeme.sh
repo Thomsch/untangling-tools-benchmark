@@ -26,7 +26,7 @@ check_environment() {
 has_untangling_output() {
   local untangling_output_dir="$1"
 
-  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
+  # TODO: This path is used several times in this file. Create a function to dynamically retrieve it.
   local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
   [ -f "$flexeme_graph_file" ]
 }
@@ -37,7 +37,7 @@ has_untangling_output() {
 # - $1: The directory containing the repository for the project.
 # - $2: The ground truth file for the commit (unused in this implementation).
 # - $3: The commit hash to untangle.
-# - $4: The commit identifier (unused in this implementation).
+# - $4: The commit identifier (used only for diagnostic messages in this implementation).
 # - $5: The output directory where the untangling results will be stored.
 untangle_commit() {
   local repository_dir="$1"
@@ -45,7 +45,7 @@ untangle_commit() {
   local commit_identifier="$4"
   local untangling_output_dir="$5"
 
-  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
+  # TODO: This path is used several times in this file. Create a function to dynamically retrieve it.
   local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
 
   local javac_traces_file="${JAVAC_TRACES_DIR}/${commit_identifier}/dljc-logs/javac.json"
@@ -79,7 +79,7 @@ convert_untangling_output_to_csv() {
   local untangling_output_dir="$1"
   local untangling_export_file="$2"
 
-  # TODO: This path is used several time in this file. Create a function to dynamically retrieve it.
+  # TODO: This path is used several times in this file. Create a function to dynamically retrieve it.
   local flexeme_graph_file="${untangling_output_dir}/flexeme.dot"
   python3 src/python/main/flexeme_results_to_csv.py "$flexeme_graph_file" "$untangling_export_file"
 }

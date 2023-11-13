@@ -27,8 +27,8 @@ has_untangling_output() {
   local project_name="$2"
   local commit_hash="$3"
 
-  # SmartCommit outputs the untangling results in a subfolder named after the repository name and commit hash.
-  # so the results will be stored in untangling_output_dir/<project_name>/<commit_hash>.
+  # SmartCommit outputs the untangling results in a subfolder named after the repository name and
+  # commit hash, so the results will be stored in untangling_output_dir/<project_name>/<commit_hash>.
   [ -d "$untangling_output_dir/$project_name/$commit_hash" ]
 }
 
