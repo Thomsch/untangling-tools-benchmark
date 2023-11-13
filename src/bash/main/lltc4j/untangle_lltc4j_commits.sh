@@ -5,7 +5,7 @@
 # the untangling results are stored in 'evaluation/<commit_identifier>/<tool_name>.csv'.
 #
 # Arguments:
-# - $1: The file containing the commits to untangle with header:
+# - $1: The CSV file containing the commits to untangle with header:
 #       vcs_url,commit_hash,parent_hash
 # - $2: The results directory where the untangling results will be stored.
 #       The directory is expected to already contain the ground truth files for the commits.
@@ -24,10 +24,11 @@
 # Tool parameters:
 # Tool-specific parameters are provided via environment variables. Run
 # this script with the tool's name to see the required parameters.
-# Example for flexeme: untangle_lltc4j_commits.sh <commits_file> <results_dir> flexeme
+# Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
 # This scripts outputs to stdout one line per LLTC4J commit with the following format:
-# <commit_identifier> <status> <time> [<log_file>]. The <> denote a variable.
+# <commit_identifier> <status> <time> [<log_file>].
+# The <> denote a metavariable, and the [] are literal.
 # - <commit_identifier>: Identify a commit. e.g.,'<project name>_<commit hash>'.
 # - <status>: The result of the untangling. Possible values are:
 #   - CACHED: The untangling results were already computed and cached.
@@ -35,14 +36,16 @@
 #   - UNTANGLING_FAIL: The untangling tool failed.
 #   - EXPORT_FAIL: The export of the untangling results failed.
 #
-# Logging and errors messages are written to stderr.
+# The script outputs to stderr the total elapsed time for the untangling process and
+# a message indicating that the untangling for the given file and tool is complete for logging purposes.
+#
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
 if [ $# -ne 3 ] ; then
-    echo "usage: $0 <commits_file> <results_dir> <tool_name>" >&2
+    echo "usage: $0 <commits_csv_file> <results_dir> <tool_name>" >&2
     exit 1
 fi
 
@@ -80,41 +83,52 @@ set -o allexport
 . "$SCRIPT_DIR/lltc4j_util.sh"
 set +o allexport
 
-# Verify that the script for the tool exists.
-script_for_tool="$SCRIPT_DIR/tool_${tool_name}.sh"
-if ! [ -f "$script_for_tool" ]; then
-    echo "Script for tool '$tool_name' not found: '$script_for_tool'." >&2
+# Verify that the implementation for the selected tool exists.
+tool_lib="$SCRIPT_DIR/tool_${tool_name}.sh"
+if ! [ -f "$tool_lib" ]; then
+    echo "Implementation '$tool_lib' for tool '$tool_name' not found." >&2
     exit 1
 fi
 
 # Verify that the script for the tool defines the required functions for an untangling tool.
 # Required functions:
-# - check_environment: Checks any pre-requisites for the tool to function. The function should exit with an error if the pre-requisites are not met.
+# - check_environment: Checks any pre-requisites for the tool to function.
+#                      The function exits with an error if the tool's pre-requisites are not met.
+# - has_untangling_output: Checks if the untangling tool has already produced an output for the given commit.
+#                          The function return 0 if the untangling tool has already produced an output for the given commit.
+#                          The function return 1 if the untangling tool has not already produced an output for the given commit.
+# - untangle_commit: Untangles the given commit and stores the results in the given output directory.
+#                    The function exits with an error if the untangling tool fails.
+# - convert_untangling_output_to_csv: Converts the untangling output to the CSV format and stores it in the given output file.
+#                                     The function exits with an error if the conversion fails.
+
+# Remove previously existing functions to ensure the tool's implementation exists.
+unset -f check_environment has_untangling_output untangle_commit convert_untangling_output_to_csv
 
 # shellcheck source=/dev/null
-. "$script_for_tool"
+. "$tool_lib"
 
 if ! [[ $(type -t check_environment) == function ]]; then
-  echo "Function 'check_environment' not found in '$script_for_tool'." >&2
+  echo "Function 'check_environment' not found in '$tool_lib'." >&2
   exit 1
 fi
 
 check_environment
 
 if ! [[ $(type -t has_untangling_output) == function ]]; then
-  echo "Function 'has_untangling_output' not found in '$script_for_tool'." >&2
+  echo "Function 'has_untangling_output' not found in '$tool_lib'." >&2
   exit 1
 fi
 export -f has_untangling_output
 
 if ! [[ $(type -t untangle_commit) == function ]]; then
-  echo "Function 'untangle_commit' not found in '$script_for_tool'." >&2
+  echo "Function 'untangle_commit' not found in '$tool_lib'." >&2
   exit 1
 fi
 export -f untangle_commit
 
 if ! [[ $(type -t convert_untangling_output_to_csv) == function ]]; then
-  echo "Function 'untangle_commit' not found in '$script_for_tool'." >&2
+  echo "Function 'untangle_commit' not found in '$tool_lib'." >&2
   exit 1
 fi
 export -f convert_untangling_output_to_csv
@@ -149,8 +163,9 @@ export -f clone_repository
 # hasn't yet finished cloning.
 tail -n+2 "$commits_file" | parallel --colsep "," clone_repository {}
 
-# Untangle a commit from the LLTC4J dataset using the given untangling tool
-# and save the untangling result in a CSV file in the given results directory.
+# Untangle a commit from the LLTC4J dataset and save the untangling result in a CSV file.
+# The tool to use for untangling and the output directory are provided in the surrounding
+# scope of this function.
 #
 # Arguments:
 # - $1: The URL of the git repository for the project.
@@ -164,23 +179,33 @@ untangle_lltc4j_commit() {
   project_name="$(get_project_name_from_url "$vcs_url")"
   commit_identifier="$(get_commit_identifier "$project_name" "$commit_hash")"
 
-  local commit_result_dir="${results_dir}/evaluation/${commit_identifier}"
+  # The directory where the repository for this project is stored.
   local project_repository_dir="${results_dir}/repositories/${project_name}"
+
+  # The directory where the untangling results for this commit will be stored.
   local untangling_output_dir="$untangling_tool_output_dir/$commit_identifier"
-
-  local untangling_export_file="${commit_result_dir}/${tool_name}.csv"
-  local log_file="${logs_dir}/${commit_identifier}_${tool_name}.log"
-  local ground_truth_file="${commit_result_dir}/truth.csv"
-
-  rm -f "$log_file" # Remove previous log file.
-
   mkdir -p "$untangling_output_dir"
 
-  status_string="OK"
+  # The directory where the untangling results for the tool will be stored and
+  # where the ground truth is stored.
+  local commit_result_dir="${results_dir}/evaluation/${commit_identifier}"
+  local untangling_export_file="${commit_result_dir}/${tool_name}.csv"
+  local ground_truth_file="${commit_result_dir}/truth.csv"
 
+  # Log file for this commit. The log file contains all the output related to the
+  # untangling process for this commit: checking out the commit,
+  # verifying the ground truth, running the untangling tool, and exporting the
+  # untangling results.
+  local log_file="${logs_dir}/${commit_identifier}_${tool_name}.log"
+
+  # Remove previous log file.
+  rm -f "$log_file"
+
+  status_string="OK"
   START="$(date +%s.%N)"
 
   # If the ground truth is missing, skip this commit.
+  # TODO: Refactor into a function so it can return early. The status code can be determined by the function's return value.
   if ! [ -f "$ground_truth_file" ]; then
     echo "Ground truth file not found: ${ground_truth_file}" >> "$log_file" 2>&1
     status_string="GROUND_TRUTH_MISSING"
@@ -252,7 +277,7 @@ untangle_lltc4j_commit() {
     fi
   fi
 
-#  rm -rf "$tmp_repository_dir"
+  rm -rf "$tmp_repository_dir"
 
   END="$(date +%s.%N)"
   ELAPSED="$(echo "$END - $START" | bc)"
@@ -269,5 +294,5 @@ ELAPSED_TIME=$((END_TIME - START_TIME))
 ELAPSED_TIME_FORMATTED=$(date -u -d @"${ELAPSED_TIME}" +"%H:%M:%S")
 
 echo "" >&2
-echo "Untangling completed with tool '${tool_name}'." >&2
+echo "Untangled commits in ${commits_file} with tool '${tool_name}'." >&2
 echo "Total elapsed time: ${ELAPSED_TIME_FORMATTED}." >&2

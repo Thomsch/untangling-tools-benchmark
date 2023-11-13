@@ -1,15 +1,16 @@
 #!/bin/bash
-# Compile a list of commits from different projects with the default system Java version.
+# Run javac on a list of commits from different projects with the default system Java version.
 # The compilation generates javac traces containing the sourcepath and classpath used to compile the project.
 #
 # Arguments:
-# - $1: Path to the file containing a list of commits to compile.
+# - $1: The CSV file containing the commits to untangle with header:
+#       vcs_url,commit_hash,parent_hash
 # - $2: Directory to store project clones.
 #
 # The results are written to stdout in CSV format with the following columns:
 # - Name of the project
 # - Commit hash (abbreviated to 6 characters)
-# - Compilation status. Shows the java version, or the status tag "FAIL" or "COMMIT_NOT_FOUND".
+# - Compilation status. Shows the Java version, or the status tag "FAIL" or "COMMIT_NOT_FOUND".
 # - Time elapsed. In seconds, rounded to the nearest integer.
 #
 # Each version of the project is cloned in a directory named after the project
@@ -58,14 +59,10 @@ get_java_version() {
     major_version=$(echo "$java_version" | cut -d. -f1)
   fi
 
-  # Format the result as "JAVAX"
-  java_version="JAVA$major_version"
-
-  # Return the formatted result
-  echo "$java_version"
+  echo "JAVA$major_version"
 }
 
-# Try to compile a commit and write the compilation result to stdout.
+# Try to compile a commit and write the compilation result to stdout as a 4-column CSV row.
 # Arguments:
 # 1) Project VCS URL
 # 2) Commit hash
@@ -80,9 +77,10 @@ compile() {
   local repository="${clone_dir}/${project_name}_${short_commit_hash}"
   echo "$repository"
 
-  # TODO: Find a way to speed this up.
-  # IDEA: Use a local clone of the repository and copy clone.
   START="$(date +%s.%N)"
+
+  # TODO: Do not clone the repository for each commit. Clone it once per project and then copy the directory for each commit.
+  # Cloning the repository for each commit is slow and might cause issues with GitHub rate limits or the internet provider.
   git clone -q "$vcs_url" "$repository"
   cd "$repository"
   git checkout -q "$commit_hash"

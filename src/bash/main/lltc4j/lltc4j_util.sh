@@ -12,7 +12,7 @@ get_project_name_from_url() {
 }
 
 # Returns the shortened commit hash from a commit hash. The shortened commit
-# hash is the first 7 characters of the commit hash, like git does.
+# hash is the first 6 characters of the commit hash, like git does.
 #
 # Arguments:
 # - $1: The commit hash.
