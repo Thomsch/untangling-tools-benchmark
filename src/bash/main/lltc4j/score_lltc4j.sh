@@ -60,6 +60,7 @@ score_bug(){
 }
 
 export -f score_bug
+# Reads the commits file, ignoring the CSV header, and score each commit in parallel.
 tail -n+2 "$commits_file" | parallel --colsep "," score_bug {}
 
 if ! cat "${evaluation_root_dir}"/*/scores.csv > "$aggregate_scores_file" ; then

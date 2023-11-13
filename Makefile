@@ -1,6 +1,6 @@
 # .DEFAULT_GOAL := out/decomposition.csv
 
-check: shell-script-style check-python-format check-python-style python-test
+check: shell-script-style check-python-format check-python-style python-test shell-test
 
 SH_SCRIPTS   = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)sh'   * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
 BASH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)bash' * | grep -v /.git/ | grep -v '~$$' | grep -v '\.tar$$' | grep -v addrfilter | grep -v cronic-orig | grep -v gradlew | grep -v mail-stackoverflow.sh)
@@ -28,6 +28,9 @@ format-python:
 
 python-test:
 	PYTHONPATH="${MAKEFILE_DIR}/src/python/main" pytest src/python/test
+
+shell-test:
+	bats "${MAKEFILE_DIR}/src/bash/test"
 
 .PHONY: clean
 clean: 

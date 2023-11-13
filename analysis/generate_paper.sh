@@ -56,7 +56,7 @@ copy_results(){
 
   if [ ! -d "$source_dir" ]; then
     echo "Error: Directory '${source_dir}' not found."
-    return 0
+    return 1
   fi
 
   cp -r "${source_dir}" "${TMP_DIR}/evaluation/"
