@@ -26,4 +26,4 @@ if [ ! -f "$file_path" ]; then
   exit 1
 fi
 
-awk '{print $2}' "$file_path" | uniq -c
+awk '{print $2}' "$file_path" | sort | uniq -c
