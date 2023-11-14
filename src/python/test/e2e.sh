@@ -30,7 +30,7 @@ export bugs_file="${workdir}/data/d4j-5-bugs.csv" # Path to the file containing 
 #
 # Arguments:
 # - $1: The folder where the results are stored and repositories checked out. This folder should also contain the expected scores and metrics.
-function rune2e() {
+function run_e2e() {
   local out_dir=$1
   local metrics_expected_file="${out_dir}/metrics_expected_file.csv"
   local untangling_scores_expected_file="${out_dir}/untangling_scores_expected_file.csv"
@@ -67,9 +67,9 @@ export out_root_dir="${workdir}/src/python/test/e2e"
 
 # Run on all changes
 echo "$0: Run e2e on all changes"
-rune2e "${out_root_dir}/all-changes"
+run_e2e "${out_root_dir}/all-changes"
 
 # Run on code changes only
 echo "$0: Run e2e on code changes only"
 export REMOVE_NON_CODE_CHANGES=true
-rune2e "${out_root_dir}/code-changes"
+run_e2e "${out_root_dir}/code-changes"
