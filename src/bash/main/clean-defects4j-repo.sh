@@ -2,6 +2,7 @@
 
 # Run from within a clone of a Defects4J repository.
 # Adds "cleaned" commits at the end of the repository.
+# A "cleaned" commit contains only code-changes compared to the regular commit.
 # Example use:
 #   defects4j checkout -p Lang -v 1b -w /tmp/lang_1_buggy
 #   cd /tmp/lang_1_buggy
@@ -26,10 +27,12 @@
 #    ... ---> V_n ---> C_{n-1} ---> C_b ---> C_n
 #
 # where "C" stands for "cleaned" or "code only".
-# Each C_i is exactly like V_i, except that C_i contains no comments, blank
-# lines, or import statements.
-# Thus, the diffs between C_i and C_j are exactly like the diffs between V_i and
-# V_j, except that the C* diffs contain no comments, blank lines, or whitespace.
+#
+# Each C_i is identical to V_i, except that C_i contains no comments,
+# blank lines, or import statements.  Thus, the differences between
+# C_i and C_j are equivalent to the differences between V_i and V_j,
+# except that the differences found in C* contain no comments, blank
+# lines, or whitespace.
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -76,6 +79,7 @@ olddir="$(pwd)"
 newdir="$olddir"_cleaned
 tmpdir="/tmp/clean-defects4j-repo-$(basename "$olddir")"
 
+# Reset $newdir to the current state of the repository, even if it already exists.
 rm -rf "$newdir"
 cp -Rp "$olddir" "$newdir"
 
