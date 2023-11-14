@@ -26,8 +26,8 @@
 # this script with the tool's name to see the required parameters.
 # Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
-# This scripts outputs to stdout one line per LLTC4J commit with the following format:
-# <commit_identifier> <status> <time> [<log_file>].
+# This script outputs to stdout one line per LLTC4J commit with the following format:
+#   <commit_identifier> <status> <time> [<log_file>]
 # The <> denote a metavariable, and the [] are literal.
 # - <commit_identifier>: Identify a commit. e.g.,'<project name>_<commit hash>'.
 # - <status>: The result of the untangling. Possible values are:
@@ -230,7 +230,7 @@ untangle_lltc4j_commit() {
 
   # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
   if [ "$REMOVE_NON_CODE_CHANGES" = true ] && [ "$status_string" = "OK" ]; then
-    echo "Untangling on code changes only" >> "$log_file" 2>&1
+    echo "Untangling on code changes only." >> "$log_file" 2>&1
 
     cd "$tmp_repository_dir" > /dev/null 2>&1
     # Resets the current branch up to this commit.
@@ -249,10 +249,10 @@ untangle_lltc4j_commit() {
 
     cd "$base_dir"
   else
-    echo "Untangling on the original changes" >> "$log_file" 2>&1
+    echo "Untangling on all changes (not just code changes)." >> "$log_file" 2>&1
   fi
 
-  # TODO: Refactoring into a function so it can return early. The status code can be
+  # TODO: Refactor into a function so it can return early. The status code can be
   #       determined by the function's return value.
   if [ "$status_string" == "OK" ]; then
 
