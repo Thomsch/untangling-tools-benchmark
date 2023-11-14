@@ -66,8 +66,10 @@ function rune2e() {
 export out_root_dir="${workdir}/src/python/test/e2e"
 
 # Run on all changes
+echo "$0: Run e2e on all changes"
 rune2e "${out_root_dir}/all-changes"
 
 # Run on code changes only
+echo "$0: Run e2e on code changes only"
 export REMOVE_NON_CODE_CHANGES=true
 rune2e "${out_root_dir}/code-changes"
