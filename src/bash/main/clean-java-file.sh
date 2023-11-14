@@ -22,7 +22,7 @@ pre_process() {
   if [ "$(uname)" = "Darwin" ]; then
     clang -x c++ -E "$file"
   elif [ "$(uname)" = "Linux" ]; then
-    cpp -fpreprocessed -dD -E "$file" | preprocess_and_clean
+    cpp -fpreprocessed -dD -E "$file"
   else
     echo "Unsupported operating system."
     exit 1
