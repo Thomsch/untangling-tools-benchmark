@@ -16,16 +16,20 @@ fi
 
 file="$1"
 
-# Remove in-line, block comments, trailing whitespaces, and blank lines
-if [ "$(uname)" = "Darwin" ]; then
-  alias pre_processor='clang -x c++ -E'
-elif [ "$(uname)" = "Linux" ]; then
-  alias pre_processor='cpp -fpreprocessed -dD -E'
-else
-  echo "Unsupported operating system."
-  exit 1
-fi
+pre_process() {
+  file="$1"
 
-pre_processor "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"
+  if [ "$(uname)" = "Darwin" ]; then
+    clang -x c++ -E "$file"
+  elif [ "$(uname)" = "Linux" ]; then
+    cpp -fpreprocessed -dD -E "$file" | preprocess_and_clean
+  else
+    echo "Unsupported operating system."
+    exit 1
+  fi
+}
+
+# Remove in-line, block comments, trailing whitespaces, and blank lines
+pre_process "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"
 
 mv -f "$file.cleaned" "$file"
