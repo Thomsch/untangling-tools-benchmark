@@ -15,9 +15,15 @@
 #       - 'smartcommit' to use SmartCommit.
 #       - 'flexeme' to use Flexeme.
 #       - 'filename' to use a file-based approach.
-# Tool-specific arguments are provided via environment variables. Run
-# this script with the tool's name to see the required arguments.
 #
+# Environment variables:
+# - REMOVE_NON_CODE_CHANGES: If set to 'true', then the untangling tool will only
+#   consider the code changes in the commit. Otherwise, it will consider all the
+#   changes (e.g., documentation, whitespaces).
+#
+# Tool parameters:
+# Tool-specific parameters are provided via environment variables. Run
+# this script with the tool's name to see the required parameters.
 # Example: untangle_lltc4j_commits.sh <commits_file> <results_dir> smartcommit
 #
 # This script outputs to stdout one line per LLTC4J commit with the following format:
@@ -204,7 +210,6 @@ untangle_lltc4j_commit() {
     echo "Ground truth file not found: ${ground_truth_file}" >> "$log_file" 2>&1
     status_string="GROUND_TRUTH_MISSING"
   else
-
     # TODO: Only do that if we need to untangle.
     # Copy the repository to a temporary directory to enable parallelization.
     # The temporary directory contains the commit identifier to facilitate
@@ -212,7 +217,9 @@ untangle_lltc4j_commit() {
     local tmp_repository_dir
     tmp_repository_dir="$(mktemp -d -t "${commit_identifier}.XXXXXX")"
     cp -r "$project_repository_dir"/. "$tmp_repository_dir"
+    echo "Untangling in temporary directory: $tmp_repository_dir" >> "$log_file" 2>&1
 
+    base_dir="$(pwd)"
     # Checkout the commit to untangle.
     cd "$tmp_repository_dir" >> "$log_file" 2>&1 || exit 1
     if ! git -c advice.detachedHead=false checkout "$commit_hash" >> "$log_file" 2>&1; then
@@ -221,6 +228,32 @@ untangle_lltc4j_commit() {
     cd - >> "$log_file" 2>&1 || exit 1
   fi
 
+  # Clean repo if flag $REMOVE_NON_CODE_CHANGES is set to true.
+  if [ "$REMOVE_NON_CODE_CHANGES" = true ] && [ "$status_string" = "OK" ]; then
+    echo "Untangling on code changes only." >> "$log_file" 2>&1
+
+    cd "$tmp_repository_dir" > /dev/null 2>&1
+    # Resets the current branch up to this commit.
+    git reset -q --hard "$commit_hash" >> "$log_file" 2>&1
+    # Remove the non-code changes.
+    "$SCRIPT_DIR/clean_lltc4j_repo.sh" >> "$log_file" 2>&1
+    cd - > /dev/null 2>&1
+
+    # Running cd again is necessary to refresh the directory content otherwise
+    # git throws an error. See https://stackoverflow.com/a/70612805
+    cd "$tmp_repository_dir" > /dev/null 2>&1
+
+    # Update the commit to untangle to the version without non-code changes.
+    revision_clean_fixed=$(git rev-parse HEAD)
+    commit_hash="$revision_clean_fixed"
+
+    cd "$base_dir"
+  else
+    echo "Untangling on all changes (not just code changes)." >> "$log_file" 2>&1
+  fi
+
+  # TODO: Refactor into a function so it can return early. The status code can be
+  #       determined by the function's return value.
   if [ "$status_string" == "OK" ]; then
 
     # Untangle the commit if the exported untangling results for this commit do not exist.
