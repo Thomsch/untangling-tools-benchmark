@@ -30,6 +30,6 @@ pre_process() {
 }
 
 # Remove in-line, block comments, trailing whitespaces, and blank lines
-pre_process "$file" | grep -v '^#' | sed 's/[ \t]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"
+pre_process "$file" | grep -v '^#' | sed 's/[[:space:]]*$//' | grep -v '^$' | grep -v '^\s*//' > "$file.cleaned"
 
 mv -f "$file.cleaned" "$file"
