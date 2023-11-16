@@ -32,9 +32,8 @@ export bugs_file="${workdir}/data/d4j-5-bugs.csv" # Path to the file containing 
 # - $1: The folder where the results are stored and repositories checked out. This folder should also contain the expected scores and metrics.
 function run_e2e() {
   local out_dir=$1
-  local metrics_expected_file="${out_dir}/metrics_expected_file.csv"
-  local untangling_scores_expected_file="${out_dir}/untangling_scores_expected_file.csv"
-
+  local metrics_expected_file="${out_dir}/metrics_expected.csv"
+  local untangling_scores_expected_file="${out_dir}/untangling_scores_expected.csv"
 
   # Run the 5_bug example and write output files to e2e/
   echo "about to run compute_metrics.sh"
