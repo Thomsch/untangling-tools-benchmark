@@ -41,7 +41,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: flexeme_results_to_csv.py <path/to/root/results> <path/to/out/file>"
+            "usage: flexeme_results_to_csv.py <path/to/flexeme/graph/file> <path/to/csv/file>"
         )
         sys.exit(1)
 
