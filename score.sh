@@ -18,13 +18,14 @@ set -o allexport
 . "$SCRIPTDIR"/check-environment.sh
 set +o allexport
 
-export bugs_file="$1" # The file containing the bugs to untangle.
-export out_dir="$2" # The directory where the results are stored and repositories checked out.
-
 if [ $# -ne 2 ] ; then
     echo 'usage: score.sh <bugs_file> <out_dir>'
     exit 1
 fi
+
+export bugs_file="$1" # The file containing the bugs to untangle.
+export out_dir="$2" # The directory where the results are stored and repositories checked out.
+
 
 export out_file="${out_dir}/decomposition_scores.csv" # Aggregated results.
 export workdir="${out_dir}/repositories"
