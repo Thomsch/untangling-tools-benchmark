@@ -16,8 +16,10 @@ Returns:
 """
 import sys
 from os import path
+
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
+
 import diff_metrics
 
 
@@ -46,7 +48,7 @@ def main():
 
     if len(args) != 4:
         print(
-            "usage: patch | python3 diff_metrics.py <project> <bug_id> <repo_root> <diff version>"
+            "usage: patch | python3 summary_statistics.py <project> <bug_id> <repo_root> <diff version>"
         )
         sys.exit(1)
 
