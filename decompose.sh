@@ -64,7 +64,6 @@ untangle_with_tools(){
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
   printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}"
-  cat "${logs_dir}/${project}_${vid}_decompose.log"
 }
 
 export -f untangle_with_tools

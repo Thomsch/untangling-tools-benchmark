@@ -44,7 +44,6 @@ echo ""
 echo "Untangling project $project, bug $vid, repository $repository"
 
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
-echo "SCRIPTDIR: $SCRIPTDIR"
 
 # Set environment variable to false if not specified.
 if [ -z "${REMOVE_NON_CODE_CHANGES+x}" ]; then
