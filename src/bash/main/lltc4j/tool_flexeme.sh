@@ -56,7 +56,7 @@ untangle_commit() {
 
   local javac_traces_file="${JAVAC_TRACES_DIR}/${commit_identifier}/dljc-logs/javac.json"
   if ! [ -f "$javac_traces_file" ]; then
-    echo "Missing javac traces for ${commit_identifier}"
+    echo "Missing javac traces for ${commit_identifier} in ${javac_traces_file}"
     return 1
   fi
 
