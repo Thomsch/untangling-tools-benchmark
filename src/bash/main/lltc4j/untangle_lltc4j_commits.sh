@@ -259,7 +259,7 @@ untangle_lltc4j_commit() {
     # Untangle the commit if the exported untangling results for this commit do not exist.
     if [ -f "$untangling_export_file" ]; then
       status_string="CACHED"
-    elif has_untangling_output "$untangling_output_dir" "$project_name" "$commit_hash" || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$commit_hash" "$commit_identifier" "$untangling_output_dir" >> "$log_file" 2>&1; then
+    elif has_untangling_output "$untangling_output_dir" "$project_name" "$commit_hash" >> "$log_file" 2>&1 || untangle_commit "$tmp_repository_dir" "$ground_truth_file" "$commit_hash" "$commit_identifier" "$untangling_output_dir" >> "$log_file" 2>&1; then
       status_string="UNTANGLING_SUCCESS"
     else
       status_string="UNTANGLING_FAIL"
