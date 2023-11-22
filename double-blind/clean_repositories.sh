@@ -22,10 +22,10 @@ SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
 # Clone repositories
 echo "Cloning repositories into $artifacts_dir"
 export GIT_TERMINAL_PROMPT=0
-git -C "$artifacts_dir" clone --depth 1 https://github.com/Thomsch/untangling-tools-benchmark \
-  || git -C "$artifacts_dir" clone --depth 1 git@github.com:Thomsch/untangling-tools-benchmark.git
-git -C "$artifacts_dir" clone --depth 1 https://github.com/Thomsch/flexeme \
-  || git -C "$artifacts_dir" clone --depth 1 git@github.com:Thomsch/Flexeme.git
+git -C "$artifacts_dir" clone --filter=blob:none https://github.com/Thomsch/untangling-tools-benchmark \
+  || git -C "$artifacts_dir" clone --filter=blob:none git@github.com:Thomsch/untangling-tools-benchmark.git
+git -C "$artifacts_dir" clone --filter=blob:none https://github.com/Thomsch/flexeme \
+  || git -C "$artifacts_dir" clone --filter=blob:none git@github.com:Thomsch/Flexeme.git
 echo "Cloning repositories into $artifacts_dir: DONE"
 
 echo "Cleaning all files in $artifacts_dir"
