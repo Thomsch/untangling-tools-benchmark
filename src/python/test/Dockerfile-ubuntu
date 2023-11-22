@@ -57,7 +57,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && touch ${HOME}/.parallel will-cite
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& git clone --depth 1 https://github.com/rjust/defects4j \
+&& git clone --filter=blob:none https://github.com/rjust/defects4j \
 && cd defects4j \
 && cpanm --installdeps . \
 && ./init.sh
