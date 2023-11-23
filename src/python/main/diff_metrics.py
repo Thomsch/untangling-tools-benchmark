@@ -161,7 +161,7 @@ def tangle_counts(repository):
     tangled_lines_count = count_tangled_lines(original_diff, fix_diff, nonfix_diff)
     tangled_hunks_count = count_tangled_hunks(original_diff, fix_diff)
 
-    return f"{tangled_lines_count},{tangled_hunks_count}"
+    return tangled_lines_count, tangled_hunks_count
 
 
 def main():
@@ -215,10 +215,10 @@ def main():
     code_changed_lines = len(lines_in_patch(clean_original_diff))
     average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else ""
 
+    tangled_lines_count, tangled_hunks_count = tangle_counts(repository)
     print(
-        f"{project},{vid},{files_updated},"
-        f"{hunks_count},{average_hunk_size},{code_changed_lines},"
-        f"{tangle_counts(repository)}"
+        f"{project},{vid},{files_updated},{hunks_count},{average_hunk_size},"
+        f"{code_changed_lines},{tangled_lines_count},{tangled_hunks_count}"
     )
 
 if __name__ == "__main__":
