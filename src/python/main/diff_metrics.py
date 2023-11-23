@@ -25,6 +25,7 @@ Returns:
 """
 import sys
 from os import path
+
 from unidiff import PatchSet
 from unidiff.constants import LINE_TYPE_CONTEXT
 
@@ -215,11 +216,10 @@ def main():
     average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else ""
 
     print(
-        f"{project},{vid},{files_updated},{test_files_updated},"
-        f"{hunks_count},{average_hunk_size},{code_changed_lines},{all_changed_lines - code_changed_lines},"
+        f"{project},{vid},{files_updated},"
+        f"{hunks_count},{average_hunk_size},{code_changed_lines},"
         f"{tangle_counts(repository)}"
     )
-
 
 if __name__ == "__main__":
     main()
