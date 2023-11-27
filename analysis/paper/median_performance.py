@@ -40,7 +40,13 @@ def print_performance(decomposition_file):
     print("% All the data used in the text is one file so that it can be easily updated.")
     print("% Generated automatically by median_performance.py in https://github.com/Thomsch/untangling-tools-benchmark")
 
-    print(f"\\newcommand\\numberOfBugs{{{bug_count}\\xspace}}")
+    # Untangling counts
+    print(f"\\newcommand\\dfjCommitsCount{{{bug_count}\\xspace}}")
+    print(f"\\newcommand\\lltcfjCommitsCount{{TODO\\xspace}} % Manually update this number if it has changed")
+    print(f"\\newcommand\\dfjCommitCountFlexemeError{{TODO\\xspace}} % Manually update this number if it has changed")
+    print(f"\\newcommand\\lltcfjCommitCountFlexemeError{{TODO\\xspace}} % Manually update this number if it has changed")
+
+    # Untangling performance
     print(f"\\newcommand\\smartCommitMedian{{{smartcommit_median:.2f}\\xspace}}")
     print(f"\\newcommand\\flexemeMedian{{{flexeme_median:.2f}\\xspace}}")
     print(f"\\newcommand\\fileUntanglingMedian{{{file_rand_index_median:.2f}\\xspace}}")

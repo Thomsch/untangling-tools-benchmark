@@ -30,7 +30,10 @@ def test_calculate_performance(sample_decompositions_csv, capfd):
     expected_output = (
         "% All the data used in the text is one file so that it can be easily updated.\n"
         "% Generated automatically by median_performance.py in https://github.com/Thomsch/untangling-tools-benchmark\n"
-        "\\newcommand\\numberOfBugs{4\\xspace}\n"
+        "\\newcommand\\dfjCommitsCount{4\\xspace}\n"
+        "\\newcommand\\lltcfjCommitsCount{TODO\\xspace} % Manually update this number if it has changed\n"
+        "\\newcommand\\dfjCommitCountFlexemeError{TODO\\xspace} % Manually update this number if it has changed\n"
+        "\\newcommand\\lltcfjCommitCountFlexemeError{TODO\\xspace} % Manually update this number if it has changed\n"
         "\\newcommand\\smartCommitMedian{0.75\\xspace}\n"
         "\\newcommand\\flexemeMedian{0.65\\xspace}\n"
         "\\newcommand\\fileUntanglingMedian{0.55\\xspace}\n"
