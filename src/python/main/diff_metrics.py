@@ -178,48 +178,20 @@ def main():
     vid = args[1]
     repository = args[2]
 
-    unclean_original_diff = PatchSet.from_filename(
-        filename=path.join(repository, "diff", "VC.diff"),
-        encoding="latin-1",
-    )
     clean_original_diff = PatchSet.from_filename(
         path.join(repository, "diff", "VC_clean.diff"), encoding="latin-1"
     )
 
-    # Generate diff metrics on clean VC diff
-
-    # The number of files updated, not including tests.
-    files_updated = len(clean_original_diff)
-
-    # Count the number of changed lines in the unclean VC diff
-    all_changed_lines = 0
-    test_files_updated = 0
-    for file in unclean_original_diff:
-        if file.path.endswith("Test.java"):
-            test_files_updated += 1
-        for hunk in file:
-            for line in hunk:
-                # A diff line contains an indicator ('+': added to modified
-                # program, '-': removed from original program, ' ': unchanged
-                # from original to modified program) and a line value (i.e. the
-                # textual content of the source code line).
-                if line.line_type == LINE_TYPE_CONTEXT:
-                    continue
-                all_changed_lines += 1
-
-    # Generate diff metrics on clean VC diff
-
-    # The number of files updated, not including tests.
     files_updated = len(clean_original_diff)
     hunks_count = len(get_hunks_in_patch(clean_original_diff))
     code_changed_lines = len(lines_in_patch(clean_original_diff))
     average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else ""
-
     tangled_lines_count, tangled_hunks_count = tangle_counts(repository)
     print(
         f"{project},{vid},{files_updated},{hunks_count},{average_hunk_size},"
         f"{code_changed_lines},{tangled_lines_count},{tangled_hunks_count}"
     )
+
 
 if __name__ == "__main__":
     main()
