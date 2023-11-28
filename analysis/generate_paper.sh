@@ -95,7 +95,7 @@ if ! python analysis/paper/clean_decompositions.py "${TMP_DIR}/evaluation"; then
   exit 1
 fi
 
-if ! python analysis/paper/combine_decompositions.py "${TMP_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"; then
+if ! python analysis/paper/concatenate_untangled_lines.py "${TMP_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"; then
   echo "Error: Failed to combine decompositions"
   exit 1
 fi

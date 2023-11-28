@@ -77,8 +77,8 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     if len(args) != 1:
-        print("usage: combine_decompositions.py <path/to/untangling/evaluation/folder>")
-        print("example: combine_decompositions.py untangling-evaluation/evaluation")
+        print("usage: concatenate_untangled_lines.py <path/to/untangling/evaluation/folder>")
+        print("example: concatenate_untangled_lines.py untangling-evaluation/evaluation")
         sys.exit(1)
 
     main(os.path.abspath(args[0]))
