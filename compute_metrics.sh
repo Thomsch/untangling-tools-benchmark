@@ -70,7 +70,7 @@ fi
 
 metrics_results="${out_dir}/metrics.csv"
 
-echo "project,vid,files_updated,test_files_updated,hunks,average_hunk_size,code_changed_lines,noncode_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
+echo "project,vid,files_updated,hunks,average_hunk_size,code_changed_lines,tangled_lines,tangled_hunks" > "$metrics_results"
 cat "${metrics_dir}"/*.csv >> "$metrics_results"
 echo ""
 echo "Commit metrics were aggregated and saved in ${metrics_results}"

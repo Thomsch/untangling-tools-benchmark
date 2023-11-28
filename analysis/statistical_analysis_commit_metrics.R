@@ -23,7 +23,7 @@ performance.metrics <- left_join(performance.data, metrics.data, by = c('project
 performance.metrics.long = pivot_longer(performance.metrics, cols = c('smartcommit_rand_index', 'flexeme_rand_index'), names_to = 'Tool', values_to = 'Performance')
 
 # Simple model because we proved in RQ1 that bug_id and project are not significant.
-model.all <- lm(Performance ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=performance.metrics.long)
+model.all <- lm(Performance ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines + tangled_hunks, data=performance.metrics.long)
 
 summary(model.all) # There is a significance in code_changed_lines, and tangled_hunks.
 
@@ -37,7 +37,7 @@ summary(model.all) # There is a significance in code_changed_lines, and tangled_
 # tangled_hunks
 
 summarise_model_all_variables <- function(data) {
-  model <- lm(performance ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=data)
+  model <- lm(performance ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines + tangled_hunks, data=data)
   summary(model)
 }	
 
@@ -46,14 +46,14 @@ performance.metrics.smartcommit <- select(performance.metrics, -c('flexeme_rand_
 
 summarise_model_all_variables(performance.metrics.smartcommit)
 
-model.smartcommit.all <- lm(smartcommit_rand_index ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines +             tangled_hunks, data=performance.metrics.smartcommit)
+model.smartcommit.all <- lm(smartcommit_rand_index ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines +             tangled_hunks, data=performance.metrics.smartcommit)
 
 summary(model.smartcommit.all)
 
 # Flexeme All
 performance.metrics.flexeme <- select(performance.metrics, -c('smartcommit_rand_index')) %>% rename(performance = flexeme_rand_index)
 
-model.flexeme.all <- lm(performance ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines +             tangled_hunks, data=performance.metrics.flexeme)
+model.flexeme.all <- lm(performance ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines +             tangled_hunks, data=performance.metrics.flexeme)
 
 summary(model.flexeme.all)
 
@@ -77,7 +77,7 @@ visualize(model.smartcommit.files_updated, "model", alpha = 0.1, jitter = c(0.3,
 untanglingPerformance.flexeme <- select(performance.metrics, -c('smartcommit_rand_index'))
 
 # -> to file impact_metrics_flexeme_all.txt
-model.flexeme.all <- lm(flexeme_rand_index ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines +             tangled_hunks, data=untanglingPerformance.flexeme)
+model.flexeme.all <- lm(flexeme_rand_index ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines +             tangled_hunks, data=untanglingPerformance.flexeme)
 summary(model.flexeme.all)
 
 # -> to file impact_metrics_flexeme_individual.txt
