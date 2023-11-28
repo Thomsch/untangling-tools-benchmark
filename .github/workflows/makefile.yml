@@ -12,7 +12,7 @@ jobs:
       - name: install Python modules
         run: pip install -U -r requirements.txt
       - name: Install shellcheck and checkbashisms
-        run: sudo apt install -y shellcheck devscripts
+        run: sudo apt install -y shellcheck devscripts || (sleep 60 && sudo apt install -y shellcheck devscripts)
       - name: Install bats
         run: sudo apt install -y bats
       - name: make check
