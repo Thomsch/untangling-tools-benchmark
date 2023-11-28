@@ -13,8 +13,10 @@ jobs:
         run: pip install -U -r requirements.txt
       - name: apt-get update
         run: sudo apt-get update
-      - name: Install shellcheck and checkbashisms
-        run: sudo apt install -y shellcheck devscripts || (sleep 60 && sudo apt install -y shellcheck devscripts)
+      - name: Install shellcheck
+        run: sudo apt install -y shellcheck
+      - name: Install checkbashisms
+        run: sudo apt install -y devscripts
       - name: Install bats
         run: sudo apt install -y bats
       - name: make check
