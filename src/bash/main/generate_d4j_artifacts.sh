@@ -47,16 +47,25 @@ workdir="$(pwd)"
 mkdir -p "$repository"
 defects4j checkout -p "$project" -v "$vid"b -w "$repository"
 
-# Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
-cd "$repository"
-if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
-then
-    echo 'Cleaning Java directory............................................... OK'
-else
-    echo 'Cleaning Java directory............................................... FAIL'
-    exit 1
+if [ -z "${REMOVE_NON_CODE_CHANGES+x}" ]; then
+  REMOVE_NON_CODE_CHANGES=false
 fi
-cd -
+
+if [ "${REMOVE_NON_CODE_CHANGES}" = true ]; then
+# Clean Defects4J repository: The rest of the pipeline will work on cleaned "$repository"
+  echo "Untangling on code changes only"
+  cd "$repository"
+  if "${workdir}/src/bash/main/clean-defects4j-repo.sh" "$project" "$vid"
+  then
+      echo 'Cleaning Java directory............................................... OK'
+  else
+      echo 'Cleaning Java directory............................................... FAIL'
+      exit 1
+  fi
+  cd -
+else
+  echo "Untangling on the original changes"
+fi
 
 diff_dir="${repository}/diff"
 # Generate six artifacts (three unified diffs, three source code files)
@@ -72,10 +81,17 @@ fi
 cd "$repository"
 mkdir -p "$diff_dir"
 
-# Get the 3 cleaned commit hashes
-revision_buggy=$(git rev-parse HEAD)
-revision_fixed=$(git rev-parse HEAD~1)
-revision_original=$(git rev-parse HEAD~2)
+if [ "$REMOVE_NON_CODE_CHANGES" = true ]; then
+  # Get the 3 cleaned commit hashes
+  revision_buggy=$(git rev-parse HEAD)
+  revision_fixed=$(git rev-parse HEAD~1)
+  revision_original=$(git rev-parse HEAD~2)
+else
+  read -r buggy fixed <<< "$(print_revision_ids "$project" "$vid")"
+  revision_buggy=$(git rev-parse HEAD)
+  revision_fixed=$fixed
+  revision_original=$buggy
+fi
 
 # D4J bug-inducing minimized patch
 inverted_patch="${DEFECTS4J_HOME}/framework/projects/${project}/patches/${vid}.src.patch"

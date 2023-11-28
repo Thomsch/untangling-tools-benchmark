@@ -43,6 +43,13 @@ mkdir -p "$flexeme_untangling_dir"
 echo ""
 echo "Untangling project $project, bug $vid, repository $repository"
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+
+# Set environment variable to false if not specified.
+if [ -z "${REMOVE_NON_CODE_CHANGES+x}" ]; then
+  REMOVE_NON_CODE_CHANGES=false
+fi
+
 # If D4J bug repository does not exist, checkout the D4J bug to repository and
 # generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
@@ -50,10 +57,18 @@ if [ ! -d "${repository}" ] ; then
   ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository"
 fi
 
-# Commit hash is the revision_fixed_ID
 cd "$repository" || exit 1
-commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+# Set the commit to untangle on the original fix or the cleaned fix.
+if [ "$REMOVE_NON_CODE_CHANGES" = true ]; then
+  commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+else
+  . "$SCRIPTDIR"/d4j_utils.sh
+  # shellcheck disable=SC2034
+  read -r buggy fixed <<< "$(print_revision_ids "$project" "$vid")"
+  commit="$fixed"      # Original fixed commit
+fi
 export commit
+
 cd - || exit 1
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
