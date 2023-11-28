@@ -43,6 +43,7 @@ export TMP_DIR
 # Copy results in a temporary directory to avoid modifying the original results.
 mkdir -p "${TMP_DIR}/evaluation"
 cp -r "${UNTANGLING_DIR}/logs" "${TMP_DIR}/logs"
+cp "${UNTANGLING_DIR}/metrics.csv" "${TMP_DIR}/metrics.csv"
 
 # Copy commits that are in the given list.
 copy_results(){
