@@ -116,5 +116,4 @@ summarise_model_all_variables(performance.metrics.file, outputPath, "impact_metr
 # For each metric, do model analysis and print graph in pdf
 generate_pairwise_analysis(performance.metrics.smartcommit, metrics.names, "smartcommit", outputPath)
 generate_pairwise_analysis(performance.metrics.flexeme, metrics.names, "flexeme", outputPath)
-generate_pairwise_analysis(performance.metrics.file.smartcommit, metrics.names, "file-smartcommit", outputPath)
-generate_pairwise_analysis(performance.metrics.file.flexeme, metrics.names, "file-flexeme", outputPath)
+generate_pairwise_analysis(performance.metrics.file, metrics.names, "file", outputPath)

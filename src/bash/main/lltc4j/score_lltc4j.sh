@@ -51,7 +51,7 @@ score_bug(){
 
   START="$(date +%s.%N)"  # Record start time for bug scoring
 
-  python3 src/python/main/untangling_score.py "$evaluation_dir" "${project_name}" "${commit_hash}" > "${evaluation_dir}/scores.csv" 2> "${logs_dir}/${project_name}_${short_commit_hash}_score.log"
+  python3 src/python/main/untangling_score.py "$evaluation_dir" "${project_name}" "${short_commit_hash}" > "${evaluation_dir}/scores.csv" 2> "${logs_dir}/${project_name}_${short_commit_hash}_score.log"
   ret_code=$?
   scoring_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
