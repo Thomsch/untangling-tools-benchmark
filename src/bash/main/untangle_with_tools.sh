@@ -43,6 +43,13 @@ mkdir -p "$flexeme_untangling_dir"
 echo ""
 echo "Untangling project $project, bug $vid, repository $repository"
 
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd -P)"
+
+# Set environment variable to false if not specified.
+if [ -z "${REMOVE_NON_CODE_CHANGES+x}" ]; then
+  REMOVE_NON_CODE_CHANGES=false
+fi
+
 # If D4J bug repository does not exist, checkout the D4J bug to repository and
 # generates 6 artifacts for it.
 if [ ! -d "${repository}" ] ; then
@@ -50,10 +57,18 @@ if [ ! -d "${repository}" ] ; then
   ./src/bash/main/generate_d4j_artifacts.sh "$project" "$vid" "$repository"
 fi
 
-# Commit hash is the revision_fixed_ID
 cd "$repository" || exit 1
-commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+# Set the commit to untangle on the original fix or the cleaned fix.
+if [ "$REMOVE_NON_CODE_CHANGES" = true ]; then
+  commit="$(git rev-parse HEAD~1)"    # Clean fixed commit
+else
+  . "$SCRIPTDIR"/d4j_utils.sh
+  # shellcheck disable=SC2034
+  read -r buggy fixed <<< "$(print_revision_ids "$project" "$vid")"
+  commit="$fixed"      # Original fixed commit
+fi
 export commit
+
 cd - || exit 1
 # Get source path and class path
 sourcepath="$(defects4j export -p dir.src.classes -w "${repository}")"
@@ -82,16 +97,16 @@ fi
 # Untangle with Flexeme
 
 flexeme_untangling_results="${flexeme_untangling_dir}/${project}_${vid}"
-flexeme_untangling_graph="${flexeme_untangling_results}/flexeme.dot"
+flexeme_graph_file="${flexeme_untangling_results}/flexeme.dot"
 
-if [ -f "$flexeme_untangling_graph" ]; then
+if [ -f "$flexeme_graph_file" ]; then
   echo 'Untangling with Flexeme .............................................. CACHED'
   regenerate_results=false
 else
   echo 'Untangling with Flexeme ..............................................'
   mkdir -p "$flexeme_untangling_results"
   START_UNTANGLING="$(date +%s.%N)"
-  if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_untangling_graph}"
+  if ./src/bash/main/untangle_flexeme.sh "$repository" "$commit" "$sourcepath" "$classpath" "${flexeme_graph_file}"
   then
     END_UNTANGLING="$(date +%s.%N)"
     ELAPSED="$(echo "$END_UNTANGLING - $START_UNTANGLING" | bc)"
@@ -130,7 +145,7 @@ if [ -f "$flexeme_result_out" ] && [ $regenerate_results == false ]; then
   echo -ne 'Parsing Flexeme results .............................................. CACHED\r'
 else
   echo 'Parsing Flexeme results ..............................................'
-  if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_untangling_graph" "$flexeme_result_out"
+  if python3 src/python/main/flexeme_results_to_csv.py "$flexeme_graph_file" "$flexeme_result_out"
   then
       echo 'Parsing Flexeme results .............................................. OK'
   else

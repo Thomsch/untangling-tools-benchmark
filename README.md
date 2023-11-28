@@ -24,9 +24,13 @@ mkdir ${HOME}/.parallel
 touch ${HOME}/.parallel will-cite
 ```
 
-3. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
+3. Install [jq](https://jqlang.github.io/jq/)
+    - For Ubuntu: `sudo apt-get install jq`
+    - For MacOS: `brew install jq`
 
-4. Install GNU coreutils if you are on MacOS or Windows.
+4. [Install Defects4J](https://github.com/rjust/defects4j#setting-up-defects4j)
+
+5. Install GNU coreutils if you are on MacOS or Windows.
 
 ### Part 2: The untangling evaluation itself
 

@@ -95,7 +95,7 @@ def main():
     df_mixed_changes[['project_name', 'short_commit']] = df_mixed_changes['commit_identifier'].str.split('_',
                                                                                                          expand=True)
     # Put the scores in a dataframe and create a new column with the short commit hash.
-    df_scores = pd.read_csv(args.scores_file, names=["project_name", "commit", "smartcommit", "flexeme", "filebased"])
+    df_scores = pd.read_csv(args.scores_file, names=["project_name", "commit", "smartcommit", "flexeme", "filename"])
     df_scores["short_commit"] = df_scores["commit"].apply(lambda x: x[:6])
 
     # Filter the scores to keep only the scores for commits with mixed changes
@@ -107,7 +107,7 @@ def main():
     # Output the scores to stdout
     from io import StringIO
     output = StringIO()
-    df_mixed_changes.to_csv(output, columns=['project_name', 'commit', 'smartcommit', 'flexeme', 'filebased'],
+    df_mixed_changes.to_csv(output, columns=['project_name', 'commit', 'smartcommit', 'flexeme', 'filename'],
                             index=False, header=False)
     print(output.getvalue())
 

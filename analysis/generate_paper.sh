@@ -22,7 +22,7 @@ export UNTANGLING_DIR=$2
 export PAPER_REPOSITORY=$3
 
 if ! [ -f "$COMMITS_FILE" ]; then
-    echo "Error: File '${COMMITS_FILE}' not found. Exiting."
+    echo "Error: commit file '${COMMITS_FILE}' not found. Exiting."
     exit 1
 fi
 
@@ -57,7 +57,7 @@ copy_results(){
 
   if [ ! -d "$source_dir" ]; then
     echo "Error: Directory '${source_dir}' not found."
-    return 0
+    return 1
   fi
 
   cp -r "${source_dir}" "${TMP_DIR}/evaluation/"
@@ -108,7 +108,7 @@ Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "$
 #
 Rscript analysis/paper/performance_distribution.R "${TMP_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/figures/rq1-performance-distribution.pdf"
 Rscript analysis/paper/statistical_analysis_untangling_tool.R "${TMP_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/data/rq1.txt"
-Rscript analysis/paper/compare_models.R "${TMP_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex"
+Rscript analysis/paper/compare_models.R "${TMP_DIR}/decomposition_scores.csv" "${PAPER_REPOSITORY}/tables/model-comparison.tex" > "${PAPER_REPOSITORY}"/data/model-comparison.txt
 
 #
 # RQ2

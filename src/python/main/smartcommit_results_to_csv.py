@@ -44,7 +44,7 @@ def main():
 
     if len(args) != 2:
         print(
-            "usage: smartcommit_results_to_csv.py <path/to/root/results> <path/to/out/file>"
+            "usage: smartcommit_results_to_csv.py <path/to/results/dir> <path/to/out/file>"
         )
         sys.exit(1)
 

@@ -22,7 +22,7 @@ jobs:
         run: |
           python3 -m venv .venv
           . .venv/bin/activate
-          git clone --depth 1 --branch main https://github.com/Thomsch/Flexeme ../Flexeme
+          git clone --filter=blob:none --branch main https://github.com/Thomsch/Flexeme ../Flexeme
           pip install -e ../Flexeme
 
       - run: pwd && ls -al && ls -al ..
