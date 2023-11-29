@@ -61,12 +61,14 @@ def concatenate_untangled_lines_for_commit(commit_dir) -> pd.DataFrame:
     truth_df = pd.read_csv(truth_path)
 
     concatenate_df = pd.DataFrame(columns=["treatment", "file", "source", "target", "group"])
-    for csv_filename in os.listdir(commit_dir):
-        if csv_filename not in included_tools:
-            continue
-        untangled_lines_df = pd.read_csv(os.path.join(commit_dir, csv_filename))
+
+    for untangled_lines_file in included_tools:
+        if not os.path.exists(os.path.join(commit_dir, untangled_lines_file)):
+            untangled_lines_df = None
+        else:
+            untangled_lines_df = pd.read_csv(os.path.join(commit_dir, untangled_lines_file))
         untangled_lines_normalize_df = normalize_untangled_lines(truth_df, untangled_lines_df)
-        untangled_lines_normalize_df["treatment"] = csv_filename
+        untangled_lines_normalize_df["treatment"] = untangled_lines_file
         concatenate_df = pd.concat([concatenate_df, untangled_lines_normalize_df], ignore_index=True)
 
     truth_df["treatment"] = "truth.csv"
