@@ -16,10 +16,10 @@ inputFile = args[1]
 outputFile = args[2]
 
 data <- read.csv(inputFile)
-data$BugId <- as_factor(data$BugId)
+data$bug_id <- as_factor(data$bug_id)
 
-groupCount <- data %>% group_by(Project, BugId, Treatment) %>% summarise(GroupCount = n_distinct(Group))
-summary <- groupCount %>% group_by(Treatment) %>% summarise("Min."=min(GroupCount), "Max."=max(GroupCount), "Median"=median(GroupCount), "Std. dev."=sd(GroupCount))
+groupCount <- data %>% group_by(project, bug_id, treatment) %>% summarise(group_count = n_distinct(group), .groups = 'keep')
+summary <- groupCount %>% group_by(treatment) %>% summarise("Min."=min(group_count), "Max."=max(group_count), "Median"=median(group_count), "Std. dev."=sd(group_count))
 summary.table <- xtable(summary)
 
 print(summary.table, only.contents = TRUE, booktabs = TRUE, timestamp	= NULL, comment = TRUE, include.rownames = FALSE, file=outputFile)

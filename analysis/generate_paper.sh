@@ -95,13 +95,14 @@ if ! python analysis/paper/clean_decompositions.py "${TMP_DIR}/evaluation"; then
   exit 1
 fi
 
-if ! python src/python/main/analysis/concatenate_untangled_lines.py "${TMP_DIR}/evaluation" > "${TMP_DIR}/combined_decompositions.csv"; then
+UNTANGLED_LINES_FILE="${TMP_DIR}/untangled_lines.csv"
+if ! python src/python/main/analysis/concatenate_untangled_lines.py "${TMP_DIR}/evaluation" > "${UNTANGLED_LINES_FILE}"; then
   echo "Error: Failed to combine decompositions"
   exit 1
 fi
 
-Rscript analysis/paper/group_size.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-size.tex"
-Rscript analysis/paper/group_count.R "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/group-count.tex"
+Rscript analysis/paper/group_size.R "${UNTANGLED_LINES_FILE}" "${PAPER_REPOSITORY}/tables/group-size.tex"
+Rscript analysis/paper/group_count.R "${UNTANGLED_LINES_FILE}" "${PAPER_REPOSITORY}/tables/group-count.tex"
 
 #
 # RQ1

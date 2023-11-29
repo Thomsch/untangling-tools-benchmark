@@ -16,10 +16,14 @@ inputFile = args[1]
 outputFile = args[2]
 
 data <- read.csv(inputFile)
-data$BugId <- as_factor(data$BugId)
+data$bug_id <- as_factor(data$bug_id)
 
-groupSize <- data %>% group_by(Project, BugId, Treatment, Group) %>% summarise(n = n())
-summary <- groupSize %>% group_by(Treatment) %>% summarise("Min."=min(n), "Max."=max(n), "Median"=median(n), "Std. dev."=sd(n))
+groupSize <- data %>% group_by(project, bug_id, treatment, group) %>% summarise(n = n(), .groups = 'keep')
+
+print(groupSize)
+summary <- groupSize %>% group_by(treatment) %>% summarise("Min."=min(n), "Max."=max(n), "Median"=median(n), "Std. dev."=sd(n))
+
+print(summary)
 
 summary.table <- xtable(summary)
 
