@@ -17,7 +17,7 @@ import sys
 
 import pandas as pd
 
-included_tools = ["flexeme.csv", "smartcommit.csv", "filename.csv"]
+included_tool_results_files = ["flexeme.csv", "smartcommit.csv", "filename.csv"]
 
 def normalize_untangled_lines(truth_df, untangled_lines_df) -> pd.DataFrame:
     """
@@ -62,16 +62,16 @@ def concatenate_untangled_lines_for_commit(commit_dir) -> pd.DataFrame:
 
     concatenate_df = pd.DataFrame(columns=["treatment", "file", "source", "target", "group"])
 
-    for untangled_lines_file in included_tools:
+    for untangled_lines_file in included_tool_results_files:
         if not os.path.exists(os.path.join(commit_dir, untangled_lines_file)):
             untangled_lines_df = None
         else:
             untangled_lines_df = pd.read_csv(os.path.join(commit_dir, untangled_lines_file))
         untangled_lines_normalize_df = normalize_untangled_lines(truth_df, untangled_lines_df)
-        untangled_lines_normalize_df["treatment"] = untangled_lines_file
+        untangled_lines_normalize_df["treatment"] = untangled_lines_file.split(".")[0]
         concatenate_df = pd.concat([concatenate_df, untangled_lines_normalize_df], ignore_index=True)
 
-    truth_df["treatment"] = "truth.csv"
+    truth_df["treatment"] = "truth"
     concatenate_df = pd.concat([concatenate_df, truth_df], ignore_index=True)
     return concatenate_df
 
