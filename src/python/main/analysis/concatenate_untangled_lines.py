@@ -19,6 +19,9 @@ import pandas as pd
 
 tool_result_filenames = ["flexeme.csv", "smartcommit.csv", "filename.csv"]
 
+column_names_commit = ["treatment", "file", "source", "target", "group"]
+column_names_dataset = ["project", "bug_id"] + column_names_commit
+
 def normalize_untangled_lines(truth_df, untangled_lines_df) -> pd.DataFrame:
     """
     Normalize the untangled lines to match the ground truth CSV file.
@@ -60,7 +63,7 @@ def concatenate_untangled_lines_for_commit(commit_dir) -> pd.DataFrame:
 
     truth_df = pd.read_csv(truth_path)
 
-    concatenate_df = pd.DataFrame(columns=["treatment", "file", "source", "target", "group"])
+    concatenate_df = pd.DataFrame(columns=column_names_commit)
 
     for tool_result_filename in tool_result_filenames:
         untangled_lines_file = os.path.join(commit_dir, tool_result_filename)
@@ -76,14 +79,15 @@ def concatenate_untangled_lines_for_commit(commit_dir) -> pd.DataFrame:
     concatenate_df = pd.concat([concatenate_df, truth_df], ignore_index=True)
     return concatenate_df
 
-def main(evaluation_dir):
+def concatenate_untangled_lines_for_dataset(evaluation_dir) -> pd.DataFrame:
     """
-    Implement the logic of the script. See the module docstring for more
-    information.
-    """
+    Concatenate the untangled lines from all the tools into a single dataframe.
+    Returns a dataframe with the columns specified in column_names_dataset.
 
-    # Iterate through each bug directory in the `evaluation` directory of the untangling directory.
-    concatenate_df = pd.DataFrame(columns=["project", "bug_id", "treatment", "file", "source", "target", "group"])
+    Arguments:
+        evaluation_dir: Path to the directory containing the subdirectories for each commit.
+    """
+    concatenate_df = pd.DataFrame(columns=column_names_dataset)
 
     for bug_tag in os.listdir(evaluation_dir):
         bug_dir = os.path.join(evaluation_dir, bug_tag)
@@ -105,7 +109,14 @@ def main(evaluation_dir):
         untangled_lines_for_commit_df["project"] = project
         untangled_lines_for_commit_df["bug_id"] = bug_id
         concatenate_df = pd.concat([concatenate_df, untangled_lines_for_commit_df], ignore_index=True)
-    print(concatenate_df.to_csv(index=False, header=True))
+    return concatenate_df
+def main(evaluation_dir):
+    """
+    Implement the logic of the script. See the module docstring for more
+    information.
+    """
+    concatenate_df = concatenate_untangled_lines_for_dataset(evaluation_dir)
+    print(concatenate_df.to_csv(index=False))
 
 if __name__ == "__main__":
     args = sys.argv[1:]

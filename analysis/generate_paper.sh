@@ -101,8 +101,11 @@ if ! python src/python/main/analysis/concatenate_untangled_lines.py "${TMP_DIR}/
   exit 1
 fi
 
+D4J_RESULTS_DIR="$HOME/data/d4j-code-changes"
+LLTC4J_RESULTS_DIR="$HOME/data/lltc4j-code-changes"
+
+python src/python/main/analysis/print_group_counts.py --d4j $D4J_RESULTS_DIR --lltc4j $LLTC4J_RESULTS_DIR > "${PAPER_REPOSITORY}/tables/group-count.tex"
 Rscript analysis/paper/group_size.R "${UNTANGLED_LINES_FILE}" "${PAPER_REPOSITORY}/tables/group-size.tex"
-Rscript analysis/paper/group_count.R "${UNTANGLED_LINES_FILE}" "${PAPER_REPOSITORY}/tables/group-count.tex"
 
 #
 # RQ1
