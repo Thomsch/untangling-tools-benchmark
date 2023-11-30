@@ -3,23 +3,25 @@
 # Generate the results for the paper automatically.
 # Arguments:
 # - $1: File containing a list of commits to generate the results for.
-# - $2: The directory where the untangling evaluation results are stored.
-# - $3: The directory of the paper repository.
+# - $2: The directory where the untangling evaluation results for D4J are stored.
+# - $3: The directory where the untangling evaluation results are LLTC4J stored.
+# - $4: The directory of the paper repository.
 #
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
 set -o pipefail   # Produce a failure status if any command in the pipeline fails
 
-if [[ $# -ne 3 ]] ; then
-    echo 'usage: generate_paper.sh <commits-list> <evaluation-results-folder> <paper-repository>'
-    echo 'example: generate_paper.sh commits.csv ~/evaluation-results ~/papers/untangling-tools-evaluation'
+if [[ $# -ne 4 ]] ; then
+    echo "usage: $0 <commits-list> <d4j-results-dir> <lltc4j-results-dir> <paper-repository>"
+    echo "example: $0 commits.csv ~/evaluation-results ~/papers/untangling-tools-evaluation"
     exit 1
 fi
 
 export COMMITS_FILE=$1
-export UNTANGLING_DIR=$2
-export PAPER_REPOSITORY=$3
+export D4J_RESULTS_DIR=$2
+export LLTC4J_RESULTS_DIR=$2
+export PAPER_REPOSITORY=$4
 
 if ! [ -f "$COMMITS_FILE" ]; then
     echo "Error: commit file '${COMMITS_FILE}' not found. Exiting."
@@ -42,8 +44,8 @@ export TMP_DIR
 
 # Copy results in a temporary directory to avoid modifying the original results.
 mkdir -p "${TMP_DIR}/evaluation"
-cp -r "${UNTANGLING_DIR}/logs" "${TMP_DIR}/logs"
-cp "${UNTANGLING_DIR}/metrics.csv" "${TMP_DIR}/metrics.csv"
+cp -r "${D4J_RESULTS_DIR}/logs" "${TMP_DIR}/logs"
+cp "${D4J_RESULTS_DIR}/metrics.csv" "${TMP_DIR}/metrics.csv"
 
 # Copy commits that are in the given list.
 copy_results(){
@@ -53,7 +55,7 @@ copy_results(){
   project_name="$(get_project_name_from_url "$vcs_url")"
   short_commit_hash="${commit_hash:0:6}"
 
-  source_dir="${UNTANGLING_DIR}/evaluation/${project_name}_${short_commit_hash}/"
+  source_dir="${D4J_RESULTS_DIR}/evaluation/${project_name}_${short_commit_hash}/"
 
   if [ ! -d "$source_dir" ]; then
     echo "Error: Directory '${source_dir}' not found."
@@ -88,24 +90,10 @@ python analysis/paper/median_performance.py "${TMP_DIR}/decomposition_scores.csv
 analysis/paper/flexeme_no_changes.sh "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
 
 #
-# Tables
+# Untangling statistics
 #
-if ! python analysis/paper/clean_decompositions.py "${TMP_DIR}/evaluation"; then
-  echo "Error: Failed to clean decompositions"
-  exit 1
-fi
-
-UNTANGLED_LINES_FILE="${TMP_DIR}/untangled_lines.csv"
-if ! python src/python/main/analysis/concatenate_untangled_lines.py "${TMP_DIR}/evaluation" > "${UNTANGLED_LINES_FILE}"; then
-  echo "Error: Failed to combine decompositions"
-  exit 1
-fi
-
-D4J_RESULTS_DIR="$HOME/data/d4j-code-changes"
-LLTC4J_RESULTS_DIR="$HOME/data/lltc4j-code-changes"
-
-python src/python/main/analysis/print_group_counts.py --d4j $D4J_RESULTS_DIR --lltc4j $LLTC4J_RESULTS_DIR > "${PAPER_REPOSITORY}/tables/group-count.tex"
-Rscript analysis/paper/group_size.R "${UNTANGLED_LINES_FILE}" "${PAPER_REPOSITORY}/tables/group-size.tex"
+python src/python/main/analysis/print_group_counts.py --d4j "$D4J_RESULTS_DIR" --lltc4j "$LLTC4J_RESULTS_DIR" > "${PAPER_REPOSITORY}/tables/group-count.tex"
+python src/python/main/analysis/print_group_sizes.py --d4j "$D4J_RESULTS_DIR" --lltc4j "$LLTC4J_RESULTS_DIR" > "${PAPER_REPOSITORY}/tables/group-size.tex"
 
 #
 # RQ1
