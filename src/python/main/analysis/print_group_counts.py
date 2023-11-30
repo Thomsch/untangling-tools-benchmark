@@ -39,7 +39,7 @@ def order_rows_by_treatment(dataframe: pd.DataFrame) -> pd.DataFrame:
     return dataframe
 
 
-def prettify_summary(summary_df : pd.DataFrame) -> pd.DataFrame:
+def prettify_summary(df : pd.DataFrame) -> pd.DataFrame:
     """
     Prettifies the given summary dataframe. Specifically:
     - Order rows by treatment
@@ -47,23 +47,23 @@ def prettify_summary(summary_df : pd.DataFrame) -> pd.DataFrame:
     - Capitalize indexes names (treatment, dataset) -> (Treatment, Dataset)
     - Rename column Std_dev into Std. dev.
     """
-    summary_df = order_rows_by_treatment(summary_df)
+    df = order_rows_by_treatment(df)
 
-    summary_df.index = summary_df.index.set_levels(summary_df.index.levels[1].str.capitalize(), level='treatment')
+    df.index = df.index.set_levels(df.index.levels[1].str.capitalize(), level='treatment')
 
     # Rename column Std_dev into Std. dev.
-    summary_df = summary_df.rename(columns={'min': 'Min'})
-    summary_df = summary_df.rename(columns={'max': 'Max'})
-    summary_df = summary_df.rename(columns={'median': 'Median'})
-    summary_df = summary_df.rename(columns={'std': 'Std. dev.'})
+    df = df.rename(columns={'min': 'Min'})
+    df = df.rename(columns={'max': 'Max'})
+    df = df.rename(columns={'median': 'Median'})
+    df = df.rename(columns={'std': 'Std. dev.'})
 
     # Rename column 'dataset' into 'Dataset'
-    summary_df = summary_df.rename_axis(index={'dataset': 'Dataset'})
+    df = df.rename_axis(index={'dataset': 'Dataset'})
 
     # Rename column 'treatment' into 'Treatment'
-    summary_df = summary_df.rename_axis(index={'treatment': 'Treatment'})
+    df = df.rename_axis(index={'treatment': 'Treatment'})
 
-    return summary_df
+    return df
 
 
 if __name__ == "__main__":
@@ -92,25 +92,25 @@ if __name__ == "__main__":
     column_names_evaluation = ["dataset"] + column_names_dataset
     concatenate_df = pd.DataFrame(columns=column_names_evaluation)
 
-    for dataset in [args.d4j, args.lltc4j]:
-        if dataset is None:
+    for dataset_dir in [args.d4j, args.lltc4j]:
+        if dataset_dir is None:
             continue
 
-        evaluation_path = os.path.join(dataset, "evaluation")
+        evaluation_path = os.path.join(dataset_dir, "evaluation")
         if not os.path.exists(evaluation_path):
             raise ValueError(f"Directory {evaluation_path} does not exist.")
 
         untangled_lines_dataset_df = concatenate_untangled_lines_for_dataset(evaluation_path)
-        untangled_lines_dataset_df["dataset"] = dataset_name_map[dataset]
+        untangled_lines_dataset_df["dataset"] = dataset_name_map[dataset_dir]
         concatenate_df = pd.concat([concatenate_df, untangled_lines_dataset_df], ignore_index=True)
 
     # Calculate the number of distinct groups per tool in each commit.
-    group_count = concatenate_df.groupby(['dataset', 'project', 'bug_id', 'treatment']).agg(group_count=('group', 'nunique'))
+    group_count_df = concatenate_df.groupby(['dataset', 'project', 'bug_id', 'treatment']).agg(group_count=('group', 'nunique'))
 
     # Calculate summary statistics per treatment in each dataset.
-    summary = group_count.groupby(['dataset', 'treatment']).agg(['min', 'max', 'median', 'std'])
+    summary_df = group_count_df.groupby(['dataset', 'treatment']).agg(['min', 'max', 'median', 'std'])
 
-    summary = prettify_summary(summary)
-    print(summary.style
+    summary_df = prettify_summary(summary_df)
+    print(summary_df.style
           .format(precision=0)
           .to_latex(multirow_align='t', clines="skip-last;data", hrules=True))
