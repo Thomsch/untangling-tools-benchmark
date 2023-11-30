@@ -52,7 +52,10 @@ def prettify_summary(summary_df : pd.DataFrame) -> pd.DataFrame:
     summary_df.index = summary_df.index.set_levels(summary_df.index.levels[1].str.capitalize(), level='treatment')
 
     # Rename column Std_dev into Std. dev.
-    summary_df = summary_df.rename(columns={'Std_dev': 'Std. dev.'})
+    summary_df = summary_df.rename(columns={'min': 'Min'})
+    summary_df = summary_df.rename(columns={'max': 'Max'})
+    summary_df = summary_df.rename(columns={'median': 'Median'})
+    summary_df = summary_df.rename(columns={'std': 'Std. dev.'})
 
     # Rename column 'dataset' into 'Dataset'
     summary_df = summary_df.rename_axis(index={'dataset': 'Dataset'})
@@ -105,12 +108,7 @@ if __name__ == "__main__":
     group_count = concatenate_df.groupby(['dataset', 'project', 'bug_id', 'treatment']).agg(group_count=('group', 'nunique'))
 
     # Calculate summary statistics per treatment in each dataset.
-    summary = group_count.groupby(['dataset', 'treatment']).agg(
-        Min=pd.NamedAgg(column='group_count', aggfunc='min'),
-        Max=pd.NamedAgg(column='group_count', aggfunc='max'),
-        Median=pd.NamedAgg(column='group_count', aggfunc='median'),
-        Std_dev=pd.NamedAgg(column='group_count', aggfunc='std')
-    )
+    summary = group_count.groupby(['dataset', 'treatment']).agg(['min', 'max', 'median', 'std'])
 
     summary = prettify_summary(summary)
     print(summary.style
