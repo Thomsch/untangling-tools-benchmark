@@ -1,0 +1,29 @@
+Project commons-net.git Commit 4564a17fb24a851771f83a614d0bde5bae05bcfa
+{'documentation', 'bugfix'}
+
+Project commons-math Commit 264851fcfcad33513ba4f86441dbca3581134a66
+{'documentation', 'test', 'whitespace', 'bugfix', 'None'}
+
+Project commons-math Commit fdbdb5eba8ae678d4c696878bfecbc12d3ed43c8
+{'no_bugfix', 'documentation', 'whitespace'}
+
+Project commons-configuration.git Commit a32f8b913901de4e6c5090f0fd33b0c9cda02ef9
+{'documentation', 'whitespace', 'test', 'bugfix'}
+
+Project commons-scxml.git Commit 7a40cd30e35e0117c21800914d27307cb24a5241
+{'documentation', 'test', 'whitespace', 'bugfix'}
+
+Project commons-net.git Commit 9fb2ca62d1cd49e037d14fb35a00d75a6266a8ea
+{'None', 'documentation', 'whitespace', 'bugfix'}
+
+Project commons-scxml.git Commit b39a4adf6f31875e375435ca720a8d2e06ebcc53
+{'documentation', 'test', 'bugfix'}
+
+Project giraph.git Commit 864b3bfdf8f5e73cc4150fd5ca931e335c0511a1
+{'no_bugfix', 'documentation', 'bugfix'}
+
+Project commons-configuration.git Commit 9712293bdafda3927b73e832d04ba8641946745e
+{'bugfix'}
+
+Project commons-scxml.git Commit f9641fae3def8457ac754e657045fe8cd1456d62
+{'None', 'documentation', 'whitespace', 'bugfix'}
