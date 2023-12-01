@@ -33,7 +33,6 @@ mkdir -p "$workdir"
 mkdir -p "${metrics_dir}"
 mkdir -p "${logs_dir}"
 
-echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_metrics.log"
 if [ -n "${DEBUG}" ] ; then
   echo "Contents of ${logs_dir}:"
   ls -al "${logs_dir}"
@@ -44,18 +43,19 @@ generate_commit_metrics() {
   local project="$1"
   local vid="$2"
   export repository="${workdir}/${project}_${vid}"
+  local log_file="${logs_dir}/${project}_${vid}_metrics.log"
   START="$(date +%s.%N)"  # Record start time for bug commit metrics generation
   
   if [ -n "${DEBUG}" ] ; then
-    echo "about  to call: ./src/bash/main/get_metrics_for_d4j_bug.sh $project $vid $out_dir $repository > ${logs_dir}/${project}_${vid}_metrics.log"
+    echo "about  to call: ./src/bash/main/get_metrics_for_d4j_bug.sh $project $vid $out_dir $repository > $log_file"
   fi
-  ./src/bash/main/get_metrics_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_metrics.log" 2>&1
+  ./src/bash/main/get_metrics_for_d4j_bug.sh "$project" "$vid" "$out_dir" "$repository" > "$log_file" 2>&1
   ret_code=$?
   metrics_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}"
+  printf "%-20s %s %.0fs [%s] \n" "${project}_${vid}" "${metrics_status_string}" "${ELAPSED}" "$log_file"
 }
 
 export -f generate_commit_metrics

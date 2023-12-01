@@ -48,22 +48,21 @@ export logs_dir="${out_dir}/logs"
 mkdir -p "$workdir"
 mkdir -p "$logs_dir"
 
-echo "$0: logs will be stored in ${logs_dir}/<project>_<bug_id>_decompose.log"
-echo ""
-
 export PYTHONHASHSEED=0
 untangle_with_tools(){
   local project="$1"
   local vid="$2"
   export repository="${workdir}/${project}_${vid}"
+  local log_file="${logs_dir}/${project}_${vid}_decompose.log"
+
   START="$(date +%s.%N)"   # Record start time for bug decomposition
-  ./src/bash/main/untangle_with_tools.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_decompose.log" 2>&1
+  ./src/bash/main/untangle_with_tools.sh "$project" "$vid" "$out_dir" "$repository" > "$log_file" 2>&1
   ret_code=$?
   decomposition_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}"
+  printf "%-20s %s %.0fs [%s]\n" "${project}_${vid}" "${decomposition_status_string}" "${ELAPSED}" "$log_file"
 }
 
 export -f untangle_with_tools
