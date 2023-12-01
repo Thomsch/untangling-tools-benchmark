@@ -47,9 +47,9 @@ summarise_model_all_variables <- function(data, output.path, output.filename) {
   
   if("Tool" %in% colnames(data))
   {
-    model <- lm(performance ~ Tool + files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=data)
+    model <- lm(performance ~ Tool + files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines + tangled_hunks, data=data)
   } else {
-    model <- lm(performance ~ files_updated + test_files_updated + hunks + average_hunk_size + code_changed_lines + noncode_changed_lines + tangled_lines + tangled_hunks, data=data)
+    model <- lm(performance ~ files_updated + hunks + average_hunk_size + code_changed_lines + tangled_lines + tangled_hunks, data=data)
   }
   
   capture.output(summary(model), file=file.path(output.path, output.filename))
