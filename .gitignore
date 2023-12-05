@@ -36,3 +36,6 @@ untangling-tools-benchmark.Rproj
 .RData
 
 .Rhistory
+
+# Ignore untangling and analysis log files
+logs/
