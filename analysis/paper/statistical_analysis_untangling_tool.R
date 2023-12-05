@@ -10,6 +10,7 @@
 # The results are saved as text data. The output file contains
 # the output of the summary() and cohen.d() functions.
 
+library(librarian)
 library(tidyverse)
 library(car)
 library(ggpubr)
@@ -18,6 +19,7 @@ library(effsize)
 library(lmerTest)
 library(flexplot)
 library(rsq)
+shelf(broom)
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -49,5 +51,8 @@ sink(outputFile)
 summary(model)
 #estimates(model_simple)
 
+tidy(model)
+
 cohen.d(data_long$Performance[data_long$Tool == "SmartCommit"], data_long$Performance[data_long$Tool == "Flexeme"])
 sink()
+
