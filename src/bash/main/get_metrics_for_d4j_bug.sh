@@ -8,7 +8,7 @@
 # Writes the results to a {<project>_<id>}.csv file (with 1 row) in <out_dir>/metrics folder.
 
 #    CSV header:
-#    {d4j_project,d4j_bug_id,files_updated,test_files_updated,hunks,average_hunk_size,lines_updated,tangled_lines_count,tangled_hunks_count}
+#    {d4j_project,d4j_bug_id,files_updated,hunks,average_hunk_size,lines_updated,tangled_lines_count,tangled_hunks_count}
 
 set -o errexit    # Exit immediately if a command exits with a non-zero status
 set -o nounset    # Exit if script tries to use an uninitialized variable
@@ -61,29 +61,29 @@ else
 fi
 
 # Compute version-specific metrics
-whitespace_statistics_csv="${metrics_dir}/${project}_${vid}_whitespace.csv"
-clean_statistics_csv="${metrics_dir}/${project}_${vid}_clean.csv"
-
-if [ -f "$whitespace_statistics_csv" ]; then
-    echo 'Calculating whitespace statistics .................................................. CACHED'
-else
-    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "whitespace" > "$whitespace_statistics_csv"
-    then
-        echo 'Calculating whitespace statistics .................................................. OK'
-    else
-        echo 'Calculating whitespace statistics .................................................. FAIL'
-        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
-    fi
-fi
-
-if [ -f "$clean_statistics_csv" ]; then
-    echo 'Calculating clean statistics .................................................. CACHED'
-else
-    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "clean" > "$clean_statistics_csv"
-    then
-        echo 'Calculating clean statistics .................................................. OK'
-    else
-        echo 'Calculating clean statistics .................................................. FAIL'
-        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
-    fi
-fi
+#whitespace_statistics_csv="${metrics_dir}/${project}_${vid}_whitespace.csv"
+#clean_statistics_csv="${metrics_dir}/${project}_${vid}_clean.csv"
+#
+#if [ -f "$whitespace_statistics_csv" ]; then
+#    echo 'Calculating whitespace statistics .................................................. CACHED'
+#else
+#    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "whitespace" > "$whitespace_statistics_csv"
+#    then
+#        echo 'Calculating whitespace statistics .................................................. OK'
+#    else
+#        echo 'Calculating whitespace statistics .................................................. FAIL'
+#        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
+#    fi
+#fi
+#
+#if [ -f "$clean_statistics_csv" ]; then
+#    echo 'Calculating clean statistics .................................................. CACHED'
+#else
+#    if python3 src/python/main/summary_statistics.py "$project" "$vid" "$repository" "clean" > "$clean_statistics_csv"
+#    then
+#        echo 'Calculating clean statistics .................................................. OK'
+#    else
+#        echo 'Calculating clean statistics .................................................. FAIL'
+#        exit 1        # Return exit code 1 to mark this run as FAIl when called in compute_metrics.sh
+#    fi
+#fi

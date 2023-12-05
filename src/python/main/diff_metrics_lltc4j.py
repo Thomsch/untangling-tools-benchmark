@@ -80,8 +80,8 @@ def main():
     average_hunk_size = (code_changed_lines / hunks_count) if hunks_count != 0 else ""
 
     print(
-        f"{project_name},{commit_hash},{files_updated},{test_files_updated},"
-        f"{hunks_count},{average_hunk_size},{code_changed_lines},{all_changed_lines - code_changed_lines},"
+        f"{project_name},{commit_hash},{files_updated}"
+        f"{hunks_count},{average_hunk_size},{code_changed_lines}"
         f"0,0"  # TODO: No tangled lines/hunks for now. Used to be tangle_counts(repository_path)
     )
 

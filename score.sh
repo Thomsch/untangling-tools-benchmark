@@ -43,17 +43,18 @@ echo ""
 score_bug(){
   local project="$1"
   local vid="$2"
+  local log_file="${logs_dir}/${project}_${vid}_score.log"
 
   export repository="${workdir}/${project}_${vid}"
   START="$(date +%s.%N)"  # Record start time for bug scoring
   
-  ./src/bash/main/score_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${logs_dir}/${project}_${vid}_score.log" 2>&1
+  ./src/bash/main/score_bug.sh "$project" "$vid" "$out_dir" "$repository" > "${log_file}" 2>&1
   ret_code=$?
   scoring_status_string="$([ $ret_code -ne 0 ] && echo "FAIL" || echo "OK")"
   END="$(date +%s.%N)"
   # Must use `bc` because the computation is on floating-point numbers.
   ELAPSED="$(echo "$END - $START" | bc)"
-  printf "%-20s %s (time: %.0fs)\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}"
+  printf "%-20s %s %.0fs [%s]\n" "${project}_${vid}" "${scoring_status_string}" "${ELAPSED}" "${log_file}"
 }
 
 export -f score_bug
