@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Generate the results for the paper automatically.
+# Generates the results for the paper automatically.
+#
 # Arguments:
 # - $1: The directory where the untangling evaluation results for D4J are stored.
 # - $2: The directory where the untangling evaluation results are LLTC4J stored.
@@ -25,26 +26,7 @@ export SCRIPT_DIR
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPT_DIR/../src/bash/main/lltc4j/lltc4j_util.sh"
 
-copy_dataset() {
-  # Temporary directory for intermediate results
-  TMP_DIR=$(mktemp -d)
-  export TMP_DIR
-
-  # Copy results in a temporary directory to avoid modifying the original results.
-  mkdir -p "${TMP_DIR}/evaluation"
-  cp -r "${D4J_RESULTS_DIR}/logs" "${TMP_DIR}/logs"
-  cp "${D4J_RESULTS_DIR}/metrics.csv" "${TMP_DIR}/metrics.csv"
-
-  export -f copy_results
-  tail -n+2 "$COMMITS_FILE" | parallel --colsep "," copy_results {}
-
-  # Generate the aggregated scores for the given commits.
-  if ! cat "${TMP_DIR}/evaluation"/*/scores.csv > "${TMP_DIR}/decomposition_scores.csv" ; then
-    echo "No \"scores.csv\" files found under ${TMP_DIR}."
-    exit 1
-  fi
-}
-
+# Implementation of the script's logic. See script's description for more details.
 main() {
   check_directory "$D4J_RESULTS_DIR"
   check_directory "$LLTC4J_RESULTS_DIR"
@@ -60,7 +42,6 @@ main() {
   # Data
   #
   python analysis/paper/count_missing_results.py "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
-
   analysis/paper/flexeme_no_changes.sh "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
   
   #
@@ -85,17 +66,31 @@ main() {
   # RQ2
   #
   Rscript analysis/paper/statistical_analysis_commit_metrics.R "${TMP_DIR}/decomposition_scores.csv" "${TMP_DIR}/metrics.csv" "${PAPER_REPOSITORY}/data"
-
-  #
-  # Manual Evaluation
-  #
-  # TODO: Generate "${TMP_DIR}/changed_lines.csv" with `line_count.sh`
-  # Rscript analysis/paper/manual_evaluation.R "analysis/manual/d4j-manual-bugs.csv" "${TMP_DIR}/changed_lines.csv" "${TMP_DIR}/combined_decompositions.csv" "${PAPER_REPOSITORY}/tables/manual-evaluation.tex"
 }
 
+# Copy the results of a dataset to a temporary directory.
+copy_dataset() {
+  # Temporary directory for intermediate results
+  TMP_DIR=$(mktemp -d)
+  export TMP_DIR
+
+  # Copy results in a temporary directory to avoid modifying the original results.
+  mkdir -p "${TMP_DIR}/evaluation"
+  cp -r "${D4J_RESULTS_DIR}/logs" "${TMP_DIR}/logs"
+  cp "${D4J_RESULTS_DIR}/metrics.csv" "${TMP_DIR}/metrics.csv"
+
+  export -f copy_commit_results
+  tail -n+2 "$COMMITS_FILE" | parallel --colsep "," copy_commit_results {}
+
+  # Generate the aggregated scores for the given commits.
+  if ! cat "${TMP_DIR}/evaluation"/*/scores.csv > "${TMP_DIR}/decomposition_scores.csv" ; then
+    echo "No \"scores.csv\" files found under ${TMP_DIR}."
+    exit 1
+  fi
+}
 
 # Copy commits that are in the given list.
-copy_results(){
+copy_commit_results(){
   local vcs_url="$1" # The URL of the git repository for the project.
   local commit_hash="$2" # The commit hash to untangle.
   local project_name
@@ -112,6 +107,7 @@ copy_results(){
   cp -r "${source_dir}" "${TMP_DIR}/evaluation/"
 }
 
+# Check that the given path is an existing directory. Exit otherwise.
 check_directory() {
   if [ ! -d "$1" ]; then
     echo "Error: '$1' is not an existing directory. Exiting."
@@ -119,6 +115,7 @@ check_directory() {
   fi
 }
 
+# Check that the given path is an existing file. Exit otherwise.
 check_file() {
   if ! [ -f "$1" ]; then
     echo "Error: score file '$1' is not an existing file. Exiting."
