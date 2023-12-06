@@ -27,6 +27,23 @@ def print_performance_table(dataframe: pd.DataFrame):
           .to_latex(multirow_align='t', clines="skip-last;data", hrules=True))
 
 
+def print_performance_commands(df_performance, aggregator_operation):
+    """
+    Print the commands to define the performance for each untangling tool on stderr.
+    The command names are in the format <dataset><Tool><Aggregator>.
+
+    :param df_performance: The dataframe containing the performance values.
+    :param aggregator_operation: The name of the aggregator operation used to calculate the performance.
+    """
+    for dataset in df_performance.index:
+        for tool in df_performance.columns:
+            value = df_performance.loc[dataset, tool].round(PRECISION)
+            dataset_name_for_latex = dataset.lower().replace('4', 'f')
+            tool_name_for_latex = tool.capitalize()
+            aggreator_for_latex = aggregator_operation.capitalize()
+            print(f"\\newcommand\\{dataset_name_for_latex}{tool_name_for_latex}{aggreator_for_latex}{{{value}\\xspace}}", file=sys.stderr)
+
+
 def load_dataframes(*dataset_files: str, names: List[str] = None) -> pd.DataFrame:
     """
     Loads the dataframes from the given files and returns them as a single dataframe.
@@ -69,21 +86,6 @@ def clean_labels(dataframe: pd.DataFrame):
     dataframe = dataframe[["Flexeme", "SmartCommit", "Filename"]]
 
     return dataframe
-
-
-def print_performance_commands(df_performance, aggreator):
-    """
-    Print the commands to define the performance for each untangling tool on stderr.
-    The command names are in the format \<dataset><Tool><aggregator>.
-    """
-    for dataset in ["Defects4J", "LLTC4J"]:
-        for tool in ["SmartCommit", "Flexeme", "Filename"]:
-            value = df_performance.loc[dataset, tool].round(PRECISION)
-            dataset_name_for_latex = dataset.lower().replace('4', 'f')
-            tool_name_for_latex = tool.capitalize()
-            aggreator_for_latex = aggreator.capitalize()
-            print(f"\\newcommand\\{dataset_name_for_latex}{tool_name_for_latex}{aggreator_for_latex}{{{value}\\xspace}}", file=sys.stderr)
-
 
 
 def main(d4j_file:str, lltc4j_file:str):
