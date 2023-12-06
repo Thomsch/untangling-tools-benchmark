@@ -25,11 +25,7 @@ export SCRIPT_DIR
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 . "$SCRIPT_DIR/../src/bash/main/lltc4j/lltc4j_util.sh"
 
-main() {
-  check_directory "$D4J_RESULTS_DIR"
-  check_directory "$LLTC4J_RESULTS_DIR"
-  check_directory "$PAPER_REPOSITORY"
-
+copy_dataset() {
   # Temporary directory for intermediate results
   TMP_DIR=$(mktemp -d)
   export TMP_DIR
@@ -47,20 +43,19 @@ main() {
     echo "No \"scores.csv\" files found under ${TMP_DIR}."
     exit 1
   fi
-  
+}
+
+main() {
+  check_directory "$D4J_RESULTS_DIR"
+  check_directory "$LLTC4J_RESULTS_DIR"
+  check_directory "$PAPER_REPOSITORY"
+
   D4J_SCORE_FILE="${D4J_RESULTS_DIR}/decomposition_scores.csv"
   LLTC4J_SCORE_FILE="${LLTC4J_RESULTS_DIR}/decomposition_scores.csv"
 
-  if ! [ -f "$D4J_SCORE_FILE" ]; then
-    echo "Error: D4J score file '${D4J_SCORE_FILE}' not found. Exiting."
-    exit 1
-  fi
-
-  if ! [ -f "$LLTC4J_SCORE_FILE" ]; then
-    echo "Error: LLTC4J score file '${LLTC4J_SCORE_FILE}' not found. Exiting."
-    exit 1
-  fi
-
+  check_file "$D4J_SCORE_FILE"
+  check_file "$LLTC4J_SCORE_FILE"
+  
   #
   # Data
   # Directory for the data that is not importable directly into the paper.
@@ -125,6 +120,13 @@ copy_results(){
 check_directory() {
   if [ ! -d "$1" ]; then
     echo "Error: '$1' is not an existing directory. Exiting."
+    exit 1
+  fi
+}
+
+check_file() {
+  if ! [ -f "$1" ]; then
+    echo "Error: score file '$1' is not an existing file. Exiting."
     exit 1
   fi
 }
