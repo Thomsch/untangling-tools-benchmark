@@ -74,6 +74,19 @@ if ! cat "${TMP_DIR}/evaluation"/*/scores.csv > "${TMP_DIR}/decomposition_scores
   exit 1
 fi
 
+D4J_SCORE_FILE="${D4J_RESULTS_DIR}/decomposition_scores.csv"
+LLTC4J_SCORE_FILE="${LLTC4J_RESULTS_DIR}/decomposition_scores.csv"
+
+if ! [ -f "$D4J_SCORE_FILE" ]; then
+    echo "Error: D4J score file '${D4J_SCORE_FILE}' not found. Exiting."
+    exit 1
+fi
+
+if ! [ -f "$LLTC4J_SCORE_FILE" ]; then
+    echo "Error: LLTC4J score file '${LLTC4J_SCORE_FILE}' not found. Exiting."
+    exit 1
+fi
+
 #
 # Data
 # Directory for the data that is not importable directly into the paper.
@@ -84,10 +97,12 @@ fi
 # Counts the total number of D4J bugs that were evaluated and how many decomposition failed per tool
 python analysis/paper/count_missing_results.py "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
 
-# Generates the performance statistics
-python analysis/paper/median_performance.py "${TMP_DIR}/decomposition_scores.csv" > "${PAPER_REPOSITORY}/data/performances.tex"
-
 analysis/paper/flexeme_no_changes.sh "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
+
+#
+# Untangling performance
+#
+python src/python/main/analysis/print_median_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" > "${PAPER_REPOSITORY}/tables/tool-performance.tex" 2> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
 
 #
 # Untangling statistics
