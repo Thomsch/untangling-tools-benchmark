@@ -16,13 +16,13 @@ inputFile = args[1]
 outputFile = args[2]
 
 
-data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'Commit', 'SmartCommit', 'Flexeme', 'File_Untangling'))
+data <- read.csv(inputFile, header = FALSE, col.names = c('Project', 'CommitId', 'SmartCommit', 'Flexeme', 'File-based'))
 data$Commit <- as_factor(data$Commit)
 
 # Convert to long format
-data_long = pivot_longer(data, cols = c("Flexeme", "SmartCommit", "File_Untangling"), names_to = 'Tool', values_to = 'Performance')
-data_long$Tool <- factor(data_long$Tool, levels = c("Flexeme", "SmartCommit", "File_Untangling"))
+data_long = pivot_longer(data, cols = c("Flexeme", "SmartCommit", "File-based"), names_to = 'Tool', values_to = 'Performance')
+data_long$Tool <- factor(data_long$Tool, levels = c("Flexeme", "SmartCommit", "File-based"))
 
 pdf(outputFile)
-flexplot(Performance ~ Tool, data = data_long) + scale_x_discrete(limits = c("Flexeme", "SmartCommit", "File_Untangling"))
+flexplot(Performance ~ Tool, data = data_long) + scale_x_discrete(limits = c("Flexeme", "SmartCommit", "File-based"))
 dev.off()

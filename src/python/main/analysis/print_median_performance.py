@@ -39,7 +39,7 @@ def print_performance_commands(df_performance, aggregator_operation):
         for tool in df_performance.columns:
             value = df_performance.loc[dataset, tool].round(PRECISION)
             dataset_name_for_latex = dataset.lower().replace('4', 'f')
-            tool_name_for_latex = tool.capitalize()
+            tool_name_for_latex = tool.capitalize().replace('-', '')
             aggreator_for_latex = aggregator_operation.capitalize()
             print(f"\\newcommand\\{dataset_name_for_latex}{tool_name_for_latex}{aggreator_for_latex}{{{value}\\xspace}}", file=sys.stderr)
 
@@ -79,11 +79,11 @@ def clean_labels(dataframe: pd.DataFrame):
     dataframe = dataframe.rename(columns={
         "smartcommit_rand_index": "SmartCommit",
         "flexeme_rand_index": "Flexeme",
-        "filename_rand_index": "Filename",
+        "filename_rand_index": "File-based",
     })
 
     # Reorder the columns
-    dataframe = dataframe[["Flexeme", "SmartCommit", "Filename"]]
+    dataframe = dataframe[["Flexeme", "SmartCommit", "File-based"]]
 
     return dataframe
 
