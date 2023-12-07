@@ -57,6 +57,9 @@ def prettify_summary(df : pd.DataFrame) -> pd.DataFrame:
     # Rename index 'Filename' into 'File-based'
     df = df.rename_axis(index={'filename': 'File-based'})
 
+    # Rename index 'Truth' into 'Ground truth'
+    df = df.rename_axis(index={'truth': 'Ground truth'})
+
     # Rename column Std_dev into Std. dev.
     df = df.rename(columns={'min': 'Min'})
     df = df.rename(columns={'max': 'Max'})
