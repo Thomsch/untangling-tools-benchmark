@@ -45,12 +45,17 @@ def prettify_summary(df : pd.DataFrame) -> pd.DataFrame:
     Prettifies the given summary dataframe. Specifically:
     - Order rows by treatment
     - Captialize treatment names (truth, flexeme, smartcommit, filename) -> (Truth, Flexeme, Smartcommit, Filename)
+    - Rename index 'Filename' into 'File-based'
     - Capitalize indexes names (treatment, dataset) -> (Treatment, Dataset)
     - Rename column Std_dev into Std. dev.
     """
     df = order_rows_by_treatment(df)
 
+    # Capitalize treatment names
     df.index = df.index.set_levels(df.index.levels[1].str.capitalize(), level='treatment')
+
+    # Rename index 'Filename' into 'File-based'
+    df = df.rename_axis(index={'filename': 'File-based'})
 
     # Rename column Std_dev into Std. dev.
     df = df.rename(columns={'min': 'Min'})

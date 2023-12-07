@@ -47,7 +47,7 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     expected_standard_output = (
         "\\begin{tabular}{lrrr}\n"
         "\\toprule\n"
-        " & Flexeme & SmartCommit & Filename \\\\\n"
+        " & Flexeme & SmartCommit & File-based \\\\\n"
             "Dataset &  &  &  \\\\\n"
             "\\midrule\n"
         "Defects4J & 0.65 & \\bfseries 0.75 & 0.55 \\\\\n"
@@ -60,10 +60,10 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     expected_error_output = (
         "\\newcommand\\defectsfjFlexemeMedian{0.65\\xspace}\n"
         "\\newcommand\\defectsfjSmartcommitMedian{0.75\\xspace}\n"
-        "\\newcommand\\defectsfjFilenameMedian{0.55\\xspace}\n"
+        "\\newcommand\\defectsfjFilebasedMedian{0.55\\xspace}\n"
         "\\newcommand\\lltcfjFlexemeMedian{0.4\\xspace}\n"
         "\\newcommand\\lltcfjSmartcommitMedian{0.8\\xspace}\n"
-        "\\newcommand\\lltcfjFilenameMedian{0.65\\xspace}\n"
+        "\\newcommand\\lltcfjFilebasedMedian{0.65\\xspace}\n"
     )
 
     assert captured.out == expected_standard_output
