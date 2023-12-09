@@ -1,9 +1,9 @@
 """
-Tests for print_median_performance.py
+Tests for print_performance.py
 """
 import pytest
 
-import src.python.main.analysis.print_median_performance as print_median_performance
+import src.python.main.analysis.print_performance as print_median_performance
 
 
 @pytest.fixture
@@ -35,12 +35,11 @@ P2,aef4d3,0.9,0.5,0.7
     return str(file)
 
 
-
 def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores)
+    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "median")
 
     captured = capfd.readouterr()
 
@@ -64,6 +63,39 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
         "\\newcommand\\lltcfjFlexemeMedian{0.4\\xspace}\n"
         "\\newcommand\\lltcfjSmartcommitMedian{0.8\\xspace}\n"
         "\\newcommand\\lltcfjFilebasedMedian{0.65\\xspace}\n"
+    )
+
+    assert captured.out == expected_standard_output
+    assert captured.err == expected_error_output
+
+def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
+    """
+    Tests that the performance metrics are calculated correctly.
+    """
+    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean")
+
+    captured = capfd.readouterr()
+
+    expected_standard_output = (
+        "\\begin{tabular}{lrrr}\n"
+        "\\toprule\n"
+        " & Flexeme & SmartCommit & File-based \\\\\n"
+            "Dataset &  &  &  \\\\\n"
+            "\\midrule\n"
+        "Defects4J & 0.65 & \\bfseries 0.75 & 0.55 \\\\\n"
+            "LLTC4J & 0.40 & \\bfseries 0.68 & 0.52 \\\\\n"
+            "\\bottomrule\n"
+        "\\end{tabular}\n"
+        "\n"
+    )
+
+    expected_error_output = (
+        "\\newcommand\\defectsfjFlexemeMean{0.65\\xspace}\n"
+        "\\newcommand\\defectsfjSmartcommitMean{0.75\\xspace}\n"
+        "\\newcommand\\defectsfjFilebasedMean{0.55\\xspace}\n"
+        "\\newcommand\\lltcfjFlexemeMean{0.4\\xspace}\n"
+        "\\newcommand\\lltcfjSmartcommitMean{0.68\\xspace}\n"
+        "\\newcommand\\lltcfjFilebasedMean{0.52\\xspace}\n"
     )
 
     assert captured.out == expected_standard_output

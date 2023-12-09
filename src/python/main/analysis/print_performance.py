@@ -19,7 +19,7 @@ import pandas as pd
 PRECISION = 2
 
 
-def main(d4j_file:str, lltc4j_file:str):
+def main(d4j_file:str, lltc4j_file:str, aggregator:str):
     """
     Implementation of the script's logic. See the script's documentation for details.
 
@@ -31,18 +31,17 @@ def main(d4j_file:str, lltc4j_file:str):
     df_scores = load_dataframes(d4j_file, lltc4j_file, names=["Defects4J", "LLTC4J"])
 
     # calculate performance
-    performance_operator='median'
     df_performance = df_scores.groupby(["dataset"]).agg(
         {
-            "smartcommit_rand_index": performance_operator,
-            "flexeme_rand_index": performance_operator,
-            "filename_rand_index": performance_operator,
+            "smartcommit_rand_index": aggregator,
+            "flexeme_rand_index": aggregator,
+            "filename_rand_index": aggregator,
         }
     )
     df_performance = clean_labels(df_performance)
 
     # print performance in latex format
-    print_performance_commands(df_performance, performance_operator)
+    print_performance_commands(df_performance, aggregator)
     print_performance_table(df_performance)
 
 def print_performance_table(dataframe: pd.DataFrame):
@@ -135,5 +134,12 @@ if __name__ == "__main__":
         metavar="LLTC4J_SCORE_FILE",
     )
 
+    parser.add_argument(
+        "--aggregator",
+        help="The aggregator operation used to calculate the performance. e.g., median, mean",
+        required=True,
+        metavar="AGGREGATOR",
+    )
+
     args = parser.parse_args()
-    main(args.d4j, args.lltc4j)
+    main(args.d4j, args.lltc4j, args.aggregator)
