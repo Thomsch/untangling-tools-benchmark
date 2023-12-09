@@ -53,8 +53,6 @@ def assemble_tangled_metrics(commit_metrics_file: str, results_dir: str, dataset
 
     if df_metrics.isna().any().any():
         print("Warning: The DataFrame contains NA values. They will be dropped", file=sys.stderr)
-        print(df_metrics.to_string(), file=sys.stderr)  # Optionally, you can print the locations of NaN values in the DataFrame
-        # drop rows with NaN values
         print(f"Before {df_metrics.shape}", file=sys.stderr)
         df_metrics = df_metrics.dropna()
         print(f"After {df_metrics.shape}", file=sys.stderr)
@@ -92,7 +90,7 @@ def count_tangled_levels(df: pd.DataFrame, exclusive_levels=False) -> pd.DataFra
             result_df['tangled_level'] = np.where((result_df[level] > 0) & (result_df['tangled_level'].isnull()), level, result_df['tangled_level'])
 
         result_df['tangled_level'] = result_df['tangled_level'].astype(CategoricalDtype(categories=levels, ordered=True))
-        result_df = result_df.groupby('dataset')['tangled_level'].value_counts(sort=False).reset_index()
+        result_df = result_df[['dataset', 'tangled_level']].groupby('dataset').value_counts(sort=False).reset_index(name='count')
         result_df = result_df.rename(columns={'tangled_level': 'tangled_metric'})
     else:
         result_df = result_df.groupby('dataset').agg(lambda x: np.count_nonzero(x))
