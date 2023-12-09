@@ -75,6 +75,8 @@ def one_tangled_file_and_one_not_tangled_file() -> pd.DataFrame:
         }
 ))
 
+# TODO: Tangled patch only if no tangled files. One level cannot be tangled if the previous level is not tangled.
+
 def test_is_tangled_patch(tangled_patch, single_concern_patch):
     """
     Test the compute_tangled_patch function.
