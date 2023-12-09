@@ -14,7 +14,7 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 if [[ $# -ne 3 ]] ; then
     echo "usage: $0 <d4j-results-dir> <lltc4j-results-dir> <paper-repository>"
-    echo "example: $0 ~/d4j-evaluation ~/lltc4j-evaluation ~/papers/untangling-tools-evaluation"
+    echo "example: $0 ~/d4j-evaluation ~/lltc4j-evaluation ~/path/to/paper/repo/"
     exit 1
 fi
 
