@@ -96,7 +96,6 @@ def count_tangled_levels(df: pd.DataFrame, exclusive_levels=False) -> pd.DataFra
         result_df = result_df.rename(columns={'tangled_level': 'tangled_metric'})
     else:
         result_df = result_df.groupby('dataset').agg(lambda x: np.count_nonzero(x))
-        print(result_df)
         result_df = result_df.reset_index().melt(id_vars=['dataset']).rename(columns={'variable': 'tangled_metric', 'value': 'count'})
 
     result_df['tangled_metric'] = result_df['tangled_metric'].astype(CategoricalDtype(categories=levels, ordered=True))
