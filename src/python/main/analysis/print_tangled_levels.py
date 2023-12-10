@@ -90,7 +90,7 @@ def count_tangled_levels(df: pd.DataFrame, exclusive_levels=False) -> pd.DataFra
             result_df['tangled_level'] = np.where((result_df[level] > 0) & (result_df['tangled_level'].isnull()), level, result_df['tangled_level'])
 
         result_df['tangled_level'] = result_df['tangled_level'].astype(CategoricalDtype(categories=levels, ordered=True))
-        result_df = result_df[['dataset', 'tangled_level']].groupby('dataset').value_counts(sort=False).reset_index(name='count')
+        result_df = result_df[['dataset', 'tangled_level']].groupby('dataset').value_counts(sort=False, normalize=True).reset_index(name='count')
         result_df = result_df.rename(columns={'tangled_level': 'tangled_metric'})
     else:
         result_df = result_df.groupby('dataset').agg(lambda x: np.count_nonzero(x))
@@ -157,7 +157,7 @@ def format_for_latex(dataframe: pd.DataFrame) -> pd.DataFrame:
     # Set the index to be tangled_metric and rename it to 'Tangled metric'
     dataframe = dataframe.set_index('tangled_metric')
     dataframe.index.name = 'Tangled metric'
-
+    
     return dataframe
 
 
