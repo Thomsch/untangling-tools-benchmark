@@ -48,7 +48,10 @@ main() {
   # Untangling performance
   #
   python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'mean' > "${PAPER_REPOSITORY}/tables/tool-performance.tex" 2> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  # shellcheck disable=SC2129
   python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'median' > /dev/null 2>> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'mean' --overall True >> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'median' --overall True >> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
 
   #
   # Untangling statistics

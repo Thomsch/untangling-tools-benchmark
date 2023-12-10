@@ -39,7 +39,7 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "median")
+    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "median", False)
 
     captured = capfd.readouterr()
 
@@ -72,7 +72,7 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean")
+    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", False)
 
     captured = capfd.readouterr()
 
@@ -100,3 +100,21 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
 
     assert captured.out == expected_standard_output
     assert captured.err == expected_error_output
+
+
+def test_calculate_performance_overall(sample_d4j_scores, sample_lltc4j_scores, capfd):
+    """
+    Tests that the performance metrics are calculated correctly.
+    """
+    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", True)
+
+    captured = capfd.readouterr()
+
+    expected_standard_output = (
+        "\\newcommand\\overallSmartcommitMean{0.71\\xspace}\n"
+        "\\newcommand\\overallFlexemeMean{0.52\\xspace}\n"
+        "\\newcommand\\overallFilebasedMean{0.54\\xspace}\n"
+    )
+
+    assert captured.out == expected_standard_output
+    assert captured.err is ''
