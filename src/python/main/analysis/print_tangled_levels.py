@@ -142,6 +142,10 @@ def format_for_latex(dataframe: pd.DataFrame) -> pd.DataFrame:
     - Reshape the dataframe
     - Use human friendly names for the indices, columns and values
     """
+
+    # Format 'count' column to be a percentage
+    dataframe['count'] = dataframe['count'].map(lambda x: f"{x:.0%}")
+
     # Reshape the dataframe
     dataframe = dataframe.pivot(columns='dataset', index='tangled_metric',values='count').reset_index().rename_axis(None, axis=1)
 
