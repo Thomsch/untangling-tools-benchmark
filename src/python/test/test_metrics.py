@@ -3,7 +3,7 @@
 import pytest
 import pandas as pd
 
-from src.python.main.tangled_metrics import is_tangled_patch, count_tangled_file
+from src.python.main.metrics import is_tangled_patch, count_tangled_file
 
 def convert_ground_truth_to_legacy(df: pd.DataFrame) -> pd.DataFrame:
     """

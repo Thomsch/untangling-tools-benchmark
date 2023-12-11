@@ -7,8 +7,6 @@ Concatenates the ground truth CSV files for an experiment into a single CSV file
 import sys
 import os
 
-from typing import List
-
 import pandas as pd
 import argparse
 
@@ -19,7 +17,7 @@ def main(results_dir: str):
     """
     Implements the script's logic. See module description for details.
     """
-    ground_truth_files = retrieve_ground_truth_files(results_dir)
+    ground_truth_files = evaluation_results.retrieve_ground_truth_files(results_dir)
 
     dfs = []
     for file in ground_truth_files:
@@ -34,17 +32,6 @@ def main(results_dir: str):
     result_df = pd.concat(dfs, ignore_index=True)
     print(result_df.to_csv(index=False))
 
-def retrieve_ground_truth_files(results_dir: str) -> List[str]:
-    """
-    Retrieves the ground truth files from the given directory.
-    """
-    ground_truth_files = []
-    for root, _, files in os.walk(results_dir):
-        for file in files:
-            if file == "truth.csv":
-                ground_truth_files.append(os.path.join(root, file))
-
-    return ground_truth_files
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

@@ -3,7 +3,10 @@ Utilities to read data from the evaluation results.
 """
 
 import os
+from typing import List
+
 import pandas as pd
+
 
 GROUND_TRUTH_COLUMNS = ["file", "source", "target", "group"]
 PERFORMANCE_COLUMNS = [
@@ -38,3 +41,38 @@ def read_performance(file: str, dataset_name: str = None) -> pd.DataFrame:
         df["dataset"] = dataset_name
 
     return df
+
+
+def read_metrics(file: str, dataset_name=None) -> pd.DataFrame:
+    """
+    Read a metrics CSV file for a dataset. This CSV file is expected to have a header.
+
+    :param file: The CSV file to read as a dataframe
+    :param dataset_name: Optional dataset name to add to the dataframe.
+    """
+    df = pd.read_csv(file, header=0)
+
+    # if vid is a column, rename it to 'commit_id'
+    if "vid" in df.columns:
+        df = df.rename(columns={"vid": "commit_id"})
+
+    # Convert the commit_id column to string for D4J bug ids.
+    df["commit_id"] = df["commit_id"].astype(str)
+
+    if dataset_name:
+        df["dataset"] = dataset_name
+
+    return df
+
+
+def retrieve_ground_truth_files(results_dir: str) -> List[str]:
+    """
+    Retrieves the ground truth files from the given directory.
+    """
+    ground_truth_files = []
+    for root, _, files in os.walk(results_dir):
+        for file in files:
+            if file == "truth.csv":
+                ground_truth_files.append(os.path.join(root, file))
+
+    return ground_truth_files
