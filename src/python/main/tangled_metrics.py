@@ -1,18 +1,8 @@
 """
 This module contains the functions to measure the tangled metrics.
 """
-import os
 import pandas as pd
 
-
-def read_ground_truth(ground_truth_file: str) -> pd.DataFrame:
-    """
-    Reads the ground truth from a CSV file.
-    """
-    if not os.path.exists(ground_truth_file):
-        raise FileNotFoundError(f"File {ground_truth_file} does not exist.")
-
-    return pd.read_csv(ground_truth_file, header=0)
 
 
 def is_tangled_patch(ground_truth: pd.DataFrame):

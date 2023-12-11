@@ -19,7 +19,8 @@ from pandas.api.types import CategoricalDtype
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-import tangled_metrics as tangled_metrics
+import tangled_metrics
+import evaluation_results
 
 def main(d4j_metrics_file: str, d4j_result_dir, lltc4j_metrics_file: str, lltc4j_result_dir: str):
     """
@@ -113,7 +114,7 @@ def calculate_tangled_metrics(ground_truth_files) -> pd.DataFrame:
         commit_folder = os.path.basename(os.path.dirname(file))
         project, commit_id = commit_folder.split("_")
 
-        truth_df = tangled_metrics.read_ground_truth(file)
+        truth_df = evaluation_results.read_ground_truth(file)
         is_tangled_patch = tangled_metrics.is_tangled_patch(truth_df)
         tangled_files = tangled_metrics.count_tangled_file(truth_df)
 
@@ -123,18 +124,6 @@ def calculate_tangled_metrics(ground_truth_files) -> pd.DataFrame:
     result_df = pd.DataFrame(data, columns=['project', 'commit_id', 'is_tangled_patch', 'tangled_files_count'])
     return result_df
 
-
-def retrieve_ground_truth_files(results_dir: str) -> List[str]:
-    """
-    Retrieves the ground truth files from the given directory.
-    """
-    ground_truth_files = []
-    for root, _, files in os.walk(results_dir):
-        for file in files:
-            if file == "truth.csv":
-                ground_truth_files.append(os.path.join(root, file))
-
-    return ground_truth_files
 
 def format_for_latex(dataframe: pd.DataFrame) -> pd.DataFrame:
     """
