@@ -14,7 +14,7 @@ set -o pipefail   # Produce a failure status if any command in the pipeline fail
 
 if [[ $# -ne 3 ]] ; then
     echo "usage: $0 <d4j-results-dir> <lltc4j-results-dir> <paper-repository>"
-    echo "example: $0 ~/d4j-evaluation ~/lltc4j-evaluation ~/papers/untangling-tools-evaluation"
+    echo "example: $0 ~/d4j-evaluation ~/lltc4j-evaluation ~/path/to/paper/repo/"
     exit 1
 fi
 
@@ -47,7 +47,11 @@ main() {
   #
   # Untangling performance
   #
-  python src/python/main/analysis/print_median_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" > "${PAPER_REPOSITORY}/tables/tool-performance.tex" 2> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'mean' > "${PAPER_REPOSITORY}/tables/tool-performance.tex" 2> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  # shellcheck disable=SC2129
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'median' > /dev/null 2>> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'mean' --overall True >> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
+  python src/python/main/analysis/print_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" --aggregator 'median' --overall True >> "${PAPER_REPOSITORY}/lib/tool-performance.tex"
 
   #
   # Untangling statistics
