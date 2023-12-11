@@ -4,7 +4,6 @@ This module contains the functions to measure the tangled metrics.
 import pandas as pd
 
 
-
 def is_tangled_patch(ground_truth: pd.DataFrame):
     """
     Check whether a commit is tangled at the patch level or not.

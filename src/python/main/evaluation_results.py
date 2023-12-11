@@ -5,7 +5,8 @@ Utilities to read data from the evaluation results.
 import os
 import pandas as pd
 
-GROUND_TRUTH_COLUMNS = ['file','source','target','group']
+GROUND_TRUTH_COLUMNS = ["file", "source", "target", "group"]
+
 
 def read_ground_truth(ground_truth_file: str) -> pd.DataFrame:
     """
