@@ -19,6 +19,9 @@ from typing import List
 
 import pandas as pd
 
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import evaluation_results
+
 PRECISION = 2
 
 TOOL_NAME_MAP = {
@@ -101,14 +104,7 @@ def load_dataframes(*dataset_files: str, names: List[str] = None) -> pd.DataFram
 
     dataframes = []
     for dataset_file, name in zip(dataset_files, names):
-        df = pd.read_csv(dataset_file, names=[
-            "project",
-            "commit_id",
-            "smartcommit_rand_index",
-            "flexeme_rand_index",
-            "filename_rand_index",
-        ],)
-        df["dataset"] = name
+        df = evaluation_results.read_performance(dataset_file, dataset_name = name)
         dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)
