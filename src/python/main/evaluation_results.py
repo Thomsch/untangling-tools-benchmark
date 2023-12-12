@@ -6,11 +6,16 @@ import os
 from typing import List
 
 import pandas as pd
-
-from . import tangled_metrics
-
 from pandas.api.types import CategoricalDtype
 
+
+TANGLED_LEVELS = [
+    "tangled_lines",
+    "tangled_hunks",
+    "tangled_files",
+    "tangled_patch",
+    "single_concern_patch",
+]
 
 GROUND_TRUTH_COLUMNS = ["file", "source", "target", "group"]
 PERFORMANCE_COLUMNS = [
@@ -62,7 +67,7 @@ def read_metrics(file: str, dataset_name=None) -> pd.DataFrame:
 
     if "tangled_level" in df.columns:
         df["tangled_level"] = df["tangled_level"].astype(
-            CategoricalDtype(categories=tangled_metrics.TANGLED_LEVELS, ordered=True)
+            CategoricalDtype(categories=TANGLED_LEVELS, ordered=True)
         )
 
     # Convert the commit_id column to string for D4J bug ids.

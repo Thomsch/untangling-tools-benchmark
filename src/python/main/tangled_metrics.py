@@ -10,18 +10,10 @@ import os
 import argparse
 import pandas as pd
 import numpy as np
+from pandas.api.types import CategoricalDtype
 
 from . import metrics
 from . import evaluation_results
-from pandas.api.types import CategoricalDtype
-
-TANGLED_LEVELS = [
-    "tangled_lines",
-    "tangled_hunks",
-    "tangled_files",
-    "tangled_patch",
-    "single_concern_patch",
-]
 
 
 def main(metrics_file: str, results_dir: str):
@@ -98,7 +90,7 @@ def calculate_tangled_levels(dataframe: pd.DataFrame) -> pd.DataFrame:
 
     dataframe["tangled_level"] = None
     # Go through each level from finer granularity to coarser granularity and set the tangled level for each commit if it is not set yet.
-    for level in TANGLED_LEVELS:
+    for level in evaluation_results.TANGLED_LEVELS:
         dataframe["tangled_level"] = np.where(
             (dataframe[level] > 0) & (dataframe["tangled_level"].isnull()),
             level,
@@ -106,7 +98,7 @@ def calculate_tangled_levels(dataframe: pd.DataFrame) -> pd.DataFrame:
         )
 
     dataframe["tangled_level"] = dataframe["tangled_level"].astype(
-        CategoricalDtype(categories=TANGLED_LEVELS, ordered=True)
+        CategoricalDtype(categories=evaluation_results.TANGLED_LEVELS, ordered=True)
     )
 
     return dataframe
