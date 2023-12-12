@@ -19,9 +19,8 @@ from typing import List
 
 import pandas as pd
 
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import latex_utils
-import evaluation_results
+from src.python.main.analysis import latex_utils
+from src.python.main import evaluation_results
 
 
 def main(d4j_file:str, lltc4j_file:str, aggregator:str, overall:bool):
@@ -82,7 +81,7 @@ def print_performance_commands(df_performance, aggregator_operation):
     """
     for dataset in df_performance.index:
         for tool in df_performance.columns:
-            value = df_performance.loc[dataset, tool].round(PRECISION)
+            value = df_performance.loc[dataset, tool].round(latex_utils.PRECISION)
             dataset_name_for_latex = dataset.lower().replace('4', 'f')
             tool_name_for_latex = tool.capitalize().replace('-', '')
             aggreator_for_latex = aggregator_operation.capitalize()

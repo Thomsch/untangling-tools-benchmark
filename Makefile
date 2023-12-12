@@ -27,7 +27,7 @@ format-python:
 	black ${PYTHON_FILES}
 
 python-test:
-	PYTHONPATH="${MAKEFILE_DIR}/src/python/main" pytest src/python/test
+	pytest src/python/test
 
 shell-test:
 	bats "${MAKEFILE_DIR}/src/bash/test"

@@ -108,6 +108,10 @@ The detailed pipeline can be visualized in [diagrams/pipeline.drawio.svg](diagra
 In addition to `data/d4j-5-bugs.csv`, there are 1 other pre-computed bug file that you can use: `data/d4j-compatible-bugs.csv` contains all the Defects4J bugs that are active and compatible with the experimental infrastructure. Bug projects marked as deprecated by Defects4J's authors are not included in this list of compatible bugs.
 To generate a new bug file, see **Generating the bug file** section.
 
+#### Running Python scripts
+Pythons scripts are in the same directory structure as the python modules, making testing and reusing modules difficult.
+The solution is to run python scripts as module (`python -m`) so the scripts can import other modules directly and be compatible with tests.  
+
 #### Optional steps
 Run `./compute_metrics.sh data/d4j-5-bugs.csv $UTB_OUTPUT` to compute the metrics of the D4J bugs. See section [Metrics](#metrics) for more details.
 
@@ -119,8 +123,6 @@ Do not use `data/d4j-bugs-all.csv` as it contains bugs that are deprecated or no
 
 ### Untangling one Defects4J bug
 If you only want to evaluate the decomposition of one Defects4J bug, you can follow the pipeline presented in [diagrams/pipeline.drawio.svg](diagrams/pipeline.drawio.svg).
-
-### Aggregating decomposition elapsed time
 
 ## Tests
 - Run `make check` to run all the checks (tests, linting, etc.) for bash and Python.

@@ -1,0 +1,10 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "untanglingevaluation"
+version = "1.0"
+
+[pytest]
+python_paths = "src/python/main;src/python/test"

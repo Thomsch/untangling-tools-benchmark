@@ -11,8 +11,8 @@ import argparse
 import pandas as pd
 import numpy as np
 
-import metrics
-import evaluation_results
+from . import metrics
+from . import evaluation_results
 from pandas.api.types import CategoricalDtype
 
 TANGLED_LEVELS = [

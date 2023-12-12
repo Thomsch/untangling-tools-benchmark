@@ -7,7 +7,7 @@ from typing import List
 
 import pandas as pd
 
-import tangled_metrics
+from . import tangled_metrics
 
 from pandas.api.types import CategoricalDtype
 

@@ -3,7 +3,7 @@ Tests for print_performance.py
 """
 import pytest
 
-import src.python.main.analysis.print_performance as print_median_performance
+import src.python.main.analysis.print_performance as print_performance
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "median", False)
+    print_performance.main(sample_d4j_scores, sample_lltc4j_scores, "median", False)
 
     captured = capfd.readouterr()
 
@@ -72,7 +72,7 @@ def test_calculate_performance(sample_d4j_scores, sample_lltc4j_scores, capfd):
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", False)
+    print_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", False)
 
     captured = capfd.readouterr()
 
@@ -106,7 +106,7 @@ def test_calculate_performance_overall(sample_d4j_scores, sample_lltc4j_scores, 
     """
     Tests that the performance metrics are calculated correctly.
     """
-    print_median_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", True)
+    print_performance.main(sample_d4j_scores, sample_lltc4j_scores, "mean", True)
 
     captured = capfd.readouterr()
 
