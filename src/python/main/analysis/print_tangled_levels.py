@@ -52,10 +52,10 @@ def format_for_latex(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe['count'] = dataframe['count'].map(lambda x: f"{x:.0%}")
 
     # Reshape the dataframe
-    dataframe = dataframe.pivot(columns='dataset', index='tangled_metric',values='count').reset_index().rename_axis(None, axis=1)
+    dataframe = dataframe.pivot(columns='dataset', index='tangled_level',values='count').reset_index().rename_axis(None, axis=1)
 
     # Use human friendly names for the tangled metrics values
-    dataframe['tangled_metric'] = dataframe['tangled_metric'].replace({
+    dataframe['tangled_level'] = dataframe['tangled_level'].replace({
         'tangled_lines': 'Tangled lines',
         'tangled_hunks': 'Tangled hunks',
         'tangled_files_count': 'Tangled files',
@@ -64,8 +64,8 @@ def format_for_latex(dataframe: pd.DataFrame) -> pd.DataFrame:
     })
 
     # Set the index to be tangled_metric and rename it to 'Tangled metric'
-    dataframe = dataframe.set_index('tangled_metric')
-    dataframe.index.name = 'Tangled metric'
+    dataframe = dataframe.set_index('tangled_level')
+    dataframe.index.name = 'Tangled level'
     
     return dataframe
 
