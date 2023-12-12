@@ -19,8 +19,8 @@ from typing import List
 
 import pandas as pd
 
-import latex_utils
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import latex_utils
 import evaluation_results
 
 
