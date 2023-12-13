@@ -37,6 +37,9 @@ main() {
 
   check_file "$D4J_SCORE_FILE"
   check_file "$LLTC4J_SCORE_FILE"
+
+  ALL_SCORES_FILE=$(mktemp)
+  python src/python/main/analysis/concatenate_performance.py --d4j "$D4J_SCORE_FILE" --lltc4j "$LLTC4J_SCORE_FILE" > "$ALL_SCORES_FILE"
   
   #
   # Data

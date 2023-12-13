@@ -52,7 +52,7 @@ truth_csv="${evaluation_dir}/truth.csv"
 if [ -f "$truth_csv" ]; then
     echo 'Calculating ground truth ............................................. CACHED'
 else
-    if python3 src/python/main/ground_truth.py "$repository" "$truth_csv"
+    if python3 -m src.python.main.ground_truth "$repository" "$truth_csv"
     then
         echo 'Calculating ground truth ............................................. OK'
     else

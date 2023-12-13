@@ -29,7 +29,7 @@ from collections import deque
 import pandas as pd
 from unidiff import PatchSet, LINE_TYPE_CONTEXT
 
-from diff_metrics import lines_in_patch
+from .diff_metrics import lines_in_patch
 
 COL_NAMES = ["file", "source", "target"]
 

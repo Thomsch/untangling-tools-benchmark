@@ -19,13 +19,10 @@ from typing import List
 
 import pandas as pd
 
-PRECISION = 2
+from src.python.main.analysis import latex_utils
+from src.python.main import evaluation_results
 
-TOOL_NAME_MAP = {
-    "smartcommit_rand_index": "SmartCommit",
-    "flexeme_rand_index": "Flexeme",
-    "filename_rand_index": "File-based",
-}
+
 def main(d4j_file:str, lltc4j_file:str, aggregator:str, overall:bool):
     """
     Implementation of the script's logic. See the script's documentation for details.
@@ -60,13 +57,13 @@ def print_performance_table(dataframe: pd.DataFrame):
     Prints the dataframe in latex format on stdout.
     """
     print(dataframe.style
-          .format(precision=PRECISION).highlight_max(axis=1,props='bfseries: ;')
+          .format(precision=latex_utils.PRECISION).highlight_max(axis=1,props='bfseries: ;')
           .to_latex(multirow_align='t', clines="skip-last;data", hrules=True))
 
 def print_overall_performance_commands(dataframe, aggregator):
     dataframe.columns = ['tool', 'value']
-    dataframe = dataframe.replace(TOOL_NAME_MAP)
-    dataframe['value'] = dataframe['value'].round(PRECISION)
+    dataframe = dataframe.replace(latex_utils.TOOL_NAME_MAP)
+    dataframe['value'] = dataframe['value'].round(latex_utils.PRECISION)
 
     for index, row in dataframe.iterrows():
         tool_name_for_latex = row['tool'].capitalize().replace('-', '')
@@ -84,7 +81,7 @@ def print_performance_commands(df_performance, aggregator_operation):
     """
     for dataset in df_performance.index:
         for tool in df_performance.columns:
-            value = df_performance.loc[dataset, tool].round(PRECISION)
+            value = df_performance.loc[dataset, tool].round(latex_utils.PRECISION)
             dataset_name_for_latex = dataset.lower().replace('4', 'f')
             tool_name_for_latex = tool.capitalize().replace('-', '')
             aggreator_for_latex = aggregator_operation.capitalize()
@@ -101,14 +98,7 @@ def load_dataframes(*dataset_files: str, names: List[str] = None) -> pd.DataFram
 
     dataframes = []
     for dataset_file, name in zip(dataset_files, names):
-        df = pd.read_csv(dataset_file, names=[
-            "project",
-            "commit_id",
-            "smartcommit_rand_index",
-            "flexeme_rand_index",
-            "filename_rand_index",
-        ],)
-        df["dataset"] = name
+        df = evaluation_results.read_performance(dataset_file, dataset_name = name)
         dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)
@@ -123,7 +113,7 @@ def clean_labels(dataframe: pd.DataFrame):
     dataframe.index = dataframe.index.set_names('Dataset')
 
     # Rename the columns to the tool names in human friendly format.
-    dataframe = dataframe.rename(columns=TOOL_NAME_MAP)
+    dataframe = dataframe.rename(columns=latex_utils.TOOL_NAME_MAP)
 
     # Reorder the columns
     dataframe = dataframe[["Flexeme", "SmartCommit", "File-based"]]
