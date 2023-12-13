@@ -51,6 +51,20 @@ def read_performance(file: str, dataset_name: str = None) -> pd.DataFrame:
 
     return df
 
+def read_tool_untangling(file: str, dataset_name: str = None) -> pd.DataFrame:
+    """
+    Read the tool untangling CSV file for a dataset.
+
+    :param file: The CSV file to read as a dataframe
+    :param dataset_name: Optional dataset name to add to the dataframe.
+    """
+    df = pd.read_csv(file, header=0)
+
+    if dataset_name:
+        df["dataset"] = dataset_name
+
+    return df
+
 
 def read_metrics(file: str, dataset_name=None) -> pd.DataFrame:
     """
