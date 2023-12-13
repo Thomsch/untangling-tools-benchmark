@@ -30,7 +30,7 @@ def main(directory:str):
         truth_df = remove_duplicate_lines(truth_df)
 
         commit_folder = os.path.dirname(truth_file)
-        project, commit_id = commit_folder.split("_")
+        project, commit_id = os.path.basename(commit_folder).split("_")
 
         flexeme_file = os.path.join(commit_folder, FILE_NAME)
 
