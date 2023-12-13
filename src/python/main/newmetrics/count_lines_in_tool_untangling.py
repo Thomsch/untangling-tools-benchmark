@@ -38,6 +38,7 @@ def main(directory:str):
 
     result_df = pd.DataFrame(data, columns=COLUMNS)
     result_df["commit_id"] = result_df["commit_id"].astype(str)
+    print(result_df.to_csv(index=False))
 
 
 if __name__ == "__main__":
