@@ -15,7 +15,6 @@ import os
 
 import pandas as pd
 
-import evaluation_results
 
 def read_dataset_file(file:str, name:str):
     df = pd.read_csv(file, header=0)
