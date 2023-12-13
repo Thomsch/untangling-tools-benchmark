@@ -46,7 +46,13 @@ main() {
   #
   python analysis/paper/count_missing_results.py "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/missing_decompositions.txt"
   analysis/paper/flexeme_no_changes.sh "${TMP_DIR}" > "${PAPER_REPOSITORY}/data/flexeme_no_changes.txt"
-  
+
+  # Missing lines
+  python -m src.python.main.newmetrics.count_lines_in_tool_untangling --directory "$D4J_RESULTS_DIR" > "$D4J_RESULTS_DIR/flexeme_line_count_d4j.csv"
+  python -m src.python.main.newmetrics.count_lines_in_tool_untangling --directory "$LLTC4J_RESULTS_DIR" > "$LLTC4J_RESULTS_DIR/flexeme_line_count_lltc4j.csv"
+  python -m src.python.main.analysis.concatenate_line_count --d4j "$D4J_RESULTS_DIR/flexeme_line_count_d4j.csv" --ltc4j "$LLTC4J_RESULTS_DIR/flexeme_line_count_lltc4j.csv" > "flexeme_line_count.csv"
+  python -m src.python.main.analysis.print_missing_lines -c "flexeme_line_count.csv" > "${PAPER_REPOSITORY}/lib/missing.tex"
+
   #
   # Untangling performance
   #
