@@ -39,3 +39,4 @@ untangling-tools-benchmark.Rproj
 
 # Ignore untangling and analysis log files
 logs/
+analysis/.ipynb_checkpoints/
