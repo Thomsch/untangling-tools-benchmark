@@ -1,6 +1,7 @@
 """
 Test the clean_artifacts module.
 """
+
 from unidiff import (
     PatchSet,
     LINE_TYPE_CONTEXT,

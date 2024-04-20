@@ -2,7 +2,6 @@
 Tests for untangling_score.py
 """
 
-
 import os
 import sys
 import tempfile
